@@ -167,10 +167,10 @@ public class Cli {
                                                  .setShortFlag('v')
                                                  .setLongFlag(NO_LONGFLAG));
 
-//        sw1.setHelp("""
-//                    Verbose processing.  List files as they are processed.
-//                    Set verbose level with "-v:1" or "-v:2".
-//                    "-v" defaults to level '1'""");
+        sw1.setHelp("""
+                    Verbose processing.  List files as they are processed.
+                    Set verbose level with "-v:1" or "-v:2".
+                    "-v" defaults to level '1'""");
         jsap.registerParameter(sw1);
 
         // '-j' : Copy html output target directory into a new 'jar' file
@@ -183,9 +183,9 @@ public class Cli {
                                                  .setShortFlag('j')
                                                  .setLongFlag(NO_LONGFLAG));
 
-//        sw5.setHelp("""
-//                    Copy html output target directory into a new 'jar' file.
-//                    NOTE: Can NOT be used with any other switches, except "-v:n".""");
+        sw5.setHelp("""
+                    Copy html output target directory into a new 'jar' file.
+                    NOTE: Can NOT be used with any other switches, except "-v:n".""");
         jsap.registerParameter(sw5);
 
         // '-W' : Initialise wrapper directories and files
@@ -196,9 +196,9 @@ public class Cli {
                                                  .setShortFlag('W')
                                                  .setLongFlag(NO_LONGFLAG));
 
-//        sw6.setHelp("""
-//                    Initialise wrapper directories and files.
-//                    NOTE: Can NOT be used with any other switches, except "-v:n".""");
+        sw6.setHelp("""
+                    Initialise wrapper directories and files.
+                    NOTE: Can NOT be used with any other switches, except "-v:n".""");
         jsap.registerParameter(sw6);
 
         // '-h' or '--help' : Provide online help
@@ -324,7 +324,7 @@ public class Cli {
         String stylesheet = "";
         String use = "";
 
-        try (BufferedReader inReader = Files.newBufferedReader(inpPath)) {
+        try ( BufferedReader inReader = Files.newBufferedReader(inpPath)) {
             String line;
 
             while ((line = inReader.readLine()) != null) {
@@ -351,7 +351,7 @@ public class Cli {
             }
         }
 
-        try (BufferedWriter outWriter = Files.newBufferedWriter(outPath, CREATE, TRUNCATE_EXISTING, WRITE)) {
+        try ( BufferedWriter outWriter = Files.newBufferedWriter(outPath, CREATE, TRUNCATE_EXISTING, WRITE)) {
             outWriter.write(iniDoc.getString("page", "html", iniDoc.getString("page", "content", "Error during processing.")));
         }
     }
@@ -428,7 +428,7 @@ public class Cli {
             System.err.println("template:\n" + templatesPath.toString());
         }
 
-        try (BufferedReader inReader = Files.newBufferedReader(templatesPath)) {
+        try ( BufferedReader inReader = Files.newBufferedReader(templatesPath)) {
             String line;
 
             while ((line = inReader.readLine()) != null) {

@@ -18,7 +18,7 @@
     
     <properties>
         <project.filename>${project.artifactId}-${project.version}.${project.packaging}</project.filename>
-        <java.version>13</java.version>
+        <java.version>14</java.version>
         <source.encoding>UTF-8</source.encoding>
         <javadoc.source.version>${java.version}</javadoc.source.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -81,6 +81,7 @@
                                     <goal>java</goal>
                                 </goals>
                                 <configuration>
+                                    <commandlineArgs>--enable-preview</commandlineArgs>
                                     <includeProjectDependencies>false</includeProjectDependencies>
                                     <includePluginDependencies>true</includePluginDependencies>
                                     <mainClass>org.markdownj.cli.Main</mainClass>
@@ -195,6 +196,7 @@
                             <goal>java</goal>
                         </goals>
                         <configuration>
+                            <commandlineArgs>--enable-preview</commandlineArgs>
                             <workingDirectory>${project.build.directory}</workingDirectory>
                             <includeProjectDependencies>false</includeProjectDependencies>
                             <includePluginDependencies>true</includePluginDependencies>
@@ -244,12 +246,13 @@
                 <version>3.8.1</version>
                 <configuration>
                     <showDeprecation>true</showDeprecation>
-                    <source>13</source>
-                    <target>13</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                     <release>${java.version}</release>
                     <encoding>${source.encoding}</encoding>
                     <compilerArgs>
-                        <arg>-Xlint:all</arg>                    
+                        <arg>-Xlint:all</arg>
+                        <arg>--enable-preview</arg>
                     </compilerArgs>
                 </configuration>
             </plugin>
