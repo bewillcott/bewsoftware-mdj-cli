@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    <!--
+    <parent>
+        <groupId>org.markdownj</groupId>
+        <artifactId>markdownj</artifactId>
+        <version>0.5-SNAPSHOT</version>
+    </parent>
+    -->
+    <name>MarkdownJ CLI</name>
+    <description>Command-line program that uses the Markdownj Core library.</description>
+    <artifactId>markdownj-cli</artifactId>
+    <groupId>org.markdownj</groupId>
+    <version>0.1.15-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    
+    <properties>
+        <project.filename>${project.artifactId}-${project.version}.${project.packaging}</project.filename>
+        <java.version>13</java.version>
+        <source.encoding>UTF-8</source.encoding>
+        <javadoc.source.version>${java.version}</javadoc.source.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>${source.encoding}</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>${source.encoding}</project.reporting.outputEncoding>
+        <javadoc.reporting.outputDirectory>${project.reporting.outputDirectory}/apidocs</javadoc.reporting.outputDirectory>
+        <jdk.version>${java.version}</jdk.version>
+    </properties>
+    
+    <developers>
+        <developer>
+            <id>bewillcott</id>
+            <name>Bradley Willcott</name>
+            <email>bw.opensource@yahoo.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>Australia/Perth</timezone>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License</name>
+            <comments>
+                Copyright (C) 2020 Bradley Willcott
+
+                Markdownj CLI is free software: you can redistribute it and/or modify
+                it under the terms of the GNU General Public License as published by
+                the Free Software Foundation, either version 3 of the License, or
+                (at your option) any later version.
+
+                Markdownj CLI is distributed in the hope that it will be useful,
+                but WITHOUT ANY WARRANTY; without even the implied warranty of
+                MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+                GNU General Public License for more details.
+
+                You should have received a copy of the GNU General Public License
+                along with this program.  If not, see http://www.gnu.org/licenses/.
+                
+            </comments>
+        </license>
+    </licenses>
+    
+    <profiles>
+        <profile>
+            <id>release-profile</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.6.0</version>
+                        <executions>
+                            <execution>
+                                <id>Markdownj-Compile</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <configuration>
+                                    <includeProjectDependencies>false</includeProjectDependencies>
+                                    <includePluginDependencies>true</includePluginDependencies>
+                                    <mainClass>org.markdownj.cli.Main</mainClass>
+                                    <arguments>
+                                        <argument>-s src/docs/manual</argument>
+                                        <argument>-d target/manual</argument>
+                                        <argument>-rwv:2</argument>
+                                    </arguments> 
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>Markdownj-Package</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>markdown</executable>
+                                    <workingDirectory>${project.build.directory}</workingDirectory>
+                                    <includeProjectDependencies>false</includeProjectDependencies>
+                                    <includePluginDependencies>true</includePluginDependencies>
+                                    <arguments>
+                                        <argument>-v:2</argument>
+                                        <argument>-j:${project.artifactId}-${project.version}-manual.jar;manual</argument>
+                                    </arguments> 
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.markdownj</groupId>
+                                <artifactId>markdownj-cli</artifactId>
+                                <version>0.1.15-SNAPSHOT</version>
+                                <type>jar</type>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-install-plugin</artifactId>
+                        <version>3.0.0-M1</version>
+                        <executions>
+                            <execution>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <configuration>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>${project.artifactId}</artifactId>
+                                    <version>${project.version}</version>
+                                    <classifier>manual</classifier>
+                                    <packaging>jar</packaging>
+                                    <file>${project.build.directory}/${project.artifactId}-${project.version}-manual.jar</file>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>    
+    </profiles>
+    
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/markdownj-cli.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>**/markdownj-cli.properties</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>
+                    src/docs
+                </directory>
+                <excludes>
+                    <exclude>
+                        **/*
+                    </exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>
+                    target/manual
+                </directory>
+                <excludes>
+                    <exclude>
+                        **/*
+                    </exclude>
+                </excludes>
+            </resource>
+        </resources>
+
+        <plugins>            
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <id>Markdownj-Compile</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <workingDirectory>${project.build.directory}</workingDirectory>
+                            <includeProjectDependencies>false</includeProjectDependencies>
+                            <includePluginDependencies>true</includePluginDependencies>
+                            <mainClass>org.markdownj.cli.Main</mainClass>
+                            <arguments>
+                                <argument>-s src/docs/manual</argument>
+                                <argument>-d target/manual</argument>
+                                <argument>-rwv:2</argument>
+                            </arguments> 
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.markdownj</groupId>
+                        <artifactId>markdownj-cli</artifactId>
+                        <version>0.1.15-SNAPSHOT</version>
+                        <type>jar</type>
+                    </dependency>
+                </dependencies>
+            </plugin>       
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.1.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>3.0.0-M1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-plugin</artifactId>
+                <version>1.11.2</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.scm</groupId>
+                        <artifactId>maven-scm-provider-gitexe</artifactId>
+                        <version>1.11.2</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <showDeprecation>true</showDeprecation>
+                    <source>13</source>
+                    <target>13</target>
+                    <release>${java.version}</release>
+                    <encoding>${source.encoding}</encoding>
+                    <compilerArgs>
+                        <arg>-Xlint:all</arg>                    
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.8.2</version>
+                <configuration>
+                    <locales>en</locales>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <encoding>${source.encoding}</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.0.0-M1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>3.0.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M4</version>
+                <configuration>
+                    <argLine>--enable-preview</argLine>     
+                    <includes>
+                        <include>**/*.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/TestResultPair.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>libs/</classpathPrefix>
+                            <mainClass>org.markdownj.cli.Main</mainClass>
+                            <addBuildEnvironmentEntries>true</addBuildEnvironmentEntries>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeScope>runtime</includeScope>
+                            <excludeScope>test</excludeScope>
+                            <outputDirectory>
+                                ${project.build.directory}/libs
+                            </outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>  
+        </plugins>
+    </build>
+    
+    <dependencies>
+        <dependency>
+            <groupId>com.martiansoftware</groupId>
+            <artifactId>jsap</artifactId>
+            <version>2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>markdownj-core</artifactId>
+            <version>0.5.15-SNAPSHOT</version>
+        </dependency>
+        <!-- TESTING DEPENDENCIES -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.6.0</version>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.bew</groupId>
+            <artifactId>BEWCommons</artifactId>
+            <version>1.0.2-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+</project>
