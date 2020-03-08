@@ -7,7 +7,7 @@ title: Markdownj CLI | Meta Blocks
 
 ---
 
-__Table of Page Contents__
+####[#top]Table of Page Contents
 
 - [Meta Blocks](#top)
     - [Sections](#sections)
@@ -21,7 +21,7 @@ __Table of Page Contents__
 
 ---
 
-##[#top] Meta Blocks
+## Meta Blocks
 
 A meta block is a collection of key/value pairs located at the very top of a Markdown file.  
 It begins with a fence of 3 at signs: "@@@" alone at the beginning of the first line
@@ -91,7 +91,7 @@ The following is a copy of the top of the source file for this page:
 
 ~~~
 @@@
-use:defaults
+use:articles
 title: Markdownj CLI | Meta Blocks
 @@@
 ~~~
@@ -100,10 +100,10 @@ title: Markdownj CLI | Meta Blocks
 ####[#page.use] Use ####[&uarr;](#top)
 `use` is a reserved key word in the context of `page`: `page.use`.
 
-As you can see, there is a `use` key with a value of `defaults`.  If you were to check the configuration file:
-`markdownj-cli.ini` in the root directory of this project, you will find a section labeled as `[defaults]`.
+As you can see, there is a `use` key with a value of `articles`.  If you were to check the configuration file:
+`markdownj-cli.ini` in the root directory of this project, you will find a section labeled as `[articles]`.
 The key/value pairs in this section are the ones being used for this page.  If needed, you could add any
-number of additional such pairs, and they would be available to any page set to `use : defaults`.
+number of additional such pairs, and they would be available to any page set to `use : articles`.
 
 If needed, you could easily add your own special sections to the configuration file, with their key/value pairs.
 This would be a way of providing consistency across various sections and pages of your document.
@@ -160,11 +160,5 @@ It contains the unprocessed markdown text of the body of this document.
 
 
 
-
----
-${document.copyright}  
-Last updated: ${system.date}
-
 [Home]:index.html
 [w3s]:https://www.w3schools.com/tags/tag_title.asp
-

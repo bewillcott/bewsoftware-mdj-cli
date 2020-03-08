@@ -1,5 +1,5 @@
 @@@
-use:defaults
+use : articles
 title: Markdownj CLI | Configuration
 @@@
 
@@ -16,7 +16,7 @@ document you are working on.
 For example, the Markdownj CLI project directory structure: (Linux)
 
 ~~~
-~/NetBeansProjects/markdownj/markdownj-cli
+~/NetBeansProjects/markdownj-cli
     ├── jshell.history
     ├── licenseheader.txt
     ├── markdownj-cli.ini
@@ -37,6 +37,7 @@ For example, the Markdownj CLI project directory structure: (Linux)
                 ├── options.html
                 ├── options.md
                 ├── templates
+                │   ├── article.html
                 │   └── default.html
                 ├── todo.html
                 └── todo.md
@@ -45,13 +46,5 @@ For example, the Markdownj CLI project directory structure: (Linux)
 
 
 
-
-
-
----
-${document.copyright}  
-Last updated: ${system.date}
-
 [Home]:index.html
 [setup]:setup.html
-

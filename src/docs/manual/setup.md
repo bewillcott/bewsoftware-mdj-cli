@@ -1,5 +1,5 @@
 @@@
-use:defaults
+use : articles
 title: Markdownj CLI | Setup
 @@@
 
@@ -17,7 +17,7 @@ directory:
 For example, the Markdownj CLI project root directory structure: (Linux)
 
 ~~~
-~/NetBeansProjects/markdownj/markdownj-cli
+~/NetBeansProjects/markdownj-cli
     ├── markdownj-cli.ini
     ├── pom.xml
     └── src
@@ -28,6 +28,7 @@ For example, the Markdownj CLI project root directory structure: (Linux)
                 ├── index.html
                 ├── index.md
                 └── templates
+                    ├── article.html
                     └── default.html
 ~~~
 
@@ -35,14 +36,14 @@ To setup the above structure, run:
 
 ~~~
 $ pwd
-$ ~/NetBeansProjects/markdownj/markdownj-cli
+$ ~/NetBeansProjects/markdownj-cli
 $ java -jar /path/to/dirof/markdownj-cli${program.version}.jar -v -W:src/docs/manual
 ~~~
 
 __Note:__ the switch is a capital `W`.
 
 This will configure and install the `markdownj-cli.ini` and create the directories:
-`css` and `templates`, and install their respective files: ``styles.css` and `default.html`.
+`css` and `templates`, and install their respective files: `styles.css` and `default.html`.
 
 Now if you are writing a book: (Windows)
 
@@ -55,6 +56,7 @@ Now if you are writing a book: (Windows)
     ├── index.html
     ├── index.md
     └── templates
+        ├── article.html
         └── default.html
 ~~~
 
@@ -66,8 +68,5 @@ $ ~/Documents/MyBook
 $ java -jar /path/to/dirof/markdownj-cli${program.version}.jar -v -W
 ~~~
 
----
-${document.copyright}  
-Last updated: ${system.date}
 
 [Home]:index.html

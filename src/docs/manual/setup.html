@@ -2,16 +2,17 @@
 <!--
 Generate by MarkdownJ CLI
 version: 0.1.15-SNAPSHOT
-on Sun Mar 01 10:18:21 AWST 2020
+on Sun Mar 08 13:17:22 AWST 2020
 -->
 <html lang="en-us">
     <head>
         <title>Markdownj CLI | Setup</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
     </head>
     <body>
+        <article>
 <p><a href="index.html">Home</a></p>
 
 <hr>
@@ -27,7 +28,7 @@ directory:</p>
 
 <pre>
     <code>
-~/NetBeansProjects/markdownj/markdownj-cli
+~/NetBeansProjects/markdownj-cli
     ├── markdownj-cli.ini
     ├── pom.xml
     └── src
@@ -38,6 +39,7 @@ directory:</p>
                 ├── index.html
                 ├── index.md
                 └── templates
+                    ├── article.html
                     └── default.html
     </code>
 </pre>
@@ -47,7 +49,7 @@ directory:</p>
 <pre>
     <code>
 $ pwd
-$ ~/NetBeansProjects/markdownj/markdownj-cli
+$ ~/NetBeansProjects/markdownj-cli
 $ java -jar /path/to/dirof/markdownj-cli0.1.15-SNAPSHOT.jar -v -W:src/docs/manual
     </code>
 </pre>
@@ -55,7 +57,7 @@ $ java -jar /path/to/dirof/markdownj-cli0.1.15-SNAPSHOT.jar -v -W:src/docs/manua
 <p><b>Note:</b> the switch is a capital <code>W</code>.</p>
 
 <p>This will configure and install the <code>markdownj-cli.ini</code> and create the directories:
-<code>css</code> and <code>templates</code>, and install their respective files: <code>`styles.css</code> and <code>default.html</code>.</p>
+<code>css</code> and <code>templates</code>, and install their respective files: <code>styles.css</code> and <code>default.html</code>.</p>
 
 <p>Now if you are writing a book: (Windows)</p>
 
@@ -69,6 +71,7 @@ $ java -jar /path/to/dirof/markdownj-cli0.1.15-SNAPSHOT.jar -v -W:src/docs/manua
     ├── index.html
     ├── index.md
     └── templates
+        ├── article.html
         └── default.html
     </code>
 </pre>
@@ -83,9 +86,11 @@ $ java -jar /path/to/dirof/markdownj-cli0.1.15-SNAPSHOT.jar -v -W
     </code>
 </pre>
 
-<p><hr>
-Copyright © 2020 ${document.author} <br>
-Last updated: Sun Mar 01 10:18:21 AWST 2020</p>
-
+<footer>
+    <hr>
+Copyright © 2020 Bradley Willcott<br>
+Last updated: Sun Mar 08 13:17:22 AWST 2020
+</footer>
+        </article>
     </body>
 </html>

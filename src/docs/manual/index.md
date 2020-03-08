@@ -1,5 +1,5 @@
 @@@
-use : defaults
+use : articles
 title: Markdownj CLI
 @@@
 
@@ -28,9 +28,6 @@ The program has a number of options. For details see the [Options][opt] page.
 ## Under Construction
 
 
----
-${document.copyright}  
-Last updated: ${system.date}
 
 [conf]:configuration.html
 [mb]:meta blocks.html

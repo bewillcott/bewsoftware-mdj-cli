@@ -1,5 +1,5 @@
 @@@
-use : defaults
+use : articles
 title: Markdownj CLI | ToDo List
 @@@
 
@@ -44,11 +44,7 @@ Command Line Options
 
 
 
----
-${document.copyright}  
-Last updated: ${system.date}
 
 [Home]:index.html
 [mb]:meta blocks.html
 [opt]:options.html
-

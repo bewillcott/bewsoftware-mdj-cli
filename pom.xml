@@ -78,22 +78,18 @@
                                 <id>Markdownj-Compile</id>
                                 <phase>prepare-package</phase>
                                 <goals>
-                                    <goal>java</goal>
+                                    <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <commandlineArgs>--enable-preview</commandlineArgs>
+                                    <executable>java</executable>
+                                    <commandlineArgs>--enable-preview -classpath %classpath org.markdownj.cli.Main -v:2 -s src/docs/manual -d target/manual -wr</commandlineArgs>
+                                    <workingDirectory></workingDirectory>
                                     <includeProjectDependencies>false</includeProjectDependencies>
                                     <includePluginDependencies>true</includePluginDependencies>
-                                    <mainClass>org.markdownj.cli.Main</mainClass>
-                                    <arguments>
-                                        <argument>-s src/docs/manual</argument>
-                                        <argument>-d target/manual</argument>
-                                        <argument>-rwv:2</argument>
-                                    </arguments> 
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>Markdownj-Package</id>
+                                <id>Markdownj-Package(HTML)</id>
                                 <phase>package</phase>
                                 <goals>
                                     <goal>exec</goal>
@@ -106,6 +102,42 @@
                                     <arguments>
                                         <argument>-v:2</argument>
                                         <argument>-j:${project.artifactId}-${project.version}-manual.jar;manual</argument>
+                                    </arguments> 
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>Markdownj-Package(SRC)</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>markdown</executable>
+                                    <workingDirectory>${project.directory}</workingDirectory>
+                                    <includeProjectDependencies>false</includeProjectDependencies>
+                                    <includePluginDependencies>true</includePluginDependencies>
+                                    <arguments>
+                                        <argument>-v:2</argument>
+                                        <argument>-j:${project.build.directory}/${project.artifactId}-${project.version}-manual-src.jar;src/docs/manual</argument>
+                                    </arguments> 
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>Zip Binary Jar and libs/*</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>zip</executable>
+                                    <workingDirectory>${project.build.directory}</workingDirectory>
+                                    <includeProjectDependencies>false</includeProjectDependencies>
+                                    <includePluginDependencies>true</includePluginDependencies>
+                                    <arguments>
+                                        <argument>-r</argument>
+                                        <argument>${project.artifactId}-${project.version}.zip</argument>
+                                        <argument>${project.artifactId}-${project.version}.jar</argument>
+                                        <argument>libs</argument>
                                     </arguments> 
                                 </configuration>
                             </execution>
@@ -125,6 +157,7 @@
                         <version>3.0.0-M1</version>
                         <executions>
                             <execution>
+                                <id>manual</id>                                    
                                 <phase>install</phase>
                                 <goals>
                                     <goal>install-file</goal>
@@ -136,6 +169,21 @@
                                     <classifier>manual</classifier>
                                     <packaging>jar</packaging>
                                     <file>${project.build.directory}/${project.artifactId}-${project.version}-manual.jar</file>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>manual-src</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <configuration>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>${project.artifactId}</artifactId>
+                                    <version>${project.version}</version>
+                                    <classifier>manual-src</classifier>
+                                    <packaging>jar</packaging>
+                                    <file>${project.build.directory}/${project.artifactId}-${project.version}-manual-src.jar</file>
                                 </configuration>
                             </execution>
                         </executions>
@@ -183,7 +231,7 @@
             </resource>
         </resources>
 
-        <plugins>            
+        <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -193,19 +241,14 @@
                         <id>Markdownj-Compile</id>
                         <phase>prepare-package</phase>
                         <goals>
-                            <goal>java</goal>
+                            <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <commandlineArgs>--enable-preview</commandlineArgs>
-                            <workingDirectory>${project.build.directory}</workingDirectory>
+                            <executable>java</executable>
+                            <commandlineArgs>--enable-preview -classpath %classpath org.markdownj.cli.Main -v:2 -s src/docs/manual -d target/manual -wr</commandlineArgs>
+                            <workingDirectory></workingDirectory>
                             <includeProjectDependencies>false</includeProjectDependencies>
                             <includePluginDependencies>true</includePluginDependencies>
-                            <mainClass>org.markdownj.cli.Main</mainClass>
-                            <arguments>
-                                <argument>-s src/docs/manual</argument>
-                                <argument>-d target/manual</argument>
-                                <argument>-rwv:2</argument>
-                            </arguments> 
                         </configuration>
                     </execution>
                 </executions>
@@ -217,11 +260,17 @@
                         <type>jar</type>
                     </dependency>
                 </dependencies>
-            </plugin>       
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.1.1</version>
+                <configuration>
+                    <additionalJOptions>
+                        <additionalJOption>--enable-preview</additionalJOption>
+                        <additionalJOption>--release=${java.version}</additionalJOption>
+                    </additionalJOptions>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -364,6 +413,12 @@
             <groupId>com.bew</groupId>
             <artifactId>BEWCommons</artifactId>
             <version>1.0.2-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.xerial</groupId>
+                    <artifactId>sqlite-jdbc</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>

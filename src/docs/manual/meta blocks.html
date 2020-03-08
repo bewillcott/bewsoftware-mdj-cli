@@ -2,7 +2,7 @@
 <!--
 Generate by MarkdownJ CLI
 version: 0.1.15-SNAPSHOT
-on Sat Mar 07 15:10:03 AWST 2020
+on Sun Mar 08 13:17:22 AWST 2020
 -->
 <html lang="en-us">
     <head>
@@ -17,7 +17,7 @@ on Sat Mar 07 15:10:03 AWST 2020
 
 <hr>
 
-<p><b>Table of Page Contents</b></p>
+<h4 id="top">Table of Page Contents</h4>
 
 <ul>
 <li><a href="#top">Meta Blocks</a>
@@ -36,7 +36,7 @@ on Sat Mar 07 15:10:03 AWST 2020
 
 <hr>
 
-<h2 id="top">Meta Blocks</h2>
+<h2>Meta Blocks</h2>
 
 <p>A meta block is a collection of key/value pairs located at the very top of a Markdown file. <br>
 It begins with a fence of 3 at signs: "@@@" alone at the beginning of the first line
@@ -299,7 +299,7 @@ All of the above information laid out.
 <pre>
     <code>
 @@@
-use:defaults
+use:articles
 title: Markdownj CLI | Meta Blocks
 @@@
     </code>
@@ -309,10 +309,10 @@ title: Markdownj CLI | Meta Blocks
 
 <p><code>use</code> is a reserved key word in the context of <code>page</code>: <code>page.use</code>.</p>
 
-<p>As you can see, there is a <code>use</code> key with a value of <code>defaults</code>.  If you were to check the configuration file:
-<code>markdownj-cli.ini</code> in the root directory of this project, you will find a section labeled as <code>[defaults]</code>.
+<p>As you can see, there is a <code>use</code> key with a value of <code>articles</code>.  If you were to check the configuration file:
+<code>markdownj-cli.ini</code> in the root directory of this project, you will find a section labeled as <code>[articles]</code>.
 The key/value pairs in this section are the ones being used for this page.  If needed, you could add any
-number of additional such pairs, and they would be available to any page set to <code>use : defaults</code>.</p>
+number of additional such pairs, and they would be available to any page set to <code>use : articles</code>.</p>
 
 <p>If needed, you could easily add your own special sections to the configuration file, with their key/value pairs.
 This would be a way of providing consistency across various sections and pages of your document.</p>
@@ -371,10 +371,11 @@ directory referred to by the <code>cssDir</code> key's value.  The initial entry
 
 <p>It contains the unprocessed markdown text of the body of this document.</p>
 
-<p><hr>
-Copyright © 2020 Bradley Willcott <br>
-Last updated: Sat Mar 07 15:10:03 AWST 2020</p>
-
+<footer>
+    <hr>
+Copyright © 2020 Bradley Willcott<br>
+Last updated: Sun Mar 08 13:17:22 AWST 2020
+</footer>
         </article>
     </body>
 </html>
