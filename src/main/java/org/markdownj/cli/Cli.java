@@ -358,7 +358,7 @@ public class Cli {
 
     private static void processMetaBlock() {
         String text = conf.iniDoc.getString("page", "text", "");
-        Matcher m = Pattern.compile("\\A(?:@@@\\n(?<metablock>.*?)\\n@@@\\n)?(?<body>.*)\\z", DOTALL)
+        Matcher m = Pattern.compile("\\A(?:@@@\\n(?<metablock>.*?)\\n@@@\\n)(?<body>.*)\\z", DOTALL)
                 .matcher(text);
         conf.iniDoc.removeSection("page");
 

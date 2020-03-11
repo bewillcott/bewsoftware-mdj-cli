@@ -24,12 +24,15 @@ The program has a number of options. For details see the [Options][opt] page.
 - [Configuration][conf]
 - [Command-Line Options][opt]
 - [Meta Blocks][mb]
+- [License][lic]
+
 
 ## Under Construction
 
 
 
 [conf]:configuration.html
+[lic]:LICENSE.html
 [mb]:meta blocks.html
 [opt]:options.html
 [todo]:todo.html
