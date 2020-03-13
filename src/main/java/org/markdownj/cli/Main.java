@@ -44,8 +44,7 @@ import static org.markdownj.cli.Find.getUpdateList;
  */
 public class Main {
 
-    private static final String CtlX = Character.toString(24);
-
+//    private static final String CtlX = Character.toString(24);
     /**
      * @param args the command line arguments
      *
@@ -110,8 +109,8 @@ public class Main {
 
         vlevel = (vlevelarr.length > 0 ? vlevelarr[0] : (verbose ? 1 : 0));
 
-//        String[] files = config.getStringArray("files");
         switch (vlevel) {
+            case 3:
             case 2:
                 System.err.println("input: |" + input + "|");
                 System.err.println("output: |" + output + "|");
@@ -169,8 +168,8 @@ public class Main {
 
         // if '-w' switch active, copy 'css' files to destination directory
         if (wrapper) {
-            com.bew.commons.fileio.Files.copyDirTree(source, destination,
-                                                     "*.css", vlevel, COPY_ATTRIBUTES, REPLACE_EXISTING);
+            com.bew.commons.fileio.BEWFiles.copyDirTree(source, destination,
+                                                        "*.css", vlevel, COPY_ATTRIBUTES, REPLACE_EXISTING);
             // Load configuration file data
             String srcDir = "";
 

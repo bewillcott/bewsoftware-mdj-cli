@@ -155,7 +155,7 @@ directory referred to by the `cssDir` key's value.  The initial entry being:
 ####[#page.text] Text ####[&uarr;](#top)
 `text` is a reserved key word in the context of `page`: `page.text`.
 
-It contains the unprocessed markdown text of the body of this document.
+It contains the unprocessed markdown text of the body of the document.
 
 
 

@@ -24,6 +24,7 @@ The program has a number of options. For details see the [Options][opt] page.
 - [Configuration][conf]
 - [Command-Line Options][opt]
 - [Meta Blocks][mb]
+- [Named Meta Blocks][nmb]
 - [License][lic]
 
 
@@ -31,8 +32,9 @@ The program has a number of options. For details see the [Options][opt] page.
 
 
 
-[conf]:configuration.html
+[conf]:Configuration.html
 [lic]:LICENSE.html
-[mb]:meta blocks.html
-[opt]:options.html
-[todo]:todo.html
+[mb]:Meta Blocks.html
+[nmb]:Named Meta Blocks.html
+[opt]:Options.html
+[todo]:ToDo.html

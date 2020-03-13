@@ -11,7 +11,7 @@ title: Markdownj CLI | ToDo List
 
 
 - [ ]! Add file [meta block][mb]:
-    - [ ]! Add labeled meta blocks. `@@@[label]`
+    - [ ]! Add [named meta blocks][nmb]. `@@@[name]`
     - [ ]! Add reading project POM file (`pom.xml`). `[project]`
     - [ ]! Add include file:
         - [ ]! Include markdown file: `includeMD` : `filename.md`
@@ -20,7 +20,7 @@ title: Markdownj CLI | ToDo List
     - [x]! Add including CSS file.
     - [x]! Add variables for template replacement parameters.
 - [x]! Add configuration file: `markdownj-cli.ini`
-- [ ]! Add auto-generated Table of Page Contents.
+- [ ]! Add auto-generated Table of Contents for each page.
 - [ ]! Add archive creation as `jar` file:
     - [x]! Auto-generate MANIFEST.mf file.
         - [ ]! include meta data from [MANIFEST.mf] section in `markdownj-cli.ini`.
@@ -46,5 +46,6 @@ Command Line Options
 
 
 [Home]:index.html
-[mb]:meta blocks.html
-[opt]:options.html
+[mb]:Meta Blocks.html
+[nmb]:Named Meta Blocks.html
+[opt]:Options.html

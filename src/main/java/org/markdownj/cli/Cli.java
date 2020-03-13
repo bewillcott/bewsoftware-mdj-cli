@@ -26,21 +26,18 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.spi.FileSystemProvider;
-import java.util.Collections;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.jar.Manifest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.markdownj.MarkdownProcessor;
+import org.markdownj.TextEditor;
 
+import static com.bew.commons.fileio.BEWFiles.getResource;
 import static com.martiansoftware.jsap.JSAP.INTEGER_PARSER;
 import static com.martiansoftware.jsap.JSAP.NO_LONGFLAG;
 import static com.martiansoftware.jsap.JSAP.STRING_PARSER;
@@ -66,35 +63,16 @@ public class Cli {
     private static final String CONF_FILENAME = "markdownj-cli.ini";
     private static final MarkdownProcessor MARKDOWN = new MarkdownProcessor();
     private static final POMProperties POM = INSTANCE;
+    private static final Pattern SUBSTITUTION_PATTERN = Pattern.compile("(?<!\\\\)(?:\\$\\{(?<group>\\w+)[.](?<key>\\w+)\\})");
     static IniFile conf;
     static int vlevel;
 
     static int createJarFile(String jarFilename, String jarSrcDir, int vlevel) throws IOException {
-        Path srcPath = of(jarSrcDir).toAbsolutePath();
         SortedSet<Path> fileList = getFileList(jarSrcDir, "*", true, vlevel);
         Manifest manifest = getManifest();
 
         Jar.createJAR(jarFilename, fileList, manifest);
         return 0;
-    }
-
-    private static Path getResource(String name) throws URISyntaxException, IOException {
-        URI uri = Cli.class.getResource(name).toURI();
-
-        if ("jar".equals(uri.getScheme())) {
-            for (FileSystemProvider provider : FileSystemProvider.installedProviders()) {
-                if (provider.getScheme().equalsIgnoreCase("jar")) {
-                    try {
-                        provider.getFileSystem(uri);
-                    } catch (FileSystemNotFoundException e) {
-                        // in this case we need to initialize it first:
-                        provider.newFileSystem(uri, Collections.emptyMap());
-                    }
-                }
-            }
-        }
-
-        return Paths.get(uri);
     }
 
     private static String getString(String use, String section, String key) {
@@ -169,7 +147,7 @@ public class Cli {
 
         sw1.setHelp("""
                     Verbose processing.  List files as they are processed.
-                    Set verbose level with "-v:1" or "-v:2".
+                    Set verbose level with "-v:[1-3]".
                     "-v" defaults to level '1'""");
         jsap.registerParameter(sw1);
 
@@ -219,14 +197,14 @@ public class Cli {
             Files.createDirectories(docRootPath);
         }
 
-        Path srcPath = getResource("/docs").toAbsolutePath();
+        Path srcPath = getResource(Cli.class, "/docs").toAbsolutePath();
 
         if (vlevel >= 2) {
             System.err.println("srcPath: " + srcPath);
             System.err.println("srcPath exists: " + Files.exists(srcPath));
         }
 
-        Path iniPath = getResource("/" + CONF_FILENAME + "").toAbsolutePath();
+        Path iniPath = getResource(Cli.class, "/" + CONF_FILENAME + "").toAbsolutePath();
 
         if (vlevel >= 2) {
             System.err.println("iniPath: " + iniPath);
@@ -240,8 +218,8 @@ public class Cli {
             System.err.println("iniPath2 exists: " + Files.exists(iniPath2));
         }
 
-        com.bew.commons.fileio.Files.copyDirTree(srcPath.toAbsolutePath(), of(docRootDir).toAbsolutePath(),
-                                                 "*.{html,css}", vlevel, COPY_ATTRIBUTES, REPLACE_EXISTING);
+        com.bew.commons.fileio.BEWFiles.copyDirTree(srcPath.toAbsolutePath(), of(docRootDir).toAbsolutePath(),
+                                                    "*.{html,css}", vlevel, COPY_ATTRIBUTES, REPLACE_EXISTING);
 
         if (Files.exists(iniPath2)) {
             if (vlevel >= 2) {
@@ -321,7 +299,6 @@ public class Cli {
         StringBuilder sb = new StringBuilder();
         IniDocument iniDoc = conf.iniDoc;
         String template = "";
-        String stylesheet = "";
         String use = "";
 
         try ( BufferedReader inReader = Files.newBufferedReader(inpPath)) {
@@ -336,19 +313,22 @@ public class Cli {
 
         if (wrapper) {
             processMetaBlock();
+            processNamedMetaBlocks();
         }
-
-        iniDoc.setString("page", "content", MARKDOWN.markdown(iniDoc.getString("page", "text", "")));
 
         if (wrapper) {
             use = iniDoc.getString("page", "use", null);
             template = getString(use, "page", "template");
-            stylesheet = getString(use, "page", "stylesheet");
+            iniDoc.setString("page", "content", MARKDOWN.markdown(processSubstitutions(use, iniDoc.getString("page", "text", ""))));
 
             if (!template.isBlank()) {
                 iniDoc.setString("page", "srcFile", inpPath.toAbsolutePath().toString());
                 processTemplate(use, template);
             }
+
+        } else {
+            iniDoc.setString("page", "content", MARKDOWN.markdown(iniDoc.getString("page", "text", "")));
+
         }
 
         try ( BufferedWriter outWriter = Files.newBufferedWriter(outPath, CREATE, TRUNCATE_EXISTING, WRITE)) {
@@ -380,32 +360,48 @@ public class Cli {
         conf.iniDoc.setString("page", "text", text);
     }
 
-    private static String processSubstitution(String use, String text) {
-        Pattern p = Pattern.compile("(?:\\\\(?<keep>\\$\\{\\w+[.]\\w+\\})|\\$\\{(?<group>\\w+)[.](?<key>\\w+)\\})");
-        Matcher m = p.matcher(text);
-        StringBuilder sb = new StringBuilder();
-        int lastIndex = 0;
-        boolean found = false;
+    private static void processNamedMetaBlocks() {
+        TextEditor text = new TextEditor(conf.iniDoc.getString("page", "text", ""));
+        Pattern p = Pattern.compile("(?<=\\n)(?:@@@\\[(?<name>\\w+)\\]\\n(?<metablock>.*?)\\n@@@\\n)", DOTALL);
 
-        while (m.find()) {
-            found = true;
-            sb.append(text.subSequence(lastIndex, m.start()));
+        text.replaceAll(p, (m) -> {
+                    String name = m.group("name");
+                    String metaBlock = m.group("metablock");
 
-            String keep = m.group("keep");
-            String group = m.group("group");
-            String key = m.group("key");
+                    conf.iniDoc.setString("page", name, metaBlock);
+                    return "";
+                });
 
-            if (keep != null) {
-                sb.append(keep);
-            } else {
-                sb.append(processSubstitution(use, getString(use, group, key)));
-            }
+        text.replaceAll("\\\\@@@", "@@@");
 
-            lastIndex = m.end();
-        }
+        conf.iniDoc.setString("page", "text", text.toString());
+    }
 
-        sb.append(text.subSequence(lastIndex, text.length()));
-        return sb.toString();
+    private static String processSubstitutions(String use, final String text) {
+        String tmp = "(?<!\\\\)(?:\\$\\{(?<group>\\w+)[.](?<key>\\w+)\\})";
+
+        TextEditor textEd = new TextEditor(text);
+
+        do {
+            textEd.replaceAll(SUBSTITUTION_PATTERN, (m) -> {
+
+                          if (vlevel >= 3) {
+                              System.out.println(m.group());
+                          }
+
+                          String group = m.group("group");
+                          String key = m.group("key");
+                          String rtn = "ERROR: Substitution!";
+
+                          if (group != null) {
+                              rtn = getString(use, group, key);
+                          }
+
+                          return rtn;
+                      });
+        } while (textEd.wasFound());
+
+        return textEd.toString();
     }
 
     private static void processTemplate(String use, String template) throws IOException {
@@ -420,11 +416,14 @@ public class Cli {
         // Relativize path to stylesheet
         Path stylesheetPath = docRootPath.resolve(conf.iniDoc.getString("document", "cssDir", ""))
                 .resolve(getString(use, "page", "stylesheet")).toAbsolutePath();
+
         Path srcPath = of(conf.iniDoc.getString("page", "srcFile", ""));
         Path cssPath = srcPath.getParent().relativize(stylesheetPath);
+
         conf.iniDoc.setString("page", "stylesheet", cssPath.toString());
 
         if (vlevel >= 2) {
+            System.err.println("srcFile:\n" + srcPath.toString());
             System.err.println("template:\n" + templatesPath.toString());
         }
 
@@ -436,7 +435,11 @@ public class Cli {
             }
         }
 
-        conf.iniDoc.setString("page", "html", processSubstitution(use, sbin.toString()));
+        TextEditor textEd = new TextEditor(processSubstitutions(use, sbin.toString()));
+        textEd.replaceAllLiteral("\\\\\\$", "$");
+        textEd.replaceAllLiteral("\\\\\\[", "[");
+
+        conf.iniDoc.setString("page", "html", textEd.toString());
     }
 
     static void provideUsageHelp(String msg, JSAP jsap) {
