@@ -1,12 +1,15 @@
 /*
+ * This file is part of the Markdownj Command-line Interface program
+ * (aka: markdownj-cli).
+ *
  * Copyright (C) 2020 Bradley Willcott
  *
- * This program is free software: you can redistribute it and/or modify
+ * markdownj-cli is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * markdownj-cli is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -29,7 +32,10 @@ import java.util.Properties;
  * System.out.println(pom.title):
  * </code></pre>
  *
- * @author Bradley Willcott
+ * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
+ *
+ * @since 0.1
+ * @version 1.0
  */
 public final class POMProperties {
 
@@ -77,9 +83,11 @@ public final class POMProperties {
 
     private POMProperties() {
         Properties properties = new Properties();
-        try {
+        try
+        {
             properties.load(POMProperties.class.getResourceAsStream("/markdownj-cli.properties"));
-        } catch (IOException ex) {
+        } catch (IOException ex)
+        {
             throw new RuntimeException("FileIOError", ex);
         }
 

@@ -1,32 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     
     <modelVersion>4.0.0</modelVersion>
-    <!--
-    <parent>
-        <groupId>org.markdownj</groupId>
-        <artifactId>markdownj</artifactId>
-        <version>0.5-SNAPSHOT</version>
-    </parent>
-    -->
+
     <name>MarkdownJ CLI</name>
     <description>Command-line program that uses the Markdownj Core library.</description>
     <artifactId>markdownj-cli</artifactId>
     <groupId>org.markdownj</groupId>
-    <version>0.1.20-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
-    
+
     <properties>
-        <project.filename>${project.artifactId}-${project.version}.${project.packaging}</project.filename>
+        <major.minor.version>1.0</major.minor.version>
+        <!--<project.filename>${project.build.finalName}.${project.packaging}</project.filename>-->
         <java.version>14</java.version>
         <source.encoding>UTF-8</source.encoding>
         <javadoc.source.version>${java.version}</javadoc.source.version>
+        <jdk.version>${java.version}</jdk.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>${source.encoding}</project.build.sourceEncoding>
         <project.reporting.outputEncoding>${source.encoding}</project.reporting.outputEncoding>
         <javadoc.reporting.outputDirectory>${project.reporting.outputDirectory}/apidocs</javadoc.reporting.outputDirectory>
-        <jdk.version>${java.version}</jdk.version>
     </properties>
     
     <developers>
@@ -59,33 +55,109 @@
 
                 You should have received a copy of the GNU General Public License
                 along with this program.  If not, see http://www.gnu.org/licenses/.
-                
             </comments>
         </license>
     </licenses>
     
+    <scm>
+        <connection>scm:svn:http://127.0.0.1/dummy</connection>
+        <developerConnection>scm:svn:https://127.0.0.1/dummy</developerConnection>
+        <tag>HEAD</tag>
+        <url>http://127.0.0.1/dummy</url>
+    </scm>
+    
+    <dependencies>
+        <dependency>
+            <groupId>com.martiansoftware</groupId>
+            <artifactId>jsap</artifactId>
+            <version>2.1</version>
+        </dependency>
+        <!-- TESTING DEPENDENCIES -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.6.0</version>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.markdownj</groupId>
+            <artifactId>markdownj-core</artifactId>
+            <version>0.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bew</groupId>
+            <artifactId>BEWFiles</artifactId>
+            <version>1.0.3</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
+
     <profiles>
         <profile>
-            <id>release-profile</id>
+            <id>increment-build</id>
             <build>
                 <plugins>
+                    <!-- Increment {buildNumber} and update the 'pom.xml' file -->
+                    <plugin>
+                        <groupId>com.bew.mojo</groupId>
+                        <artifactId>simple-buildnumber-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>Update</id>
+                                <goals>
+                                    <goal>create-xml</goal>
+                                </goals>
+                                <configuration>
+                                    <runOnce>false</runOnce>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>release-build</id>
+            <build>
+                <plugins>
+                    <!-- Keep current {buildNumber}, remove '-SNAPSHOT' and update the 'pom.xml' file -->
+                    <plugin>
+                        <groupId>com.bew.mojo</groupId>
+                        <artifactId>simple-buildnumber-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>Release</id>
+                                <goals>
+                                    <goal>create-xml</goal>
+                                </goals>
+                                <configuration>
+                                    <release>true</release>
+                                    <keepNumber>true</keepNumber>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
-                        <version>1.6.0</version>
                         <executions>
                             <execution>
-                                <id>Markdownj-Compile</id>
+                                <id>Markdownj-Compile(release)</id>
                                 <phase>prepare-package</phase>
                                 <goals>
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
                                     <executable>java</executable>
-                                    <commandlineArgs>--enable-preview -classpath %classpath org.markdownj.cli.Main -v:2 -s src/docs/manual -d target/manual -wr</commandlineArgs>
+                                    <commandlineArgs> -classpath %classpath org.markdownj.cli.Main -v:2 -s src/docs/manual -d target/manual -wr</commandlineArgs>
                                     <workingDirectory></workingDirectory>
                                     <includeProjectDependencies>false</includeProjectDependencies>
                                     <includePluginDependencies>true</includePluginDependencies>
+                                    <executableDependency>
+                                        <groupId>org.markdownj</groupId>
+                                        <artifactId>markdownj-cli</artifactId>
+                                    </executableDependency>
                                 </configuration>
                             </execution>
                             <execution>
@@ -95,14 +167,15 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <executable>markdown</executable>
+                                    <executable>java</executable>
+                                    <commandlineArgs> -classpath %classpath org.markdownj.cli.Main -v:2 -j:${project.build.finalName}-manual.jar;manual</commandlineArgs>
                                     <workingDirectory>${project.build.directory}</workingDirectory>
                                     <includeProjectDependencies>false</includeProjectDependencies>
                                     <includePluginDependencies>true</includePluginDependencies>
-                                    <arguments>
-                                        <argument>-v:2</argument>
-                                        <argument>-j:${project.artifactId}-${project.version}-manual.jar;manual</argument>
-                                    </arguments> 
+                                    <executableDependency>
+                                        <groupId>org.markdownj</groupId>
+                                        <artifactId>markdownj-cli</artifactId>
+                                    </executableDependency>
                                 </configuration>
                             </execution>
                             <execution>
@@ -112,18 +185,19 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <executable>markdown</executable>
+                                    <executable>java</executable>
+                                    <commandlineArgs> -classpath %classpath org.markdownj.cli.Main -v:2 -j:${project.build.directory}/${project.build.finalName}-manual-src.jar;src/docs/manual</commandlineArgs>
                                     <workingDirectory>${project.directory}</workingDirectory>
                                     <includeProjectDependencies>false</includeProjectDependencies>
                                     <includePluginDependencies>true</includePluginDependencies>
-                                    <arguments>
-                                        <argument>-v:2</argument>
-                                        <argument>-j:${project.build.directory}/${project.artifactId}-${project.version}-manual-src.jar;src/docs/manual</argument>
-                                    </arguments> 
+                                    <executableDependency>
+                                        <groupId>org.markdownj</groupId>
+                                        <artifactId>markdownj-cli</artifactId>
+                                    </executableDependency>
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>Zip Binary Jar and libs/*</id>
+                                <id>Zip Binary Jar and libs</id>
                                 <phase>package</phase>
                                 <goals>
                                     <goal>exec</goal>
@@ -135,10 +209,10 @@
                                     <includePluginDependencies>true</includePluginDependencies>
                                     <arguments>
                                         <argument>-r</argument>
-                                        <argument>${project.artifactId}-${project.version}.zip</argument>
-                                        <argument>${project.artifactId}-${project.version}.jar</argument>
-                                        <argument>${project.artifactId}-${project.version}-manual.jar</argument>
-                                        <argument>${project.artifactId}-${project.version}-manual-src.jar</argument>
+                                        <argument>${project.build.finalName}.zip</argument>
+                                        <argument>${project.build.finalName}.jar</argument>
+                                        <argument>${project.build.finalName}-manual.jar</argument>
+                                        <argument>${project.build.finalName}-manual-src.jar</argument>
                                         <argument>libs</argument>
                                     </arguments> 
                                 </configuration>
@@ -148,7 +222,7 @@
                             <dependency>
                                 <groupId>org.markdownj</groupId>
                                 <artifactId>markdownj-cli</artifactId>
-                                <version>0.1.19-SNAPSHOT</version>
+                                <version>0.1.98</version>
                                 <type>jar</type>
                             </dependency>
                         </dependencies>
@@ -156,7 +230,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-install-plugin</artifactId>
-                        <version>3.0.0-M1</version>
                         <executions>
                             <execution>
                                 <id>manual</id>                                    
@@ -167,10 +240,10 @@
                                 <configuration>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>${project.artifactId}</artifactId>
-                                    <version>${project.version}</version>
+                                    <version>${project.artifact.version}</version>
                                     <classifier>manual</classifier>
                                     <packaging>jar</packaging>
-                                    <file>${project.build.directory}/${project.artifactId}-${project.version}-manual.jar</file>
+                                    <file>${project.build.directory}/${project.build.finalName}-manual.jar</file>
                                 </configuration>
                             </execution>
                             <execution>
@@ -182,14 +255,26 @@
                                 <configuration>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>${project.artifactId}</artifactId>
-                                    <version>${project.version}</version>
+                                    <version>${project.artifact.version}</version>
                                     <classifier>manual-src</classifier>
                                     <packaging>jar</packaging>
-                                    <file>${project.build.directory}/${project.artifactId}-${project.version}-manual-src.jar</file>
+                                    <file>${project.build.directory}/${project.build.finalName}-manual-src.jar</file>
                                 </configuration>
                             </execution>
                         </executions>
-                    </plugin>
+                    </plugin>          
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>            
                 </plugins>
             </build>
         </profile>    
@@ -233,56 +318,119 @@
             </resource>
         </resources>
 
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
-                <executions>
-                    <execution>
-                        <id>Markdownj-Compile</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>java</executable>
-                            <commandlineArgs>--enable-preview -classpath %classpath org.markdownj.cli.Main -v:2 -s src/docs/manual -d target/manual -wr</commandlineArgs>
-                            <workingDirectory></workingDirectory>
-                            <includeProjectDependencies>false</includeProjectDependencies>
-                            <includePluginDependencies>true</includePluginDependencies>
-                        </configuration>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.markdownj</groupId>
-                        <artifactId>markdownj-cli</artifactId>
-                        <version>0.1.19-SNAPSHOT</version>
-                        <type>jar</type>
-                    </dependency>
-                </dependencies>
-            </plugin>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>3.2.0</version>
+                </plugin>
+                <plugin>                  
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.8.6</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>                
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                </plugin>        
+                <plugin>         
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>3.1.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>3.0.0-M1</version>
+                </plugin>
+                <plugin>                
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>3.0.0-M5</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>3.0.0-M1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-invoker-plugin</artifactId>
+                    <version>3.2.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.2.0</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.2.0</version>
+                </plugin>     
+                <plugin>                
+                    <artifactId>maven-jxr-plugin</artifactId>
+                    <version>3.0.0</version>
+                </plugin>               
+                <plugin>
+                    <artifactId>maven-plugin-plugin</artifactId>
+                    <version>3.6.0</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>3.1.1</version>
+                </plugin>
+                <plugin>                
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>3.0.0-M1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.2.0</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-scm-plugin</artifactId>
+                    <version>1.11.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.9.1</version>
+                </plugin>                
+                <plugin>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.2.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.0.0-M5</version>
+                </plugin>
+                <plugin>                        
+                    <groupId>com.bew.mojo</groupId>
+                    <artifactId>simple-buildnumber-maven-plugin</artifactId>
+                    <version>1.0.15</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>     
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.1.1</version>
                 <configuration>
-                    <additionalJOptions>
-                        <additionalJOption>--enable-preview</additionalJOption>
-                        <additionalJOption>--release=${java.version}</additionalJOption>
-                    </additionalJOptions>
+                    <source>${maven.compiler.source}</source>
+                    <release>${maven.compiler.target}</release>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>3.0.0-M1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-scm-plugin</artifactId>
-                <version>1.11.2</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.scm</groupId>
@@ -294,23 +442,20 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
                 <configuration>
                     <showDeprecation>true</showDeprecation>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                     <release>${java.version}</release>
                     <encoding>${source.encoding}</encoding>
                     <compilerArgs>
                         <arg>-Xlint:all</arg>
-                        <arg>--enable-preview</arg>
                     </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.8.2</version>
                 <configuration>
                     <locales>en</locales>
                 </configuration>
@@ -318,32 +463,22 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>3.1.0</version>
                 <configuration>
                     <encoding>${source.encoding}</encoding>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.1</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>3.0.0-M1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.0.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M4</version>
                 <configuration>
-                    <argLine>--enable-preview</argLine>     
                     <includes>
                         <include>**/*.java</include>
                     </includes>
@@ -355,7 +490,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -371,7 +505,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.1.1</version>
                 <executions>
                     <execution>
                         <id>copy-dependencies</id>
@@ -390,33 +523,23 @@
                 </executions>
             </plugin>  
         </plugins>
+        
+        <finalName>${project.artifactId}-${project.artifact.version}</finalName>    
     </build>
     
-    <dependencies>
-        <dependency>
-            <groupId>com.martiansoftware</groupId>
-            <artifactId>jsap</artifactId>
-            <version>2.1</version>
-        </dependency>
-        <!-- TESTING DEPENDENCIES -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.6.0</version>
-            <scope>test</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.markdownj</groupId>
-            <artifactId>markdownj-core</artifactId>
-            <version>0.5.20-SNAPSHOT</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>com.bew</groupId>
-            <artifactId>BEWCommons</artifactId>
-            <version>1.0.5-SNAPSHOT</version>
-            <type>jar</type>
-        </dependency>
-    </dependencies>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>

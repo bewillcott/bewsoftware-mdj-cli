@@ -1,12 +1,15 @@
 /*
+ * This file is part of the Markdownj Command-line Interface program
+ * (aka: markdownj-cli).
+ *
  * Copyright (C) 2020 Bradley Willcott
  *
- * This program is free software: you can redistribute it and/or modify
+ * markdownj-cli is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * markdownj-cli is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -43,7 +46,10 @@ import static java.nio.file.Path.of;
 
 /**
  *
- * @author Bradley Willcott
+ * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
+ *
+ * @since 0.1
+ * @version 1.0
  */
 public class Find {
 
@@ -68,10 +74,12 @@ public class Find {
         // the file or directory name.
         void find(Path file) {
             Path name = file.getFileName();
-            if (name != null && matcher.matches(name)) {
+            if (name != null && matcher.matches(name))
+            {
                 numMatches++;
 
-                if (vlevel >= 2) {
+                if (vlevel >= 2)
+                {
                     System.err.println(file);
                 }
 
@@ -82,7 +90,8 @@ public class Find {
         // Prints the total number of
         // matches to standard out.
         SortedSet<Path> done() {
-            if (vlevel >= 1) {
+            if (vlevel >= 1)
+            {
                 System.err.println("Matched: "
                                    + numMatches);
             }
@@ -131,7 +140,8 @@ public class Find {
     public static SortedSet<Path> getFileList(String sourceDir, String pattern, boolean recursive, int vlevel) throws IOException {
         Path currentDir = FileSystems.getDefault().getPath("").toAbsolutePath();
 
-        if (vlevel >= 1) {
+        if (vlevel >= 1)
+        {
             System.err.println("PWD: " + currentDir);
         }
 
@@ -163,7 +173,8 @@ public class Find {
     public static List<Path[]> getUpdateList(String sourceDir, String destDir, String pattern, String outExtn, boolean recursive, int vlevel) throws IOException {
         Path currentDir = FileSystems.getDefault().getPath("").toAbsolutePath();
 
-        if (vlevel >= 1) {
+        if (vlevel >= 1)
+        {
             System.err.println("PWD: " + currentDir);
         }
 
@@ -175,41 +186,50 @@ public class Find {
         SortedSet<Path> inpList = finder.done();
         List<Path[]> outList = new ArrayList<>(inpList.size());
 
-        if (vlevel >= 2) {
+        if (vlevel >= 2)
+        {
             System.err.println("inpList:");
         }
 
-        for (Path inPath : inpList) {
+        for (Path inPath : inpList)
+        {
             Matcher m;
 
-            if (srcPath.toString().isEmpty() || destDir == null) {
+            if (srcPath.toString().isEmpty() || destDir == null)
+            {
                 m = Pattern.compile("^(?<basename>.*?)(?:[.]\\w+)?$").matcher(inPath.toString());
-            } else {
+            } else
+            {
                 m = Pattern.compile("^(?:" + srcPath + "/)(?<basename>.*?)(?:[.]\\w+)?$").matcher(inPath.toString());
             }
 
-            if (m.find()) {
+            if (m.find())
+            {
                 String basename = m.group("basename");
                 Path outPath = of(destDir != null ? destDir : "", basename + (outExtn != null ? outExtn : DefaultHTML));
 
-                if (notExists(outPath) || getLastModifiedTime(inPath).compareTo(getLastModifiedTime(outPath)) > 0) {
+                if (notExists(outPath) || getLastModifiedTime(inPath).compareTo(getLastModifiedTime(outPath)) > 0)
+                {
                     Path[] files = new Path[2];
 
                     files[0] = inPath;
                     files[1] = outPath;
                     outList.add(files);
 
-                    if (vlevel >= 2) {
+                    if (vlevel >= 2)
+                    {
                         System.err.println(outPath);
                     }
                 }
             }
         }
 
-        if (vlevel >= 2) {
+        if (vlevel >= 2)
+        {
             System.err.println("outList:");
 
-            outList.forEach((files) -> {
+            outList.forEach((files) ->
+            {
                 System.err.println(files[1]);
             });
         }

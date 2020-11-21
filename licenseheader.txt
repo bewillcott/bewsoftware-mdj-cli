@@ -1,14 +1,17 @@
 <#if licenseFirst??>
 ${licenseFirst}
 </#if>
+${licensePrefix}This file is part of the Markdownj Command-line Interface program 
+${licensePrefix}(aka: markdownj-cli).
+${licensePrefix}
 ${licensePrefix}Copyright (C) ${date?date?string("yyyy")} Bradley Willcott
 ${licensePrefix?replace(" +$", "", "r")}
-${licensePrefix}This program is free software: you can redistribute it and/or modify
+${licensePrefix}markdownj-cli is free software: you can redistribute it and/or modify
 ${licensePrefix}it under the terms of the GNU General Public License as published by
 ${licensePrefix}the Free Software Foundation, either version 3 of the License, or
 ${licensePrefix}(at your option) any later version.
 ${licensePrefix?replace(" +$", "", "r")}
-${licensePrefix}This program is distributed in the hope that it will be useful,
+${licensePrefix}markdownj-cli is distributed in the hope that it will be useful,
 ${licensePrefix}but WITHOUT ANY WARRANTY; without even the implied warranty of
 ${licensePrefix}MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ${licensePrefix}GNU General Public License for more details.

@@ -47,4 +47,4 @@ For example, the Markdownj CLI project directory structure: (Linux)
 
 
 [Home]:index.html
-[setup]:setup.html
+[setup]:Setup.html

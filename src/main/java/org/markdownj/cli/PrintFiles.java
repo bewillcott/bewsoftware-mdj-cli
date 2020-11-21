@@ -1,12 +1,15 @@
 /*
+ * This file is part of the Markdownj Command-line Interface program
+ * (aka: markdownj-cli).
+ *
  * Copyright (C) 2020 Bradley Willcott
  *
- * This program is free software: you can redistribute it and/or modify
+ * markdownj-cli is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * markdownj-cli is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -18,7 +21,10 @@ package org.markdownj.cli;
 
 /**
  *
- * @author Bradley Willcott
+ * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
+ *
+ * @since 0.1
+ * @version 1.0
  */
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -36,11 +42,14 @@ public class PrintFiles
     @Override
     public FileVisitResult visitFile(Path file,
                                      BasicFileAttributes attr) {
-        if (attr.isSymbolicLink()) {
+        if (attr.isSymbolicLink())
+        {
             System.out.format("Symbolic link: %s ", file);
-        } else if (attr.isRegularFile()) {
+        } else if (attr.isRegularFile())
+        {
             System.out.format("Regular file: %s ", file);
-        } else {
+        } else
+        {
             System.out.format("Other: %s ", file);
         }
         System.out.println("(" + attr.size() + "bytes)");

@@ -1,0 +1,1700 @@
+Apache Maven 3.5.4 (Red Hat 3.5.4-5)
+Maven home: /usr/share/maven
+Java version: 14, vendor: Oracle Corporation, runtime: /home/bwillcott/Java-Dev/jdk-14
+Default locale: en_AU, platform encoding: UTF-8
+OS name: "linux", version: "5.5.8-200.fc31.x86_64", arch: "amd64", family: "unix"
+[DEBUG] Created new class realm maven.api
+[DEBUG] Importing foreign packages into class realm maven.api
+[DEBUG]   Imported: javax.annotation.* < plexus.core
+[DEBUG]   Imported: javax.annotation.security.* < plexus.core
+[DEBUG]   Imported: javax.enterprise.inject.* < plexus.core
+[DEBUG]   Imported: javax.enterprise.util.* < plexus.core
+[DEBUG]   Imported: javax.inject.* < plexus.core
+[DEBUG]   Imported: org.apache.maven.* < plexus.core
+[DEBUG]   Imported: org.apache.maven.artifact < plexus.core
+[DEBUG]   Imported: org.apache.maven.classrealm < plexus.core
+[DEBUG]   Imported: org.apache.maven.cli < plexus.core
+[DEBUG]   Imported: org.apache.maven.configuration < plexus.core
+[DEBUG]   Imported: org.apache.maven.exception < plexus.core
+[DEBUG]   Imported: org.apache.maven.execution < plexus.core
+[DEBUG]   Imported: org.apache.maven.execution.scope < plexus.core
+[DEBUG]   Imported: org.apache.maven.lifecycle < plexus.core
+[DEBUG]   Imported: org.apache.maven.model < plexus.core
+[DEBUG]   Imported: org.apache.maven.monitor < plexus.core
+[DEBUG]   Imported: org.apache.maven.plugin < plexus.core
+[DEBUG]   Imported: org.apache.maven.profiles < plexus.core
+[DEBUG]   Imported: org.apache.maven.project < plexus.core
+[DEBUG]   Imported: org.apache.maven.reporting < plexus.core
+[DEBUG]   Imported: org.apache.maven.repository < plexus.core
+[DEBUG]   Imported: org.apache.maven.rtinfo < plexus.core
+[DEBUG]   Imported: org.apache.maven.settings < plexus.core
+[DEBUG]   Imported: org.apache.maven.toolchain < plexus.core
+[DEBUG]   Imported: org.apache.maven.usability < plexus.core
+[DEBUG]   Imported: org.apache.maven.wagon.* < plexus.core
+[DEBUG]   Imported: org.apache.maven.wagon.authentication < plexus.core
+[DEBUG]   Imported: org.apache.maven.wagon.authorization < plexus.core
+[DEBUG]   Imported: org.apache.maven.wagon.events < plexus.core
+[DEBUG]   Imported: org.apache.maven.wagon.observers < plexus.core
+[DEBUG]   Imported: org.apache.maven.wagon.proxy < plexus.core
+[DEBUG]   Imported: org.apache.maven.wagon.repository < plexus.core
+[DEBUG]   Imported: org.apache.maven.wagon.resource < plexus.core
+[DEBUG]   Imported: org.codehaus.classworlds < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.* < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.classworlds < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.component < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.configuration < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.container < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.context < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.lifecycle < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.logging < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.personality < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.util.xml.Xpp3Dom < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.util.xml.pull.XmlPullParser < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.util.xml.pull.XmlPullParserException < plexus.core
+[DEBUG]   Imported: org.codehaus.plexus.util.xml.pull.XmlSerializer < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.* < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.artifact < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.collection < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.deployment < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.graph < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.impl < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.installation < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.internal.impl < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.metadata < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.repository < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.resolution < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.spi < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.transfer < plexus.core
+[DEBUG]   Imported: org.eclipse.aether.version < plexus.core
+[DEBUG]   Imported: org.fusesource.jansi.* < plexus.core
+[DEBUG]   Imported: org.slf4j.* < plexus.core
+[DEBUG]   Imported: org.slf4j.helpers.* < plexus.core
+[DEBUG]   Imported: org.slf4j.spi.* < plexus.core
+[DEBUG] Populating class realm maven.api
+[INFO] Error stacktraces are turned on.
+[DEBUG] Message scheme: color
+[DEBUG] Message styles: debug info warning error success failure strong mojo project
+[DEBUG] Reading global settings from /usr/share/maven/conf/settings.xml
+[DEBUG] Reading user settings from /home/bwillcott/.m2/settings.xml
+[DEBUG] Reading global toolchains from /usr/share/maven/conf/toolchains.xml
+[DEBUG] Reading user toolchains from /home/bwillcott/.m2/toolchains.xml
+[DEBUG] Using local repository at /home/bwillcott/.m2/repository
+[DEBUG] Using manager EnhancedLocalRepositoryManager with priority 10.0 for /home/bwillcott/.m2/repository
+[INFO] Scanning for projects...
+[DEBUG] Extension realms for project org.markdownj:markdownj-cli:jar:0.1: (none)
+[DEBUG] Looking up lifecycle mappings for packaging jar from ClassRealm[plexus.core, parent: null]
+[DEBUG] === REACTOR BUILD PLAN ================================================
+[DEBUG] Project: org.markdownj:markdownj-cli:jar:0.1
+[DEBUG] Tasks:   [install]
+[DEBUG] Style:   Regular
+[DEBUG] =======================================================================
+[INFO] 
+[INFO] --------------------< org.markdownj:markdownj-cli >---------------------
+[INFO] Building MarkdownJ CLI 0.1
+[INFO] --------------------------------[ jar ]---------------------------------
+[DEBUG] Lifecycle default -> [validate, initialize, generate-sources, process-sources, generate-resources, process-resources, compile, process-classes, generate-test-sources, process-test-sources, generate-test-resources, process-test-resources, test-compile, process-test-classes, test, prepare-package, package, pre-integration-test, integration-test, post-integration-test, verify, install, deploy]
+[DEBUG] Lifecycle clean -> [pre-clean, clean, post-clean]
+[DEBUG] Lifecycle site -> [pre-site, site, post-site, site-deploy]
+[DEBUG] Lifecycle default -> [validate, initialize, generate-sources, process-sources, generate-resources, process-resources, compile, process-classes, generate-test-sources, process-test-sources, generate-test-resources, process-test-resources, test-compile, process-test-classes, test, prepare-package, package, pre-integration-test, integration-test, post-integration-test, verify, install, deploy]
+[DEBUG] Lifecycle clean -> [pre-clean, clean, post-clean]
+[DEBUG] Lifecycle site -> [pre-site, site, post-site, site-deploy]
+[DEBUG] Lifecycle default -> [validate, initialize, generate-sources, process-sources, generate-resources, process-resources, compile, process-classes, generate-test-sources, process-test-sources, generate-test-resources, process-test-resources, test-compile, process-test-classes, test, prepare-package, package, pre-integration-test, integration-test, post-integration-test, verify, install, deploy]
+[DEBUG] Lifecycle clean -> [pre-clean, clean, post-clean]
+[DEBUG] Lifecycle site -> [pre-site, site, post-site, site-deploy]
+[DEBUG] Lifecycle default -> [validate, initialize, generate-sources, process-sources, generate-resources, process-resources, compile, process-classes, generate-test-sources, process-test-sources, generate-test-resources, process-test-resources, test-compile, process-test-classes, test, prepare-package, package, pre-integration-test, integration-test, post-integration-test, verify, install, deploy]
+[DEBUG] Lifecycle clean -> [pre-clean, clean, post-clean]
+[DEBUG] Lifecycle site -> [pre-site, site, post-site, site-deploy]
+[DEBUG] Lifecycle default -> [validate, initialize, generate-sources, process-sources, generate-resources, process-resources, compile, process-classes, generate-test-sources, process-test-sources, generate-test-resources, process-test-resources, test-compile, process-test-classes, test, prepare-package, package, pre-integration-test, integration-test, post-integration-test, verify, install, deploy]
+[DEBUG] Lifecycle clean -> [pre-clean, clean, post-clean]
+[DEBUG] Lifecycle site -> [pre-site, site, post-site, site-deploy]
+[DEBUG] Lifecycle default -> [validate, initialize, generate-sources, process-sources, generate-resources, process-resources, compile, process-classes, generate-test-sources, process-test-sources, generate-test-resources, process-test-resources, test-compile, process-test-classes, test, prepare-package, package, pre-integration-test, integration-test, post-integration-test, verify, install, deploy]
+[DEBUG] Lifecycle clean -> [pre-clean, clean, post-clean]
+[DEBUG] Lifecycle site -> [pre-site, site, post-site, site-deploy]
+[DEBUG] Lifecycle default -> [validate, initialize, generate-sources, process-sources, generate-resources, process-resources, compile, process-classes, generate-test-sources, process-test-sources, generate-test-resources, process-test-resources, test-compile, process-test-classes, test, prepare-package, package, pre-integration-test, integration-test, post-integration-test, verify, install, deploy]
+[DEBUG] Lifecycle clean -> [pre-clean, clean, post-clean]
+[DEBUG] Lifecycle site -> [pre-site, site, post-site, site-deploy]
+[DEBUG] Lifecycle default -> [validate, initialize, generate-sources, process-sources, generate-resources, process-resources, compile, process-classes, generate-test-sources, process-test-sources, generate-test-resources, process-test-resources, test-compile, process-test-classes, test, prepare-package, package, pre-integration-test, integration-test, post-integration-test, verify, install, deploy]
+[DEBUG] Lifecycle clean -> [pre-clean, clean, post-clean]
+[DEBUG] Lifecycle site -> [pre-site, site, post-site, site-deploy]
+[DEBUG] Lifecycle default -> [validate, initialize, generate-sources, process-sources, generate-resources, process-resources, compile, process-classes, generate-test-sources, process-test-sources, generate-test-resources, process-test-resources, test-compile, process-test-classes, test, prepare-package, package, pre-integration-test, integration-test, post-integration-test, verify, install, deploy]
+[DEBUG] Lifecycle clean -> [pre-clean, clean, post-clean]
+[DEBUG] Lifecycle site -> [pre-site, site, post-site, site-deploy]
+[DEBUG] Lifecycle default -> [validate, initialize, generate-sources, process-sources, generate-resources, process-resources, compile, process-classes, generate-test-sources, process-test-sources, generate-test-resources, process-test-resources, test-compile, process-test-classes, test, prepare-package, package, pre-integration-test, integration-test, post-integration-test, verify, install, deploy]
+[DEBUG] Lifecycle clean -> [pre-clean, clean, post-clean]
+[DEBUG] Lifecycle site -> [pre-site, site, post-site, site-deploy]
+[DEBUG] === PROJECT BUILD PLAN ================================================
+[DEBUG] Project:       org.markdownj:markdownj-cli:0.1
+[DEBUG] Dependencies (collect): []
+[DEBUG] Dependencies (resolve): [compile, runtime, test]
+[DEBUG] Repositories (dependencies): [central (https://repo.maven.apache.org/maven2, default, releases)]
+[DEBUG] Repositories (plugins)     : [central (https://repo.maven.apache.org/maven2, default, releases)]
+[DEBUG] -----------------------------------------------------------------------
+[DEBUG] Goal:          com.bew.mojo:test-maven-plugin:0.1.21-SNAPSHOT:create (Create/Increment Build Number)
+[DEBUG] Style:         Regular
+[DEBUG] Configuration: <?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <buildNumberPropertiesFileLocation default-value="${basedir}/buildNumber.properties"/>
+  <buildNumberPropertyName default-value="buildNumber">${maven.buildNumber.buildNumberPropertyName}</buildNumberPropertyName>
+  <format>{0,number}</format>
+  <getRevisionOnlyOnce default-value="true">${maven.buildNumber.getRevisionOnlyOnce}</getRevisionOnlyOnce>
+  <items>
+    <item>buildNumber</item>
+  </items>
+  <project>${project}</project>
+  <reactorProjects default-value="${reactorProjects}"/>
+  <session default-value="${session}"/>
+  <skip default-value="false">${maven.buildNumber.skip}</skip>
+</configuration>
+[DEBUG] -----------------------------------------------------------------------
+[DEBUG] Goal:          com.bew.mojo:test-maven-plugin:0.1.21-SNAPSHOT:project.artifact.version (Eval)
+[DEBUG] Style:         Regular
+[DEBUG] Configuration: <?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <project>${project}</project>
+  <skip default-value="false">${project.artifact.version.skip}</skip>
+  <versionFormat default-value="${project.version}.${buildNumber}-SNAPSHOT">${project.artifact.version.format}</versionFormat>
+</configuration>
+[DEBUG] -----------------------------------------------------------------------
+[DEBUG] Goal:          com.github.ekryd.echo-maven-plugin:echo-maven-plugin:1.3.0:echo (end)
+[DEBUG] Style:         Regular
+[DEBUG] Configuration: <?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <append default-value="false">${echo.append}</append>
+  <basePath default-value="${basedir}"/>
+  <characterOutput default-value="false">${echo.characterOutput}</characterOutput>
+  <encoding default-value="UTF-8">${echo.encoding}</encoding>
+  <force default-value="false">${echo.force}</force>
+  <fromFile>${echo.fromFile}</fromFile>
+  <level default-value="INFO">${echo.level}</level>
+  <lineSeparator default-value="${line.separator}">${echo.lineSeparator}</lineSeparator>
+  <message>
+
+
+                                The project.artifact.version is ${project.artifact.version}
+                                
+</message>
+  <skip default-value="false">${echo.skip}</skip>
+  <toFile>${echo.toFile}</toFile>
+</configuration>
+[DEBUG] -----------------------------------------------------------------------
+[DEBUG] Goal:          org.apache.maven.plugins:maven-resources-plugin:3.1.0:resources (default-resources)
+[DEBUG] Style:         Regular
+[DEBUG] Configuration: <?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <addDefaultExcludes default-value="true"/>
+  <buildFilters default-value="${project.build.filters}"/>
+  <encoding default-value="${project.build.sourceEncoding}">UTF-8</encoding>
+  <escapeWindowsPaths default-value="true"/>
+  <fileNameFiltering default-value="false"/>
+  <includeEmptyDirs default-value="false"/>
+  <outputDirectory default-value="${project.build.outputDirectory}"/>
+  <overwrite default-value="false"/>
+  <project default-value="${project}"/>
+  <resources default-value="${project.resources}"/>
+  <session default-value="${session}"/>
+  <skip default-value="false">${maven.resources.skip}</skip>
+  <supportMultiLineFiltering default-value="false"/>
+  <useBuildFilters default-value="true"/>
+  <useDefaultDelimiters default-value="true"/>
+</configuration>
+[DEBUG] -----------------------------------------------------------------------
+[DEBUG] Goal:          org.apache.maven.plugins:maven-compiler-plugin:3.8.1:compile (default-compile)
+[DEBUG] Style:         Regular
+[DEBUG] Configuration: <?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <basedir default-value="${basedir}"/>
+  <buildDirectory default-value="${project.build.directory}"/>
+  <compilePath default-value="${project.compileClasspathElements}"/>
+  <compileSourceRoots default-value="${project.compileSourceRoots}"/>
+  <compilerArgs>
+    <arg>-Xlint:all</arg>
+    <arg>--enable-preview</arg>
+  </compilerArgs>
+  <compilerId default-value="javac">${maven.compiler.compilerId}</compilerId>
+  <compilerReuseStrategy default-value="${reuseCreated}">${maven.compiler.compilerReuseStrategy}</compilerReuseStrategy>
+  <compilerVersion>${maven.compiler.compilerVersion}</compilerVersion>
+  <debug default-value="true">${maven.compiler.debug}</debug>
+  <debuglevel>${maven.compiler.debuglevel}</debuglevel>
+  <encoding default-value="${project.build.sourceEncoding}">UTF-8</encoding>
+  <executable>${maven.compiler.executable}</executable>
+  <failOnError default-value="true">${maven.compiler.failOnError}</failOnError>
+  <failOnWarning default-value="false">${maven.compiler.failOnWarning}</failOnWarning>
+  <forceJavacCompilerUse default-value="false">${maven.compiler.forceJavacCompilerUse}</forceJavacCompilerUse>
+  <fork default-value="false">${maven.compiler.fork}</fork>
+  <generatedSourcesDirectory default-value="${project.build.directory}/generated-sources/annotations"/>
+  <maxmem>${maven.compiler.maxmem}</maxmem>
+  <meminitial>${maven.compiler.meminitial}</meminitial>
+  <mojoExecution default-value="${mojoExecution}"/>
+  <optimize default-value="false">${maven.compiler.optimize}</optimize>
+  <outputDirectory default-value="${project.build.outputDirectory}"/>
+  <parameters default-value="false">${maven.compiler.parameters}</parameters>
+  <project default-value="${project}"/>
+  <projectArtifact default-value="${project.artifact}"/>
+  <release>14</release>
+  <session default-value="${session}"/>
+  <showDeprecation default-value="false">true</showDeprecation>
+  <showWarnings default-value="false">${maven.compiler.showWarnings}</showWarnings>
+  <skipMain>${maven.main.skip}</skipMain>
+  <skipMultiThreadWarning default-value="false">${maven.compiler.skipMultiThreadWarning}</skipMultiThreadWarning>
+  <source default-value="1.6">14</source>
+  <staleMillis default-value="0">${lastModGranularityMs}</staleMillis>
+  <target default-value="1.6">14</target>
+  <useIncrementalCompilation default-value="true">${maven.compiler.useIncrementalCompilation}</useIncrementalCompilation>
+  <verbose default-value="false">${maven.compiler.verbose}</verbose>
+</configuration>
+[DEBUG] -----------------------------------------------------------------------
+[DEBUG] Goal:          org.apache.maven.plugins:maven-resources-plugin:3.1.0:testResources (default-testResources)
+[DEBUG] Style:         Regular
+[DEBUG] Configuration: <?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <addDefaultExcludes default-value="true"/>
+  <buildFilters default-value="${project.build.filters}"/>
+  <encoding default-value="${project.build.sourceEncoding}">UTF-8</encoding>
+  <escapeWindowsPaths default-value="true"/>
+  <fileNameFiltering default-value="false"/>
+  <includeEmptyDirs default-value="false"/>
+  <outputDirectory default-value="${project.build.testOutputDirectory}"/>
+  <overwrite default-value="false"/>
+  <project default-value="${project}"/>
+  <resources default-value="${project.testResources}"/>
+  <session default-value="${session}"/>
+  <skip default-value="false">${maven.test.skip}</skip>
+  <supportMultiLineFiltering default-value="false"/>
+  <useBuildFilters default-value="true"/>
+  <useDefaultDelimiters default-value="true"/>
+</configuration>
+[DEBUG] -----------------------------------------------------------------------
+[DEBUG] Goal:          org.apache.maven.plugins:maven-compiler-plugin:3.8.1:testCompile (default-testCompile)
+[DEBUG] Style:         Regular
+[DEBUG] Configuration: <?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <basedir default-value="${basedir}"/>
+  <buildDirectory default-value="${project.build.directory}"/>
+  <compilePath default-value="${project.compileClasspathElements}"/>
+  <compileSourceRoots default-value="${project.testCompileSourceRoots}"/>
+  <compilerArgs>
+    <arg>-Xlint:all</arg>
+    <arg>--enable-preview</arg>
+  </compilerArgs>
+  <compilerId default-value="javac">${maven.compiler.compilerId}</compilerId>
+  <compilerReuseStrategy default-value="${reuseCreated}">${maven.compiler.compilerReuseStrategy}</compilerReuseStrategy>
+  <compilerVersion>${maven.compiler.compilerVersion}</compilerVersion>
+  <debug default-value="true">${maven.compiler.debug}</debug>
+  <debuglevel>${maven.compiler.debuglevel}</debuglevel>
+  <encoding default-value="${project.build.sourceEncoding}">UTF-8</encoding>
+  <executable>${maven.compiler.executable}</executable>
+  <failOnError default-value="true">${maven.compiler.failOnError}</failOnError>
+  <failOnWarning default-value="false">${maven.compiler.failOnWarning}</failOnWarning>
+  <forceJavacCompilerUse default-value="false">${maven.compiler.forceJavacCompilerUse}</forceJavacCompilerUse>
+  <fork default-value="false">${maven.compiler.fork}</fork>
+  <generatedTestSourcesDirectory default-value="${project.build.directory}/generated-test-sources/test-annotations"/>
+  <maxmem>${maven.compiler.maxmem}</maxmem>
+  <meminitial>${maven.compiler.meminitial}</meminitial>
+  <mojoExecution default-value="${mojoExecution}"/>
+  <optimize default-value="false">${maven.compiler.optimize}</optimize>
+  <outputDirectory default-value="${project.build.testOutputDirectory}"/>
+  <parameters default-value="false">${maven.compiler.parameters}</parameters>
+  <project default-value="${project}"/>
+  <release>14</release>
+  <session default-value="${session}"/>
+  <showDeprecation default-value="false">true</showDeprecation>
+  <showWarnings default-value="false">${maven.compiler.showWarnings}</showWarnings>
+  <skip>${maven.test.skip}</skip>
+  <skipMultiThreadWarning default-value="false">${maven.compiler.skipMultiThreadWarning}</skipMultiThreadWarning>
+  <source default-value="1.6">14</source>
+  <staleMillis default-value="0">${lastModGranularityMs}</staleMillis>
+  <target default-value="1.6">14</target>
+  <testPath default-value="${project.testClasspathElements}"/>
+  <testRelease>${maven.compiler.testRelease}</testRelease>
+  <testSource>${maven.compiler.testSource}</testSource>
+  <testTarget>${maven.compiler.testTarget}</testTarget>
+  <useIncrementalCompilation default-value="true">${maven.compiler.useIncrementalCompilation}</useIncrementalCompilation>
+  <verbose default-value="false">${maven.compiler.verbose}</verbose>
+</configuration>
+[DEBUG] -----------------------------------------------------------------------
+[DEBUG] Goal:          org.apache.maven.plugins:maven-surefire-plugin:3.0.0-M4:test (default-test)
+[DEBUG] Style:         Regular
+[DEBUG] Configuration: <?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <additionalClasspathElements>${maven.test.additionalClasspath}</additionalClasspathElements>
+  <argLine>--enable-preview</argLine>
+  <basedir default-value="${basedir}"/>
+  <childDelegation default-value="false">${childDelegation}</childDelegation>
+  <classesDirectory default-value="${project.build.outputDirectory}"/>
+  <classpathDependencyExcludes>${maven.test.dependency.excludes}</classpathDependencyExcludes>
+  <debugForkedProcess>${maven.surefire.debug}</debugForkedProcess>
+  <dependenciesToScan>${dependenciesToScan}</dependenciesToScan>
+  <disableXmlReport default-value="false">${disableXmlReport}</disableXmlReport>
+  <enableAssertions default-value="true">${enableAssertions}</enableAssertions>
+  <enableProcessChecker>${surefire.enableProcessChecker}</enableProcessChecker>
+  <encoding default-value="${project.reporting.outputEncoding}">${surefire.encoding}</encoding>
+  <excludedEnvironmentVariables>${surefire.excludedEnvironmentVariables}</excludedEnvironmentVariables>
+  <excludedGroups>${excludedGroups}</excludedGroups>
+  <excludes>
+    <exclude>**/TestResultPair.java</exclude>
+  </excludes>
+  <excludesFile>${surefire.excludesFile}</excludesFile>
+  <failIfNoSpecifiedTests>${surefire.failIfNoSpecifiedTests}</failIfNoSpecifiedTests>
+  <failIfNoTests>${failIfNoTests}</failIfNoTests>
+  <forkCount default-value="1">${forkCount}</forkCount>
+  <forkMode default-value="once">${forkMode}</forkMode>
+  <forkedProcessExitTimeoutInSeconds default-value="30">${surefire.exitTimeout}</forkedProcessExitTimeoutInSeconds>
+  <forkedProcessTimeoutInSeconds>${surefire.timeout}</forkedProcessTimeoutInSeconds>
+  <groups>${groups}</groups>
+  <includes>
+    <include>**/*.java</include>
+  </includes>
+  <includesFile>${surefire.includesFile}</includesFile>
+  <junitArtifactName default-value="junit:junit">${junitArtifactName}</junitArtifactName>
+  <jvm>${jvm}</jvm>
+  <localRepository default-value="${localRepository}"/>
+  <objectFactory>${objectFactory}</objectFactory>
+  <parallel>${parallel}</parallel>
+  <parallelMavenExecution default-value="${session.parallel}"/>
+  <parallelOptimized default-value="true">${parallelOptimized}</parallelOptimized>
+  <parallelTestsTimeoutForcedInSeconds>${surefire.parallel.forcedTimeout}</parallelTestsTimeoutForcedInSeconds>
+  <parallelTestsTimeoutInSeconds>${surefire.parallel.timeout}</parallelTestsTimeoutInSeconds>
+  <perCoreThreadCount default-value="true">${perCoreThreadCount}</perCoreThreadCount>
+  <pluginArtifactMap>${plugin.artifactMap}</pluginArtifactMap>
+  <pluginDescriptor default-value="${plugin}"/>
+  <printSummary default-value="true">${surefire.printSummary}</printSummary>
+  <project default-value="${project}"/>
+  <projectArtifactMap>${project.artifactMap}</projectArtifactMap>
+  <projectBuildDirectory default-value="${project.build.directory}"/>
+  <projectRemoteRepositories default-value="${project.remoteArtifactRepositories}"/>
+  <redirectTestOutputToFile default-value="false">${maven.test.redirectTestOutputToFile}</redirectTestOutputToFile>
+  <remoteRepositories default-value="${project.pluginArtifactRepositories}"/>
+  <reportFormat default-value="brief">${surefire.reportFormat}</reportFormat>
+  <reportNameSuffix default-value="">${surefire.reportNameSuffix}</reportNameSuffix>
+  <reportsDirectory default-value="${project.build.directory}/surefire-reports"/>
+  <rerunFailingTestsCount default-value="0">${surefire.rerunFailingTestsCount}</rerunFailingTestsCount>
+  <reuseForks default-value="true">${reuseForks}</reuseForks>
+  <runOrder default-value="filesystem">${surefire.runOrder}</runOrder>
+  <session default-value="${session}"/>
+  <shutdown default-value="exit">${surefire.shutdown}</shutdown>
+  <skip default-value="false">${maven.test.skip}</skip>
+  <skipAfterFailureCount default-value="0">${surefire.skipAfterFailureCount}</skipAfterFailureCount>
+  <skipExec>${maven.test.skip.exec}</skipExec>
+  <skipTests default-value="false">${skipTests}</skipTests>
+  <suiteXmlFiles>${surefire.suiteXmlFiles}</suiteXmlFiles>
+  <tempDir default-value="surefire">${tempDir}</tempDir>
+  <test>${test}</test>
+  <testClassesDirectory default-value="${project.build.testOutputDirectory}"/>
+  <testFailureIgnore default-value="false">${maven.test.failure.ignore}</testFailureIgnore>
+  <testNGArtifactName default-value="org.testng:testng">${testNGArtifactName}</testNGArtifactName>
+  <testSourceDirectory default-value="${project.build.testSourceDirectory}"/>
+  <threadCount>${threadCount}</threadCount>
+  <threadCountClasses default-value="0">${threadCountClasses}</threadCountClasses>
+  <threadCountMethods default-value="0">${threadCountMethods}</threadCountMethods>
+  <threadCountSuites default-value="0">${threadCountSuites}</threadCountSuites>
+  <trimStackTrace default-value="true">${trimStackTrace}</trimStackTrace>
+  <useFile default-value="true">${surefire.useFile}</useFile>
+  <useManifestOnlyJar default-value="true">${surefire.useManifestOnlyJar}</useManifestOnlyJar>
+  <useModulePath default-value="true">${surefire.useModulePath}</useModulePath>
+  <useSystemClassLoader default-value="true">${surefire.useSystemClassLoader}</useSystemClassLoader>
+  <useUnlimitedThreads default-value="false">${useUnlimitedThreads}</useUnlimitedThreads>
+  <workingDirectory>${basedir}</workingDirectory>
+</configuration>
+[DEBUG] -----------------------------------------------------------------------
+[DEBUG] Goal:          org.codehaus.mojo:exec-maven-plugin:1.6.0:exec (Markdownj-Compile)
+[DEBUG] Style:         Regular
+[DEBUG] Configuration: <?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <addOutputToClasspath default-value="true">${addOutputToClasspath}</addOutputToClasspath>
+  <addResourcesToClasspath default-value="false">${addResourcesToClasspath}</addResourcesToClasspath>
+  <async default-value="false">${exec.async}</async>
+  <asyncDestroyOnShutdown default-value="true">${exec.asyncDestroyOnShutdown}</asyncDestroyOnShutdown>
+  <basedir default-value="${basedir}"/>
+  <classpathScope default-value="runtime">${exec.classpathScope}</classpathScope>
+  <commandlineArgs>--enable-preview -classpath %classpath org.markdownj.cli.Main -v:2 -s src/docs/manual -d target/manual -wr</commandlineArgs>
+  <executable>java</executable>
+  <localRepository default-value="${localRepository}"/>
+  <longClasspath default-value="false">${exec.longClasspath}</longClasspath>
+  <longModulepath default-value="true">${exec.longModulepath}</longModulepath>
+  <outputFile>${exec.outputFile}</outputFile>
+  <pluginDependencies default-value="${plugin.artifacts}"/>
+  <project default-value="${project}"/>
+  <remoteRepositories default-value="${project.remoteArtifactRepositories}"/>
+  <session default-value="${session}"/>
+  <skip default-value="false">${exec.skip}</skip>
+  <sourceRoot>${sourceRoot}</sourceRoot>
+  <testSourceRoot>${testSourceRoot}</testSourceRoot>
+  <toolchain default-value="jdk">${exec.toolchain}</toolchain>
+  <workingDirectory>${exec.workingdir}</workingDirectory>
+</configuration>
+[DEBUG] -----------------------------------------------------------------------
+[DEBUG] Goal:          org.apache.maven.plugins:maven-dependency-plugin:3.1.1:copy-dependencies (copy-dependencies)
+[DEBUG] Style:         Regular
+[DEBUG] Configuration: <?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <addParentPoms default-value="false">${mdep.addParentPoms}</addParentPoms>
+  <classifier default-value="">${classifier}</classifier>
+  <copyPom default-value="false">${mdep.copyPom}</copyPom>
+  <excludeArtifactIds default-value="">${excludeArtifactIds}</excludeArtifactIds>
+  <excludeClassifiers default-value="">${excludeClassifiers}</excludeClassifiers>
+  <excludeGroupIds default-value="">${excludeGroupIds}</excludeGroupIds>
+  <excludeScope default-value="">test</excludeScope>
+  <excludeTransitive default-value="false">${excludeTransitive}</excludeTransitive>
+  <excludeTypes default-value="">${excludeTypes}</excludeTypes>
+  <failOnMissingClassifierArtifact default-value="false">${mdep.failOnMissingClassifierArtifact}</failOnMissingClassifierArtifact>
+  <includeArtifactIds default-value="">${includeArtifactIds}</includeArtifactIds>
+  <includeClassifiers default-value="">${includeClassifiers}</includeClassifiers>
+  <includeGroupIds default-value="">${includeGroupIds}</includeGroupIds>
+  <includeScope default-value="">runtime</includeScope>
+  <includeTypes default-value="">${includeTypes}</includeTypes>
+  <markersDirectory default-value="${project.build.directory}/dependency-maven-plugin-markers">${markersDirectory}</markersDirectory>
+  <outputAbsoluteArtifactFilename default-value="false">${outputAbsoluteArtifactFilename}</outputAbsoluteArtifactFilename>
+  <outputDirectory default-value="${project.build.directory}/dependency">/home/bwillcott/NetBeansProjects/markdownj-cli/target/libs</outputDirectory>
+  <overWriteIfNewer default-value="true">${overWriteIfNewer}</overWriteIfNewer>
+  <overWriteReleases default-value="false">${overWriteReleases}</overWriteReleases>
+  <overWriteSnapshots default-value="false">${overWriteSnapshots}</overWriteSnapshots>
+  <prependGroupId default-value="false">${mdep.prependGroupId}</prependGroupId>
+  <project default-value="${project}"/>
+  <reactorProjects default-value="${reactorProjects}"/>
+  <remoteRepositories default-value="${project.remoteArtifactRepositories}"/>
+  <session default-value="${session}"/>
+  <silent default-value="false">${silent}</silent>
+  <skip default-value="false">${mdep.skip}</skip>
+  <stripClassifier default-value="false">${mdep.stripClassifier}</stripClassifier>
+  <stripVersion default-value="false">${mdep.stripVersion}</stripVersion>
+  <type default-value="">${type}</type>
+  <useBaseVersion default-value="true">${mdep.useBaseVersion}</useBaseVersion>
+  <useRepositoryLayout default-value="false">${mdep.useRepositoryLayout}</useRepositoryLayout>
+  <useSubDirectoryPerArtifact default-value="false">${mdep.useSubDirectoryPerArtifact}</useSubDirectoryPerArtifact>
+  <useSubDirectoryPerScope default-value="false">${mdep.useSubDirectoryPerScope}</useSubDirectoryPerScope>
+  <useSubDirectoryPerType default-value="false">${mdep.useSubDirectoryPerType}</useSubDirectoryPerType>
+</configuration>
+[DEBUG] -----------------------------------------------------------------------
+[DEBUG] Goal:          org.apache.maven.plugins:maven-jar-plugin:3.2.0:jar (default-jar)
+[DEBUG] Style:         Regular
+[DEBUG] Configuration: <?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <archive>
+    <manifest>
+      <addClasspath>true</addClasspath>
+      <classpathPrefix>libs/</classpathPrefix>
+      <mainClass>org.markdownj.cli.Main</mainClass>
+      <addBuildEnvironmentEntries>true</addBuildEnvironmentEntries>
+      <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+    </manifest>
+  </archive>
+  <classesDirectory default-value="${project.build.outputDirectory}"/>
+  <finalName default-value="${project.build.finalName}"/>
+  <forceCreation default-value="false">${maven.jar.forceCreation}</forceCreation>
+  <outputDirectory default-value="${project.build.directory}"/>
+  <outputTimestamp default-value="${project.build.outputTimestamp}"/>
+  <project default-value="${project}"/>
+  <session default-value="${session}"/>
+  <skipIfEmpty default-value="false"/>
+  <useDefaultManifestFile default-value="false">${jar.useDefaultManifestFile}</useDefaultManifestFile>
+</configuration>
+[DEBUG] -----------------------------------------------------------------------
+[DEBUG] Goal:          org.apache.maven.plugins:maven-source-plugin:3.2.3.1-SNAPSHOT:jar-no-fork (Create-jar)
+[DEBUG] Style:         Regular
+[DEBUG] Configuration: <?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <attach default-value="true">true</attach>
+  <classifier default-value="sources">sources</classifier>
+  <defaultManifestFile default-value="${project.build.outputDirectory}/META-INF/MANIFEST.MF"/>
+  <excludeResources default-value="false">${maven.source.excludeResources}</excludeResources>
+  <finalName default-value="${project.build.finalName}"/>
+  <forceCreation default-value="false">${maven.source.forceCreation}</forceCreation>
+  <includePom default-value="false">${maven.source.includePom}</includePom>
+  <outputDirectory default-value="${project.build.directory}"/>
+  <outputTimestamp default-value="${project.build.outputTimestamp}"/>
+  <project default-value="${project}"/>
+  <reactorProjects default-value="${reactorProjects}"/>
+  <session default-value="${session}"/>
+  <skipSource default-value="false">${maven.source.skip}</skipSource>
+  <useDefaultExcludes default-value="true">${maven.source.useDefaultExcludes}</useDefaultExcludes>
+  <useDefaultManifestFile default-value="false">${maven.source.useDefaultManifestFile}</useDefaultManifestFile>
+</configuration>
+[DEBUG] -----------------------------------------------------------------------
+[DEBUG] Goal:          org.apache.maven.plugins:maven-install-plugin:2.4:install (default-install)
+[DEBUG] Style:         Regular
+[DEBUG] Configuration: <?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <artifact default-value="${project.artifact}"/>
+  <attachedArtifacts default-value="${project.attachedArtifacts}"/>
+  <createChecksum default-value="false">${createChecksum}</createChecksum>
+  <localRepository>${localRepository}</localRepository>
+  <packaging default-value="${project.packaging}"/>
+  <pomFile default-value="${project.file}"/>
+  <skip default-value="false">${maven.install.skip}</skip>
+  <updateReleaseInfo default-value="false">${updateReleaseInfo}</updateReleaseInfo>
+</configuration>
+[DEBUG] =======================================================================
+[DEBUG] Dependency collection stats: {ConflictMarker.analyzeTime=1531004, ConflictMarker.markTime=223264, ConflictMarker.nodeCount=21, ConflictIdSorter.graphTime=653503, ConflictIdSorter.topsortTime=490697, ConflictIdSorter.conflictIdCount=12, ConflictIdSorter.conflictIdCycleCount=0, ConflictResolver.totalTime=7678789, ConflictResolver.conflictItemCount=20, DefaultDependencyCollector.collectTime=74130894, DefaultDependencyCollector.transformTime=12469224}
+[DEBUG] org.markdownj:markdownj-cli:jar:0.1
+[DEBUG]    com.martiansoftware:jsap:jar:2.1:compile
+[DEBUG]    org.junit.jupiter:junit-jupiter:jar:5.6.0:test (optional)
+[DEBUG]       org.junit.jupiter:junit-jupiter-api:jar:5.6.0:test (optional)
+[DEBUG]          org.apiguardian:apiguardian-api:jar:1.1.0:test (optional)
+[DEBUG]          org.opentest4j:opentest4j:jar:1.2.0:test (optional)
+[DEBUG]          org.junit.platform:junit-platform-commons:jar:1.6.0:test (optional)
+[DEBUG]       org.junit.jupiter:junit-jupiter-params:jar:5.6.0:test (optional)
+[DEBUG]       org.junit.jupiter:junit-jupiter-engine:jar:5.6.0:test (optional)
+[DEBUG]          org.junit.platform:junit-platform-engine:jar:1.6.0:test (optional)
+[DEBUG]    org.markdownj:markdownj-core:jar:0.5.30-SNAPSHOT:compile
+[DEBUG]    com.bew:BEWCommons:jar:1.0.5-SNAPSHOT:compile
+[DEBUG]       org.xerial:sqlite-jdbc:jar:3.30.1:compile
+[INFO] 
+[INFO] --- test-maven-plugin:0.1.21-SNAPSHOT:create (Create/Increment Build Number) @ markdownj-cli ---
+[DEBUG] Dependency collection stats: {ConflictMarker.analyzeTime=51241, ConflictMarker.markTime=86964, ConflictMarker.nodeCount=1, ConflictIdSorter.graphTime=6423, ConflictIdSorter.topsortTime=10356, ConflictIdSorter.conflictIdCount=1, ConflictIdSorter.conflictIdCycleCount=0, ConflictResolver.totalTime=65214, ConflictResolver.conflictItemCount=1, DefaultDependencyCollector.collectTime=5840331, DefaultDependencyCollector.transformTime=316638}
+[DEBUG] com.bew.mojo:test-maven-plugin:jar:0.1.21-SNAPSHOT:
+[DEBUG]    org.codehaus.plexus:plexus-utils:jar:1.1:runtime
+[DEBUG] Created new class realm plugin>com.bew.mojo:test-maven-plugin:0.1.21-SNAPSHOT
+[DEBUG] Importing foreign packages into class realm plugin>com.bew.mojo:test-maven-plugin:0.1.21-SNAPSHOT
+[DEBUG]   Imported:  < maven.api
+[DEBUG] Populating class realm plugin>com.bew.mojo:test-maven-plugin:0.1.21-SNAPSHOT
+[DEBUG]   Included: com.bew.mojo:test-maven-plugin:jar:0.1.21-SNAPSHOT
+[DEBUG]   Included: org.codehaus.plexus:plexus-utils:jar:1.1
+[DEBUG] Configuring mojo com.bew.mojo:test-maven-plugin:0.1.21-SNAPSHOT:create from plugin realm ClassRealm[plugin>com.bew.mojo:test-maven-plugin:0.1.21-SNAPSHOT, parent: jdk.internal.loader.ClassLoaders$AppClassLoader@5bc2b487]
+[DEBUG] Configuring mojo 'com.bew.mojo:test-maven-plugin:0.1.21-SNAPSHOT:create' with basic configurator -->
+[DEBUG]   (s) buildNumberPropertiesFileLocation = /home/bwillcott/NetBeansProjects/markdownj-cli/buildNumber.properties
+[DEBUG]   (f) buildNumberPropertyName = buildNumber
+[DEBUG]   (f) format = {0,number}
+[DEBUG]   (f) getRevisionOnlyOnce = true
+[DEBUG]   (f) items = [buildNumber]
+[DEBUG]   (f) project = MavenProject: org.markdownj:markdownj-cli:0.1 @ /home/bwillcott/NetBeansProjects/markdownj-cli/pom.xml
+[DEBUG]   (f) reactorProjects = [MavenProject: org.markdownj:markdownj-cli:0.1 @ /home/bwillcott/NetBeansProjects/markdownj-cli/pom.xml]
+[DEBUG]   (f) session = org.apache.maven.execution.MavenSession@13d186db
+[DEBUG]   (f) skip = false
+[DEBUG] -- end configuration --
+[INFO] Time stamp: 1585373757
+[INFO] revision: 82
+[INFO] 
+[INFO] --- test-maven-plugin:0.1.21-SNAPSHOT:project.artifact.version (Eval) @ markdownj-cli ---
+[DEBUG] Configuring mojo com.bew.mojo:test-maven-plugin:0.1.21-SNAPSHOT:project.artifact.version from plugin realm ClassRealm[plugin>com.bew.mojo:test-maven-plugin:0.1.21-SNAPSHOT, parent: jdk.internal.loader.ClassLoaders$AppClassLoader@5bc2b487]
+[DEBUG] Configuring mojo 'com.bew.mojo:test-maven-plugin:0.1.21-SNAPSHOT:project.artifact.version' with basic configurator -->
+[DEBUG]   (f) project = MavenProject: org.markdownj:markdownj-cli:0.1 @ /home/bwillcott/NetBeansProjects/markdownj-cli/pom.xml
+[DEBUG]   (f) skip = false
+[DEBUG]   (f) versionFormat = 0.1.82-SNAPSHOT
+[DEBUG] -- end configuration --
+[INFO] 'project.getArtifact().getVersion()' available from previous execution: 0.1
+[INFO] format: 0.1.82-SNAPSHOT
+[INFO] project.artifact.version: null
+[INFO] project.getArtifact().getVersion(): 0.1.82-SNAPSHOT
+[INFO] 
+[INFO] --- echo-maven-plugin:1.3.0:echo (end) @ markdownj-cli ---
+[DEBUG] Dependency collection stats: {ConflictMarker.analyzeTime=116740, ConflictMarker.markTime=112283, ConflictMarker.nodeCount=19, ConflictIdSorter.graphTime=54722, ConflictIdSorter.topsortTime=64316, ConflictIdSorter.conflictIdCount=15, ConflictIdSorter.conflictIdCycleCount=0, ConflictResolver.totalTime=1151861, ConflictResolver.conflictItemCount=19, DefaultDependencyCollector.collectTime=123194199, DefaultDependencyCollector.transformTime=1547768}
+[DEBUG] com.github.ekryd.echo-maven-plugin:echo-maven-plugin:jar:1.3.0:
+[DEBUG]    com.github.ekryd.echo-maven-plugin:echo-output:jar:1.3.0:compile
+[DEBUG]       commons-io:commons-io:jar:2.6:compile
+[DEBUG]    org.apache.maven:maven-plugin-api:jar:3.6.3:compile
+[DEBUG]       org.apache.maven:maven-model:jar:3.6.3:compile
+[DEBUG]       org.apache.maven:maven-artifact:jar:3.6.3:compile
+[DEBUG]          org.apache.commons:commons-lang3:jar:3.8.1:compile
+[DEBUG]       org.eclipse.sisu:org.eclipse.sisu.plexus:jar:0.3.4:compile
+[DEBUG]          javax.enterprise:cdi-api:jar:1.0:compile
+[DEBUG]             javax.annotation:jsr250-api:jar:1.0:compile
+[DEBUG]             javax.inject:javax.inject:jar:1:compile
+[DEBUG]          org.eclipse.sisu:org.eclipse.sisu.inject:jar:0.3.4:compile
+[DEBUG]          org.codehaus.plexus:plexus-component-annotations:jar:1.5.5:compile
+[DEBUG]       org.codehaus.plexus:plexus-utils:jar:3.2.1:compile
+[DEBUG]       org.codehaus.plexus:plexus-classworlds:jar:2.6.0:compile
+[DEBUG] Created new class realm plugin>com.github.ekryd.echo-maven-plugin:echo-maven-plugin:1.3.0
+[DEBUG] Importing foreign packages into class realm plugin>com.github.ekryd.echo-maven-plugin:echo-maven-plugin:1.3.0
+[DEBUG]   Imported:  < maven.api
+[DEBUG] Populating class realm plugin>com.github.ekryd.echo-maven-plugin:echo-maven-plugin:1.3.0
+[DEBUG]   Included: com.github.ekryd.echo-maven-plugin:echo-maven-plugin:jar:1.3.0
+[DEBUG]   Included: com.github.ekryd.echo-maven-plugin:echo-output:jar:1.3.0
+[DEBUG]   Included: commons-io:commons-io:jar:2.6
+[DEBUG]   Included: org.apache.commons:commons-lang3:jar:3.8.1
+[DEBUG]   Included: javax.enterprise:cdi-api:jar:1.0
+[DEBUG]   Included: org.eclipse.sisu:org.eclipse.sisu.inject:jar:0.3.4
+[DEBUG]   Included: org.codehaus.plexus:plexus-component-annotations:jar:1.5.5
+[DEBUG]   Included: org.codehaus.plexus:plexus-utils:jar:3.2.1
+[DEBUG] Configuring mojo com.github.ekryd.echo-maven-plugin:echo-maven-plugin:1.3.0:echo from plugin realm ClassRealm[plugin>com.github.ekryd.echo-maven-plugin:echo-maven-plugin:1.3.0, parent: jdk.internal.loader.ClassLoaders$AppClassLoader@5bc2b487]
+[DEBUG] Configuring mojo 'com.github.ekryd.echo-maven-plugin:echo-maven-plugin:1.3.0:echo' with basic configurator -->
+[DEBUG]   (f) append = false
+[DEBUG]   (f) basePath = /home/bwillcott/NetBeansProjects/markdownj-cli
+[DEBUG]   (f) characterOutput = false
+[DEBUG]   (f) encoding = UTF-8
+[DEBUG]   (f) force = false
+[DEBUG]   (f) level = INFO
+[DEBUG]   (f) lineSeparator = 
+
+[DEBUG]   (f) message = 
+
+
+                                The project.artifact.version is 0.1.82-SNAPSHOT
+                                
+
+[DEBUG]   (f) skip = false
+[DEBUG] -- end configuration --
+[INFO] 
+
+
+                                The project.artifact.version is 0.1.82-SNAPSHOT
+                                
+
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:resources (default-resources) @ markdownj-cli ---
+[DEBUG] Dependency collection stats: {ConflictMarker.analyzeTime=361043, ConflictMarker.markTime=207564, ConflictMarker.nodeCount=68, ConflictIdSorter.graphTime=167341, ConflictIdSorter.topsortTime=44648, ConflictIdSorter.conflictIdCount=28, ConflictIdSorter.conflictIdCycleCount=0, ConflictResolver.totalTime=2760261, ConflictResolver.conflictItemCount=67, DefaultDependencyCollector.collectTime=173067917, DefaultDependencyCollector.transformTime=3585352}
+[DEBUG] org.apache.maven.plugins:maven-resources-plugin:jar:3.1.0:
+[DEBUG]    org.apache.maven:maven-plugin-api:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-artifact:jar:3.0:compile
+[DEBUG]       org.sonatype.sisu:sisu-inject-plexus:jar:1.4.2:compile
+[DEBUG]          org.sonatype.sisu:sisu-inject-bean:jar:1.4.2:compile
+[DEBUG]             org.sonatype.sisu:sisu-guice:jar:noaop:2.1.7:compile
+[DEBUG]    org.apache.maven:maven-core:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-settings:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-settings-builder:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-repository-metadata:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-model-builder:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-aether-provider:jar:3.0:runtime
+[DEBUG]       org.sonatype.aether:aether-impl:jar:1.7:compile
+[DEBUG]          org.sonatype.aether:aether-spi:jar:1.7:compile
+[DEBUG]       org.sonatype.aether:aether-api:jar:1.7:compile
+[DEBUG]       org.sonatype.aether:aether-util:jar:1.7:compile
+[DEBUG]       org.codehaus.plexus:plexus-classworlds:jar:2.2.3:compile
+[DEBUG]       org.codehaus.plexus:plexus-component-annotations:jar:1.7.1:compile
+[DEBUG]       org.sonatype.plexus:plexus-sec-dispatcher:jar:1.3:compile
+[DEBUG]          org.sonatype.plexus:plexus-cipher:jar:1.4:compile
+[DEBUG]    org.apache.maven:maven-model:jar:3.0:compile
+[DEBUG]    org.codehaus.plexus:plexus-utils:jar:3.1.0:compile
+[DEBUG]    org.apache.maven.shared:maven-filtering:jar:3.1.1:compile
+[DEBUG]       org.apache.maven.shared:maven-shared-utils:jar:3.0.0:compile
+[DEBUG]          com.google.code.findbugs:jsr305:jar:2.0.1:compile
+[DEBUG]       org.sonatype.plexus:plexus-build-api:jar:0.0.7:compile
+[DEBUG]    commons-io:commons-io:jar:2.5:compile
+[DEBUG]    org.codehaus.plexus:plexus-interpolation:jar:1.24:compile
+[DEBUG] Created new class realm plugin>org.apache.maven.plugins:maven-resources-plugin:3.1.0
+[DEBUG] Importing foreign packages into class realm plugin>org.apache.maven.plugins:maven-resources-plugin:3.1.0
+[DEBUG]   Imported:  < maven.api
+[DEBUG] Populating class realm plugin>org.apache.maven.plugins:maven-resources-plugin:3.1.0
+[DEBUG]   Included: org.apache.maven.plugins:maven-resources-plugin:jar:3.1.0
+[DEBUG]   Included: org.sonatype.sisu:sisu-inject-bean:jar:1.4.2
+[DEBUG]   Included: org.sonatype.sisu:sisu-guice:jar:noaop:2.1.7
+[DEBUG]   Included: org.sonatype.aether:aether-util:jar:1.7
+[DEBUG]   Included: org.codehaus.plexus:plexus-component-annotations:jar:1.7.1
+[DEBUG]   Included: org.sonatype.plexus:plexus-sec-dispatcher:jar:1.3
+[DEBUG]   Included: org.sonatype.plexus:plexus-cipher:jar:1.4
+[DEBUG]   Included: org.codehaus.plexus:plexus-utils:jar:3.1.0
+[DEBUG]   Included: org.apache.maven.shared:maven-filtering:jar:3.1.1
+[DEBUG]   Included: org.apache.maven.shared:maven-shared-utils:jar:3.0.0
+[DEBUG]   Included: com.google.code.findbugs:jsr305:jar:2.0.1
+[DEBUG]   Included: org.sonatype.plexus:plexus-build-api:jar:0.0.7
+[DEBUG]   Included: commons-io:commons-io:jar:2.5
+[DEBUG]   Included: org.codehaus.plexus:plexus-interpolation:jar:1.24
+[DEBUG] Configuring mojo org.apache.maven.plugins:maven-resources-plugin:3.1.0:resources from plugin realm ClassRealm[plugin>org.apache.maven.plugins:maven-resources-plugin:3.1.0, parent: jdk.internal.loader.ClassLoaders$AppClassLoader@5bc2b487]
+[DEBUG] Configuring mojo 'org.apache.maven.plugins:maven-resources-plugin:3.1.0:resources' with basic configurator -->
+[DEBUG]   (f) addDefaultExcludes = true
+[DEBUG]   (f) buildFilters = []
+[DEBUG]   (f) encoding = UTF-8
+[DEBUG]   (f) escapeWindowsPaths = true
+[DEBUG]   (f) fileNameFiltering = false
+[DEBUG]   (s) includeEmptyDirs = false
+[DEBUG]   (s) outputDirectory = /home/bwillcott/NetBeansProjects/markdownj-cli/target/classes
+[DEBUG]   (s) overwrite = false
+[DEBUG]   (f) project = MavenProject: org.markdownj:markdownj-cli:0.1 @ /home/bwillcott/NetBeansProjects/markdownj-cli/pom.xml
+[DEBUG]   (s) resources = [Resource {targetPath: null, filtering: true, FileSet {directory: /home/bwillcott/NetBeansProjects/markdownj-cli/src/main/resources, PatternSet [includes: {**/markdownj-cli.properties}, excludes: {}]}}, Resource {targetPath: null, filtering: false, FileSet {directory: /home/bwillcott/NetBeansProjects/markdownj-cli/src/main/resources, PatternSet [includes: {}, excludes: {**/markdownj-cli.properties}]}}, Resource {targetPath: null, filtering: false, FileSet {directory: /home/bwillcott/NetBeansProjects/markdownj-cli/src/docs, PatternSet [includes: {}, excludes: {**/*}]}}, Resource {targetPath: null, filtering: false, FileSet {directory: /home/bwillcott/NetBeansProjects/markdownj-cli/target/manual, PatternSet [includes: {}, excludes: {**/*}]}}]
+[DEBUG]   (f) session = org.apache.maven.execution.MavenSession@13d186db
+[DEBUG]   (f) skip = false
+[DEBUG]   (f) supportMultiLineFiltering = false
+[DEBUG]   (f) useBuildFilters = true
+[DEBUG]   (s) useDefaultDelimiters = true
+[DEBUG] -- end configuration --
+[DEBUG] properties used {env.TERM=xterm-256color, java.specification.version=14, sun.arch.data.model=64, env.GDK_BACKEND=x11, java.vendor.url=https://java.oracle.com/, env.COLORFGBG=15;0, sun.boot.library.path=/home/bwillcott/Java-Dev/jdk-14/lib, sun.java.command=org.codehaus.plexus.classworlds.launcher.Launcher -e -X install, jdk.debug=release, env.SSH_AGENT_PID=1396, env.DERBY_HOME=/home/bwillcott/Java-Dev/db-derby-10.15.1.3/bin, maven.version=3.5.4, java.specification.vendor=Oracle Corporation, java.version.date=2020-03-17, env.J2D_PIXMAPS=shared, java.home=/home/bwillcott/Java-Dev/jdk-14, env.GDK_CORE_DEVICE_EVENTS=1, java.vm.specification.vendor=Oracle Corporation, java.specification.name=Java Platform API Specification, env.SSH_ASKPASS=/usr/bin/ksshaskpass, env.PROFILEHOME=/home/bwillcott/NetBeansProjects/markdownj-cli, sun.management.compiler=HotSpot 64-Bit Tiered Compilers, env.XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session1, java.runtime.version=14+36-1461, env.PATH=/home/bwillcott/Java-Dev/db-derby-10.15.1.3/bin/bin:/home/bwillcott/Java-Dev/db-derby-10.15.1.3/bin/bin:/home/bwillcott/.local/bin:/home/bwillcott/bin:/usr/local/lib/nodejs/node-v12.13.1-linux-x64/bin:/usr/lib64/ccache:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin, env.LS_COLORS=rs=0:di=38;5;33:ln=38;5;51:mh=00:pi=40;38;5;11:so=38;5;13:do=38;5;5:bd=48;5;232;38;5;11:cd=48;5;232;38;5;3:or=48;5;232;38;5;9:mi=01;37;41:su=48;5;196;38;5;15:sg=48;5;11;38;5;16:ca=48;5;196;38;5;226:tw=48;5;10;38;5;16:ow=48;5;10;38;5;21:st=48;5;21;38;5;15:ex=38;5;40:*.tar=38;5;9:*.tgz=38;5;9:*.arc=38;5;9:*.arj=38;5;9:*.taz=38;5;9:*.lha=38;5;9:*.lz4=38;5;9:*.lzh=38;5;9:*.lzma=38;5;9:*.tlz=38;5;9:*.txz=38;5;9:*.tzo=38;5;9:*.t7z=38;5;9:*.zip=38;5;9:*.z=38;5;9:*.dz=38;5;9:*.gz=38;5;9:*.lrz=38;5;9:*.lz=38;5;9:*.lzo=38;5;9:*.xz=38;5;9:*.zst=38;5;9:*.tzst=38;5;9:*.bz2=38;5;9:*.bz=38;5;9:*.tbz=38;5;9:*.tbz2=38;5;9:*.tz=38;5;9:*.deb=38;5;9:*.rpm=38;5;9:*.jar=38;5;9:*.war=38;5;9:*.ear=38;5;9:*.sar=38;5;9:*.rar=38;5;9:*.alz=38;5;9:*.ace=38;5;9:*.zoo=38;5;9:*.cpio=38;5;9:*.7z=38;5;9:*.rz=38;5;9:*.cab=38;5;9:*.wim=38;5;9:*.swm=38;5;9:*.dwm=38;5;9:*.esd=38;5;9:*.jpg=38;5;13:*.jpeg=38;5;13:*.mjpg=38;5;13:*.mjpeg=38;5;13:*.gif=38;5;13:*.bmp=38;5;13:*.pbm=38;5;13:*.pgm=38;5;13:*.ppm=38;5;13:*.tga=38;5;13:*.xbm=38;5;13:*.xpm=38;5;13:*.tif=38;5;13:*.tiff=38;5;13:*.png=38;5;13:*.svg=38;5;13:*.svgz=38;5;13:*.mng=38;5;13:*.pcx=38;5;13:*.mov=38;5;13:*.mpg=38;5;13:*.mpeg=38;5;13:*.m2v=38;5;13:*.mkv=38;5;13:*.webm=38;5;13:*.ogm=38;5;13:*.mp4=38;5;13:*.m4v=38;5;13:*.mp4v=38;5;13:*.vob=38;5;13:*.qt=38;5;13:*.nuv=38;5;13:*.wmv=38;5;13:*.asf=38;5;13:*.rm=38;5;13:*.rmvb=38;5;13:*.flc=38;5;13:*.avi=38;5;13:*.fli=38;5;13:*.flv=38;5;13:*.gl=38;5;13:*.dl=38;5;13:*.xcf=38;5;13:*.xwd=38;5;13:*.yuv=38;5;13:*.cgm=38;5;13:*.emf=38;5;13:*.ogv=38;5;13:*.ogx=38;5;13:*.aac=38;5;45:*.au=38;5;45:*.flac=38;5;45:*.m4a=38;5;45:*.mid=38;5;45:*.midi=38;5;45:*.mka=38;5;45:*.mp3=38;5;45:*.mpc=38;5;45:*.ogg=38;5;45:*.ra=38;5;45:*.wav=38;5;45:*.oga=38;5;45:*.opus=38;5;45:*.spx=38;5;45:*.xspf=38;5;45:, env.XDG_SEAT=seat0, file.encoding=UTF-8, env.HOSTNAME=D0-17-C2-12-57-48, javadoc.source.version=14, env.HISTCONTROL=ignoredups, env.XDG_SESSION_DESKTOP=KDE, env.SHLVL=1, project.baseUri=file:/home/bwillcott/NetBeansProjects/markdownj-cli/, java.io.tmpdir=/tmp, java.version=14, java.vm.specification.name=Java Virtual Machine Specification, java.library.path=/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib, java.vendor=Oracle Corporation, classworlds.conf=/usr/share/maven/bin/m2.conf, sun.io.unicode.encoding=UnicodeLittle, env.XAUTHORITY=/home/bwillcott/.Xauthority, env.SESSION_MANAGER=local/unix:@/tmp/.ICE-unix/1467,unix/unix:/tmp/.ICE-unix/1467, env.LANG=en_AU.UTF-8, env.PAM_KWALLET5_LOGIN=/run/user/1000/kwallet5.socket, buildNumber=82, env.XDG_DATA_DIRS=/usr/share/kde-settings/kde-profile/default/share:/usr/local/share:/usr/share, java.vm.specification.version=14, os.name=Linux, env.DISPLAY=:0, env.KDEDIRS=/usr, maven.compiler.source=14, user.home=/home/bwillcott, source.encoding=UTF-8, maven.build.timestamp=2020-03-28T05:35:58Z, env.JRE_HOME=/home/bwillcott/apps/jdk, env.COLORTERM=truecolor, env.LANGUAGE=en_GB, env.DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus, path.separator=:, os.version=5.5.8-200.fc31.x86_64, env.MAIL=/var/spool/mail/bwillcott, env.IMSETTINGS_INTEGRATE_DESKTOP=yes, java.vm.name=OpenJDK 64-Bit Server VM, env.KDE_SESSION_UID=1000, env.SHELL=/bin/bash, env.XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0, env.HISTSIZE=1000, env.SHELL_SESSION_ID=0b9853fba2da418b9bb1c504bcbb35ae, os.arch=amd64, maven.multiModuleProjectDirectory=/home/bwillcott/NetBeansProjects/markdownj-cli, env.DESKTOP_SESSION=/usr/share/xsessions/plasma, env.MAVEN_PROJECTBASEDIR=/home/bwillcott/NetBeansProjects/markdownj-cli, java.vm.info=mixed mode, sharing, env.JDK_HOME=/home/bwillcott/apps/jdk, env.GTK2_RC_FILES=/home/bwillcott/.gtkrc-2.0-kde4, env.USER=bwillcott, java.class.version=58.0, javadoc.reporting.outputDirectory=/home/bwillcott/NetBeansProjects/markdownj-cli/target/site/apidocs, env.KDE_SESSION_VERSION=5, sun.jnu.encoding=UTF-8, env.CATALINA_HOME=/home/bwillcott/apps/apache-tomcat-9.0.31, maven.build.version=Apache Maven 3.5.4 (Red Hat 3.5.4-5), maven.home=/usr/share/maven, env.KONSOLE_DBUS_SERVICE=:1.362, env.JAVA_HOME=/home/bwillcott/apps/jdk, file.separator=/, java.vm.compressedOopsMode=Zero based, line.separator=
+, jdk.version=14, env.WINDOWID=161480711, user.name=bwillcott, env.LOGNAME=bwillcott, env.XDG_VTNR=1, env.XCURSOR_THEME=breeze_cursors, env.SSH_AUTH_SOCK=/tmp/ssh-TKeWLGiPI4Sg/agent.1225, env.XDG_RUNTIME_DIR=/run/user/1000, env.ANDROID_HOME=/home/bwillcott/Android/Sdk, env.XMODIFIERS=@im=none, project.reporting.outputEncoding=UTF-8, env.KDE_FULL_SESSION=true, maven.compiler.target=14, env.XDG_SESSION_TYPE=x11, library.jansi.path=/usr/share/maven/lib/jansi-native, project.filename=markdownj-cli-0.1.${buildNumber}-SNAPSHOT.jar, env.KONSOLE_VERSION=191201, env.XDG_SESSION_CLASS=user, env.OLDPWD=/home/bwillcott/NetBeansProjects/markdownj-cli, env.PWD=/home/bwillcott/NetBeansProjects/markdownj-cli, env.LESSOPEN=||/usr/bin/lesspipe.sh %s, java.class.path=/usr/share/java/plexus-classworlds.jar, env.HOME=/home/bwillcott, env.QT_IM_MODULE=xim, java.vm.vendor=Oracle Corporation, maven.conf=/usr/share/maven/conf, sun.java.launcher=SUN_STANDARD, user.country=AU, sun.cpu.endian=little, user.language=en, env.KONSOLE_DBUS_WINDOW=/Windows/1, env.IMSETTINGS_MODULE=none, env.JAVACMD=/home/bwillcott/apps/jdk/bin/java, env.NB_DESKTOP_STARTUP_ID=D0-17-C2-12-57-48;1585292632;13886;1526_TIME210607, env.KONSOLE_DBUS_SESSION=/Sessions/1, env.GTK_IM_MODULE=gtk-im-context-simple, env.XDG_MENU_PREFIX=kf5-, java.runtime.name=OpenJDK Runtime Environment, env.XDG_SESSION_ID=2, project.build.sourceEncoding=UTF-8, env.MAVEN_CMD_LINE_ARGS= -e -X install, java.vendor.url.bug=https://bugreport.java.com/bugreport/, env.XDG_CONFIG_DIRS=/etc/xdg:/usr/share/kde-settings/kde-profile/default/xdg, user.dir=/home/bwillcott/NetBeansProjects/markdownj-cli, env.XDG_CURRENT_DESKTOP=KDE, java.vm.version=14+36-1461, env.QT_AUTO_SCREEN_SCALE_FACTOR=0}
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[DEBUG] resource with targetPath null
+directory /home/bwillcott/NetBeansProjects/markdownj-cli/src/main/resources
+excludes []
+includes [**/markdownj-cli.properties]
+[DEBUG] ignoreDelta true
+[INFO] Copying 1 resource
+[DEBUG] Copying file markdownj-cli.properties
+[DEBUG] file markdownj-cli.properties has a filtered file extension
+[DEBUG] filtering /home/bwillcott/NetBeansProjects/markdownj-cli/src/main/resources/markdownj-cli.properties to /home/bwillcott/NetBeansProjects/markdownj-cli/target/classes/markdownj-cli.properties
+[DEBUG] resource with targetPath null
+directory /home/bwillcott/NetBeansProjects/markdownj-cli/src/main/resources
+excludes [**/markdownj-cli.properties]
+includes []
+[DEBUG] ignoreDelta true
+[INFO] Copying 5 resources
+[DEBUG] Copying file docs/css/style.css
+[DEBUG] file style.css has a filtered file extension
+[DEBUG] copy /home/bwillcott/NetBeansProjects/markdownj-cli/src/main/resources/docs/css/style.css to /home/bwillcott/NetBeansProjects/markdownj-cli/target/classes/docs/css/style.css
+[DEBUG] Copying file docs/templates/default.html
+[DEBUG] file default.html has a filtered file extension
+[DEBUG] copy /home/bwillcott/NetBeansProjects/markdownj-cli/src/main/resources/docs/templates/default.html to /home/bwillcott/NetBeansProjects/markdownj-cli/target/classes/docs/templates/default.html
+[DEBUG] Copying file docs/templates/article_1.html
+[DEBUG] file article_1.html has a filtered file extension
+[DEBUG] copy /home/bwillcott/NetBeansProjects/markdownj-cli/src/main/resources/docs/templates/article_1.html to /home/bwillcott/NetBeansProjects/markdownj-cli/target/classes/docs/templates/article_1.html
+[DEBUG] Copying file docs/templates/article.html
+[DEBUG] file article.html has a filtered file extension
+[DEBUG] copy /home/bwillcott/NetBeansProjects/markdownj-cli/src/main/resources/docs/templates/article.html to /home/bwillcott/NetBeansProjects/markdownj-cli/target/classes/docs/templates/article.html
+[DEBUG] Copying file markdownj-cli.ini
+[DEBUG] file markdownj-cli.ini has a filtered file extension
+[DEBUG] copy /home/bwillcott/NetBeansProjects/markdownj-cli/src/main/resources/markdownj-cli.ini to /home/bwillcott/NetBeansProjects/markdownj-cli/target/classes/markdownj-cli.ini
+[DEBUG] resource with targetPath null
+directory /home/bwillcott/NetBeansProjects/markdownj-cli/src/docs
+excludes [**/*]
+includes []
+[DEBUG] ignoreDelta true
+[INFO] Copying 0 resource
+[DEBUG] resource with targetPath null
+directory /home/bwillcott/NetBeansProjects/markdownj-cli/target/manual
+excludes [**/*]
+includes []
+[DEBUG] ignoreDelta true
+[INFO] Copying 0 resource
+[DEBUG] no use filter components
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ markdownj-cli ---
+[DEBUG] Dependency collection stats: {ConflictMarker.analyzeTime=592167, ConflictMarker.markTime=338480, ConflictMarker.nodeCount=118, ConflictIdSorter.graphTime=242316, ConflictIdSorter.topsortTime=92024, ConflictIdSorter.conflictIdCount=45, ConflictIdSorter.conflictIdCycleCount=0, ConflictResolver.totalTime=2721879, ConflictResolver.conflictItemCount=72, DefaultDependencyCollector.collectTime=163317741, DefaultDependencyCollector.transformTime=4019070}
+[DEBUG] org.apache.maven.plugins:maven-compiler-plugin:jar:3.8.1:
+[DEBUG]    org.apache.maven:maven-plugin-api:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-model:jar:3.0:compile
+[DEBUG]       org.sonatype.sisu:sisu-inject-plexus:jar:1.4.2:compile
+[DEBUG]          org.sonatype.sisu:sisu-inject-bean:jar:1.4.2:compile
+[DEBUG]             org.sonatype.sisu:sisu-guice:jar:noaop:2.1.7:compile
+[DEBUG]    org.apache.maven:maven-artifact:jar:3.0:compile
+[DEBUG]       org.codehaus.plexus:plexus-utils:jar:2.0.4:compile
+[DEBUG]    org.apache.maven:maven-core:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-settings:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-settings-builder:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-repository-metadata:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-model-builder:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-aether-provider:jar:3.0:runtime
+[DEBUG]       org.sonatype.aether:aether-impl:jar:1.7:compile
+[DEBUG]          org.sonatype.aether:aether-spi:jar:1.7:compile
+[DEBUG]       org.sonatype.aether:aether-api:jar:1.7:compile
+[DEBUG]       org.sonatype.aether:aether-util:jar:1.7:compile
+[DEBUG]       org.codehaus.plexus:plexus-interpolation:jar:1.14:compile
+[DEBUG]       org.codehaus.plexus:plexus-classworlds:jar:2.2.3:compile
+[DEBUG]       org.codehaus.plexus:plexus-component-annotations:jar:1.7.1:compile
+[DEBUG]       org.sonatype.plexus:plexus-sec-dispatcher:jar:1.3:compile
+[DEBUG]          org.sonatype.plexus:plexus-cipher:jar:1.4:compile
+[DEBUG]    org.apache.maven.shared:maven-shared-utils:jar:3.2.1:compile
+[DEBUG]       commons-io:commons-io:jar:2.5:compile
+[DEBUG]    org.apache.maven.shared:maven-shared-incremental:jar:1.1:compile
+[DEBUG]    org.codehaus.plexus:plexus-java:jar:0.9.10:compile
+[DEBUG]       org.ow2.asm:asm:jar:6.2:compile
+[DEBUG]       com.thoughtworks.qdox:qdox:jar:2.0-M9:compile
+[DEBUG]    org.codehaus.plexus:plexus-compiler-api:jar:2.8.4:compile
+[DEBUG]    org.codehaus.plexus:plexus-compiler-manager:jar:2.8.4:compile
+[DEBUG]    org.codehaus.plexus:plexus-compiler-javac:jar:2.8.4:runtime
+[DEBUG] Created new class realm plugin>org.apache.maven.plugins:maven-compiler-plugin:3.8.1
+[DEBUG] Importing foreign packages into class realm plugin>org.apache.maven.plugins:maven-compiler-plugin:3.8.1
+[DEBUG]   Imported:  < maven.api
+[DEBUG] Populating class realm plugin>org.apache.maven.plugins:maven-compiler-plugin:3.8.1
+[DEBUG]   Included: org.apache.maven.plugins:maven-compiler-plugin:jar:3.8.1
+[DEBUG]   Included: org.sonatype.sisu:sisu-inject-bean:jar:1.4.2
+[DEBUG]   Included: org.sonatype.sisu:sisu-guice:jar:noaop:2.1.7
+[DEBUG]   Included: org.codehaus.plexus:plexus-utils:jar:2.0.4
+[DEBUG]   Included: org.sonatype.aether:aether-util:jar:1.7
+[DEBUG]   Included: org.codehaus.plexus:plexus-interpolation:jar:1.14
+[DEBUG]   Included: org.codehaus.plexus:plexus-component-annotations:jar:1.7.1
+[DEBUG]   Included: org.sonatype.plexus:plexus-sec-dispatcher:jar:1.3
+[DEBUG]   Included: org.sonatype.plexus:plexus-cipher:jar:1.4
+[DEBUG]   Included: org.apache.maven.shared:maven-shared-utils:jar:3.2.1
+[DEBUG]   Included: commons-io:commons-io:jar:2.5
+[DEBUG]   Included: org.apache.maven.shared:maven-shared-incremental:jar:1.1
+[DEBUG]   Included: org.codehaus.plexus:plexus-java:jar:0.9.10
+[DEBUG]   Included: org.ow2.asm:asm:jar:6.2
+[DEBUG]   Included: com.thoughtworks.qdox:qdox:jar:2.0-M9
+[DEBUG]   Included: org.codehaus.plexus:plexus-compiler-api:jar:2.8.4
+[DEBUG]   Included: org.codehaus.plexus:plexus-compiler-manager:jar:2.8.4
+[DEBUG]   Included: org.codehaus.plexus:plexus-compiler-javac:jar:2.8.4
+[DEBUG] Configuring mojo org.apache.maven.plugins:maven-compiler-plugin:3.8.1:compile from plugin realm ClassRealm[plugin>org.apache.maven.plugins:maven-compiler-plugin:3.8.1, parent: jdk.internal.loader.ClassLoaders$AppClassLoader@5bc2b487]
+[DEBUG] Configuring mojo 'org.apache.maven.plugins:maven-compiler-plugin:3.8.1:compile' with basic configurator -->
+[DEBUG]   (f) basedir = /home/bwillcott/NetBeansProjects/markdownj-cli
+[DEBUG]   (f) buildDirectory = /home/bwillcott/NetBeansProjects/markdownj-cli/target
+[DEBUG]   (f) compilePath = [/home/bwillcott/NetBeansProjects/markdownj-cli/target/classes, /home/bwillcott/.m2/repository/com/martiansoftware/jsap/2.1/jsap-2.1.jar, /home/bwillcott/.m2/repository/org/markdownj/markdownj-core/0.5.30-SNAPSHOT/markdownj-core-0.5.30-SNAPSHOT.jar, /home/bwillcott/.m2/repository/com/bew/BEWCommons/1.0.5-SNAPSHOT/BEWCommons-1.0.5-SNAPSHOT.jar, /home/bwillcott/.m2/repository/org/xerial/sqlite-jdbc/3.30.1/sqlite-jdbc-3.30.1.jar]
+[DEBUG]   (f) compileSourceRoots = [/home/bwillcott/NetBeansProjects/markdownj-cli/src/main/java]
+[DEBUG]   (f) compilerArgs = [-Xlint:all, --enable-preview]
+[DEBUG]   (f) compilerId = javac
+[DEBUG]   (f) debug = true
+[DEBUG]   (f) encoding = UTF-8
+[DEBUG]   (f) failOnError = true
+[DEBUG]   (f) failOnWarning = false
+[DEBUG]   (f) forceJavacCompilerUse = false
+[DEBUG]   (f) fork = false
+[DEBUG]   (f) generatedSourcesDirectory = /home/bwillcott/NetBeansProjects/markdownj-cli/target/generated-sources/annotations
+[DEBUG]   (f) mojoExecution = org.apache.maven.plugins:maven-compiler-plugin:3.8.1:compile {execution: default-compile}
+[DEBUG]   (f) optimize = false
+[DEBUG]   (f) outputDirectory = /home/bwillcott/NetBeansProjects/markdownj-cli/target/classes
+[DEBUG]   (f) parameters = false
+[DEBUG]   (f) project = MavenProject: org.markdownj:markdownj-cli:0.1 @ /home/bwillcott/NetBeansProjects/markdownj-cli/pom.xml
+[DEBUG]   (f) projectArtifact = org.markdownj:markdownj-cli:jar:0.1.82-SNAPSHOT
+[DEBUG]   (s) release = 14
+[DEBUG]   (f) session = org.apache.maven.execution.MavenSession@13d186db
+[DEBUG]   (f) showDeprecation = true
+[DEBUG]   (f) showWarnings = false
+[DEBUG]   (f) skipMultiThreadWarning = false
+[DEBUG]   (f) source = 14
+[DEBUG]   (f) staleMillis = 0
+[DEBUG]   (s) target = 14
+[DEBUG]   (f) useIncrementalCompilation = true
+[DEBUG]   (f) verbose = false
+[DEBUG] -- end configuration --
+[DEBUG] Using compiler 'javac'.
+[DEBUG] Adding /home/bwillcott/NetBeansProjects/markdownj-cli/target/generated-sources/annotations to compile source roots:
+  /home/bwillcott/NetBeansProjects/markdownj-cli/src/main/java
+[DEBUG] New compile source roots:
+  /home/bwillcott/NetBeansProjects/markdownj-cli/src/main/java
+  /home/bwillcott/NetBeansProjects/markdownj-cli/target/generated-sources/annotations
+[DEBUG] CompilerReuseStrategy: reuseCreated
+[DEBUG] useIncrementalCompilation enabled
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:testResources (default-testResources) @ markdownj-cli ---
+[DEBUG] Configuring mojo org.apache.maven.plugins:maven-resources-plugin:3.1.0:testResources from plugin realm ClassRealm[plugin>org.apache.maven.plugins:maven-resources-plugin:3.1.0, parent: jdk.internal.loader.ClassLoaders$AppClassLoader@5bc2b487]
+[DEBUG] Configuring mojo 'org.apache.maven.plugins:maven-resources-plugin:3.1.0:testResources' with basic configurator -->
+[DEBUG]   (f) addDefaultExcludes = true
+[DEBUG]   (f) buildFilters = []
+[DEBUG]   (f) encoding = UTF-8
+[DEBUG]   (f) escapeWindowsPaths = true
+[DEBUG]   (f) fileNameFiltering = false
+[DEBUG]   (s) includeEmptyDirs = false
+[DEBUG]   (s) outputDirectory = /home/bwillcott/NetBeansProjects/markdownj-cli/target/test-classes
+[DEBUG]   (s) overwrite = false
+[DEBUG]   (f) project = MavenProject: org.markdownj:markdownj-cli:0.1 @ /home/bwillcott/NetBeansProjects/markdownj-cli/pom.xml
+[DEBUG]   (s) resources = [Resource {targetPath: null, filtering: false, FileSet {directory: /home/bwillcott/NetBeansProjects/markdownj-cli/src/test/resources, PatternSet [includes: {}, excludes: {}]}}]
+[DEBUG]   (f) session = org.apache.maven.execution.MavenSession@13d186db
+[DEBUG]   (f) skip = false
+[DEBUG]   (f) supportMultiLineFiltering = false
+[DEBUG]   (f) useBuildFilters = true
+[DEBUG]   (s) useDefaultDelimiters = true
+[DEBUG] -- end configuration --
+[DEBUG] properties used {env.TERM=xterm-256color, java.specification.version=14, sun.arch.data.model=64, env.GDK_BACKEND=x11, java.vendor.url=https://java.oracle.com/, env.COLORFGBG=15;0, sun.boot.library.path=/home/bwillcott/Java-Dev/jdk-14/lib, sun.java.command=org.codehaus.plexus.classworlds.launcher.Launcher -e -X install, jdk.debug=release, env.SSH_AGENT_PID=1396, env.DERBY_HOME=/home/bwillcott/Java-Dev/db-derby-10.15.1.3/bin, maven.version=3.5.4, java.specification.vendor=Oracle Corporation, java.version.date=2020-03-17, env.J2D_PIXMAPS=shared, java.home=/home/bwillcott/Java-Dev/jdk-14, env.GDK_CORE_DEVICE_EVENTS=1, java.vm.specification.vendor=Oracle Corporation, java.specification.name=Java Platform API Specification, env.SSH_ASKPASS=/usr/bin/ksshaskpass, env.PROFILEHOME=/home/bwillcott/NetBeansProjects/markdownj-cli, sun.management.compiler=HotSpot 64-Bit Tiered Compilers, env.XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session1, java.runtime.version=14+36-1461, env.PATH=/home/bwillcott/Java-Dev/db-derby-10.15.1.3/bin/bin:/home/bwillcott/Java-Dev/db-derby-10.15.1.3/bin/bin:/home/bwillcott/.local/bin:/home/bwillcott/bin:/usr/local/lib/nodejs/node-v12.13.1-linux-x64/bin:/usr/lib64/ccache:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin, env.LS_COLORS=rs=0:di=38;5;33:ln=38;5;51:mh=00:pi=40;38;5;11:so=38;5;13:do=38;5;5:bd=48;5;232;38;5;11:cd=48;5;232;38;5;3:or=48;5;232;38;5;9:mi=01;37;41:su=48;5;196;38;5;15:sg=48;5;11;38;5;16:ca=48;5;196;38;5;226:tw=48;5;10;38;5;16:ow=48;5;10;38;5;21:st=48;5;21;38;5;15:ex=38;5;40:*.tar=38;5;9:*.tgz=38;5;9:*.arc=38;5;9:*.arj=38;5;9:*.taz=38;5;9:*.lha=38;5;9:*.lz4=38;5;9:*.lzh=38;5;9:*.lzma=38;5;9:*.tlz=38;5;9:*.txz=38;5;9:*.tzo=38;5;9:*.t7z=38;5;9:*.zip=38;5;9:*.z=38;5;9:*.dz=38;5;9:*.gz=38;5;9:*.lrz=38;5;9:*.lz=38;5;9:*.lzo=38;5;9:*.xz=38;5;9:*.zst=38;5;9:*.tzst=38;5;9:*.bz2=38;5;9:*.bz=38;5;9:*.tbz=38;5;9:*.tbz2=38;5;9:*.tz=38;5;9:*.deb=38;5;9:*.rpm=38;5;9:*.jar=38;5;9:*.war=38;5;9:*.ear=38;5;9:*.sar=38;5;9:*.rar=38;5;9:*.alz=38;5;9:*.ace=38;5;9:*.zoo=38;5;9:*.cpio=38;5;9:*.7z=38;5;9:*.rz=38;5;9:*.cab=38;5;9:*.wim=38;5;9:*.swm=38;5;9:*.dwm=38;5;9:*.esd=38;5;9:*.jpg=38;5;13:*.jpeg=38;5;13:*.mjpg=38;5;13:*.mjpeg=38;5;13:*.gif=38;5;13:*.bmp=38;5;13:*.pbm=38;5;13:*.pgm=38;5;13:*.ppm=38;5;13:*.tga=38;5;13:*.xbm=38;5;13:*.xpm=38;5;13:*.tif=38;5;13:*.tiff=38;5;13:*.png=38;5;13:*.svg=38;5;13:*.svgz=38;5;13:*.mng=38;5;13:*.pcx=38;5;13:*.mov=38;5;13:*.mpg=38;5;13:*.mpeg=38;5;13:*.m2v=38;5;13:*.mkv=38;5;13:*.webm=38;5;13:*.ogm=38;5;13:*.mp4=38;5;13:*.m4v=38;5;13:*.mp4v=38;5;13:*.vob=38;5;13:*.qt=38;5;13:*.nuv=38;5;13:*.wmv=38;5;13:*.asf=38;5;13:*.rm=38;5;13:*.rmvb=38;5;13:*.flc=38;5;13:*.avi=38;5;13:*.fli=38;5;13:*.flv=38;5;13:*.gl=38;5;13:*.dl=38;5;13:*.xcf=38;5;13:*.xwd=38;5;13:*.yuv=38;5;13:*.cgm=38;5;13:*.emf=38;5;13:*.ogv=38;5;13:*.ogx=38;5;13:*.aac=38;5;45:*.au=38;5;45:*.flac=38;5;45:*.m4a=38;5;45:*.mid=38;5;45:*.midi=38;5;45:*.mka=38;5;45:*.mp3=38;5;45:*.mpc=38;5;45:*.ogg=38;5;45:*.ra=38;5;45:*.wav=38;5;45:*.oga=38;5;45:*.opus=38;5;45:*.spx=38;5;45:*.xspf=38;5;45:, env.XDG_SEAT=seat0, file.encoding=UTF-8, env.HOSTNAME=D0-17-C2-12-57-48, javadoc.source.version=14, env.HISTCONTROL=ignoredups, env.XDG_SESSION_DESKTOP=KDE, env.SHLVL=1, project.baseUri=file:/home/bwillcott/NetBeansProjects/markdownj-cli/, java.io.tmpdir=/tmp, java.version=14, java.vm.specification.name=Java Virtual Machine Specification, java.library.path=/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib, java.vendor=Oracle Corporation, classworlds.conf=/usr/share/maven/bin/m2.conf, sun.io.unicode.encoding=UnicodeLittle, env.XAUTHORITY=/home/bwillcott/.Xauthority, env.SESSION_MANAGER=local/unix:@/tmp/.ICE-unix/1467,unix/unix:/tmp/.ICE-unix/1467, env.LANG=en_AU.UTF-8, env.PAM_KWALLET5_LOGIN=/run/user/1000/kwallet5.socket, buildNumber=82, env.XDG_DATA_DIRS=/usr/share/kde-settings/kde-profile/default/share:/usr/local/share:/usr/share, java.vm.specification.version=14, os.name=Linux, env.DISPLAY=:0, env.KDEDIRS=/usr, maven.compiler.source=14, user.home=/home/bwillcott, source.encoding=UTF-8, maven.build.timestamp=2020-03-28T05:35:58Z, env.JRE_HOME=/home/bwillcott/apps/jdk, env.COLORTERM=truecolor, env.LANGUAGE=en_GB, env.DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus, path.separator=:, os.version=5.5.8-200.fc31.x86_64, env.MAIL=/var/spool/mail/bwillcott, env.IMSETTINGS_INTEGRATE_DESKTOP=yes, java.vm.name=OpenJDK 64-Bit Server VM, env.KDE_SESSION_UID=1000, env.SHELL=/bin/bash, env.XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0, env.HISTSIZE=1000, env.SHELL_SESSION_ID=0b9853fba2da418b9bb1c504bcbb35ae, os.arch=amd64, maven.multiModuleProjectDirectory=/home/bwillcott/NetBeansProjects/markdownj-cli, env.DESKTOP_SESSION=/usr/share/xsessions/plasma, env.MAVEN_PROJECTBASEDIR=/home/bwillcott/NetBeansProjects/markdownj-cli, java.vm.info=mixed mode, sharing, env.JDK_HOME=/home/bwillcott/apps/jdk, env.GTK2_RC_FILES=/home/bwillcott/.gtkrc-2.0-kde4, env.USER=bwillcott, java.class.version=58.0, javadoc.reporting.outputDirectory=/home/bwillcott/NetBeansProjects/markdownj-cli/target/site/apidocs, env.KDE_SESSION_VERSION=5, sun.jnu.encoding=UTF-8, env.CATALINA_HOME=/home/bwillcott/apps/apache-tomcat-9.0.31, maven.build.version=Apache Maven 3.5.4 (Red Hat 3.5.4-5), maven.home=/usr/share/maven, env.KONSOLE_DBUS_SERVICE=:1.362, env.JAVA_HOME=/home/bwillcott/apps/jdk, file.separator=/, java.vm.compressedOopsMode=Zero based, line.separator=
+, jdk.version=14, env.WINDOWID=161480711, user.name=bwillcott, env.LOGNAME=bwillcott, env.XDG_VTNR=1, env.XCURSOR_THEME=breeze_cursors, env.SSH_AUTH_SOCK=/tmp/ssh-TKeWLGiPI4Sg/agent.1225, env.XDG_RUNTIME_DIR=/run/user/1000, env.ANDROID_HOME=/home/bwillcott/Android/Sdk, env.XMODIFIERS=@im=none, project.reporting.outputEncoding=UTF-8, env.KDE_FULL_SESSION=true, maven.compiler.target=14, env.XDG_SESSION_TYPE=x11, library.jansi.path=/usr/share/maven/lib/jansi-native, project.filename=markdownj-cli-0.1.${buildNumber}-SNAPSHOT.jar, env.KONSOLE_VERSION=191201, env.XDG_SESSION_CLASS=user, env.OLDPWD=/home/bwillcott/NetBeansProjects/markdownj-cli, env.PWD=/home/bwillcott/NetBeansProjects/markdownj-cli, env.LESSOPEN=||/usr/bin/lesspipe.sh %s, java.class.path=/usr/share/java/plexus-classworlds.jar, env.HOME=/home/bwillcott, env.QT_IM_MODULE=xim, java.vm.vendor=Oracle Corporation, maven.conf=/usr/share/maven/conf, sun.java.launcher=SUN_STANDARD, user.country=AU, sun.cpu.endian=little, user.language=en, env.KONSOLE_DBUS_WINDOW=/Windows/1, env.IMSETTINGS_MODULE=none, env.JAVACMD=/home/bwillcott/apps/jdk/bin/java, env.NB_DESKTOP_STARTUP_ID=D0-17-C2-12-57-48;1585292632;13886;1526_TIME210607, env.KONSOLE_DBUS_SESSION=/Sessions/1, env.GTK_IM_MODULE=gtk-im-context-simple, env.XDG_MENU_PREFIX=kf5-, java.runtime.name=OpenJDK Runtime Environment, env.XDG_SESSION_ID=2, project.build.sourceEncoding=UTF-8, env.MAVEN_CMD_LINE_ARGS= -e -X install, java.vendor.url.bug=https://bugreport.java.com/bugreport/, env.XDG_CONFIG_DIRS=/etc/xdg:/usr/share/kde-settings/kde-profile/default/xdg, user.dir=/home/bwillcott/NetBeansProjects/markdownj-cli, env.XDG_CURRENT_DESKTOP=KDE, java.vm.version=14+36-1461, env.QT_AUTO_SCREEN_SCALE_FACTOR=0}
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[DEBUG] resource with targetPath null
+directory /home/bwillcott/NetBeansProjects/markdownj-cli/src/test/resources
+excludes []
+includes []
+[DEBUG] ignoreDelta true
+[INFO] Copying 0 resource
+[DEBUG] no use filter components
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ markdownj-cli ---
+[DEBUG] Configuring mojo org.apache.maven.plugins:maven-compiler-plugin:3.8.1:testCompile from plugin realm ClassRealm[plugin>org.apache.maven.plugins:maven-compiler-plugin:3.8.1, parent: jdk.internal.loader.ClassLoaders$AppClassLoader@5bc2b487]
+[DEBUG] Configuring mojo 'org.apache.maven.plugins:maven-compiler-plugin:3.8.1:testCompile' with basic configurator -->
+[DEBUG]   (f) basedir = /home/bwillcott/NetBeansProjects/markdownj-cli
+[DEBUG]   (f) buildDirectory = /home/bwillcott/NetBeansProjects/markdownj-cli/target
+[DEBUG]   (f) compilePath = [/home/bwillcott/NetBeansProjects/markdownj-cli/target/classes, /home/bwillcott/.m2/repository/com/martiansoftware/jsap/2.1/jsap-2.1.jar, /home/bwillcott/.m2/repository/org/markdownj/markdownj-core/0.5.30-SNAPSHOT/markdownj-core-0.5.30-SNAPSHOT.jar, /home/bwillcott/.m2/repository/com/bew/BEWCommons/1.0.5-SNAPSHOT/BEWCommons-1.0.5-SNAPSHOT.jar, /home/bwillcott/.m2/repository/org/xerial/sqlite-jdbc/3.30.1/sqlite-jdbc-3.30.1.jar]
+[DEBUG]   (f) compileSourceRoots = [/home/bwillcott/NetBeansProjects/markdownj-cli/src/test/java]
+[DEBUG]   (f) compilerArgs = [-Xlint:all, --enable-preview]
+[DEBUG]   (f) compilerId = javac
+[DEBUG]   (f) debug = true
+[DEBUG]   (f) encoding = UTF-8
+[DEBUG]   (f) failOnError = true
+[DEBUG]   (f) failOnWarning = false
+[DEBUG]   (f) forceJavacCompilerUse = false
+[DEBUG]   (f) fork = false
+[DEBUG]   (f) generatedTestSourcesDirectory = /home/bwillcott/NetBeansProjects/markdownj-cli/target/generated-test-sources/test-annotations
+[DEBUG]   (f) mojoExecution = org.apache.maven.plugins:maven-compiler-plugin:3.8.1:testCompile {execution: default-testCompile}
+[DEBUG]   (f) optimize = false
+[DEBUG]   (f) outputDirectory = /home/bwillcott/NetBeansProjects/markdownj-cli/target/test-classes
+[DEBUG]   (f) parameters = false
+[DEBUG]   (f) project = MavenProject: org.markdownj:markdownj-cli:0.1 @ /home/bwillcott/NetBeansProjects/markdownj-cli/pom.xml
+[DEBUG]   (s) release = 14
+[DEBUG]   (f) session = org.apache.maven.execution.MavenSession@13d186db
+[DEBUG]   (f) showDeprecation = true
+[DEBUG]   (f) showWarnings = false
+[DEBUG]   (f) skipMultiThreadWarning = false
+[DEBUG]   (f) source = 14
+[DEBUG]   (f) staleMillis = 0
+[DEBUG]   (s) target = 14
+[DEBUG]   (f) testPath = [/home/bwillcott/NetBeansProjects/markdownj-cli/target/test-classes, /home/bwillcott/NetBeansProjects/markdownj-cli/target/classes, /home/bwillcott/.m2/repository/com/martiansoftware/jsap/2.1/jsap-2.1.jar, /home/bwillcott/.m2/repository/org/junit/jupiter/junit-jupiter/5.6.0/junit-jupiter-5.6.0.jar, /home/bwillcott/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.6.0/junit-jupiter-api-5.6.0.jar, /home/bwillcott/.m2/repository/org/apiguardian/apiguardian-api/1.1.0/apiguardian-api-1.1.0.jar, /home/bwillcott/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar, /home/bwillcott/.m2/repository/org/junit/platform/junit-platform-commons/1.6.0/junit-platform-commons-1.6.0.jar, /home/bwillcott/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.6.0/junit-jupiter-params-5.6.0.jar, /home/bwillcott/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.6.0/junit-jupiter-engine-5.6.0.jar, /home/bwillcott/.m2/repository/org/junit/platform/junit-platform-engine/1.6.0/junit-platform-engine-1.6.0.jar, /home/bwillcott/.m2/repository/org/markdownj/markdownj-core/0.5.30-SNAPSHOT/markdownj-core-0.5.30-SNAPSHOT.jar, /home/bwillcott/.m2/repository/com/bew/BEWCommons/1.0.5-SNAPSHOT/BEWCommons-1.0.5-SNAPSHOT.jar, /home/bwillcott/.m2/repository/org/xerial/sqlite-jdbc/3.30.1/sqlite-jdbc-3.30.1.jar]
+[DEBUG]   (f) useIncrementalCompilation = true
+[DEBUG]   (f) verbose = false
+[DEBUG] -- end configuration --
+[DEBUG] Using compiler 'javac'.
+[DEBUG] Adding /home/bwillcott/NetBeansProjects/markdownj-cli/target/generated-test-sources/test-annotations to test-compile source roots:
+  /home/bwillcott/NetBeansProjects/markdownj-cli/src/test/java
+[DEBUG] New test-compile source roots:
+  /home/bwillcott/NetBeansProjects/markdownj-cli/src/test/java
+  /home/bwillcott/NetBeansProjects/markdownj-cli/target/generated-test-sources/test-annotations
+[DEBUG] CompilerReuseStrategy: reuseCreated
+[DEBUG] useIncrementalCompilation enabled
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-surefire-plugin:3.0.0-M4:test (default-test) @ markdownj-cli ---
+[DEBUG] Dependency collection stats: {ConflictMarker.analyzeTime=238528, ConflictMarker.markTime=39233, ConflictMarker.nodeCount=23, ConflictIdSorter.graphTime=46182, ConflictIdSorter.topsortTime=30397, ConflictIdSorter.conflictIdCount=19, ConflictIdSorter.conflictIdCycleCount=0, ConflictResolver.totalTime=630805, ConflictResolver.conflictItemCount=22, DefaultDependencyCollector.collectTime=55312724, DefaultDependencyCollector.transformTime=1021226}
+[DEBUG] org.apache.maven.plugins:maven-surefire-plugin:jar:3.0.0-M4:
+[DEBUG]    org.apache.maven.surefire:maven-surefire-common:jar:3.0.0-M4:compile
+[DEBUG]       org.apache.maven.surefire:surefire-api:jar:3.0.0-M4:compile
+[DEBUG]          org.apache.maven.surefire:surefire-logger-api:jar:3.0.0-M4:compile
+[DEBUG]       org.apache.maven.surefire:surefire-extensions-api:jar:3.0.0-M4:compile
+[DEBUG]       org.apache.maven.surefire:surefire-booter:jar:3.0.0-M4:compile
+[DEBUG]       org.apache.maven:maven-toolchain:jar:3.0-alpha-2:compile
+[DEBUG]       org.apache.maven.shared:maven-artifact-transfer:jar:0.11.0:compile
+[DEBUG]          org.apache.maven.shared:maven-common-artifact-filters:jar:3.1.0:compile
+[DEBUG]             org.apache.maven:maven-model:jar:3.0:compile
+[DEBUG]             org.apache.maven:maven-plugin-api:jar:3.0:compile
+[DEBUG]             org.sonatype.sisu:sisu-inject-plexus:jar:1.4.2:compile
+[DEBUG]                org.codehaus.plexus:plexus-classworlds:jar:2.2.3:compile
+[DEBUG]                org.sonatype.sisu:sisu-inject-bean:jar:1.4.2:compile
+[DEBUG]                   org.sonatype.sisu:sisu-guice:jar:noaop:2.1.7:compile
+[DEBUG]          commons-codec:commons-codec:jar:1.11:compile
+[DEBUG]       org.codehaus.plexus:plexus-java:jar:1.0.3:compile
+[DEBUG]          org.ow2.asm:asm:jar:7.0:compile
+[DEBUG]          com.thoughtworks.qdox:qdox:jar:2.0-M9:compile
+[DEBUG]    org.codehaus.plexus:plexus-utils:jar:1.1:runtime
+[DEBUG] Created new class realm plugin>org.apache.maven.plugins:maven-surefire-plugin:3.0.0-M4
+[DEBUG] Importing foreign packages into class realm plugin>org.apache.maven.plugins:maven-surefire-plugin:3.0.0-M4
+[DEBUG]   Imported:  < maven.api
+[DEBUG] Populating class realm plugin>org.apache.maven.plugins:maven-surefire-plugin:3.0.0-M4
+[DEBUG]   Included: org.apache.maven.plugins:maven-surefire-plugin:jar:3.0.0-M4
+[DEBUG]   Included: org.apache.maven.surefire:maven-surefire-common:jar:3.0.0-M4
+[DEBUG]   Included: org.apache.maven.surefire:surefire-api:jar:3.0.0-M4
+[DEBUG]   Included: org.apache.maven.surefire:surefire-logger-api:jar:3.0.0-M4
+[DEBUG]   Included: org.apache.maven.surefire:surefire-extensions-api:jar:3.0.0-M4
+[DEBUG]   Included: org.apache.maven.surefire:surefire-booter:jar:3.0.0-M4
+[DEBUG]   Included: org.apache.maven.shared:maven-artifact-transfer:jar:0.11.0
+[DEBUG]   Included: org.apache.maven.shared:maven-common-artifact-filters:jar:3.1.0
+[DEBUG]   Included: org.sonatype.sisu:sisu-inject-bean:jar:1.4.2
+[DEBUG]   Included: org.sonatype.sisu:sisu-guice:jar:noaop:2.1.7
+[DEBUG]   Included: commons-codec:commons-codec:jar:1.11
+[DEBUG]   Included: org.codehaus.plexus:plexus-java:jar:1.0.3
+[DEBUG]   Included: org.ow2.asm:asm:jar:7.0
+[DEBUG]   Included: com.thoughtworks.qdox:qdox:jar:2.0-M9
+[DEBUG]   Included: org.codehaus.plexus:plexus-utils:jar:1.1
+[DEBUG] Configuring mojo org.apache.maven.plugins:maven-surefire-plugin:3.0.0-M4:test from plugin realm ClassRealm[plugin>org.apache.maven.plugins:maven-surefire-plugin:3.0.0-M4, parent: jdk.internal.loader.ClassLoaders$AppClassLoader@5bc2b487]
+[DEBUG] Configuring mojo 'org.apache.maven.plugins:maven-surefire-plugin:3.0.0-M4:test' with basic configurator -->
+[DEBUG]   (s) additionalClasspathElements = []
+[DEBUG]   (s) argLine = --enable-preview
+[DEBUG]   (s) basedir = /home/bwillcott/NetBeansProjects/markdownj-cli
+[DEBUG]   (s) childDelegation = false
+[DEBUG]   (s) classesDirectory = /home/bwillcott/NetBeansProjects/markdownj-cli/target/classes
+[DEBUG]   (s) classpathDependencyExcludes = []
+[DEBUG]   (s) dependenciesToScan = []
+[DEBUG]   (s) disableXmlReport = false
+[DEBUG]   (s) enableAssertions = true
+[DEBUG]   (s) encoding = UTF-8
+[DEBUG]   (f) excludedEnvironmentVariables = []
+[DEBUG]   (s) excludes = [**/TestResultPair.java]
+[DEBUG]   (f) forkCount = 1
+[DEBUG]   (s) forkMode = once
+[DEBUG]   (s) forkedProcessExitTimeoutInSeconds = 30
+[DEBUG]   (s) includes = [**/*.java]
+[DEBUG]   (s) junitArtifactName = junit:junit
+[DEBUG]   (s) localRepository =       id: local
+      url: file:///home/bwillcott/.m2/repository/
+   layout: default
+snapshots: [enabled => true, update => always]
+ releases: [enabled => true, update => always]
+
+[DEBUG]   (f) parallelMavenExecution = false
+[DEBUG]   (s) parallelOptimized = true
+[DEBUG]   (s) perCoreThreadCount = true
+[DEBUG]   (s) pluginArtifactMap = {org.apache.maven.plugins:maven-surefire-plugin=org.apache.maven.plugins:maven-surefire-plugin:maven-plugin:3.0.0-M4:, org.apache.maven.surefire:maven-surefire-common=org.apache.maven.surefire:maven-surefire-common:jar:3.0.0-M4:compile, org.apache.maven.surefire:surefire-api=org.apache.maven.surefire:surefire-api:jar:3.0.0-M4:compile, org.apache.maven.surefire:surefire-logger-api=org.apache.maven.surefire:surefire-logger-api:jar:3.0.0-M4:compile, org.apache.maven.surefire:surefire-extensions-api=org.apache.maven.surefire:surefire-extensions-api:jar:3.0.0-M4:compile, org.apache.maven.surefire:surefire-booter=org.apache.maven.surefire:surefire-booter:jar:3.0.0-M4:compile, org.apache.maven:maven-toolchain=org.apache.maven:maven-toolchain:jar:3.0-alpha-2:compile, org.apache.maven.shared:maven-artifact-transfer=org.apache.maven.shared:maven-artifact-transfer:jar:0.11.0:compile, org.apache.maven.shared:maven-common-artifact-filters=org.apache.maven.shared:maven-common-artifact-filters:jar:3.1.0:compile, org.apache.maven:maven-model=org.apache.maven:maven-model:jar:3.0:compile, org.apache.maven:maven-plugin-api=org.apache.maven:maven-plugin-api:jar:3.0:compile, org.sonatype.sisu:sisu-inject-plexus=org.sonatype.sisu:sisu-inject-plexus:jar:1.4.2:compile, org.codehaus.plexus:plexus-classworlds=org.codehaus.plexus:plexus-classworlds:jar:2.2.3:compile, org.sonatype.sisu:sisu-inject-bean=org.sonatype.sisu:sisu-inject-bean:jar:1.4.2:compile, org.sonatype.sisu:sisu-guice=org.sonatype.sisu:sisu-guice:jar:noaop:2.1.7:compile, commons-codec:commons-codec=commons-codec:commons-codec:jar:1.11:compile, org.codehaus.plexus:plexus-java=org.codehaus.plexus:plexus-java:jar:1.0.3:compile, org.ow2.asm:asm=org.ow2.asm:asm:jar:7.0:compile, com.thoughtworks.qdox:qdox=com.thoughtworks.qdox:qdox:jar:2.0-M9:compile, org.codehaus.plexus:plexus-utils=org.codehaus.plexus:plexus-utils:jar:1.1:runtime}
+[DEBUG]   (f) pluginDescriptor = Component Descriptor: role: 'org.apache.maven.plugin.Mojo', implementation: 'org.apache.maven.plugin.surefire.HelpMojo', role hint: 'org.apache.maven.plugins:maven-surefire-plugin:3.0.0-M4:help'
+role: 'org.apache.maven.plugin.Mojo', implementation: 'org.apache.maven.plugin.surefire.SurefirePlugin', role hint: 'org.apache.maven.plugins:maven-surefire-plugin:3.0.0-M4:test'
+---
+[DEBUG]   (s) printSummary = true
+[DEBUG]   (s) project = MavenProject: org.markdownj:markdownj-cli:0.1 @ /home/bwillcott/NetBeansProjects/markdownj-cli/pom.xml
+[DEBUG]   (s) projectArtifactMap = {com.martiansoftware:jsap=com.martiansoftware:jsap:jar:2.1:compile, org.junit.jupiter:junit-jupiter=org.junit.jupiter:junit-jupiter:jar:5.6.0:test, org.junit.jupiter:junit-jupiter-api=org.junit.jupiter:junit-jupiter-api:jar:5.6.0:test, org.apiguardian:apiguardian-api=org.apiguardian:apiguardian-api:jar:1.1.0:test, org.opentest4j:opentest4j=org.opentest4j:opentest4j:jar:1.2.0:test, org.junit.platform:junit-platform-commons=org.junit.platform:junit-platform-commons:jar:1.6.0:test, org.junit.jupiter:junit-jupiter-params=org.junit.jupiter:junit-jupiter-params:jar:5.6.0:test, org.junit.jupiter:junit-jupiter-engine=org.junit.jupiter:junit-jupiter-engine:jar:5.6.0:test, org.junit.platform:junit-platform-engine=org.junit.platform:junit-platform-engine:jar:1.6.0:test, org.markdownj:markdownj-core=org.markdownj:markdownj-core:jar:0.5.30-SNAPSHOT:compile, com.bew:BEWCommons=com.bew:BEWCommons:jar:1.0.5-SNAPSHOT:compile, org.xerial:sqlite-jdbc=org.xerial:sqlite-jdbc:jar:3.30.1:compile}
+[DEBUG]   (s) projectBuildDirectory = /home/bwillcott/NetBeansProjects/markdownj-cli/target
+[DEBUG]   (s) projectRemoteRepositories = [      id: central
+      url: https://repo.maven.apache.org/maven2
+   layout: default
+snapshots: [enabled => false, update => daily]
+ releases: [enabled => true, update => daily]
+]
+[DEBUG]   (s) redirectTestOutputToFile = false
+[DEBUG]   (s) remoteRepositories = [      id: central
+      url: https://repo.maven.apache.org/maven2
+   layout: default
+snapshots: [enabled => false, update => daily]
+ releases: [enabled => true, update => never]
+]
+[DEBUG]   (s) reportFormat = brief
+[DEBUG]   (s) reportsDirectory = /home/bwillcott/NetBeansProjects/markdownj-cli/target/surefire-reports
+[DEBUG]   (f) rerunFailingTestsCount = 0
+[DEBUG]   (f) reuseForks = true
+[DEBUG]   (s) runOrder = filesystem
+[DEBUG]   (s) session = org.apache.maven.execution.MavenSession@13d186db
+[DEBUG]   (f) shutdown = exit
+[DEBUG]   (s) skip = false
+[DEBUG]   (f) skipAfterFailureCount = 0
+[DEBUG]   (s) skipTests = false
+[DEBUG]   (s) suiteXmlFiles = []
+[DEBUG]   (s) tempDir = surefire
+[DEBUG]   (s) testClassesDirectory = /home/bwillcott/NetBeansProjects/markdownj-cli/target/test-classes
+[DEBUG]   (s) testFailureIgnore = false
+[DEBUG]   (s) testNGArtifactName = org.testng:testng
+[DEBUG]   (s) testSourceDirectory = /home/bwillcott/NetBeansProjects/markdownj-cli/src/test/java
+[DEBUG]   (s) threadCountClasses = 0
+[DEBUG]   (s) threadCountMethods = 0
+[DEBUG]   (s) threadCountSuites = 0
+[DEBUG]   (s) trimStackTrace = true
+[DEBUG]   (s) useFile = true
+[DEBUG]   (s) useManifestOnlyJar = true
+[DEBUG]   (f) useModulePath = true
+[DEBUG]   (s) useSystemClassLoader = true
+[DEBUG]   (s) useUnlimitedThreads = false
+[DEBUG]   (s) workingDirectory = /home/bwillcott/NetBeansProjects/markdownj-cli
+[DEBUG] -- end configuration --
+[INFO] 
+[INFO] --- exec-maven-plugin:1.6.0:exec (Markdownj-Compile) @ markdownj-cli ---
+[DEBUG] Failure to find org.markdownj:markdownj-cli:0.1.34-SNAPSHOT/maven-metadata.xml in http://oss.sonatype.org/content/repositories/snapshots was cached in the local repository, resolution will not be reattempted until the update interval of ossrh-snapshots has elapsed or updates are forced
+[DEBUG] Failure to find org.markdownj:markdownj-cli:0.1.34-SNAPSHOT/maven-metadata.xml in http://oss.sonatype.org/content/repositories/snapshots was cached in the local repository, resolution will not be reattempted until the update interval of ossrh-snapshots has elapsed or updates are forced
+[DEBUG] Dependency collection stats: {ConflictMarker.analyzeTime=210618, ConflictMarker.markTime=117055, ConflictMarker.nodeCount=98, ConflictIdSorter.graphTime=293296, ConflictIdSorter.topsortTime=69712, ConflictIdSorter.conflictIdCount=44, ConflictIdSorter.conflictIdCycleCount=0, ConflictResolver.totalTime=1997634, ConflictResolver.conflictItemCount=83, DefaultDependencyCollector.collectTime=75602833, DefaultDependencyCollector.transformTime=2734471}
+[DEBUG] org.codehaus.mojo:exec-maven-plugin:jar:1.6.0:
+[DEBUG]    org.markdownj:markdownj-cli:jar:0.1.34-SNAPSHOT:runtime
+[DEBUG]       com.martiansoftware:jsap:jar:2.1:runtime
+[DEBUG]       org.markdownj:markdownj-core:jar:0.5.30-SNAPSHOT:runtime
+[DEBUG]       com.bew:BEWCommons:jar:1.0.5-SNAPSHOT:runtime
+[DEBUG]          org.xerial:sqlite-jdbc:jar:3.30.1:runtime
+[DEBUG]    org.apache.maven:maven-toolchain:jar:2.2.1:compile
+[DEBUG]    org.apache.maven:maven-project:jar:2.2.1:compile
+[DEBUG]       org.apache.maven:maven-settings:jar:2.2.1:compile
+[DEBUG]       org.apache.maven:maven-profile:jar:2.2.1:compile
+[DEBUG]       org.apache.maven:maven-plugin-registry:jar:2.2.1:compile
+[DEBUG]       org.codehaus.plexus:plexus-interpolation:jar:1.11:compile
+[DEBUG]       org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9-stable-1:compile
+[DEBUG]          junit:junit:jar:4.12:test
+[DEBUG]             org.hamcrest:hamcrest-core:jar:1.3:test
+[DEBUG]    org.apache.maven:maven-model:jar:2.2.1:compile
+[DEBUG]    org.apache.maven:maven-artifact:jar:2.2.1:compile
+[DEBUG]    org.apache.maven:maven-artifact-manager:jar:2.2.1:compile
+[DEBUG]       org.apache.maven:maven-repository-metadata:jar:2.2.1:compile
+[DEBUG]       backport-util-concurrent:backport-util-concurrent:jar:3.1:compile
+[DEBUG]    org.apache.maven:maven-core:jar:2.2.1:compile
+[DEBUG]       org.apache.maven:maven-plugin-parameter-documenter:jar:2.2.1:compile
+[DEBUG]       org.slf4j:slf4j-jdk14:jar:1.5.6:runtime
+[DEBUG]          org.slf4j:slf4j-api:jar:1.5.6:runtime
+[DEBUG]       org.slf4j:jcl-over-slf4j:jar:1.5.6:runtime
+[DEBUG]       org.apache.maven.reporting:maven-reporting-api:jar:2.2.1:compile
+[DEBUG]          org.apache.maven.doxia:doxia-sink-api:jar:1.1:compile
+[DEBUG]          org.apache.maven.doxia:doxia-logging-api:jar:1.1:compile
+[DEBUG]       org.apache.maven:maven-error-diagnostics:jar:2.2.1:compile
+[DEBUG]       commons-cli:commons-cli:jar:1.2:compile
+[DEBUG]       org.apache.maven:maven-plugin-descriptor:jar:2.2.1:compile
+[DEBUG]       org.codehaus.plexus:plexus-interactivity-api:jar:1.0-alpha-4:compile
+[DEBUG]       org.apache.maven:maven-monitor:jar:2.2.1:compile
+[DEBUG]       classworlds:classworlds:jar:1.1:compile
+[DEBUG]       org.sonatype.plexus:plexus-sec-dispatcher:jar:1.3:compile
+[DEBUG]          org.sonatype.plexus:plexus-cipher:jar:1.4:compile
+[DEBUG]    org.apache.maven:maven-plugin-api:jar:2.2.1:compile
+[DEBUG]    org.codehaus.plexus:plexus-utils:jar:3.0.20:compile
+[DEBUG]    org.apache.commons:commons-exec:jar:1.3:compile
+[DEBUG] Failure to find org.markdownj:markdownj-core:0.5.30-SNAPSHOT/maven-metadata.xml in http://oss.sonatype.org/content/repositories/snapshots was cached in the local repository, resolution will not be reattempted until the update interval of ossrh-snapshots has elapsed or updates are forced
+[DEBUG] Failure to find com.bew:BEWCommons:1.0.5-SNAPSHOT/maven-metadata.xml in http://oss.sonatype.org/content/repositories/snapshots was cached in the local repository, resolution will not be reattempted until the update interval of ossrh-snapshots has elapsed or updates are forced
+[DEBUG] Created new class realm plugin>org.codehaus.mojo:exec-maven-plugin:1.6.0
+[DEBUG] Importing foreign packages into class realm plugin>org.codehaus.mojo:exec-maven-plugin:1.6.0
+[DEBUG]   Imported:  < maven.api
+[DEBUG] Populating class realm plugin>org.codehaus.mojo:exec-maven-plugin:1.6.0
+[DEBUG]   Included: org.codehaus.mojo:exec-maven-plugin:jar:1.6.0
+[DEBUG]   Included: org.markdownj:markdownj-cli:jar:0.1.34-SNAPSHOT
+[DEBUG]   Included: com.martiansoftware:jsap:jar:2.1
+[DEBUG]   Included: org.markdownj:markdownj-core:jar:0.5.30-SNAPSHOT
+[DEBUG]   Included: com.bew:BEWCommons:jar:1.0.5-SNAPSHOT
+[DEBUG]   Included: org.xerial:sqlite-jdbc:jar:3.30.1
+[DEBUG]   Included: org.codehaus.plexus:plexus-interpolation:jar:1.11
+[DEBUG]   Included: backport-util-concurrent:backport-util-concurrent:jar:3.1
+[DEBUG]   Included: org.slf4j:slf4j-jdk14:jar:1.5.6
+[DEBUG]   Included: org.slf4j:jcl-over-slf4j:jar:1.5.6
+[DEBUG]   Included: org.apache.maven.reporting:maven-reporting-api:jar:2.2.1
+[DEBUG]   Included: org.apache.maven.doxia:doxia-sink-api:jar:1.1
+[DEBUG]   Included: org.apache.maven.doxia:doxia-logging-api:jar:1.1
+[DEBUG]   Included: commons-cli:commons-cli:jar:1.2
+[DEBUG]   Included: org.codehaus.plexus:plexus-interactivity-api:jar:1.0-alpha-4
+[DEBUG]   Included: org.sonatype.plexus:plexus-sec-dispatcher:jar:1.3
+[DEBUG]   Included: org.sonatype.plexus:plexus-cipher:jar:1.4
+[DEBUG]   Included: org.codehaus.plexus:plexus-utils:jar:3.0.20
+[DEBUG]   Included: org.apache.commons:commons-exec:jar:1.3
+[DEBUG] Configuring mojo org.codehaus.mojo:exec-maven-plugin:1.6.0:exec from plugin realm ClassRealm[plugin>org.codehaus.mojo:exec-maven-plugin:1.6.0, parent: jdk.internal.loader.ClassLoaders$AppClassLoader@5bc2b487]
+[DEBUG] Configuring mojo 'org.codehaus.mojo:exec-maven-plugin:1.6.0:exec' with basic configurator -->
+[DEBUG]   (f) addOutputToClasspath = true
+[DEBUG]   (f) addResourcesToClasspath = false
+[DEBUG]   (f) async = false
+[DEBUG]   (f) asyncDestroyOnShutdown = true
+[DEBUG]   (f) basedir = /home/bwillcott/NetBeansProjects/markdownj-cli
+[DEBUG]   (f) classpathScope = runtime
+[DEBUG]   (f) commandlineArgs = --enable-preview -classpath %classpath org.markdownj.cli.Main -v:2 -s src/docs/manual -d target/manual -wr
+[DEBUG]   (f) executable = java
+[DEBUG]   (f) localRepository =       id: local
+      url: file:///home/bwillcott/.m2/repository/
+   layout: default
+snapshots: [enabled => true, update => always]
+ releases: [enabled => true, update => always]
+
+[DEBUG]   (f) longClasspath = false
+[DEBUG]   (f) longModulepath = true
+[DEBUG]   (f) pluginDependencies = [org.codehaus.mojo:exec-maven-plugin:maven-plugin:1.6.0:, org.markdownj:markdownj-cli:jar:0.1.34-SNAPSHOT:runtime, com.martiansoftware:jsap:jar:2.1:runtime, org.markdownj:markdownj-core:jar:0.5.30-SNAPSHOT:runtime, com.bew:BEWCommons:jar:1.0.5-SNAPSHOT:runtime, org.xerial:sqlite-jdbc:jar:3.30.1:runtime, org.apache.maven:maven-toolchain:jar:2.2.1:compile, org.apache.maven:maven-project:jar:2.2.1:compile, org.apache.maven:maven-settings:jar:2.2.1:compile, org.apache.maven:maven-profile:jar:2.2.1:compile, org.apache.maven:maven-plugin-registry:jar:2.2.1:compile, org.codehaus.plexus:plexus-interpolation:jar:1.11:compile, org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-9-stable-1:compile, org.apache.maven:maven-model:jar:2.2.1:compile, org.apache.maven:maven-artifact:jar:2.2.1:compile, org.apache.maven:maven-artifact-manager:jar:2.2.1:compile, org.apache.maven:maven-repository-metadata:jar:2.2.1:compile, backport-util-concurrent:backport-util-concurrent:jar:3.1:compile, org.apache.maven:maven-core:jar:2.2.1:compile, org.apache.maven:maven-plugin-parameter-documenter:jar:2.2.1:compile, org.slf4j:slf4j-jdk14:jar:1.5.6:runtime, org.slf4j:slf4j-api:jar:1.5.6:runtime, org.slf4j:jcl-over-slf4j:jar:1.5.6:runtime, org.apache.maven.reporting:maven-reporting-api:jar:2.2.1:compile, org.apache.maven.doxia:doxia-sink-api:jar:1.1:compile, org.apache.maven.doxia:doxia-logging-api:jar:1.1:compile, org.apache.maven:maven-error-diagnostics:jar:2.2.1:compile, commons-cli:commons-cli:jar:1.2:compile, org.apache.maven:maven-plugin-descriptor:jar:2.2.1:compile, org.codehaus.plexus:plexus-interactivity-api:jar:1.0-alpha-4:compile, org.apache.maven:maven-monitor:jar:2.2.1:compile, classworlds:classworlds:jar:1.1:compile, org.sonatype.plexus:plexus-sec-dispatcher:jar:1.3:compile, org.sonatype.plexus:plexus-cipher:jar:1.4:compile, org.apache.maven:maven-plugin-api:jar:2.2.1:compile, org.codehaus.plexus:plexus-utils:jar:3.0.20:compile, org.apache.commons:commons-exec:jar:1.3:compile]
+[DEBUG]   (f) project = MavenProject: org.markdownj:markdownj-cli:0.1 @ /home/bwillcott/NetBeansProjects/markdownj-cli/pom.xml
+[DEBUG]   (f) remoteRepositories = [      id: central
+      url: https://repo.maven.apache.org/maven2
+   layout: default
+snapshots: [enabled => false, update => daily]
+ releases: [enabled => true, update => daily]
+]
+[DEBUG]   (f) session = org.apache.maven.execution.MavenSession@13d186db
+[DEBUG]   (f) skip = false
+[DEBUG]   (f) toolchain = jdk
+[DEBUG] -- end configuration --
+[DEBUG] Collected project artifacts [com.martiansoftware:jsap:jar:2.1:compile, org.markdownj:markdownj-core:jar:0.5.30-SNAPSHOT:compile, com.bew:BEWCommons:jar:1.0.5-SNAPSHOT:compile, org.xerial:sqlite-jdbc:jar:3.30.1:compile]
+[DEBUG] Collected project classpath [/home/bwillcott/NetBeansProjects/markdownj-cli/target/classes]
+[DEBUG] dealing with com.martiansoftware:jsap:jar:2.1:compile
+[DEBUG] dealing with org.markdownj:markdownj-core:jar:0.5.30-SNAPSHOT:compile
+[DEBUG] dealing with com.bew:BEWCommons:jar:1.0.5-SNAPSHOT:compile
+[DEBUG] dealing with org.xerial:sqlite-jdbc:jar:3.30.1:compile
+[DEBUG] env: ANDROID_HOME=/home/bwillcott/Android/Sdk
+[DEBUG] env: CATALINA_HOME=/home/bwillcott/apps/apache-tomcat-9.0.31
+[DEBUG] env: COLORFGBG=15;0
+[DEBUG] env: COLORTERM=truecolor
+[DEBUG] env: DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+[DEBUG] env: DERBY_HOME=/home/bwillcott/Java-Dev/db-derby-10.15.1.3/bin
+[DEBUG] env: DESKTOP_SESSION=/usr/share/xsessions/plasma
+[DEBUG] env: DISPLAY=:0
+[DEBUG] env: GDK_BACKEND=x11
+[DEBUG] env: GDK_CORE_DEVICE_EVENTS=1
+[DEBUG] env: GTK2_RC_FILES=/home/bwillcott/.gtkrc-2.0-kde4
+[DEBUG] env: GTK_IM_MODULE=gtk-im-context-simple
+[DEBUG] env: HISTCONTROL=ignoredups
+[DEBUG] env: HISTSIZE=1000
+[DEBUG] env: HOME=/home/bwillcott
+[DEBUG] env: HOSTNAME=D0-17-C2-12-57-48
+[DEBUG] env: IMSETTINGS_INTEGRATE_DESKTOP=yes
+[DEBUG] env: IMSETTINGS_MODULE=none
+[DEBUG] env: J2D_PIXMAPS=shared
+[DEBUG] env: JAVACMD=/home/bwillcott/apps/jdk/bin/java
+[DEBUG] env: JAVA_HOME=/home/bwillcott/apps/jdk
+[DEBUG] env: JDK_HOME=/home/bwillcott/apps/jdk
+[DEBUG] env: JRE_HOME=/home/bwillcott/apps/jdk
+[DEBUG] env: KDEDIRS=/usr
+[DEBUG] env: KDE_FULL_SESSION=true
+[DEBUG] env: KDE_SESSION_UID=1000
+[DEBUG] env: KDE_SESSION_VERSION=5
+[DEBUG] env: KONSOLE_DBUS_SERVICE=:1.362
+[DEBUG] env: KONSOLE_DBUS_SESSION=/Sessions/1
+[DEBUG] env: KONSOLE_DBUS_WINDOW=/Windows/1
+[DEBUG] env: KONSOLE_VERSION=191201
+[DEBUG] env: LANG=en_AU.UTF-8
+[DEBUG] env: LANGUAGE=en_GB
+[DEBUG] env: LESSOPEN=||/usr/bin/lesspipe.sh %s
+[DEBUG] env: LOGNAME=bwillcott
+[DEBUG] env: LS_COLORS=rs=0:di=38;5;33:ln=38;5;51:mh=00:pi=40;38;5;11:so=38;5;13:do=38;5;5:bd=48;5;232;38;5;11:cd=48;5;232;38;5;3:or=48;5;232;38;5;9:mi=01;37;41:su=48;5;196;38;5;15:sg=48;5;11;38;5;16:ca=48;5;196;38;5;226:tw=48;5;10;38;5;16:ow=48;5;10;38;5;21:st=48;5;21;38;5;15:ex=38;5;40:*.tar=38;5;9:*.tgz=38;5;9:*.arc=38;5;9:*.arj=38;5;9:*.taz=38;5;9:*.lha=38;5;9:*.lz4=38;5;9:*.lzh=38;5;9:*.lzma=38;5;9:*.tlz=38;5;9:*.txz=38;5;9:*.tzo=38;5;9:*.t7z=38;5;9:*.zip=38;5;9:*.z=38;5;9:*.dz=38;5;9:*.gz=38;5;9:*.lrz=38;5;9:*.lz=38;5;9:*.lzo=38;5;9:*.xz=38;5;9:*.zst=38;5;9:*.tzst=38;5;9:*.bz2=38;5;9:*.bz=38;5;9:*.tbz=38;5;9:*.tbz2=38;5;9:*.tz=38;5;9:*.deb=38;5;9:*.rpm=38;5;9:*.jar=38;5;9:*.war=38;5;9:*.ear=38;5;9:*.sar=38;5;9:*.rar=38;5;9:*.alz=38;5;9:*.ace=38;5;9:*.zoo=38;5;9:*.cpio=38;5;9:*.7z=38;5;9:*.rz=38;5;9:*.cab=38;5;9:*.wim=38;5;9:*.swm=38;5;9:*.dwm=38;5;9:*.esd=38;5;9:*.jpg=38;5;13:*.jpeg=38;5;13:*.mjpg=38;5;13:*.mjpeg=38;5;13:*.gif=38;5;13:*.bmp=38;5;13:*.pbm=38;5;13:*.pgm=38;5;13:*.ppm=38;5;13:*.tga=38;5;13:*.xbm=38;5;13:*.xpm=38;5;13:*.tif=38;5;13:*.tiff=38;5;13:*.png=38;5;13:*.svg=38;5;13:*.svgz=38;5;13:*.mng=38;5;13:*.pcx=38;5;13:*.mov=38;5;13:*.mpg=38;5;13:*.mpeg=38;5;13:*.m2v=38;5;13:*.mkv=38;5;13:*.webm=38;5;13:*.ogm=38;5;13:*.mp4=38;5;13:*.m4v=38;5;13:*.mp4v=38;5;13:*.vob=38;5;13:*.qt=38;5;13:*.nuv=38;5;13:*.wmv=38;5;13:*.asf=38;5;13:*.rm=38;5;13:*.rmvb=38;5;13:*.flc=38;5;13:*.avi=38;5;13:*.fli=38;5;13:*.flv=38;5;13:*.gl=38;5;13:*.dl=38;5;13:*.xcf=38;5;13:*.xwd=38;5;13:*.yuv=38;5;13:*.cgm=38;5;13:*.emf=38;5;13:*.ogv=38;5;13:*.ogx=38;5;13:*.aac=38;5;45:*.au=38;5;45:*.flac=38;5;45:*.m4a=38;5;45:*.mid=38;5;45:*.midi=38;5;45:*.mka=38;5;45:*.mp3=38;5;45:*.mpc=38;5;45:*.ogg=38;5;45:*.ra=38;5;45:*.wav=38;5;45:*.oga=38;5;45:*.opus=38;5;45:*.spx=38;5;45:*.xspf=38;5;45:
+[DEBUG] env: MAIL=/var/spool/mail/bwillcott
+[DEBUG] env: MAVEN_CMD_LINE_ARGS= -e -X install
+[DEBUG] env: MAVEN_PROJECTBASEDIR=/home/bwillcott/NetBeansProjects/markdownj-cli
+[DEBUG] env: NB_DESKTOP_STARTUP_ID=D0-17-C2-12-57-48;1585292632;13886;1526_TIME210607
+[DEBUG] env: OLDPWD=/home/bwillcott/NetBeansProjects/markdownj-cli
+[DEBUG] env: PAM_KWALLET5_LOGIN=/run/user/1000/kwallet5.socket
+[DEBUG] env: PATH=/home/bwillcott/Java-Dev/db-derby-10.15.1.3/bin/bin:/home/bwillcott/Java-Dev/db-derby-10.15.1.3/bin/bin:/home/bwillcott/.local/bin:/home/bwillcott/bin:/usr/local/lib/nodejs/node-v12.13.1-linux-x64/bin:/usr/lib64/ccache:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin
+[DEBUG] env: PROFILEHOME=/home/bwillcott/NetBeansProjects/markdownj-cli
+[DEBUG] env: PWD=/home/bwillcott/NetBeansProjects/markdownj-cli
+[DEBUG] env: QT_AUTO_SCREEN_SCALE_FACTOR=0
+[DEBUG] env: QT_IM_MODULE=xim
+[DEBUG] env: SESSION_MANAGER=local/unix:@/tmp/.ICE-unix/1467,unix/unix:/tmp/.ICE-unix/1467
+[DEBUG] env: SHELL=/bin/bash
+[DEBUG] env: SHELL_SESSION_ID=0b9853fba2da418b9bb1c504bcbb35ae
+[DEBUG] env: SHLVL=1
+[DEBUG] env: SSH_AGENT_PID=1396
+[DEBUG] env: SSH_ASKPASS=/usr/bin/ksshaskpass
+[DEBUG] env: SSH_AUTH_SOCK=/tmp/ssh-TKeWLGiPI4Sg/agent.1225
+[DEBUG] env: TERM=xterm-256color
+[DEBUG] env: USER=bwillcott
+[DEBUG] env: WINDOWID=161480711
+[DEBUG] env: XAUTHORITY=/home/bwillcott/.Xauthority
+[DEBUG] env: XCURSOR_THEME=breeze_cursors
+[DEBUG] env: XDG_CONFIG_DIRS=/etc/xdg:/usr/share/kde-settings/kde-profile/default/xdg
+[DEBUG] env: XDG_CURRENT_DESKTOP=KDE
+[DEBUG] env: XDG_DATA_DIRS=/usr/share/kde-settings/kde-profile/default/share:/usr/local/share:/usr/share
+[DEBUG] env: XDG_MENU_PREFIX=kf5-
+[DEBUG] env: XDG_RUNTIME_DIR=/run/user/1000
+[DEBUG] env: XDG_SEAT=seat0
+[DEBUG] env: XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
+[DEBUG] env: XDG_SESSION_CLASS=user
+[DEBUG] env: XDG_SESSION_DESKTOP=KDE
+[DEBUG] env: XDG_SESSION_ID=2
+[DEBUG] env: XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session1
+[DEBUG] env: XDG_SESSION_TYPE=x11
+[DEBUG] env: XDG_VTNR=1
+[DEBUG] env: XMODIFIERS=@im=none
+[DEBUG] Executing command line: [java, --enable-preview, -classpath, /home/bwillcott/NetBeansProjects/markdownj-cli/target/classes:/home/bwillcott/.m2/repository/com/martiansoftware/jsap/2.1/jsap-2.1.jar:/home/bwillcott/.m2/repository/org/markdownj/markdownj-core/0.5.30-SNAPSHOT/markdownj-core-0.5.30-SNAPSHOT.jar:/home/bwillcott/.m2/repository/com/bew/BEWCommons/1.0.5-SNAPSHOT/BEWCommons-1.0.5-SNAPSHOT.jar:/home/bwillcott/.m2/repository/org/xerial/sqlite-jdbc/3.30.1/sqlite-jdbc-3.30.1.jar, org.markdownj.cli.Main, -v:2, -s, src/docs/manual, -d, target/manual, -wr]
+org.markdownj.cli.POMProperties:
+  title: MarkdownJ CLI
+  description: Command-line program that uses the Markdownj Core library.
+  version: 0.1
+  artifactId: markdownj-cli
+  groupId: org.markdownj
+
+[INFO] 
+[INFO] --- maven-dependency-plugin:3.1.1:copy-dependencies (copy-dependencies) @ markdownj-cli ---
+[DEBUG] Dependency collection stats: {ConflictMarker.analyzeTime=784318, ConflictMarker.markTime=486269, ConflictMarker.nodeCount=354, ConflictIdSorter.graphTime=391623, ConflictIdSorter.topsortTime=134921, ConflictIdSorter.conflictIdCount=82, ConflictIdSorter.conflictIdCycleCount=0, ConflictResolver.totalTime=5082041, ConflictResolver.conflictItemCount=210, DefaultDependencyCollector.collectTime=233364372, DefaultDependencyCollector.transformTime=6949654}
+[DEBUG] org.apache.maven.plugins:maven-dependency-plugin:jar:3.1.1:
+[DEBUG]    org.apache.maven:maven-artifact:jar:3.0:compile
+[DEBUG]    org.apache.maven:maven-plugin-api:jar:3.0:compile
+[DEBUG]       org.sonatype.sisu:sisu-inject-plexus:jar:1.4.2:compile
+[DEBUG]          org.sonatype.sisu:sisu-inject-bean:jar:1.4.2:compile
+[DEBUG]             org.sonatype.sisu:sisu-guice:jar:noaop:2.1.7:compile
+[DEBUG]    org.apache.maven:maven-model:jar:3.0:compile
+[DEBUG]    org.apache.maven:maven-core:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-settings:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-settings-builder:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-model-builder:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-aether-provider:jar:3.0:runtime
+[DEBUG]       org.sonatype.aether:aether-impl:jar:1.7:compile
+[DEBUG]          org.sonatype.aether:aether-spi:jar:1.7:compile
+[DEBUG]       org.sonatype.aether:aether-api:jar:1.7:compile
+[DEBUG]       org.sonatype.aether:aether-util:jar:1.7:compile
+[DEBUG]       org.codehaus.plexus:plexus-interpolation:jar:1.14:compile
+[DEBUG]       org.codehaus.plexus:plexus-classworlds:jar:2.2.3:compile
+[DEBUG]       org.codehaus.plexus:plexus-component-annotations:jar:1.7.1:compile
+[DEBUG]       org.sonatype.plexus:plexus-sec-dispatcher:jar:1.3:compile
+[DEBUG]          org.sonatype.plexus:plexus-cipher:jar:1.4:compile
+[DEBUG]    org.apache.maven:maven-repository-metadata:jar:3.0:compile
+[DEBUG]    org.apache.maven.reporting:maven-reporting-api:jar:3.0:compile
+[DEBUG]    org.apache.maven.reporting:maven-reporting-impl:jar:2.3:compile
+[DEBUG]       org.apache.maven.doxia:doxia-core:jar:1.2:compile
+[DEBUG]          xerces:xercesImpl:jar:2.9.1:compile
+[DEBUG]             xml-apis:xml-apis:jar:1.3.04:compile
+[DEBUG]          org.apache.httpcomponents:httpclient:jar:4.0.2:compile
+[DEBUG]             org.apache.httpcomponents:httpcore:jar:4.0.1:compile
+[DEBUG]       commons-validator:commons-validator:jar:1.3.1:compile
+[DEBUG]          commons-beanutils:commons-beanutils:jar:1.7.0:compile
+[DEBUG]          commons-digester:commons-digester:jar:1.6:compile
+[DEBUG]          commons-logging:commons-logging:jar:1.0.4:compile
+[DEBUG]    commons-io:commons-io:jar:2.5:compile
+[DEBUG]    org.apache.maven.doxia:doxia-sink-api:jar:1.4:compile
+[DEBUG]       org.apache.maven.doxia:doxia-logging-api:jar:1.4:compile
+[DEBUG]    org.apache.maven.doxia:doxia-site-renderer:jar:1.4:compile
+[DEBUG]       org.apache.maven.doxia:doxia-decoration-model:jar:1.4:compile
+[DEBUG]       org.apache.maven.doxia:doxia-module-xhtml:jar:1.4:compile
+[DEBUG]       org.apache.maven.doxia:doxia-module-fml:jar:1.4:compile
+[DEBUG]       org.codehaus.plexus:plexus-i18n:jar:1.0-beta-7:compile
+[DEBUG]       org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-30:compile
+[DEBUG]          junit:junit:jar:3.8.1:compile
+[DEBUG]       org.codehaus.plexus:plexus-velocity:jar:1.1.7:compile
+[DEBUG]       org.apache.velocity:velocity:jar:1.5:compile
+[DEBUG]          oro:oro:jar:2.0.8:compile
+[DEBUG]       org.apache.velocity:velocity-tools:jar:2.0:compile
+[DEBUG]          commons-chain:commons-chain:jar:1.1:compile
+[DEBUG]          dom4j:dom4j:jar:1.1:compile
+[DEBUG]          sslext:sslext:jar:1.2-0:compile
+[DEBUG]          org.apache.struts:struts-core:jar:1.3.8:compile
+[DEBUG]             antlr:antlr:jar:2.7.2:compile
+[DEBUG]          org.apache.struts:struts-taglib:jar:1.3.8:compile
+[DEBUG]          org.apache.struts:struts-tiles:jar:1.3.8:compile
+[DEBUG]    org.codehaus.plexus:plexus-archiver:jar:3.6.0:compile
+[DEBUG]       org.apache.commons:commons-compress:jar:1.16.1:compile
+[DEBUG]          org.objenesis:objenesis:jar:2.6:compile
+[DEBUG]       org.iq80.snappy:snappy:jar:0.4:compile
+[DEBUG]       org.tukaani:xz:jar:1.8:runtime
+[DEBUG]    org.codehaus.plexus:plexus-utils:jar:3.1.0:compile
+[DEBUG]    org.apache.maven.shared:file-management:jar:3.0.0:compile
+[DEBUG]       org.apache.maven.shared:maven-shared-io:jar:3.0.0:compile
+[DEBUG]          org.apache.maven:maven-compat:jar:3.0:compile
+[DEBUG]          org.apache.maven.wagon:wagon-provider-api:jar:2.10:compile
+[DEBUG]    org.codehaus.plexus:plexus-io:jar:3.0.0:compile
+[DEBUG]    org.apache.maven.shared:maven-dependency-analyzer:jar:1.10:compile
+[DEBUG]       org.ow2.asm:asm:jar:6.1.1:compile
+[DEBUG]    org.apache.maven.shared:maven-dependency-tree:jar:3.0.1:compile
+[DEBUG]       org.eclipse.aether:aether-util:jar:0.9.0.M2:compile
+[DEBUG]    org.apache.maven.shared:maven-common-artifact-filters:jar:3.0.1:compile
+[DEBUG]    org.apache.maven.shared:maven-artifact-transfer:jar:0.9.1:compile
+[DEBUG]       commons-codec:commons-codec:jar:1.6:compile
+[DEBUG]       org.slf4j:slf4j-api:jar:1.7.5:compile
+[DEBUG]    org.apache.maven.shared:maven-shared-utils:jar:3.2.0:compile
+[DEBUG]    commons-lang:commons-lang:jar:2.6:compile
+[DEBUG]    commons-collections:commons-collections:jar:3.2.2:compile
+[DEBUG]    classworlds:classworlds:jar:1.1:compile
+[DEBUG] Created new class realm plugin>org.apache.maven.plugins:maven-dependency-plugin:3.1.1
+[DEBUG] Importing foreign packages into class realm plugin>org.apache.maven.plugins:maven-dependency-plugin:3.1.1
+[DEBUG]   Imported:  < maven.api
+[DEBUG] Populating class realm plugin>org.apache.maven.plugins:maven-dependency-plugin:3.1.1
+[DEBUG]   Included: org.apache.maven.plugins:maven-dependency-plugin:jar:3.1.1
+[DEBUG]   Included: org.sonatype.sisu:sisu-inject-bean:jar:1.4.2
+[DEBUG]   Included: org.sonatype.sisu:sisu-guice:jar:noaop:2.1.7
+[DEBUG]   Included: org.sonatype.aether:aether-util:jar:1.7
+[DEBUG]   Included: org.codehaus.plexus:plexus-interpolation:jar:1.14
+[DEBUG]   Included: org.codehaus.plexus:plexus-component-annotations:jar:1.7.1
+[DEBUG]   Included: org.sonatype.plexus:plexus-sec-dispatcher:jar:1.3
+[DEBUG]   Included: org.sonatype.plexus:plexus-cipher:jar:1.4
+[DEBUG]   Included: org.apache.maven.reporting:maven-reporting-api:jar:3.0
+[DEBUG]   Included: org.apache.maven.reporting:maven-reporting-impl:jar:2.3
+[DEBUG]   Included: org.apache.maven.doxia:doxia-core:jar:1.2
+[DEBUG]   Included: xerces:xercesImpl:jar:2.9.1
+[DEBUG]   Included: xml-apis:xml-apis:jar:1.3.04
+[DEBUG]   Included: org.apache.httpcomponents:httpclient:jar:4.0.2
+[DEBUG]   Included: org.apache.httpcomponents:httpcore:jar:4.0.1
+[DEBUG]   Included: commons-validator:commons-validator:jar:1.3.1
+[DEBUG]   Included: commons-beanutils:commons-beanutils:jar:1.7.0
+[DEBUG]   Included: commons-digester:commons-digester:jar:1.6
+[DEBUG]   Included: commons-logging:commons-logging:jar:1.0.4
+[DEBUG]   Included: commons-io:commons-io:jar:2.5
+[DEBUG]   Included: org.apache.maven.doxia:doxia-sink-api:jar:1.4
+[DEBUG]   Included: org.apache.maven.doxia:doxia-logging-api:jar:1.4
+[DEBUG]   Included: org.apache.maven.doxia:doxia-site-renderer:jar:1.4
+[DEBUG]   Included: org.apache.maven.doxia:doxia-decoration-model:jar:1.4
+[DEBUG]   Included: org.apache.maven.doxia:doxia-module-xhtml:jar:1.4
+[DEBUG]   Included: org.apache.maven.doxia:doxia-module-fml:jar:1.4
+[DEBUG]   Included: org.codehaus.plexus:plexus-i18n:jar:1.0-beta-7
+[DEBUG]   Included: junit:junit:jar:3.8.1
+[DEBUG]   Included: org.codehaus.plexus:plexus-velocity:jar:1.1.7
+[DEBUG]   Included: org.apache.velocity:velocity:jar:1.5
+[DEBUG]   Included: oro:oro:jar:2.0.8
+[DEBUG]   Included: org.apache.velocity:velocity-tools:jar:2.0
+[DEBUG]   Included: commons-chain:commons-chain:jar:1.1
+[DEBUG]   Included: dom4j:dom4j:jar:1.1
+[DEBUG]   Included: sslext:sslext:jar:1.2-0
+[DEBUG]   Included: org.apache.struts:struts-core:jar:1.3.8
+[DEBUG]   Included: antlr:antlr:jar:2.7.2
+[DEBUG]   Included: org.apache.struts:struts-taglib:jar:1.3.8
+[DEBUG]   Included: org.apache.struts:struts-tiles:jar:1.3.8
+[DEBUG]   Included: org.codehaus.plexus:plexus-archiver:jar:3.6.0
+[DEBUG]   Included: org.apache.commons:commons-compress:jar:1.16.1
+[DEBUG]   Included: org.objenesis:objenesis:jar:2.6
+[DEBUG]   Included: org.iq80.snappy:snappy:jar:0.4
+[DEBUG]   Included: org.tukaani:xz:jar:1.8
+[DEBUG]   Included: org.codehaus.plexus:plexus-utils:jar:3.1.0
+[DEBUG]   Included: org.apache.maven.shared:file-management:jar:3.0.0
+[DEBUG]   Included: org.apache.maven.shared:maven-shared-io:jar:3.0.0
+[DEBUG]   Included: org.codehaus.plexus:plexus-io:jar:3.0.0
+[DEBUG]   Included: org.apache.maven.shared:maven-dependency-analyzer:jar:1.10
+[DEBUG]   Included: org.ow2.asm:asm:jar:6.1.1
+[DEBUG]   Included: org.apache.maven.shared:maven-dependency-tree:jar:3.0.1
+[DEBUG]   Included: org.eclipse.aether:aether-util:jar:0.9.0.M2
+[DEBUG]   Included: org.apache.maven.shared:maven-common-artifact-filters:jar:3.0.1
+[DEBUG]   Included: org.apache.maven.shared:maven-artifact-transfer:jar:0.9.1
+[DEBUG]   Included: commons-codec:commons-codec:jar:1.6
+[DEBUG]   Included: org.apache.maven.shared:maven-shared-utils:jar:3.2.0
+[DEBUG]   Included: commons-lang:commons-lang:jar:2.6
+[DEBUG]   Included: commons-collections:commons-collections:jar:3.2.2
+[DEBUG] Configuring mojo org.apache.maven.plugins:maven-dependency-plugin:3.1.1:copy-dependencies from plugin realm ClassRealm[plugin>org.apache.maven.plugins:maven-dependency-plugin:3.1.1, parent: jdk.internal.loader.ClassLoaders$AppClassLoader@5bc2b487]
+[DEBUG] Configuring mojo 'org.apache.maven.plugins:maven-dependency-plugin:3.1.1:copy-dependencies' with basic configurator -->
+[DEBUG]   (f) addParentPoms = false
+[DEBUG]   (s) copyPom = false
+[DEBUG]   (f) excludeScope = test
+[DEBUG]   (f) excludeTransitive = false
+[DEBUG]   (s) failOnMissingClassifierArtifact = false
+[DEBUG]   (f) includeScope = runtime
+[DEBUG]   (s) markersDirectory = /home/bwillcott/NetBeansProjects/markdownj-cli/target/dependency-maven-plugin-markers
+[DEBUG]   (f) outputAbsoluteArtifactFilename = false
+[DEBUG]   (s) outputDirectory = /home/bwillcott/NetBeansProjects/markdownj-cli/target/libs
+[DEBUG]   (f) overWriteIfNewer = true
+[DEBUG]   (f) overWriteReleases = false
+[DEBUG]   (f) overWriteSnapshots = false
+[DEBUG]   (s) prependGroupId = false
+[DEBUG]   (f) project = MavenProject: org.markdownj:markdownj-cli:0.1 @ /home/bwillcott/NetBeansProjects/markdownj-cli/pom.xml
+[DEBUG]   (f) reactorProjects = [MavenProject: org.markdownj:markdownj-cli:0.1 @ /home/bwillcott/NetBeansProjects/markdownj-cli/pom.xml]
+[DEBUG]   (f) remoteRepositories = [      id: central
+      url: https://repo.maven.apache.org/maven2
+   layout: default
+snapshots: [enabled => false, update => daily]
+ releases: [enabled => true, update => daily]
+]
+[DEBUG]   (f) session = org.apache.maven.execution.MavenSession@13d186db
+[DEBUG]   (s) silent = false
+[DEBUG]   (s) skip = false
+[DEBUG]   (f) stripClassifier = false
+[DEBUG]   (s) stripVersion = false
+[DEBUG]   (f) useBaseVersion = true
+[DEBUG]   (s) useRepositoryLayout = false
+[DEBUG]   (s) useSubDirectoryPerArtifact = false
+[DEBUG]   (s) useSubDirectoryPerScope = false
+[DEBUG]   (s) useSubDirectoryPerType = false
+[DEBUG] -- end configuration --
+[INFO] com.martiansoftware:jsap:jar:2.1 already exists in destination.
+[INFO] com.bew:BEWCommons:jar:1.0.5-SNAPSHOT already exists in destination.
+[INFO] org.xerial:sqlite-jdbc:jar:3.30.1 already exists in destination.
+[INFO] org.markdownj:markdownj-core:jar:0.5.30-SNAPSHOT already exists in destination.
+[INFO] 
+[INFO] --- maven-jar-plugin:3.2.0:jar (default-jar) @ markdownj-cli ---
+[DEBUG] Dependency collection stats: {ConflictMarker.analyzeTime=225728, ConflictMarker.markTime=100756, ConflictMarker.nodeCount=106, ConflictIdSorter.graphTime=132117, ConflictIdSorter.topsortTime=64618, ConflictIdSorter.conflictIdCount=36, ConflictIdSorter.conflictIdCycleCount=0, ConflictResolver.totalTime=1814239, ConflictResolver.conflictItemCount=97, DefaultDependencyCollector.collectTime=25172348, DefaultDependencyCollector.transformTime=2398339}
+[DEBUG] org.apache.maven.plugins:maven-jar-plugin:jar:3.2.0:
+[DEBUG]    org.apache.maven:maven-plugin-api:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-model:jar:3.0:compile
+[DEBUG]       org.sonatype.sisu:sisu-inject-plexus:jar:1.4.2:compile
+[DEBUG]          org.sonatype.sisu:sisu-inject-bean:jar:1.4.2:compile
+[DEBUG]             org.sonatype.sisu:sisu-guice:jar:noaop:2.1.7:compile
+[DEBUG]    org.apache.maven:maven-core:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-settings:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-settings-builder:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-repository-metadata:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-model-builder:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-aether-provider:jar:3.0:runtime
+[DEBUG]       org.sonatype.aether:aether-impl:jar:1.7:compile
+[DEBUG]          org.sonatype.aether:aether-spi:jar:1.7:compile
+[DEBUG]       org.sonatype.aether:aether-api:jar:1.7:compile
+[DEBUG]       org.sonatype.aether:aether-util:jar:1.7:compile
+[DEBUG]       org.codehaus.plexus:plexus-interpolation:jar:1.14:compile
+[DEBUG]       org.codehaus.plexus:plexus-classworlds:jar:2.2.3:compile
+[DEBUG]       org.codehaus.plexus:plexus-component-annotations:jar:1.7.1:compile
+[DEBUG]       org.sonatype.plexus:plexus-sec-dispatcher:jar:1.3:compile
+[DEBUG]          org.sonatype.plexus:plexus-cipher:jar:1.4:compile
+[DEBUG]    org.apache.maven:maven-artifact:jar:3.0:compile
+[DEBUG]    org.apache.maven.shared:file-management:jar:3.0.0:compile
+[DEBUG]       org.apache.maven.shared:maven-shared-io:jar:3.0.0:compile
+[DEBUG]          org.apache.maven:maven-compat:jar:3.0:compile
+[DEBUG]          org.apache.maven.wagon:wagon-provider-api:jar:2.10:compile
+[DEBUG]    org.apache.maven:maven-archiver:jar:3.5.0:compile
+[DEBUG]       commons-io:commons-io:jar:2.5:compile
+[DEBUG]    org.apache.maven.shared:maven-shared-utils:jar:3.2.1:compile
+[DEBUG]    org.codehaus.plexus:plexus-archiver:jar:4.2.1:compile
+[DEBUG]       org.codehaus.plexus:plexus-io:jar:3.2.0:compile
+[DEBUG]       org.apache.commons:commons-compress:jar:1.19:compile
+[DEBUG]       org.iq80.snappy:snappy:jar:0.4:compile
+[DEBUG]       org.tukaani:xz:jar:1.8:runtime
+[DEBUG]    org.codehaus.plexus:plexus-utils:jar:3.3.0:compile
+[DEBUG] Created new class realm plugin>org.apache.maven.plugins:maven-jar-plugin:3.2.0
+[DEBUG] Importing foreign packages into class realm plugin>org.apache.maven.plugins:maven-jar-plugin:3.2.0
+[DEBUG]   Imported:  < maven.api
+[DEBUG] Populating class realm plugin>org.apache.maven.plugins:maven-jar-plugin:3.2.0
+[DEBUG]   Included: org.apache.maven.plugins:maven-jar-plugin:jar:3.2.0
+[DEBUG]   Included: org.sonatype.sisu:sisu-inject-bean:jar:1.4.2
+[DEBUG]   Included: org.sonatype.sisu:sisu-guice:jar:noaop:2.1.7
+[DEBUG]   Included: org.sonatype.aether:aether-util:jar:1.7
+[DEBUG]   Included: org.codehaus.plexus:plexus-interpolation:jar:1.14
+[DEBUG]   Included: org.codehaus.plexus:plexus-component-annotations:jar:1.7.1
+[DEBUG]   Included: org.sonatype.plexus:plexus-sec-dispatcher:jar:1.3
+[DEBUG]   Included: org.sonatype.plexus:plexus-cipher:jar:1.4
+[DEBUG]   Included: org.apache.maven.shared:file-management:jar:3.0.0
+[DEBUG]   Included: org.apache.maven.shared:maven-shared-io:jar:3.0.0
+[DEBUG]   Included: org.apache.maven:maven-archiver:jar:3.5.0
+[DEBUG]   Included: commons-io:commons-io:jar:2.5
+[DEBUG]   Included: org.apache.maven.shared:maven-shared-utils:jar:3.2.1
+[DEBUG]   Included: org.codehaus.plexus:plexus-archiver:jar:4.2.1
+[DEBUG]   Included: org.codehaus.plexus:plexus-io:jar:3.2.0
+[DEBUG]   Included: org.apache.commons:commons-compress:jar:1.19
+[DEBUG]   Included: org.iq80.snappy:snappy:jar:0.4
+[DEBUG]   Included: org.tukaani:xz:jar:1.8
+[DEBUG]   Included: org.codehaus.plexus:plexus-utils:jar:3.3.0
+[DEBUG] Configuring mojo org.apache.maven.plugins:maven-jar-plugin:3.2.0:jar from plugin realm ClassRealm[plugin>org.apache.maven.plugins:maven-jar-plugin:3.2.0, parent: jdk.internal.loader.ClassLoaders$AppClassLoader@5bc2b487]
+[DEBUG] Configuring mojo 'org.apache.maven.plugins:maven-jar-plugin:3.2.0:jar' with basic configurator -->
+[DEBUG]   (s) addClasspath = true
+[DEBUG]   (s) classpathPrefix = libs/
+[DEBUG]   (s) mainClass = org.markdownj.cli.Main
+[DEBUG]   (s) addBuildEnvironmentEntries = true
+[DEBUG]   (s) addDefaultImplementationEntries = true
+[DEBUG]   (s) manifest = org.apache.maven.archiver.ManifestConfiguration@39549f33
+[DEBUG]   (f) archive = org.apache.maven.archiver.MavenArchiveConfiguration@dbddbe3
+[DEBUG]   (f) classesDirectory = /home/bwillcott/NetBeansProjects/markdownj-cli/target/classes
+[DEBUG]   (f) finalName = markdownj-cli-0.1.82-SNAPSHOT
+[DEBUG]   (f) forceCreation = false
+[DEBUG]   (f) outputDirectory = /home/bwillcott/NetBeansProjects/markdownj-cli/target
+[DEBUG]   (f) project = MavenProject: org.markdownj:markdownj-cli:0.1 @ /home/bwillcott/NetBeansProjects/markdownj-cli/pom.xml
+[DEBUG]   (f) session = org.apache.maven.execution.MavenSession@13d186db
+[DEBUG]   (f) skipIfEmpty = false
+[DEBUG]   (f) useDefaultManifestFile = false
+[DEBUG] -- end configuration --
+[DEBUG] isUp2date: false (Destination /home/bwillcott/NetBeansProjects/markdownj-cli/target/markdownj-cli-0.1.82-SNAPSHOT.jar not found.)
+[INFO] Building jar: /home/bwillcott/NetBeansProjects/markdownj-cli/target/markdownj-cli-0.1.82-SNAPSHOT.jar
+[DEBUG] adding directory META-INF/
+[DEBUG] adding entry META-INF/MANIFEST.MF
+[DEBUG] adding directory docs/
+[DEBUG] adding directory docs/css/
+[DEBUG] adding directory docs/templates/
+[DEBUG] adding directory org/
+[DEBUG] adding directory org/markdownj/
+[DEBUG] adding directory org/markdownj/cli/
+[DEBUG] adding entry docs/css/style.css
+[DEBUG] adding entry docs/templates/default.html
+[DEBUG] adding entry docs/templates/article_1.html
+[DEBUG] adding entry docs/templates/article.html
+[DEBUG] adding entry markdownj-cli.properties
+[DEBUG] adding entry markdownj-cli.ini
+[DEBUG] adding entry org/markdownj/cli/POMProperties.class
+[DEBUG] adding entry org/markdownj/cli/Main.class
+[DEBUG] adding entry org/markdownj/cli/PrintFiles.class
+[DEBUG] adding entry org/markdownj/cli/Cli.class
+[DEBUG] adding entry org/markdownj/cli/Cli$Temp.class
+[DEBUG] adding entry org/markdownj/cli/Find$Finder.class
+[DEBUG] adding entry org/markdownj/cli/Find.class
+[DEBUG] adding entry org/markdownj/cli/Jar.class
+[DEBUG] adding directory META-INF/maven/
+[DEBUG] adding directory META-INF/maven/org.markdownj/
+[DEBUG] adding directory META-INF/maven/org.markdownj/markdownj-cli/
+[DEBUG] adding entry META-INF/maven/org.markdownj/markdownj-cli/pom.xml
+[DEBUG] adding entry META-INF/maven/org.markdownj/markdownj-cli/pom.properties
+[INFO] 
+[INFO] --- maven-source-plugin:3.2.3.1-SNAPSHOT:jar-no-fork (Create-jar) @ markdownj-cli ---
+[DEBUG] Dependency collection stats: {ConflictMarker.analyzeTime=135548, ConflictMarker.markTime=79748, ConflictMarker.nodeCount=80, ConflictIdSorter.graphTime=53766, ConflictIdSorter.topsortTime=52331, ConflictIdSorter.conflictIdCount=31, ConflictIdSorter.conflictIdCycleCount=0, ConflictResolver.totalTime=2942660, ConflictResolver.conflictItemCount=74, DefaultDependencyCollector.collectTime=11552102, DefaultDependencyCollector.transformTime=3312901}
+[DEBUG] org.apache.maven.plugins:maven-source-plugin:jar:3.2.3.1-SNAPSHOT:
+[DEBUG]    org.apache.maven:maven-model:jar:3.0:compile
+[DEBUG]    org.apache.maven:maven-plugin-api:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-artifact:jar:3.0:compile
+[DEBUG]       org.sonatype.sisu:sisu-inject-plexus:jar:1.4.2:compile
+[DEBUG]          org.sonatype.sisu:sisu-inject-bean:jar:1.4.2:compile
+[DEBUG]             org.sonatype.sisu:sisu-guice:jar:noaop:2.1.7:compile
+[DEBUG]    org.apache.maven:maven-core:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-settings:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-settings-builder:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-repository-metadata:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-model-builder:jar:3.0:compile
+[DEBUG]       org.apache.maven:maven-aether-provider:jar:3.0:runtime
+[DEBUG]       org.sonatype.aether:aether-impl:jar:1.7:compile
+[DEBUG]          org.sonatype.aether:aether-spi:jar:1.7:compile
+[DEBUG]       org.sonatype.aether:aether-api:jar:1.7:compile
+[DEBUG]       org.sonatype.aether:aether-util:jar:1.7:compile
+[DEBUG]       org.codehaus.plexus:plexus-interpolation:jar:1.14:compile
+[DEBUG]       org.codehaus.plexus:plexus-classworlds:jar:2.2.3:compile
+[DEBUG]       org.codehaus.plexus:plexus-component-annotations:jar:1.7.1:compile
+[DEBUG]       org.sonatype.plexus:plexus-sec-dispatcher:jar:1.3:compile
+[DEBUG]          org.sonatype.plexus:plexus-cipher:jar:1.4:compile
+[DEBUG]    org.apache.maven:maven-archiver:jar:3.5.0:compile
+[DEBUG]       org.apache.maven.shared:maven-shared-utils:jar:3.2.1:compile
+[DEBUG]       commons-io:commons-io:jar:2.5:compile
+[DEBUG]    org.codehaus.plexus:plexus-archiver:jar:4.2.1:compile
+[DEBUG]       org.codehaus.plexus:plexus-io:jar:3.2.0:compile
+[DEBUG]       org.apache.commons:commons-compress:jar:1.19:compile
+[DEBUG]       org.iq80.snappy:snappy:jar:0.4:compile
+[DEBUG]       org.tukaani:xz:jar:1.8:runtime
+[DEBUG]    org.codehaus.plexus:plexus-utils:jar:3.3.0:compile
+[DEBUG] Created new class realm plugin>org.apache.maven.plugins:maven-source-plugin:3.2.3.1-SNAPSHOT
+[DEBUG] Importing foreign packages into class realm plugin>org.apache.maven.plugins:maven-source-plugin:3.2.3.1-SNAPSHOT
+[DEBUG]   Imported:  < maven.api
+[DEBUG] Populating class realm plugin>org.apache.maven.plugins:maven-source-plugin:3.2.3.1-SNAPSHOT
+[DEBUG]   Included: org.apache.maven.plugins:maven-source-plugin:jar:3.2.3.1-SNAPSHOT
+[DEBUG]   Included: org.sonatype.sisu:sisu-inject-bean:jar:1.4.2
+[DEBUG]   Included: org.sonatype.sisu:sisu-guice:jar:noaop:2.1.7
+[DEBUG]   Included: org.sonatype.aether:aether-util:jar:1.7
+[DEBUG]   Included: org.codehaus.plexus:plexus-interpolation:jar:1.14
+[DEBUG]   Included: org.codehaus.plexus:plexus-component-annotations:jar:1.7.1
+[DEBUG]   Included: org.sonatype.plexus:plexus-sec-dispatcher:jar:1.3
+[DEBUG]   Included: org.sonatype.plexus:plexus-cipher:jar:1.4
+[DEBUG]   Included: org.apache.maven:maven-archiver:jar:3.5.0
+[DEBUG]   Included: org.apache.maven.shared:maven-shared-utils:jar:3.2.1
+[DEBUG]   Included: commons-io:commons-io:jar:2.5
+[DEBUG]   Included: org.codehaus.plexus:plexus-archiver:jar:4.2.1
+[DEBUG]   Included: org.codehaus.plexus:plexus-io:jar:3.2.0
+[DEBUG]   Included: org.apache.commons:commons-compress:jar:1.19
+[DEBUG]   Included: org.iq80.snappy:snappy:jar:0.4
+[DEBUG]   Included: org.tukaani:xz:jar:1.8
+[DEBUG]   Included: org.codehaus.plexus:plexus-utils:jar:3.3.0
+[DEBUG] Configuring mojo org.apache.maven.plugins:maven-source-plugin:3.2.3.1-SNAPSHOT:jar-no-fork from plugin realm ClassRealm[plugin>org.apache.maven.plugins:maven-source-plugin:3.2.3.1-SNAPSHOT, parent: jdk.internal.loader.ClassLoaders$AppClassLoader@5bc2b487]
+[DEBUG] Configuring mojo 'org.apache.maven.plugins:maven-source-plugin:3.2.3.1-SNAPSHOT:jar-no-fork' with basic configurator -->
+[DEBUG]   (f) attach = true
+[DEBUG]   (f) classifier = sources
+[DEBUG]   (f) defaultManifestFile = /home/bwillcott/NetBeansProjects/markdownj-cli/target/classes/META-INF/MANIFEST.MF
+[DEBUG]   (f) excludeResources = false
+[DEBUG]   (f) finalName = markdownj-cli-0.1.82-SNAPSHOT
+[DEBUG]   (f) forceCreation = false
+[DEBUG]   (f) includePom = false
+[DEBUG]   (f) outputDirectory = /home/bwillcott/NetBeansProjects/markdownj-cli/target
+[DEBUG]   (f) project = MavenProject: org.markdownj:markdownj-cli:0.1 @ /home/bwillcott/NetBeansProjects/markdownj-cli/pom.xml
+[DEBUG]   (f) reactorProjects = [MavenProject: org.markdownj:markdownj-cli:0.1 @ /home/bwillcott/NetBeansProjects/markdownj-cli/pom.xml]
+[DEBUG]   (f) session = org.apache.maven.execution.MavenSession@13d186db
+[DEBUG]   (f) skipSource = false
+[DEBUG]   (f) useDefaultExcludes = true
+[DEBUG]   (f) useDefaultManifestFile = false
+[DEBUG] -- end configuration --
+[DEBUG] add directory /home/bwillcott/NetBeansProjects/markdownj-cli/src/main/java to archiver
+[DEBUG] add directory /home/bwillcott/NetBeansProjects/markdownj-cli/target/generated-sources/annotations to archiver
+[DEBUG] add directory /home/bwillcott/NetBeansProjects/markdownj-cli/src/main/resources to archiver
+[DEBUG] add directory /home/bwillcott/NetBeansProjects/markdownj-cli/src/main/resources to archiver
+[DEBUG] add directory /home/bwillcott/NetBeansProjects/markdownj-cli/src/docs to archiver
+[DEBUG] add directory /home/bwillcott/NetBeansProjects/markdownj-cli/target/manual to archiver
+[DEBUG] create archive /home/bwillcott/NetBeansProjects/markdownj-cli/target/markdownj-cli-0.1.82-SNAPSHOT-sources.jar
+[DEBUG] isUp2date: false (Destination /home/bwillcott/NetBeansProjects/markdownj-cli/target/markdownj-cli-0.1.82-SNAPSHOT-sources.jar not found.)
+[INFO] Building jar: /home/bwillcott/NetBeansProjects/markdownj-cli/target/markdownj-cli-0.1.82-SNAPSHOT-sources.jar
+[DEBUG] adding directory META-INF/
+[DEBUG] adding entry META-INF/MANIFEST.MF
+[DEBUG] adding directory org/
+[DEBUG] adding directory org/markdownj/
+[DEBUG] adding directory org/markdownj/cli/
+[DEBUG] adding entry org/markdownj/cli/Main.java
+[DEBUG] adding entry org/markdownj/cli/POMProperties.java
+[DEBUG] adding entry org/markdownj/cli/Find.java
+[DEBUG] adding entry org/markdownj/cli/Cli.java
+[DEBUG] adding entry org/markdownj/cli/Jar.java
+[DEBUG] adding entry org/markdownj/cli/PrintFiles.java
+[DEBUG] adding entry markdownj-cli.properties
+[DEBUG] adding directory docs/
+[DEBUG] adding directory docs/css/
+[DEBUG] adding directory docs/templates/
+[DEBUG] adding entry docs/css/style.css
+[DEBUG] adding entry docs/templates/default.html
+[DEBUG] adding entry docs/templates/article_1.html
+[DEBUG] adding entry docs/templates/article.html
+[DEBUG] adding entry markdownj-cli.ini
+[DEBUG] adding directory META-INF/maven/
+[DEBUG] adding directory META-INF/maven/org.markdownj/
+[DEBUG] adding directory META-INF/maven/org.markdownj/markdownj-cli/
+[DEBUG] adding entry META-INF/maven/org.markdownj/markdownj-cli/pom.xml
+[DEBUG] adding entry META-INF/maven/org.markdownj/markdownj-cli/pom.properties
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 3.620 s
+[INFO] Finished at: 2020-03-28T13:36:00+08:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-source-plugin:3.2.3.1-SNAPSHOT:jar-no-fork (Create-jar) on project markdownj-cli: Execution Create-jar of goal org.apache.maven.plugins:maven-source-plugin:3.2.3.1-SNAPSHOT:jar-no-fork failed.: NullPointerException -> [Help 1]
+org.apache.maven.lifecycle.LifecycleExecutionException: Failed to execute goal org.apache.maven.plugins:maven-source-plugin:3.2.3.1-SNAPSHOT:jar-no-fork (Create-jar) on project markdownj-cli: Execution Create-jar of goal org.apache.maven.plugins:maven-source-plugin:3.2.3.1-SNAPSHOT:jar-no-fork failed.
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:213)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:154)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:146)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:117)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:81)
+    at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build (SingleThreadedBuilder.java:56)
+    at org.apache.maven.lifecycle.internal.LifecycleStarter.execute (LifecycleStarter.java:128)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:305)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:192)
+    at org.apache.maven.DefaultMaven.execute (DefaultMaven.java:105)
+    at org.apache.maven.cli.MavenCli.execute (MavenCli.java:954)
+    at org.apache.maven.cli.MavenCli.doMain (MavenCli.java:288)
+    at org.apache.maven.cli.MavenCli.main (MavenCli.java:192)
+    at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0 (Native Method)
+    at jdk.internal.reflect.NativeMethodAccessorImpl.invoke (NativeMethodAccessorImpl.java:62)
+    at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke (DelegatingMethodAccessorImpl.java:43)
+    at java.lang.reflect.Method.invoke (Method.java:564)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced (Launcher.java:289)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launch (Launcher.java:229)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode (Launcher.java:415)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.main (Launcher.java:356)
+Caused by: org.apache.maven.plugin.PluginExecutionException: Execution Create-jar of goal org.apache.maven.plugins:maven-source-plugin:3.2.3.1-SNAPSHOT:jar-no-fork failed.
+    at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo (DefaultBuildPluginManager.java:148)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:208)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:154)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:146)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:117)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:81)
+    at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build (SingleThreadedBuilder.java:56)
+    at org.apache.maven.lifecycle.internal.LifecycleStarter.execute (LifecycleStarter.java:128)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:305)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:192)
+    at org.apache.maven.DefaultMaven.execute (DefaultMaven.java:105)
+    at org.apache.maven.cli.MavenCli.execute (MavenCli.java:954)
+    at org.apache.maven.cli.MavenCli.doMain (MavenCli.java:288)
+    at org.apache.maven.cli.MavenCli.main (MavenCli.java:192)
+    at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0 (Native Method)
+    at jdk.internal.reflect.NativeMethodAccessorImpl.invoke (NativeMethodAccessorImpl.java:62)
+    at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke (DelegatingMethodAccessorImpl.java:43)
+    at java.lang.reflect.Method.invoke (Method.java:564)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced (Launcher.java:289)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launch (Launcher.java:229)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode (Launcher.java:415)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.main (Launcher.java:356)
+Caused by: java.lang.NullPointerException
+    at org.apache.maven.project.artifact.AttachedArtifact.getVersion (AttachedArtifact.java:138)
+    at org.apache.maven.artifact.DefaultArtifact.validateIdentity (DefaultArtifact.java:149)
+    at org.apache.maven.artifact.DefaultArtifact.<init> (DefaultArtifact.java:124)
+    at org.apache.maven.project.artifact.AttachedArtifact.<init> (AttachedArtifact.java:49)
+    at org.apache.maven.project.DefaultMavenProjectHelper.attachArtifact (DefaultMavenProjectHelper.java:63)
+    at org.apache.maven.plugins.source.AbstractSourceJarMojo.packageSources (AbstractSourceJarMojo.java:311)
+    at org.apache.maven.plugins.source.AbstractSourceJarMojo.packageSources (AbstractSourceJarMojo.java:259)
+    at org.apache.maven.plugins.source.AbstractSourceJarMojo.execute (AbstractSourceJarMojo.java:220)
+    at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo (DefaultBuildPluginManager.java:137)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:208)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:154)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:146)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:117)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:81)
+    at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build (SingleThreadedBuilder.java:56)
+    at org.apache.maven.lifecycle.internal.LifecycleStarter.execute (LifecycleStarter.java:128)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:305)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:192)
+    at org.apache.maven.DefaultMaven.execute (DefaultMaven.java:105)
+    at org.apache.maven.cli.MavenCli.execute (MavenCli.java:954)
+    at org.apache.maven.cli.MavenCli.doMain (MavenCli.java:288)
+    at org.apache.maven.cli.MavenCli.main (MavenCli.java:192)
+    at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0 (Native Method)
+    at jdk.internal.reflect.NativeMethodAccessorImpl.invoke (NativeMethodAccessorImpl.java:62)
+    at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke (DelegatingMethodAccessorImpl.java:43)
+    at java.lang.reflect.Method.invoke (Method.java:564)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced (Launcher.java:289)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launch (Launcher.java:229)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode (Launcher.java:415)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.main (Launcher.java:356)
+[ERROR] 
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/PluginExecutionException

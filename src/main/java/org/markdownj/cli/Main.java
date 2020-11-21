@@ -1,12 +1,15 @@
 /*
+ * This file is part of the Markdownj Command-line Interface program
+ * (aka: markdownj-cli).
+ *
  * Copyright (C) 2020 Bradley Willcott
  *
- * This program is free software: you can redistribute it and/or modify
+ * markdownj-cli is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * markdownj-cli is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -16,7 +19,7 @@
  */
 package org.markdownj.cli;
 
-import com.bew.commons.fileio.IniFile;
+import com.bew.fileio.ini.IniFile;
 import com.martiansoftware.jsap.JSAP;
 import com.martiansoftware.jsap.JSAPResult;
 import java.io.FileNotFoundException;
@@ -24,6 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
+import static com.bew.fileio.BEWFiles.copyDirTree;
 import static java.lang.System.exit;
 import static java.nio.file.Path.of;
 import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
@@ -40,7 +44,10 @@ import static org.markdownj.cli.Find.getUpdateList;
 
 /**
  *
- * @author Bradley Willcott
+ * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
+ *
+ * @since 0.1
+ * @version 1.0
  */
 public class Main {
 
@@ -50,6 +57,7 @@ public class Main {
      *
      * @throws java.io.IOException
      */
+    @SuppressWarnings("fallthrough")
     public static void main(String[] args) throws Exception {
 
         Set<Path> dirs = new TreeSet<>();
@@ -63,22 +71,26 @@ public class Main {
 
         // check whether the command line was valid, and if it wasn't,
         // display usage information and exit.
-        if (!config.success() || config.getBoolean("help")) {
+        if (!config.success() || config.getBoolean("help"))
+        {
             StringBuilder sb = new StringBuilder();
 
             // print out specific error messages describing the problems
             // with the command line, THEN print usage, THEN print full
             // help.  This is called "beating the user with a clue stick."
             for (@SuppressWarnings("unchecked") Iterator<String> errs = (Iterator<String>) config.getErrorMessageIterator();
-                 errs.hasNext();) {
+                 errs.hasNext();)
+            {
                 sb.append("Error: ").append(errs.next()).append("\n");
             }
 
             provideUsageHelp(sb.toString(), jsap);
 
-            if (config.getBoolean("help")) {
+            if (config.getBoolean("help"))
+            {
                 exit(0);
-            } else {
+            } else
+            {
                 exit(1);
             }
         }
@@ -109,7 +121,8 @@ public class Main {
 
         vlevel = (vlevelarr.length > 0 ? vlevelarr[0] : (verbose ? 1 : 0));
 
-        switch (vlevel) {
+        switch (vlevel)
+        {
             case 3:
             case 2:
                 System.err.println("input: |" + input + "|");
@@ -133,13 +146,15 @@ public class Main {
         }
 
         // '-j' jar file creation
-        if (jar) {
+        if (jar)
+        {
             if (input != null
                 || output != null
                 || source != null
                 || destination != null
                 || recursive != false
-                || initialise != false) {
+                || initialise != false)
+            {
                 String msg = "Too many switches for \"-j\"";
 
                 provideUsageHelp(msg, jsap);
@@ -150,13 +165,15 @@ public class Main {
         }
 
         // '-W' initialise wrapper functionality
-        if (initialise) {
+        if (initialise)
+        {
             if (input != null
                 || output != null
                 || source != null
                 || destination != null
                 || recursive != false
-                || jar != false) {
+                || jar != false)
+            {
                 String msg = "Too many switches for \"-W\"";
 
                 provideUsageHelp(msg, jsap);
@@ -167,29 +184,36 @@ public class Main {
         }
 
         // if '-w' switch active, copy 'css' files to destination directory
-        if (wrapper) {
-            com.bew.commons.fileio.BEWFiles.copyDirTree(source, destination,
-                                                        "*.css", vlevel, COPY_ATTRIBUTES, REPLACE_EXISTING);
+        if (wrapper)
+        {
+            copyDirTree(source, destination, "*.css", vlevel, COPY_ATTRIBUTES, REPLACE_EXISTING);
+
             // Load configuration file data
             String srcDir = "";
 
-            if (source != null) {
+            if (source != null)
+            {
                 srcDir = source;
-            } else if (input != null) {
+            } else if (input != null)
+            {
                 Path inpPath = of(input).getParent();
 
-                if (inpPath != null) {
+                if (inpPath != null)
+                {
                     srcDir = inpPath.toString();
                 }
             }
 
-            try {
+            try
+            {
                 loadConf(srcDir);
-            } catch (FileNotFoundException ex) {
+            } catch (FileNotFoundException ex)
+            {
                 provideUsageHelp("ERROR: " + ex.toString() + "\nHave you initialised the wrapper functionality? '-W <Doc Root Dir>'\n", jsap);
                 exit(1);
             }
-        } else {
+        } else
+        {
             conf = new IniFile();
         }
 
@@ -201,40 +225,50 @@ public class Main {
                                               input, null, recursive, vlevel);
 
         // Process files
-        if (fileList.size() > 0) {
-            if (output != null && fileList.size() == 1) {
+        if (fileList.size() > 0)
+        {
+            if (output != null && fileList.size() == 1)
+            {
                 Path outPath = of(output);
 
-                if (outPath.isAbsolute()) {
+                if (outPath.isAbsolute())
+                {
                     fileList.get(0)[1] = outPath;
-                } else {
+                } else
+                {
                     Path target = fileList.get(0)[1].getParent();
                     fileList.get(0)[1] = target.resolve(outPath);
                 }
             }
 
-            fileList.forEach((filePairs) -> {
-                if (vlevel >= 1) {
+            fileList.forEach((filePairs) ->
+            {
+                if (vlevel >= 1)
+                {
                     System.err.println(filePairs[0]);
                     System.err.println("    " + filePairs[1]);
                 }
 
                 Path parent = filePairs[1].getParent();
 
-                if (parent != null) {
+                if (parent != null)
+                {
                     dirs.add(parent);
                 }
             });
 
-            for (Path dir : dirs) {
-                if (vlevel >= 2) {
+            for (Path dir : dirs)
+            {
+                if (vlevel >= 2)
+                {
                     System.err.println("    " + dir);
                 }
 
                 Files.createDirectories(dir);
             }
 
-            for (Path[] filePairs : fileList) {
+            for (Path[] filePairs : fileList)
+            {
                 processFile(filePairs[0], filePairs[1], wrapper);
             }
         }

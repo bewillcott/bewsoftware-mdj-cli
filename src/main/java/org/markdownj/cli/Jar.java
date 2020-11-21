@@ -1,12 +1,15 @@
 /*
+ * This file is part of the Markdownj Command-line Interface program
+ * (aka: markdownj-cli).
+ *
  * Copyright (C) 2020 Bradley Willcott
  *
- * This program is free software: you can redistribute it and/or modify
+ * markdownj-cli is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * markdownj-cli is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -18,7 +21,10 @@ package org.markdownj.cli;
 
 /**
  *
- * @author Bradley Willcott
+ * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
+ *
+ * @since 0.1
+ * @version 1.0
  */
 import java.io.*;
 import java.nio.file.Path;
@@ -34,15 +40,18 @@ public class Jar {
     public static void createJAR(String jarFileName, Iterable<Path> jarEntries,
                                  Manifest manifest) throws IOException {
 
-        try (JarOutputStream jos = new JarOutputStream(new BufferedOutputStream(
-                new FileOutputStream(jarFileName)), manifest)) {
+        try ( JarOutputStream jos = new JarOutputStream(new BufferedOutputStream(
+                new FileOutputStream(jarFileName)), manifest))
+        {
 
             jos.setLevel(Deflater.BEST_COMPRESSION);
 
-            for (Path jarEntry : jarEntries) {
+            for (Path jarEntry : jarEntries)
+            {
                 File entryFile = jarEntry.toFile();
 
-                if (!entryFile.exists()) {
+                if (!entryFile.exists())
+                {
                     return;
                 }
 
@@ -76,13 +85,15 @@ public class Jar {
 
     private static void addEntryContent(JarOutputStream jos, String entryFileName)
             throws IOException, FileNotFoundException {
-        try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(
-                entryFileName))) {
+        try ( BufferedInputStream bis = new BufferedInputStream(new FileInputStream(
+                entryFileName)))
+        {
 
             byte[] buffer = new byte[1024];
             int count = -1;
 
-            while ((count = bis.read(buffer)) != -1) {
+            while ((count = bis.read(buffer)) != -1)
+            {
                 jos.write(buffer, 0, count);
             }
         }

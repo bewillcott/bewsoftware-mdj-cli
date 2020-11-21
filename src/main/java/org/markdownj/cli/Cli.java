@@ -1,12 +1,15 @@
 /*
- * Copyright (C) 2020-2021 Bradley Willcott
+ * This file is part of the Markdownj Command-line Interface program
+ * (aka: markdownj-cli).
  *
- * This program is free software: you can redistribute it and/or modify
+ * Copyright (C) 2020 Bradley Willcott
+ *
+ * markdownj-cli is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * markdownj-cli is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -16,11 +19,11 @@
  */
 package org.markdownj.cli;
 
-import com.bew.commons.InvalidParameterValueException;
-import com.bew.commons.InvalidProgramStateException;
-import com.bew.commons.fileio.IniDocument;
-import com.bew.commons.fileio.IniFile;
-import com.bew.commons.fileio.IniFileFormatException;
+import com.bew.common.InvalidParameterValueException;
+import com.bew.common.InvalidProgramStateException;
+import com.bew.fileio.ini.IniDocument;
+import com.bew.fileio.ini.IniFile;
+import com.bew.fileio.ini.IniFileFormatException;
 import com.martiansoftware.jsap.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -37,7 +40,8 @@ import java.util.regex.Pattern;
 import org.markdownj.MarkdownProcessor;
 import org.markdownj.TextEditor;
 
-import static com.bew.commons.fileio.BEWFiles.getResource;
+import static com.bew.fileio.BEWFiles.copyDirTree;
+import static com.bew.fileio.BEWFiles.getResource;
 import static com.martiansoftware.jsap.JSAP.INTEGER_PARSER;
 import static com.martiansoftware.jsap.JSAP.NO_LONGFLAG;
 import static com.martiansoftware.jsap.JSAP.STRING_PARSER;
@@ -56,7 +60,10 @@ import static org.markdownj.cli.POMProperties.INSTANCE;
 
 /**
  *
- * @author Bradley Willcott
+ * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
+ *
+ * @since 0.1
+ * @version 1.0
  */
 public class Cli {
 
@@ -67,16 +74,132 @@ public class Cli {
     static IniFile conf;
     static int vlevel;
 
+    private static String getString(String use, String section, String key) {
+        return conf.iniDoc.getString(section, key, conf.iniDoc.getString(use, key, ""));
+    }
+
+    private static void processMetaBlock() {
+        String text = conf.iniDoc.getString("page", "text", "");
+        Matcher m = Pattern.compile("\\A(?:@@@\\n(?<metablock>.*?)\\n@@@\\n)(?<body>.*)\\z", DOTALL)
+                .matcher(text);
+        conf.iniDoc.removeSection("page");
+
+        if (m.find())
+        {
+            String metaBlock = m.group("metablock");
+            text = m.group("body");
+
+            Matcher m2 = Pattern.compile("^\\s*(?<key>\\w+)\\s*:\\s*(?<value>.*?)?\\s*?$", MULTILINE).matcher(metaBlock);
+            StringBuilder sb = new StringBuilder();
+
+            while (m2.find())
+            {
+                String key = m2.group("key");
+                String value = m2.group("value");
+
+                conf.iniDoc.setString("page", key, value);
+            }
+        }
+
+        conf.iniDoc.setString("page", "text", text);
+    }
+
+    private static void processNamedMetaBlocks() {
+        TextEditor text = new TextEditor(conf.iniDoc.getString("page", "text", ""));
+        Pattern p = Pattern.compile("(?<=\\n)(?:@@@\\[(?<name>\\w+)\\]\\n(?<metablock>.*?)\\n@@@\\n)", DOTALL);
+
+        text.replaceAll(p, (m) ->
+                {
+                    String name = m.group("name");
+                    String metaBlock = m.group("metablock");
+
+                    conf.iniDoc.setString("page", name, metaBlock);
+                    return "";
+                });
+
+        text.replaceAll("\\\\@@@", "@@@");
+
+        conf.iniDoc.setString("page", "text", text.toString());
+    }
+
+    private static String processSubstitutions(String use, final String text) {
+        String tmp = "(?<!\\\\)(?:\\$\\{(?<group>\\w+)[.](?<key>\\w+)\\})";
+
+        TextEditor textEd = new TextEditor(text);
+
+        do
+        {
+            textEd.replaceAll(SUBSTITUTION_PATTERN, (m) ->
+                      {
+
+                          if (vlevel >= 3)
+                          {
+                              System.out.println(m.group());
+                          }
+
+                          String group = m.group("group");
+                          String key = m.group("key");
+                          String rtn = "ERROR: Substitution!";
+
+                          if (group != null)
+                          {
+                              rtn = getString(use, group, key);
+                          }
+
+                          return rtn;
+                      });
+        } while (textEd.wasFound());
+
+        return textEd.toString();
+    }
+
+    private static void processTemplate(String use, String template) throws IOException {
+        StringBuilder sbin = new StringBuilder();
+
+        Path docRootPath = of(conf.iniDoc.getString("project", "root", ""))
+                .resolve(conf.iniDoc.getString("document", "docRootDir", "")).toAbsolutePath();
+
+        Path templatesPath = docRootPath.resolve(conf.iniDoc.getString("document", "templatesDir", ""))
+                .resolve(template).toAbsolutePath();
+
+        // Relativize path to stylesheet
+        Path stylesheetPath = docRootPath.resolve(conf.iniDoc.getString("document", "cssDir", ""))
+                .resolve(getString(use, "page", "stylesheet")).toAbsolutePath();
+
+        Path srcPath = of(conf.iniDoc.getString("page", "srcFile", ""));
+        Path cssPath = srcPath.getParent().relativize(stylesheetPath);
+
+        conf.iniDoc.setString("page", "stylesheet", cssPath.toString());
+
+        if (vlevel >= 2)
+        {
+            System.err.println("srcFile:\n" + srcPath.toString());
+            System.err.println("template:\n" + templatesPath.toString());
+        }
+
+        try ( BufferedReader inReader = Files.newBufferedReader(templatesPath))
+        {
+            String line;
+
+            while ((line = inReader.readLine()) != null)
+            {
+                sbin.append(line).append("\n");
+            }
+        }
+
+        TextEditor textEd = new TextEditor(processSubstitutions(use, sbin.toString()));
+        textEd.replaceAllLiteral("\\\\\\$", "$");
+        textEd.replaceAllLiteral("\\\\\\[", "[");
+
+        conf.iniDoc.setString("page", "html", textEd.toString());
+    }
+
     static int createJarFile(String jarFilename, String jarSrcDir, int vlevel) throws IOException {
         SortedSet<Path> fileList = getFileList(jarSrcDir, "*", true, vlevel);
         Manifest manifest = getManifest();
 
         Jar.createJAR(jarFilename, fileList, manifest);
         return 0;
-    }
-
-    private static String getString(String use, String section, String key) {
-        return conf.iniDoc.getString(section, key, conf.iniDoc.getString(use, key, ""));
     }
 
     static JSAP initialiseJSAP() throws JSAPException {
@@ -145,10 +268,9 @@ public class Cli {
                                                  .setShortFlag('v')
                                                  .setLongFlag(NO_LONGFLAG));
 
-        sw1.setHelp("""
-                    Verbose processing.  List files as they are processed.
-                    Set verbose level with "-v:[1-3]".
-                    "-v" defaults to level '1'""");
+        sw1.setHelp("Verbose processing.  List files as they are processed.\n"
+                    + "Set verbose level with \"-v:[1-3]\".\n"
+                    + "\"-v\" defaults to level '1'");
         jsap.registerParameter(sw1);
 
         // '-j' : Copy html output target directory into a new 'jar' file
@@ -161,12 +283,11 @@ public class Cli {
                                                  .setShortFlag('j')
                                                  .setLongFlag(NO_LONGFLAG));
 
-        sw5.setHelp("""
-                    Copy html output target directory into a new 'jar' file.
-                    NOTE: Can NOT be used with any other switches, except "-v:n".""");
+        sw5.setHelp("Copy html output target directory into a new 'jar' file.\n"
+                    + "NOTE: Can NOT be used with any other switches, except \"-v:n\".");
         jsap.registerParameter(sw5);
 
-        // '-W' : Initialise wrapper directories and files
+// '-W' : Initialise wrapper directories and files
 //        FlaggedOption opt6 = new FlaggedOption("initialise")
         QualifiedSwitch sw6 = (QualifiedSwitch) (new QualifiedSwitch("initialise")
                                                  .setStringParser(STRING_PARSER)
@@ -174,12 +295,11 @@ public class Cli {
                                                  .setShortFlag('W')
                                                  .setLongFlag(NO_LONGFLAG));
 
-        sw6.setHelp("""
-                    Initialise wrapper directories and files.
-                    NOTE: Can NOT be used with any other switches, except "-v:n".""");
+        sw6.setHelp("Initialise wrapper directories and files.\n"
+                    + "NOTE: Can NOT be used with any other switches, except \"-v:n\".");
         jsap.registerParameter(sw6);
 
-        // '-h' or '--help' : Provide online help
+// '-h' or '--help' : Provide online help
         Switch sw3 = new Switch("help")
                 .setShortFlag('h')
                 .setLongFlag("help");
@@ -193,36 +313,42 @@ public class Cli {
     static int initialiseWrappers(String docRootDir) throws IOException, NullPointerException, InvalidParameterValueException, IniFileFormatException, InvalidProgramStateException, URISyntaxException {
         Path docRootPath = of(docRootDir).normalize().toAbsolutePath();
 
-        if (Files.notExists(docRootPath)) {
+        if (Files.notExists(docRootPath))
+        {
             Files.createDirectories(docRootPath);
         }
 
         Path srcPath = getResource(Cli.class, "/docs").toAbsolutePath();
 
-        if (vlevel >= 2) {
+        if (vlevel >= 2)
+        {
             System.err.println("srcPath: " + srcPath);
             System.err.println("srcPath exists: " + Files.exists(srcPath));
         }
 
         Path iniPath = getResource(Cli.class, "/" + CONF_FILENAME + "").toAbsolutePath();
 
-        if (vlevel >= 2) {
+        if (vlevel >= 2)
+        {
             System.err.println("iniPath: " + iniPath);
             System.err.println("iniPath exists: " + Files.exists(iniPath));
         }
 
         Path iniPath2 = of(CONF_FILENAME).toAbsolutePath();
 
-        if (vlevel >= 2) {
+        if (vlevel >= 2)
+        {
             System.err.println("iniPath2: " + iniPath2);
             System.err.println("iniPath2 exists: " + Files.exists(iniPath2));
         }
 
-        com.bew.commons.fileio.BEWFiles.copyDirTree(srcPath.toAbsolutePath(), of(docRootDir).toAbsolutePath(),
-                                                    "*.{html,css}", vlevel, COPY_ATTRIBUTES, REPLACE_EXISTING);
+        copyDirTree(srcPath.toAbsolutePath(), of(docRootDir).toAbsolutePath(),
+                    "*.{html,css}", vlevel, COPY_ATTRIBUTES, REPLACE_EXISTING);
 
-        if (Files.exists(iniPath2)) {
-            if (vlevel >= 2) {
+        if (Files.exists(iniPath2))
+        {
+            if (vlevel >= 2)
+            {
                 System.err.println("iniPath2 exists");
             }
 
@@ -230,15 +356,18 @@ public class Cli {
             dest.iniDoc.setString("document", "docRootDir", docRootPath.toString());
             dest.paddedEquals = true;
             dest.saveFile();
-        } else {
-            if (vlevel >= 2) {
+        } else
+        {
+            if (vlevel >= 2)
+            {
                 System.err.println("iniPath2 dosen't exist");
             }
 
             IniFile src = new IniFile(iniPath).loadFile();
             src.iniDoc.setString("document", "docRootDir", docRootPath.toString());
 
-            if (vlevel >= 2) {
+            if (vlevel >= 2)
+            {
                 System.err.println("document.docRootDir:" + src.iniDoc.getString("document", "docRootDir", "default"));
             }
 
@@ -249,32 +378,40 @@ public class Cli {
         return 0;
     }
 
-    static void loadConf(String srcDir) throws NullPointerException, InvalidParameterValueException,
-                                               IOException, IniFileFormatException, InvalidProgramStateException {
+    static void loadConf(String srcDir) throws InvalidParameterValueException,
+                                               IOException, IniFileFormatException,
+                                               InvalidProgramStateException {
         Path iniPath = of(CONF_FILENAME).toAbsolutePath();
 
-        if (vlevel >= 2) {
+        if (vlevel >= 2)
+        {
             System.err.println("iniPath: " + iniPath.toString());
         }
 
-        if (Files.notExists(iniPath, NOFOLLOW_LINKS) && (srcDir != null)) {
+        if (Files.notExists(iniPath, NOFOLLOW_LINKS) && (srcDir != null))
+        {
             Path srcPath = of(srcDir).toAbsolutePath();
 
-            try {
-                while (Files.notExists(srcPath.resolve(CONF_FILENAME), NOFOLLOW_LINKS)) {
+            try
+            {
+                while (Files.notExists(srcPath.resolve(CONF_FILENAME), NOFOLLOW_LINKS))
+                {
                     srcPath = srcPath.getParent();
 
-                    if (vlevel >= 2) {
+                    if (vlevel >= 2)
+                    {
                         System.err.println("srcPath: " + srcPath.toString());
                     }
                 }
-            } catch (NullPointerException ex) {
+            } catch (NullPointerException ex)
+            {
                 throw new FileNotFoundException(CONF_FILENAME);
             }
 
             iniPath = srcPath.resolve(CONF_FILENAME);
 
-            if (vlevel >= 2) {
+            if (vlevel >= 2)
+            {
                 System.err.println("iniPath: " + iniPath.toString());
             }
         }
@@ -289,7 +426,8 @@ public class Cli {
         conf.iniDoc.setString("program", "version", POM.version, "# The version of the artifact");
         conf.iniDoc.setString("program", "details", POM.toString(), "# All of the above information laid out");
 
-        if (vlevel >= 2) {
+        if (vlevel >= 2)
+        {
             System.out.println(POMProperties.INSTANCE);
         }
     }
@@ -301,151 +439,53 @@ public class Cli {
         String template = "";
         String use = "";
 
-        try ( BufferedReader inReader = Files.newBufferedReader(inpPath)) {
+        try ( BufferedReader inReader = Files.newBufferedReader(inpPath))
+        {
             String line;
 
-            while ((line = inReader.readLine()) != null) {
+            while ((line = inReader.readLine()) != null)
+            {
                 sb.append(line).append("\n");
             }
         }
 
         iniDoc.setString("page", "text", sb.toString());
 
-        if (wrapper) {
+        if (wrapper)
+        {
             processMetaBlock();
             processNamedMetaBlocks();
         }
 
-        if (wrapper) {
+        if (wrapper)
+        {
             use = iniDoc.getString("page", "use", null);
             template = getString(use, "page", "template");
             iniDoc.setString("page", "content", MARKDOWN.markdown(processSubstitutions(use, iniDoc.getString("page", "text", ""))));
 
-            if (!template.isBlank()) {
+            if (!template.isBlank())
+            {
                 iniDoc.setString("page", "srcFile", inpPath.toAbsolutePath().toString());
                 processTemplate(use, template);
             }
 
-        } else {
+        } else
+        {
             iniDoc.setString("page", "content", MARKDOWN.markdown(iniDoc.getString("page", "text", "")));
 
         }
 
-        try ( BufferedWriter outWriter = Files.newBufferedWriter(outPath, CREATE, TRUNCATE_EXISTING, WRITE)) {
+        try ( BufferedWriter outWriter = Files.newBufferedWriter(outPath, CREATE, TRUNCATE_EXISTING, WRITE))
+        {
             outWriter.write(iniDoc.getString("page", "html", iniDoc.getString("page", "content", "Error during processing.")));
         }
-    }
-
-    private static void processMetaBlock() {
-        String text = conf.iniDoc.getString("page", "text", "");
-        Matcher m = Pattern.compile("\\A(?:@@@\\n(?<metablock>.*?)\\n@@@\\n)(?<body>.*)\\z", DOTALL)
-                .matcher(text);
-        conf.iniDoc.removeSection("page");
-
-        if (m.find()) {
-            String metaBlock = m.group("metablock");
-            text = m.group("body");
-
-            Matcher m2 = Pattern.compile("^\\s*(?<key>\\w+)\\s*:\\s*(?<value>.*?)?\\s*?$", MULTILINE).matcher(metaBlock);
-            StringBuilder sb = new StringBuilder();
-
-            while (m2.find()) {
-                String key = m2.group("key");
-                String value = m2.group("value");
-
-                conf.iniDoc.setString("page", key, value);
-            }
-        }
-
-        conf.iniDoc.setString("page", "text", text);
-    }
-
-    private static void processNamedMetaBlocks() {
-        TextEditor text = new TextEditor(conf.iniDoc.getString("page", "text", ""));
-        Pattern p = Pattern.compile("(?<=\\n)(?:@@@\\[(?<name>\\w+)\\]\\n(?<metablock>.*?)\\n@@@\\n)", DOTALL);
-
-        text.replaceAll(p, (m) -> {
-                    String name = m.group("name");
-                    String metaBlock = m.group("metablock");
-
-                    conf.iniDoc.setString("page", name, metaBlock);
-                    return "";
-                });
-
-        text.replaceAll("\\\\@@@", "@@@");
-
-        conf.iniDoc.setString("page", "text", text.toString());
-    }
-
-    private static String processSubstitutions(String use, final String text) {
-        String tmp = "(?<!\\\\)(?:\\$\\{(?<group>\\w+)[.](?<key>\\w+)\\})";
-
-        TextEditor textEd = new TextEditor(text);
-
-        do {
-            textEd.replaceAll(SUBSTITUTION_PATTERN, (m) -> {
-
-                          if (vlevel >= 3) {
-                              System.out.println(m.group());
-                          }
-
-                          String group = m.group("group");
-                          String key = m.group("key");
-                          String rtn = "ERROR: Substitution!";
-
-                          if (group != null) {
-                              rtn = getString(use, group, key);
-                          }
-
-                          return rtn;
-                      });
-        } while (textEd.wasFound());
-
-        return textEd.toString();
-    }
-
-    private static void processTemplate(String use, String template) throws IOException {
-        StringBuilder sbin = new StringBuilder();
-
-        Path docRootPath = of(conf.iniDoc.getString("project", "root", ""))
-                .resolve(conf.iniDoc.getString("document", "docRootDir", "")).toAbsolutePath();
-
-        Path templatesPath = docRootPath.resolve(conf.iniDoc.getString("document", "templatesDir", ""))
-                .resolve(template).toAbsolutePath();
-
-        // Relativize path to stylesheet
-        Path stylesheetPath = docRootPath.resolve(conf.iniDoc.getString("document", "cssDir", ""))
-                .resolve(getString(use, "page", "stylesheet")).toAbsolutePath();
-
-        Path srcPath = of(conf.iniDoc.getString("page", "srcFile", ""));
-        Path cssPath = srcPath.getParent().relativize(stylesheetPath);
-
-        conf.iniDoc.setString("page", "stylesheet", cssPath.toString());
-
-        if (vlevel >= 2) {
-            System.err.println("srcFile:\n" + srcPath.toString());
-            System.err.println("template:\n" + templatesPath.toString());
-        }
-
-        try ( BufferedReader inReader = Files.newBufferedReader(templatesPath)) {
-            String line;
-
-            while ((line = inReader.readLine()) != null) {
-                sbin.append(line).append("\n");
-            }
-        }
-
-        TextEditor textEd = new TextEditor(processSubstitutions(use, sbin.toString()));
-        textEd.replaceAllLiteral("\\\\\\$", "$");
-        textEd.replaceAllLiteral("\\\\\\[", "[");
-
-        conf.iniDoc.setString("page", "html", textEd.toString());
     }
 
     static void provideUsageHelp(String msg, JSAP jsap) {
         System.err.println();
 
-        if (msg != null && !msg.isBlank()) {
+        if (msg != null && !msg.isBlank())
+        {
             System.err.println(msg);
         }
 
