@@ -72,7 +72,7 @@ public class Cli {
     static IniFile conf;
     static int vlevel;
 
-    private static String getString(String use, String section, String key) {
+    private static String getString(String section, String key, String use) {
         return conf.iniDoc.getString(section, key, conf.iniDoc.getString(use, key, ""));
     }
 
@@ -120,35 +120,6 @@ public class Cli {
         conf.iniDoc.setString("page", "text", text.toString());
     }
 
-    private static String processSubstitutions(String use, final String text) {
-        TextEditor textEd = new TextEditor(text);
-
-        do
-        {
-            textEd.replaceAll(SUBSTITUTION_PATTERN, m ->
-                      {
-
-                          if (vlevel >= 3)
-                          {
-                              System.out.println(m.group());
-                          }
-
-                          String group = m.group("group");
-                          String key = m.group("key");
-                          String rtn = "ERROR: Substitution!";
-
-                          if (group != null)
-                          {
-                              rtn = getString(use, group, key);
-                          }
-
-                          return rtn;
-                      });
-        } while (textEd.wasFound());
-
-        return textEd.toString();
-    }
-
     private static void processTemplate(String use, String template) throws IOException {
         StringBuilder sbin = new StringBuilder();
 
@@ -160,7 +131,7 @@ public class Cli {
 
         // Relativize path to stylesheet
         Path stylesheetPath = docRootPath.resolve(conf.iniDoc.getString("document", "cssDir", ""))
-                .resolve(getString(use, "page", "stylesheet")).toAbsolutePath();
+                .resolve(getString("page", "stylesheet", use)).toAbsolutePath();
 
         Path srcPath = of(conf.iniDoc.getString("page", "srcFile", ""));
         Path cssPath = srcPath.getParent().relativize(stylesheetPath);
@@ -183,7 +154,7 @@ public class Cli {
             }
         }
 
-        TextEditor textEd = new TextEditor(processSubstitutions(use, sbin.toString()));
+        TextEditor textEd = new TextEditor(processSubstitutions(sbin.toString(), use));
         textEd.replaceAllLiteral("\\\\\\$", "$");
         textEd.replaceAllLiteral("\\\\\\[", "[");
 
@@ -270,7 +241,6 @@ public class Cli {
         jsap.registerParameter(sw1);
 
         // '-j' : Copy html output target directory into a new 'jar' file
-//        FlaggedOption opt5 = new FlaggedOption("initialise")
         QualifiedSwitch sw5 = (QualifiedSwitch) (new QualifiedSwitch("jar")
                                                  .setStringParser(STRING_PARSER)
                                                  .setList(true)
@@ -283,8 +253,7 @@ public class Cli {
                     + "NOTE: Can NOT be used with any other switches, except \"-v:n\".");
         jsap.registerParameter(sw5);
 
-// '-W' : Initialise wrapper directories and files
-//        FlaggedOption opt6 = new FlaggedOption("initialise")
+        // '-W' : Initialise wrapper directories and files
         QualifiedSwitch sw6 = (QualifiedSwitch) (new QualifiedSwitch("initialise")
                                                  .setStringParser(STRING_PARSER)
                                                  .setUsageName("document root directory")
@@ -295,7 +264,7 @@ public class Cli {
                     + "NOTE: Can NOT be used with any other switches, except \"-v:n\".");
         jsap.registerParameter(sw6);
 
-// '-h' or '--help' : Provide online help
+        // '-h' or '--help' : Provide online help
         Switch sw3 = new Switch("help")
                 .setShortFlag('h')
                 .setLongFlag("help");
@@ -428,7 +397,7 @@ public class Cli {
     }
 
     static void processFile(Path inpPath, Path outPath, boolean wrapper) throws IOException {
-        SortedMap<String, String> meta;
+//        SortedMap<String, String> meta;
         StringBuilder sb = new StringBuilder();
         IniDocument iniDoc = conf.iniDoc;
         String template = "";
@@ -455,8 +424,8 @@ public class Cli {
         if (wrapper)
         {
             use = iniDoc.getString("page", "use", null);
-            template = getString(use, "page", "template");
-            iniDoc.setString("page", "content", MARKDOWN.markdown(processSubstitutions(use, iniDoc.getString("page", "text", ""))));
+            template = getString("page", "template", use);
+            iniDoc.setString("page", "content", MARKDOWN.markdown(processSubstitutions(iniDoc.getString("page", "text", ""), use)));
 
             if (!template.isBlank())
             {
@@ -474,6 +443,35 @@ public class Cli {
         {
             outWriter.write(iniDoc.getString("page", "html", iniDoc.getString("page", "content", "Error during processing.")));
         }
+    }
+
+    static String processSubstitutions(final String text, final String use) {
+        TextEditor textEd = new TextEditor(text);
+
+        do
+        {
+            textEd.replaceAll(SUBSTITUTION_PATTERN, m ->
+                      {
+
+                          if (vlevel >= 3)
+                          {
+                              System.out.println(m.group());
+                          }
+
+                          String group = m.group("group");
+                          String key = m.group("key");
+                          String rtn = "ERROR: Substitution!";
+
+                          if (group != null)
+                          {
+                              rtn = getString(group, key, use);
+                          }
+
+                          return rtn;
+                      });
+        } while (textEd.wasFound());
+
+        return textEd.toString();
     }
 
     static void provideUsageHelp(String msg, JSAP jsap) {

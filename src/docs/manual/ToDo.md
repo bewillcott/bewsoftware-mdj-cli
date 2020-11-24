@@ -11,7 +11,7 @@ title: Markdownj CLI | ToDo List
 
 
 - [ ]! Add file [meta block][mb]:
-    - [ ]! Add [named meta blocks][nmb]. `@@@[name]`
+    - [x]! Add [named meta blocks][nmb]. `@@@[name]`
     - [ ]! Add reading project POM file (`pom.xml`). `[project]`
     - [ ]! Add include file:
         - [ ]! Include markdown file: `includeMD` : `filename.md`

@@ -23,6 +23,7 @@ import com.bewsoftware.common.InvalidParameterValueException;
 import com.bewsoftware.common.InvalidProgramStateException;
 import com.bewsoftware.fileio.ini.IniFile;
 import com.bewsoftware.fileio.ini.IniFileFormatException;
+import com.bewsoftware.property.IniProperty;
 import com.martiansoftware.jsap.JSAP;
 import com.martiansoftware.jsap.JSAPException;
 import com.martiansoftware.jsap.JSAPResult;
@@ -193,8 +194,6 @@ public class Main {
         // if '-w' switch active, copy 'css' files to destination directory
         if (wrapper)
         {
-            copyDirTree(source, destination, "*.css", vlevel, COPY_ATTRIBUTES, REPLACE_EXISTING);
-
             // Load configuration file data
             String srcDir = "";
 
@@ -216,9 +215,32 @@ public class Main {
                 loadConf(srcDir);
             } catch (FileNotFoundException ex)
             {
-                provideUsageHelp("ERROR: " + ex.toString() + "\nHave you initialised the wrapper functionality? '-W <Doc Root Dir>'\n", jsap);
+                provideUsageHelp("ERROR: " + ex.toString()
+                                 + "\nHave you initialised the wrapper functionality? '-W <Doc Root Dir>'\n", jsap);
                 exit(1);
             }
+
+            if (conf.iniDoc.containsSection("includeDirs"))
+            {
+                List< IniProperty<Object>> props = conf.iniDoc.getSection("includeDirs");
+
+                for (IniProperty<Object> prop : props)
+                {
+                    String value = (String) prop.value();
+
+                    if (value != null)
+                    {
+                        value = Cli.processSubstitutions(value, null);
+
+                        if (!value.isEmpty())
+                        {
+                            copyDirTree(source + "/" + value, destination + "/" + value, "*",
+                                        vlevel, COPY_ATTRIBUTES, REPLACE_EXISTING);
+                        }
+                    }
+                }
+            }
+
         } else
         {
             conf = new IniFile();

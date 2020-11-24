@@ -5,6 +5,7 @@ title: Markdownj CLI
 
 
 #[#top] ${program.title}
+---
 
 This is a command-line program that uses the Markdownj Core library.
 
