@@ -19,15 +19,21 @@
  */
 package org.markdownj.cli;
 
-import com.bew.fileio.ini.IniFile;
+import com.bewsoftware.common.InvalidParameterValueException;
+import com.bewsoftware.common.InvalidProgramStateException;
+import com.bewsoftware.fileio.ini.IniFile;
+import com.bewsoftware.fileio.ini.IniFileFormatException;
 import com.martiansoftware.jsap.JSAP;
+import com.martiansoftware.jsap.JSAPException;
 import com.martiansoftware.jsap.JSAPResult;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
-import static com.bew.fileio.BEWFiles.copyDirTree;
+import static com.bewsoftware.fileio.BEWFiles.copyDirTree;
 import static java.lang.System.exit;
 import static java.nio.file.Path.of;
 import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
@@ -58,7 +64,7 @@ public class Main {
      * @throws java.io.IOException
      */
     @SuppressWarnings("fallthrough")
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException, JSAPException, InvalidParameterValueException, IniFileFormatException, InvalidProgramStateException, URISyntaxException {
 
         Set<Path> dirs = new TreeSet<>();
 //        StringBuilder buf = new StringBuilder();
@@ -183,6 +189,7 @@ public class Main {
             exit(initialiseWrappers(docRootDir));
         }
 
+        // TODO: Rewrite to process "includeDirs" section of conf.iniDoc.
         // if '-w' switch active, copy 'css' files to destination directory
         if (wrapper)
         {
@@ -241,7 +248,7 @@ public class Main {
                 }
             }
 
-            fileList.forEach((filePairs) ->
+            fileList.forEach(filePairs ->
             {
                 if (vlevel >= 1)
                 {

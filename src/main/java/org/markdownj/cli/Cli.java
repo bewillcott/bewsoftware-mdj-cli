@@ -19,11 +19,9 @@
  */
 package org.markdownj.cli;
 
-import com.bew.common.InvalidParameterValueException;
-import com.bew.common.InvalidProgramStateException;
-import com.bew.fileio.ini.IniDocument;
-import com.bew.fileio.ini.IniFile;
-import com.bew.fileio.ini.IniFileFormatException;
+import com.bewsoftware.fileio.ini.IniDocument;
+import com.bewsoftware.fileio.ini.IniFile;
+import com.bewsoftware.fileio.ini.IniFileFormatException;
 import com.martiansoftware.jsap.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -40,8 +38,8 @@ import java.util.regex.Pattern;
 import org.markdownj.MarkdownProcessor;
 import org.markdownj.TextEditor;
 
-import static com.bew.fileio.BEWFiles.copyDirTree;
-import static com.bew.fileio.BEWFiles.getResource;
+import static com.bewsoftware.fileio.BEWFiles.copyDirTree;
+import static com.bewsoftware.fileio.BEWFiles.getResource;
 import static com.martiansoftware.jsap.JSAP.INTEGER_PARSER;
 import static com.martiansoftware.jsap.JSAP.NO_LONGFLAG;
 import static com.martiansoftware.jsap.JSAP.STRING_PARSER;
@@ -108,7 +106,7 @@ public class Cli {
         TextEditor text = new TextEditor(conf.iniDoc.getString("page", "text", ""));
         Pattern p = Pattern.compile("(?<=\\n)(?:@@@\\[(?<name>\\w+)\\]\\n(?<metablock>.*?)\\n@@@\\n)", DOTALL);
 
-        text.replaceAll(p, (m) ->
+        text.replaceAll(p, m ->
                 {
                     String name = m.group("name");
                     String metaBlock = m.group("metablock");
@@ -123,13 +121,11 @@ public class Cli {
     }
 
     private static String processSubstitutions(String use, final String text) {
-        String tmp = "(?<!\\\\)(?:\\$\\{(?<group>\\w+)[.](?<key>\\w+)\\})";
-
         TextEditor textEd = new TextEditor(text);
 
         do
         {
-            textEd.replaceAll(SUBSTITUTION_PATTERN, (m) ->
+            textEd.replaceAll(SUBSTITUTION_PATTERN, m ->
                       {
 
                           if (vlevel >= 3)
@@ -310,7 +306,8 @@ public class Cli {
         return jsap;
     }
 
-    static int initialiseWrappers(String docRootDir) throws IOException, NullPointerException, InvalidParameterValueException, IniFileFormatException, InvalidProgramStateException, URISyntaxException {
+    static int initialiseWrappers(String docRootDir)
+            throws IOException, IniFileFormatException, URISyntaxException {
         Path docRootPath = of(docRootDir).normalize().toAbsolutePath();
 
         if (Files.notExists(docRootPath))
@@ -378,9 +375,7 @@ public class Cli {
         return 0;
     }
 
-    static void loadConf(String srcDir) throws InvalidParameterValueException,
-                                               IOException, IniFileFormatException,
-                                               InvalidProgramStateException {
+    static void loadConf(String srcDir) throws IOException, IniFileFormatException {
         Path iniPath = of(CONF_FILENAME).toAbsolutePath();
 
         if (vlevel >= 2)

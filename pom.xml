@@ -8,7 +8,7 @@
     <description>Command-line program that uses the Markdownj Core library.</description>
     <artifactId>markdownj-cli</artifactId>
     <groupId>org.markdownj</groupId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -86,9 +86,9 @@
             <version>0.6.0</version>
         </dependency>
         <dependency>
-            <groupId>com.bew</groupId>
+            <groupId>com.bewsoftware</groupId>
             <artifactId>BEWFiles</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.2</version>
             <type>jar</type>
         </dependency>
     </dependencies>
@@ -444,8 +444,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <showDeprecation>true</showDeprecation>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
+                    <source>15</source>
+                    <target>15</target>
                     <release>${java.version}</release>
                     <encoding>${source.encoding}</encoding>
                     <compilerArgs>
