@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.jar.Manifest;
 import java.util.regex.Matcher;
@@ -392,7 +391,7 @@ public class Cli {
 
         if (vlevel >= 2)
         {
-            System.out.println(POMProperties.INSTANCE);
+            System.out.println(POM);
         }
     }
 

@@ -23,7 +23,54 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * Provides access to some of the projects pom.properties.
+ * Provides access to some of the project's pom.properties.
+ * <p>
+ * To setup in a new project:</p>
+ * <ol>
+ * <li>Create a new file: "pom.properties" <br>
+ * Location: "src/main/resources"
+ * <p>
+ * </li>
+ * <li><p>
+ * Place the following text into that file, and save it:</p>
+ * <pre>
+ *<code>
+ *title=${project.name}
+ *description=${project.description}
+ *artifactId=${project.artifactId}
+ *groupId=${project.groupId}
+ *version=${project.version}
+ *filename=${project.build.finalName}.jar
+ *</code>
+ * </pre>
+ * </li><li><p>
+ * Add the following to your projects <b>pom.xml</b> file:</p>
+ * <pre>
+ *<code>
+ *&lt;build&gt;
+ *    &lt;resources&gt;
+ *        ...
+ *        &lt;resource&gt;
+ *            &lt;directory&gt;src/main/resources&lt;/directory&gt;
+ *            &lt;filtering&gt;true&lt;/filtering&gt;
+ *            &lt;includes&gt;
+ *                &lt;include&gt;&#42;&#42;/pom.properties&lt;/include&gt;
+ *            &lt;/includes&gt;
+ *        &lt;/resource&gt;
+ *        &lt;resource&gt;
+ *            &lt;directory&gt;src/main/resources&lt;/directory&gt;
+ *            &lt;filtering&gt;false&lt;/filtering&gt;
+ *            &lt;excludes&gt;
+ *                &lt;exclude&gt;&#42;&#42;/pom.properties&lt;/exclude&gt;
+ *            &lt;/excludes&gt;
+ *        &lt;/resource&gt;
+ *    &lt;/resources&gt;
+ *        ...
+ *&lt;/build&gt;
+ *</code>
+ * </pre>
+ * </li>
+ * </ol>
  * <p>
  * To access the properties:
  * </p>
@@ -57,7 +104,6 @@ public final class POMProperties {
      * Project Description
      */
     public final String description;
-
     /**
      * The filename of the binary output file.
      * <p>
@@ -85,7 +131,7 @@ public final class POMProperties {
         Properties properties = new Properties();
         try
         {
-            properties.load(POMProperties.class.getResourceAsStream("/markdownj-cli.properties"));
+            properties.load(POMProperties.class.getResourceAsStream("/pom.properties"));
         } catch (IOException ex)
         {
             throw new RuntimeException("FileIOError", ex);
@@ -104,9 +150,9 @@ public final class POMProperties {
         return new StringBuilder(POMProperties.class.getName()).append(":\n")
                 .append("  title: ").append(title).append("\n")
                 .append("  description: ").append(description).append("\n")
-                .append("  version: ").append(version).append("\n")
+                .append("  groupId: ").append(groupId).append("\n")
                 .append("  artifactId: ").append(artifactId).append("\n")
-                .append("  groupId: ").append(groupId).append("\n").toString();
+                .append("  version: ").append(version).append("\n")
+                .append("  filename: ").append(filename).append("\n").toString();
     }
-
 }
