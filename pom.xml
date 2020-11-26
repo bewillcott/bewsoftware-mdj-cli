@@ -325,14 +325,14 @@
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
                 <includes>
-                    <include>**/pom.properties</include>
+                    <include>**/markdownj-cli.properties</include>
                 </includes>
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>false</filtering>
                 <excludes>
-                    <exclude>**/pom.properties</exclude>
+                    <exclude>**/markdownj-cli.properties</exclude>
                 </excludes>
             </resource>
             <resource>
