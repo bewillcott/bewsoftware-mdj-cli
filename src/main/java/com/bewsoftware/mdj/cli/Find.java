@@ -1,15 +1,15 @@
 /*
- * This file is part of the Markdownj Command-line Interface program
- * (aka: markdownj-cli).
+ * This file is part of the MDj Command-line Interface program
+ * (aka: mdj-cli).
  *
  * Copyright (C) 2020 Bradley Willcott
  *
- * markdownj-cli is free software: you can redistribute it and/or modify
+ * mdj-cli is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * markdownj-cli is distributed in the hope that it will be useful,
+ * mdj-cli is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -17,20 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.markdownj.cli;
+package com.bewsoftware.mdj.cli;
 
-/**
- * Sample code that finds files that match the specified glob pattern.
- * For more information on what constitutes a glob pattern, see
- * https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob
- * <p>
- * The file or directories that match the pattern are printed to
- * standard out. The number of matches is also printed.
- * <p>
- * When executing this application, you must put the glob pattern
- * in quotes, so the shell will not expand any wild cards:
- * java Find . -name "*.java"
- */
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -45,6 +33,16 @@ import static java.nio.file.Files.notExists;
 import static java.nio.file.Path.of;
 
 /**
+ * Sample code that finds files that match the specified glob pattern.
+ * For more information on what constitutes a glob pattern, see
+ * https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob
+ * <p>
+ * The file or directories that match the pattern are printed to
+ * standard out. The number of matches is also printed.
+ * <p>
+ * When executing this application, you must put the glob pattern
+ * in quotes, so the shell will not expand any wild cards:
+ * java Find . -name "*.java"
  *
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
@@ -53,73 +51,9 @@ import static java.nio.file.Path.of;
  */
 public class Find {
 
-    private static final String DefaultMD = ".md";
     private static final String DefaultHTML = ".html";
 
-    public static class Finder
-            extends SimpleFileVisitor<Path> {
-
-        private final int vlevel;
-        private final PathMatcher matcher;
-        private int numMatches = 0;
-        private final SortedSet<Path> filenames = new TreeSet<>();
-
-        Finder(String pattern, int vlevel) {
-            matcher = FileSystems.getDefault()
-                    .getPathMatcher("glob:" + pattern);
-            this.vlevel = vlevel;
-        }
-
-        // Compares the glob pattern against
-        // the file or directory name.
-        void find(Path file) {
-            Path name = file.getFileName();
-            if (name != null && matcher.matches(name))
-            {
-                numMatches++;
-
-                if (vlevel >= 2)
-                {
-                    System.err.println(file);
-                }
-
-                filenames.add(file);
-            }
-        }
-
-        // Prints the total number of
-        // matches to standard out.
-        SortedSet<Path> done() {
-            if (vlevel >= 1)
-            {
-                System.err.println("Matched: "
-                                   + numMatches);
-            }
-            return filenames;
-        }
-
-        // Invoke the pattern matching
-        // method on each file.
-        @Override
-        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
-            find(file);
-            return CONTINUE;
-        }
-
-        // Invoke the pattern matching
-        // method on each directory.
-        @Override
-        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
-//            find(dir);
-            return CONTINUE;
-        }
-
-        @Override
-        public FileVisitResult visitFileFailed(Path file, IOException exc) {
-            System.err.println("visitFileFailed: " + exc);
-            return CONTINUE;
-        }
-    }
+    private static final String DefaultMD = ".md";
 
     /**
      * Provides a list of files.
@@ -237,15 +171,79 @@ public class Find {
         return outList;
     }
 
+    public static void main(String[] args) throws IOException {
+
+//        List<Path[]> fileList = Find.getUpdateList("src", "target", null, null, true, 2);
+        SortedSet<Path> fileList = getFileList("target/manual", "*", true, 2);
+    }
+
     static void usage() {
         System.err.println("java Find <path>"
                            + " -name \"<glob_pattern>\"");
         System.exit(-1);
     }
 
-    public static void main(String[] args) throws IOException {
+    public static class Finder extends SimpleFileVisitor<Path> {
 
-//        List<Path[]> fileList = Find.getUpdateList("src", "target", null, null, true, 2);
-        SortedSet<Path> fileList = getFileList("target/manual", "*", true, 2);
+        private final int vlevel;
+        private final PathMatcher matcher;
+        private int numMatches = 0;
+        private final SortedSet<Path> filenames = new TreeSet<>();
+
+        Finder(String pattern, int vlevel) {
+            matcher = FileSystems.getDefault()
+                    .getPathMatcher("glob:" + pattern);
+            this.vlevel = vlevel;
+        }
+
+        // Compares the glob pattern against
+        // the file or directory name.
+        void find(Path file) {
+            Path name = file.getFileName();
+            if (name != null && matcher.matches(name))
+            {
+                numMatches++;
+
+                if (vlevel >= 2)
+                {
+                    System.err.println(file);
+                }
+
+                filenames.add(file);
+            }
+        }
+
+        // Prints the total number of
+        // matches to standard out.
+        SortedSet<Path> done() {
+            if (vlevel >= 1)
+            {
+                System.err.println("Matched: "
+                                   + numMatches);
+            }
+            return filenames;
+        }
+
+        // Invoke the pattern matching
+        // method on each file.
+        @Override
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+            find(file);
+            return CONTINUE;
+        }
+
+        // Invoke the pattern matching
+        // method on each directory.
+        @Override
+        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
+//            find(dir);
+            return CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult visitFileFailed(Path file, IOException exc) {
+            System.err.println("visitFileFailed: " + exc);
+            return CONTINUE;
+        }
     }
 }
