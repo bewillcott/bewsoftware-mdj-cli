@@ -1,15 +1,15 @@
 /*
- * This file is part of the Markdownj Command-line Interface program
- * (aka: markdownj-cli).
+ * This file is part of the MDj Command-line Interface program
+ * (aka: mdj-cli).
  *
  * Copyright (C) 2020 Bradley Willcott
  *
- * markdownj-cli is free software: you can redistribute it and/or modify
+ * mdj-cli is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * markdownj-cli is distributed in the hope that it will be useful,
+ * mdj-cli is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.markdownj.cli;
+package com.bewsoftware.mdj.cli;
 
 import com.bewsoftware.fileio.ini.IniDocument;
 import com.bewsoftware.fileio.ini.IniFile;
@@ -34,8 +34,8 @@ import java.util.SortedSet;
 import java.util.jar.Manifest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.markdownj.MarkdownProcessor;
-import org.markdownj.TextEditor;
+import com.bewsoftware.mdj.core.MarkdownProcessor;
+import com.bewsoftware.mdj.core.TextEditor;
 
 import static com.bewsoftware.fileio.BEWFiles.copyDirTree;
 import static com.bewsoftware.fileio.BEWFiles.getResource;
@@ -51,9 +51,9 @@ import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.nio.file.StandardOpenOption.WRITE;
 import static java.util.regex.Pattern.DOTALL;
 import static java.util.regex.Pattern.MULTILINE;
-import static org.markdownj.cli.Find.getFileList;
-import static org.markdownj.cli.Jar.getManifest;
-import static org.markdownj.cli.POMProperties.INSTANCE;
+import static com.bewsoftware.mdj.cli.Find.getFileList;
+import static com.bewsoftware.mdj.cli.Jar.getManifest;
+import static com.bewsoftware.mdj.cli.POMProperties.INSTANCE;
 
 /**
  *
@@ -64,7 +64,7 @@ import static org.markdownj.cli.POMProperties.INSTANCE;
  */
 public class Cli {
 
-    private static final String CONF_FILENAME = "markdownj-cli.ini";
+    private static final String CONF_FILENAME = "mdj-cli.ini";
     private static final MarkdownProcessor MARKDOWN = new MarkdownProcessor();
     private static final POMProperties POM = INSTANCE;
     private static final Pattern SUBSTITUTION_PATTERN = Pattern.compile("(?<!\\\\)(?:\\$\\{(?<group>\\w+)[.](?<key>\\w+)\\})");

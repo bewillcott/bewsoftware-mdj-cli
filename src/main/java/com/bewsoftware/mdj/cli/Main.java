@@ -1,15 +1,15 @@
 /*
- * This file is part of the Markdownj Command-line Interface program
- * (aka: markdownj-cli).
+ * This file is part of the MDj Command-line Interface program
+ * (aka: mdj-cli).
  *
  * Copyright (C) 2020 Bradley Willcott
  *
- * markdownj-cli is free software: you can redistribute it and/or modify
+ * mdj-cli is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * markdownj-cli is distributed in the hope that it will be useful,
+ * mdj-cli is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.markdownj.cli;
+package com.bewsoftware.mdj.cli;
 
 import com.bewsoftware.common.InvalidParameterValueException;
 import com.bewsoftware.common.InvalidProgramStateException;
@@ -39,15 +39,15 @@ import static java.lang.System.exit;
 import static java.nio.file.Path.of;
 import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-import static org.markdownj.cli.Cli.conf;
-import static org.markdownj.cli.Cli.createJarFile;
-import static org.markdownj.cli.Cli.initialiseJSAP;
-import static org.markdownj.cli.Cli.initialiseWrappers;
-import static org.markdownj.cli.Cli.loadConf;
-import static org.markdownj.cli.Cli.processFile;
-import static org.markdownj.cli.Cli.provideUsageHelp;
-import static org.markdownj.cli.Cli.vlevel;
-import static org.markdownj.cli.Find.getUpdateList;
+import static com.bewsoftware.mdj.cli.Cli.conf;
+import static com.bewsoftware.mdj.cli.Cli.createJarFile;
+import static com.bewsoftware.mdj.cli.Cli.initialiseJSAP;
+import static com.bewsoftware.mdj.cli.Cli.initialiseWrappers;
+import static com.bewsoftware.mdj.cli.Cli.loadConf;
+import static com.bewsoftware.mdj.cli.Cli.processFile;
+import static com.bewsoftware.mdj.cli.Cli.provideUsageHelp;
+import static com.bewsoftware.mdj.cli.Cli.vlevel;
+import static com.bewsoftware.mdj.cli.Find.getUpdateList;
 
 /**
  *

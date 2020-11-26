@@ -3,13 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     
     <modelVersion>4.0.0</modelVersion>
-
-    <name>MarkdownJ CLI</name>
-    <description>Command-line program that uses the Markdownj Core library.</description>
-    <artifactId>markdownj-cli</artifactId>
-    <groupId>org.markdownj</groupId>
+    
+    <groupId>com.bewsoftware</groupId>
+    <artifactId>mdj-cli</artifactId>
     <version>1.0.2</version>
     <packaging>jar</packaging>
+
+    <name>MDj CLI</name>
+    <description>Command-line program that uses the Markdownj Core library.</description>
 
     <properties>
         <major.minor.version>1.0</major.minor.version>
@@ -23,6 +24,7 @@
         <project.build.sourceEncoding>${source.encoding}</project.build.sourceEncoding>
         <project.reporting.outputEncoding>${source.encoding}</project.reporting.outputEncoding>
         <javadoc.reporting.outputDirectory>${project.reporting.outputDirectory}/apidocs</javadoc.reporting.outputDirectory>
+        <skip.unit.tests>true</skip.unit.tests>
     </properties>
     
     <developers>
@@ -43,12 +45,12 @@
             <comments>
                 Copyright (C) 2020 Bradley Willcott
 
-                Markdownj CLI is free software: you can redistribute it and/or modify
+                MDj CLI is free software: you can redistribute it and/or modify
                 it under the terms of the GNU General Public License as published by
                 the Free Software Foundation, either version 3 of the License, or
                 (at your option) any later version.
 
-                Markdownj CLI is distributed in the hope that it will be useful,
+                MDj CLI is distributed in the hope that it will be useful,
                 but WITHOUT ANY WARRANTY; without even the implied warranty of
                 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
                 GNU General Public License for more details.
@@ -81,19 +83,57 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>org.markdownj</groupId>
-            <artifactId>markdownj-core</artifactId>
-            <version>0.6.0</version>
-        </dependency>
-        <dependency>
             <groupId>com.bewsoftware</groupId>
             <artifactId>BEWFiles</artifactId>
             <version>1.0.2</version>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>com.bewsoftware</groupId>
+            <artifactId>mdj-core</artifactId>
+            <version>0.6.1</version>
+        </dependency>
     </dependencies>
 
     <profiles>
+        <profile>
+            <id>compile-manual</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>MDj-Compile(release)</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>java</executable>
+                                    <commandlineArgs>-classpath %classpath com.bewsoftware.mdj.cli.Main -v:2 -s src/docs/manual -d target/manual -wr</commandlineArgs>
+                                    <workingDirectory></workingDirectory>
+                                    <includeProjectDependencies>false</includeProjectDependencies>
+                                    <includePluginDependencies>true</includePluginDependencies>
+                                    <executableDependency>
+                                        <groupId>com.bewsoftware</groupId>
+                                        <artifactId>mdj-cli</artifactId>
+                                    </executableDependency>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.bewsoftware</groupId>
+                                <artifactId>mdj-cli</artifactId>
+                                <version>1.0.2</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>    
         <profile>
             <id>increment-build</id>
             <build>
@@ -110,6 +150,29 @@
                                 </goals>
                                 <configuration>
                                     <runOnce>false</runOnce>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>increment-release</id>
+            <build>
+                <plugins>
+                    <!-- Increment {buildNumber}, remove '-SNAPSHOT' and update the 'pom.xml' file -->
+                    <plugin>
+                        <groupId>com.bew.mojo</groupId>
+                        <artifactId>simple-buildnumber-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>Release</id>
+                                <goals>
+                                    <goal>create-xml</goal>
+                                </goals>
+                                <configuration>
+                                    <release>true</release>
                                 </configuration>
                             </execution>
                         </executions>
@@ -138,43 +201,50 @@
                             </execution>
                         </executions>
                     </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>release-profile</id>
+            <build>
+                <plugins>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>Markdownj-Compile(release)</id>
+                                <id>MDj-Compile(release)</id>
                                 <phase>prepare-package</phase>
                                 <goals>
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
                                     <executable>java</executable>
-                                    <commandlineArgs> -classpath %classpath org.markdownj.cli.Main -v:2 -s src/docs/manual -d target/manual -wr</commandlineArgs>
+                                    <commandlineArgs> -classpath %classpath com.bewsoftware.mdj.cli.Main -v:2 -s src/docs/manual -d target/manual -wr</commandlineArgs>
                                     <workingDirectory></workingDirectory>
                                     <includeProjectDependencies>false</includeProjectDependencies>
                                     <includePluginDependencies>true</includePluginDependencies>
                                     <executableDependency>
-                                        <groupId>org.markdownj</groupId>
-                                        <artifactId>markdownj-cli</artifactId>
+                                        <groupId>com.bewsoftware</groupId>
+                                        <artifactId>mdj-cli</artifactId>
                                     </executableDependency>
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>Markdownj-Package(HTML)</id>
+                                <id>MDj-Package(HTML)</id>
                                 <phase>package</phase>
                                 <goals>
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
                                     <executable>java</executable>
-                                    <commandlineArgs> -classpath %classpath org.markdownj.cli.Main -v:2 -j:${project.build.finalName}-manual.jar;manual</commandlineArgs>
+                                    <commandlineArgs> -classpath %classpath com.bewsoftware.mdj.cli.Main -v:2 -j:${project.build.finalName}-manual.jar;manual</commandlineArgs>
                                     <workingDirectory>${project.build.directory}</workingDirectory>
                                     <includeProjectDependencies>false</includeProjectDependencies>
                                     <includePluginDependencies>true</includePluginDependencies>
                                     <executableDependency>
-                                        <groupId>org.markdownj</groupId>
-                                        <artifactId>markdownj-cli</artifactId>
+                                        <groupId>com.bewsoftware</groupId>
+                                        <artifactId>mdj-cli</artifactId>
                                     </executableDependency>
                                 </configuration>
                             </execution>
@@ -186,13 +256,13 @@
                                 </goals>
                                 <configuration>
                                     <executable>java</executable>
-                                    <commandlineArgs> -classpath %classpath org.markdownj.cli.Main -v:2 -j:${project.build.directory}/${project.build.finalName}-manual-src.jar;src/docs/manual</commandlineArgs>
+                                    <commandlineArgs> -classpath %classpath com.bewsoftware.mdj.cli.Main -v:2 -j:${project.build.directory}/${project.build.finalName}-manual-src.jar;src/docs/manual</commandlineArgs>
                                     <workingDirectory>${project.directory}</workingDirectory>
                                     <includeProjectDependencies>false</includeProjectDependencies>
                                     <includePluginDependencies>true</includePluginDependencies>
                                     <executableDependency>
-                                        <groupId>org.markdownj</groupId>
-                                        <artifactId>markdownj-cli</artifactId>
+                                        <groupId>com.bewsoftware</groupId>
+                                        <artifactId>mdj-cli</artifactId>
                                     </executableDependency>
                                 </configuration>
                             </execution>
@@ -220,10 +290,9 @@
                         </executions>
                         <dependencies>
                             <dependency>
-                                <groupId>org.markdownj</groupId>
-                                <artifactId>markdownj-cli</artifactId>
+                                <groupId>com.bewsoftware</groupId>
+                                <artifactId>mdj-cli</artifactId>
                                 <version>1.0.2</version>
-                                <type>jar</type>
                             </dependency>
                         </dependencies>
                     </plugin>
@@ -279,44 +348,11 @@
             </build>
         </profile>    
         <profile>
-            <id>compile-manual</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>Markdownj-Compile(release)</id>
-                                <phase>prepare-package</phase>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <configuration>
-                                    <executable>java</executable>
-                                    <commandlineArgs> -classpath %classpath org.markdownj.cli.Main -v:2 -s src/docs/manual -d target/manual -wr</commandlineArgs>
-                                    <workingDirectory></workingDirectory>
-                                    <includeProjectDependencies>false</includeProjectDependencies>
-                                    <includePluginDependencies>true</includePluginDependencies>
-                                    <executableDependency>
-                                        <groupId>org.markdownj</groupId>
-                                        <artifactId>markdownj-cli</artifactId>
-                                    </executableDependency>
-                                </configuration>
-                            </execution>
-                        </executions>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.markdownj</groupId>
-                                <artifactId>markdownj-cli</artifactId>
-                                <version>1.0.2</version>
-                                <type>jar</type>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>    
+            <id>test</id>
+            <properties>
+                <skip.unit.tests>false</skip.unit.tests>
+            </properties>
+        </profile>
     </profiles>
     
     <build>
@@ -518,6 +554,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
+                    <!-- Skips unit tests if the value of skip.unit.tests property is true -->
+                    <skipTests>${skip.unit.tests}</skipTests>
+                    <argLine></argLine>     
                     <includes>
                         <include>**/*.java</include>
                     </includes>
@@ -534,7 +573,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>libs/</classpathPrefix>
-                            <mainClass>org.markdownj.cli.Main</mainClass>
+                            <mainClass>com.bewsoftware.mdj.cli.Main</mainClass>
                             <addBuildEnvironmentEntries>true</addBuildEnvironmentEntries>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                         </manifest>
@@ -563,7 +602,7 @@
             </plugin>  
         </plugins>
         
-        <finalName>${project.artifactId}-${project.artifact.version}</finalName>    
+        <!--<finalName>${project.artifactId}-${project.artifact.version}</finalName>-->    
     </build>
     
     <reporting>

@@ -1,15 +1,15 @@
 /*
- * This file is part of the Markdownj Command-line Interface program
- * (aka: markdownj-cli).
+ * This file is part of the MDj Command-line Interface program
+ * (aka: mdj-cli).
  *
  * Copyright (C) 2020 Bradley Willcott
  *
- * markdownj-cli is free software: you can redistribute it and/or modify
+ * mdj-cli is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * markdownj-cli is distributed in the hope that it will be useful,
+ * mdj-cli is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -17,15 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.markdownj.cli;
+package com.bewsoftware.mdj.cli;
 
-/**
- *
- * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
- *
- * @since 0.1
- * @version 1.0
- */
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
@@ -34,8 +27,22 @@ import java.nio.file.attribute.BasicFileAttributes;
 
 import static java.nio.file.FileVisitResult.*;
 
-public class PrintFiles
-        extends SimpleFileVisitor<Path> {
+/**
+ *
+ * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
+ *
+ * @since 0.1
+ * @version 1.0
+ */
+public class PrintFiles extends SimpleFileVisitor<Path> {
+
+    // Print each directory visited.
+    @Override
+    public FileVisitResult postVisitDirectory(Path dir,
+                                              IOException exc) {
+        System.out.format("Directory: %s%n", dir);
+        return CONTINUE;
+    }
 
     // Print information about
     // each type of file.
@@ -53,14 +60,6 @@ public class PrintFiles
             System.out.format("Other: %s ", file);
         }
         System.out.println("(" + attr.size() + "bytes)");
-        return CONTINUE;
-    }
-
-    // Print each directory visited.
-    @Override
-    public FileVisitResult postVisitDirectory(Path dir,
-                                              IOException exc) {
-        System.out.format("Directory: %s%n", dir);
         return CONTINUE;
     }
 
