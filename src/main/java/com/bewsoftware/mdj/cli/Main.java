@@ -58,19 +58,22 @@ import static com.bewsoftware.mdj.cli.Find.getUpdateList;
  */
 public class Main {
 
-//    private static final String CtlX = Character.toString(24);
     /**
      * @param args the command line arguments
      *
-     * @throws java.io.IOException
+     * @throws IOException
+     * @throws JSAPException
+     * @throws InvalidParameterValueException
+     * @throws IniFileFormatException
+     * @throws URISyntaxException
      */
     @SuppressWarnings("fallthrough")
-    public static void main(String[] args) throws IOException, JSAPException, InvalidParameterValueException, IniFileFormatException, InvalidProgramStateException, URISyntaxException {
+    public static void main(String[] args)
+            throws IOException, JSAPException, InvalidParameterValueException,
+                   IniFileFormatException, InvalidProgramStateException,
+                   URISyntaxException {
 
         Set<Path> dirs = new TreeSet<>();
-//        StringBuilder buf = new StringBuilder();
-//        BufferedReader in = null;
-//        Reader reader = null;
 
         // Process command-line
         JSAP jsap = initialiseJSAP();
@@ -98,7 +101,7 @@ public class Main {
                 exit(0);
             } else
             {
-                exit(1);
+                exit(255);
             }
         }
 
@@ -165,7 +168,7 @@ public class Main {
                 String msg = "Too many switches for \"-j\"";
 
                 provideUsageHelp(msg, jsap);
-                exit(1);
+                exit(5);
             }
 
             exit(createJarFile(jarFilename, jarSrcDir, vlevel));
@@ -178,19 +181,18 @@ public class Main {
                 || output != null
                 || source != null
                 || destination != null
-                || recursive != false
-                || jar != false)
+                || recursive
+                || jar)
             {
                 String msg = "Too many switches for \"-W\"";
 
                 provideUsageHelp(msg, jsap);
-                exit(1);
+                exit(6);
             }
 
             exit(initialiseWrappers(docRootDir));
         }
 
-        // TODO: Rewrite to process "includeDirs" section of conf.iniDoc.
         // if '-w' switch active, copy 'css' files to destination directory
         if (wrapper)
         {
@@ -217,7 +219,7 @@ public class Main {
             {
                 provideUsageHelp("ERROR: " + ex.toString()
                                  + "\nHave you initialised the wrapper functionality? '-W <Doc Root Dir>'\n", jsap);
-                exit(1);
+                exit(4);
             }
 
             if (conf.iniDoc.containsSection("includeDirs"))

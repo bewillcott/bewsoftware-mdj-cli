@@ -6,16 +6,16 @@
     
     <groupId>com.bewsoftware</groupId>
     <artifactId>mdj-cli</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.4-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>MDj CLI</name>
-    <description>Command-line program that uses the Markdownj Core library.</description>
+    <description>Command-line program that uses the MDj Core library to process markdown files into html files.</description>
 
     <properties>
         <major.minor.version>1.0</major.minor.version>
         <!--<project.filename>${project.build.finalName}.${project.packaging}</project.filename>-->
-        <java.version>14</java.version>
+        <java.version>12</java.version>
         <source.encoding>UTF-8</source.encoding>
         <javadoc.source.version>${java.version}</javadoc.source.version>
         <jdk.version>${java.version}</jdk.version>
@@ -85,13 +85,14 @@
         <dependency>
             <groupId>com.bewsoftware</groupId>
             <artifactId>BEWFiles</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>com.bewsoftware</groupId>
             <artifactId>mdj-core</artifactId>
-            <version>0.6.1</version>
+            <version>0.6.3</version>
+            <type>jar</type>
         </dependency>
     </dependencies>
 
@@ -249,7 +250,7 @@
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>Markdownj-Package(SRC)</id>
+                                <id>MDj-Package(SRC)</id>
                                 <phase>package</phase>
                                 <goals>
                                     <goal>exec</goal>
@@ -519,8 +520,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <showDeprecation>true</showDeprecation>
-                    <source>15</source>
-                    <target>15</target>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                     <release>${java.version}</release>
                     <encoding>${source.encoding}</encoding>
                     <compilerArgs>

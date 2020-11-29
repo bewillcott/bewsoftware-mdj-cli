@@ -230,7 +230,7 @@ public class Cli {
         // '-v' : Verbose processing
         QualifiedSwitch sw1 = (QualifiedSwitch) (new QualifiedSwitch("verbose")
                                                  .setStringParser(INTEGER_PARSER)
-                                                 .setUsageName("verbose level [1-2]")
+                                                 .setUsageName("verbose level [1-3]")
                                                  .setShortFlag('v')
                                                  .setLongFlag(NO_LONGFLAG));
 
