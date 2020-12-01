@@ -59,6 +59,8 @@ import static com.bewsoftware.mdj.cli.Find.getUpdateList;
 public class Main {
 
     /**
+     * Executed from command-line.
+     *
      * @param args the command line arguments
      *
      * @throws IOException
@@ -67,11 +69,32 @@ public class Main {
      * @throws IniFileFormatException
      * @throws URISyntaxException
      */
-    @SuppressWarnings("fallthrough")
     public static void main(String[] args)
             throws IOException, JSAPException, InvalidParameterValueException,
                    IniFileFormatException, InvalidProgramStateException,
                    URISyntaxException {
+
+        exit(execute(args));
+    }
+
+    /**
+     * Called from either {@link #main(java.lang.String[]) main()} or another process.
+     *
+     * @param args Arguments to configure this cycle of processing.
+     *
+     * @return The exit code.
+     *
+     * @throws IOException            If any.
+     * @throws URISyntaxException     If any.
+     * @throws JSAPException          If any.
+     * @throws IniFileFormatException If any.
+     *
+     * @since 1.0.4
+     * @version 1.0.4
+     */
+    @SuppressWarnings("fallthrough")
+    public static int execute(String[] args)
+            throws IOException, URISyntaxException, JSAPException, IniFileFormatException {
 
         Set<Path> dirs = new TreeSet<>();
 
@@ -98,10 +121,10 @@ public class Main {
 
             if (config.getBoolean("help"))
             {
-                exit(0);
+                return 0;
             } else
             {
-                exit(255);
+                return 255;
             }
         }
 
@@ -168,10 +191,10 @@ public class Main {
                 String msg = "Too many switches for \"-j\"";
 
                 provideUsageHelp(msg, jsap);
-                exit(5);
+                return 5;
             }
 
-            exit(createJarFile(jarFilename, jarSrcDir, vlevel));
+            return createJarFile(jarFilename, jarSrcDir, vlevel);
         }
 
         // '-W' initialise wrapper functionality
@@ -187,10 +210,10 @@ public class Main {
                 String msg = "Too many switches for \"-W\"";
 
                 provideUsageHelp(msg, jsap);
-                exit(6);
+                return 6;
             }
 
-            exit(initialiseWrappers(docRootDir));
+            return initialiseWrappers(docRootDir);
         }
 
         // if '-w' switch active, copy 'css' files to destination directory
@@ -219,7 +242,7 @@ public class Main {
             {
                 provideUsageHelp("ERROR: " + ex.toString()
                                  + "\nHave you initialised the wrapper functionality? '-W <Doc Root Dir>'\n", jsap);
-                exit(4);
+                return 4;
             }
 
             if (conf.iniDoc.containsSection("includeDirs"))
@@ -256,7 +279,7 @@ public class Main {
                                               input, null, recursive, vlevel);
 
         // Process files
-        if (fileList.size() > 0)
+        if (!fileList.isEmpty())
         {
             if (output != null && fileList.size() == 1)
             {
@@ -303,5 +326,7 @@ public class Main {
                 processFile(filePairs[0], filePairs[1], wrapper);
             }
         }
+
+        return 0;
     }
 }

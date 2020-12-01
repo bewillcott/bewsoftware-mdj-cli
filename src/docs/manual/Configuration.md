@@ -1,6 +1,6 @@
 @@@
 use : articles
-title: Markdownj CLI | Configuration
+title: ${program.title} | Configuration
 @@@
 
 [Home]

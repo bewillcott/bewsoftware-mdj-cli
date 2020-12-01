@@ -1,13 +1,13 @@
 @@@
 use : articles
-title: Markdownj CLI
+title: ${program.title}
 @@@
 
 
 #[#top] ${program.title}
 ---
 
-This is a command-line program that uses the Markdownj Core library.
+This is a command-line program that uses the MDj Core library.
 
 It will process either a single file, all the files in a directory,
 or all the files in a directory tree.
@@ -19,7 +19,7 @@ The default extensions are:
 
 The program has a number of options. For details see the [Options][opt] page.
 
-##[#toc] Table of Contents ## [&uarr;](#top)
+##[#toc] Table of Contents [&uarr;](#top)
 
 - [ToDo List][todo]
 - [Configuration][conf]

@@ -1,6 +1,6 @@
 @@@
 use : articles
-title: Markdownj CLI | Command-Line Options
+title: ${program.title} | Command-Line Options
 @@@
 
 [Home]

@@ -1,6 +1,6 @@
 @@@
 use:articles
-title: Markdownj CLI | Meta Blocks
+title: ${program.title} | Meta Blocks
 @@@
 
 [Home]
@@ -96,8 +96,7 @@ title: Markdownj CLI | Meta Blocks
 @@@
 ~~~
 
-
-####[#page.use] Use ####[&uarr;](#top)
+####[#page_use] Use ####[&uarr;](#top)
 `use` is a reserved key word in the context of `page`: `page.use`.
 
 As you can see, there is a `use` key with a value of `articles`.  If you were to check the configuration file:
@@ -114,7 +113,7 @@ stylesheet for a page, which is different to that provided by the section you ar
 by adding a `stylesheet : myspecial.css` to the meta block for the page.  Note, you would of course put the
 name of _your_ stylesheet instead of 'myspecial.css'.
 
-####[#page.title] Title ####[&uarr;](#top)
+####[#page_title] Title ####[&uarr;](#top)
 `title` is a reserved key word in the context of `program`: `program.title`
 
 Though it is _not_ reserved in any other context, by convention it should be used to set the page's title: 
@@ -125,7 +124,7 @@ If you have a look at that file, you will see how these parameters can be used. 
 `page.title` parameter is used inside `<title>\${page.title}</title>` tags.  It is highly recommended that every 
 web page has a title tag.
 
-According to [w3schools.com][w3s]!, 
+According to [w3schools.com][w3s]!:
 
 "_The `<title>` tag is required in all HTML documents and it defines the title of the document_".
 
@@ -136,7 +135,6 @@ Further,
 - _defines a title in the browser toolbar_
 - _provides a title for the page when it is added to favorites_
 - _displays a title for the page in search-engine results_"
-
 
 ####[#template] Template ####[&uarr;](#top)
 `template` is a reserved key word in all contexts.
@@ -152,7 +150,7 @@ It must only refer to an actual `.css` file.  This file must be located in the
 directory referred to by the `cssDir` key's value.  The initial entry being:
 `cssDir = css`.
 
-####[#page.text] Text ####[&uarr;](#top)
+####[#page_text] Text ####[&uarr;](#top)
 `text` is a reserved key word in the context of `page`: `page.text`.
 
 It contains the unprocessed markdown text of the body of the document.

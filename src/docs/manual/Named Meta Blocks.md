@@ -1,6 +1,6 @@
 @@@
 use:articles
-title: Markdownj CLI | Named Meta Blocks
+title: ${program.title} | Named Meta Blocks
 @@@
 
 [Home]

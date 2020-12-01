@@ -1,6 +1,6 @@
 @@@
 use : articles
-title: Markdownj CLI | ToDo List
+title: ${program.title} | ToDo List
 @@@
 
 [Home]
