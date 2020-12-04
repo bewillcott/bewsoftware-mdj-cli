@@ -20,73 +20,118 @@
 package com.bewsoftware.mdj.cli;
 
 /**
+ * Create a 'jar' file.
  *
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 0.1
- * @version 1.0
+ * @version 1.0.7
  */
 import java.io.*;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.Deflater;
 
+import static java.nio.file.Path.of;
+
 public class Jar {
 
-    public static void createJAR(String jarFileName, Iterable<Path> jarEntries,
+    /**
+     * Create a 'jar' file containing the files whose paths are supplied.
+     *
+     * @param jarFile   The new jar file.
+     * @param filePaths Paths to the files to include.
+     * @param manifest  The manifest to include.
+     *
+     * @throws IOException If any.
+     */
+    public static void createJAR(File jarFile, List<Path> filePaths,
                                  Manifest manifest) throws IOException {
 
+        // Hold the exceptions.
+        List<IOException> exceptions = new ArrayList<>();
+
         try ( JarOutputStream jos = new JarOutputStream(new BufferedOutputStream(
-                new FileOutputStream(jarFileName)), manifest))
+                new FileOutputStream(jarFile)), manifest))
         {
 
             jos.setLevel(Deflater.BEST_COMPRESSION);
 
-            for (Path jarEntry : jarEntries)
+            filePaths.stream().<File>map(Path::toFile).filter(File::exists)
+                    .map(File::toPath)
+                    .forEachOrdered(filePath ->
+                    {
+                        try
+                        {
+                            jos.putNextEntry(new JarEntry(filePath.toString()));
+                            addEntryContent(jos, filePath);
+                            jos.closeEntry();
+                        } catch (IOException ex)
+                        {
+                            exceptions.add(ex);
+                        }
+                    });
+
+            if (!exceptions.isEmpty())
             {
-                File entryFile = jarEntry.toFile();
-
-                if (!entryFile.exists())
-                {
-                    return;
-                }
-
-                JarEntry je = new JarEntry(jarEntry.toString());
-                jos.putNextEntry(je);
-                addEntryContent(jos, jarEntry.toString());
-                jos.closeEntry();
+                throw exceptions.remove(0);
             }
         }
     }
 
-    public static Manifest getManifest() {
+    /**
+     * Create a new Manifest.
+     *
+     * @param progName The name of the program.
+     *
+     * @return the new Manifest.
+     */
+    public static Manifest getManifest(String progName) {
         Manifest manifest = new Manifest();
         Attributes mainAttribs = manifest.getMainAttributes();
         mainAttribs.put(Attributes.Name.MANIFEST_VERSION, "1.0");
-        mainAttribs.put(new Attributes.Name("Created-By"), "Markdownj CLI 0.1.15");
+        mainAttribs.put(new Attributes.Name("Created-By"), progName);
         mainAttribs.put(Attributes.Name.CONTENT_TYPE, "text/html");
 
         return manifest;
     }
 
-    public static void main(String[] args) throws Exception {
-        Manifest manifest = getManifest();
-        String jarFileName = "jartest.jar";
+    /**
+     * For testing purposes only.
+     *
+     * @param args if any.
+     *
+     * @throws IOException if any.
+     */
+    public static void main(String[] args) throws IOException {
+        Manifest manifest = getManifest("MDj CLI Test");
+        File jarFile = new File("jartest.jar");
         Path[] entries = new Path[2];
-        entries[0] = Path.of("manual/index.html");
-        entries[1] = Path.of("manual/css/style.css");
+        entries[0] = of("manual/index.html");
+        entries[1] = of("manual/css/style.css");
 
-        createJAR(jarFileName, Arrays.asList(entries), manifest);
+        createJAR(jarFile, Arrays.asList(entries), manifest);
     }
 
-    private static void addEntryContent(JarOutputStream jos, String entryFileName)
-            throws IOException, FileNotFoundException {
-        try ( BufferedInputStream bis = new BufferedInputStream(new FileInputStream(
-                entryFileName)))
+    /**
+     * Add the contents of the file for the new entry into the jar file.
+     *
+     * @param jos           The jar file.
+     * @param entryFilePath The file to copy in.
+     *
+     * @throws IOException if any.
+     */
+    private static void addEntryContent(JarOutputStream jos, Path entryFilePath)
+            throws IOException {
+
+        try ( BufferedInputStream bis = new BufferedInputStream(
+                new FileInputStream(entryFilePath.toFile())))
         {
 
             byte[] buffer = new byte[1024];
@@ -99,13 +144,9 @@ public class Jar {
         }
     }
 
-    private static Attributes getAttribute(String name, String value) {
-        Attributes a = new Attributes();
-        Attributes.Name attribName = new Attributes.Name(name);
-        a.put(attribName, value);
-        return a;
-    }
-
+    /**
+     * Not meant to be instantiated.
+     */
     private Jar() {
     }
 }

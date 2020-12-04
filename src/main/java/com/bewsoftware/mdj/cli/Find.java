@@ -19,6 +19,7 @@
  */
 package com.bewsoftware.mdj.cli;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -47,18 +48,24 @@ import static java.nio.file.Path.of;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 0.1
- * @version 1.0
+ * @version 1.0.7
  */
 public class Find {
 
+    /**
+     * Default HTML file extn.
+     */
     private static final String DefaultHTML = ".html";
 
+    /**
+     * Default Markdown file extn.
+     */
     private static final String DefaultMD = ".md";
 
     /**
      * Provides a list of files.
      *
-     * @param sourceDir Start file search from this directory. (Default: "" - Current Working Directory)
+     * @param srcPath   Start file search from this directory. (Default: "" - Current Working Directory)
      * @param pattern   Glob file search pattern. (Default: "{@code *}")
      * @param recursive {@code True} sets recursive directory tree walk.
      *                  {@code False} keeps search to the current directory, only.
@@ -69,18 +76,18 @@ public class Find {
      *
      * @return Set of {@code Path}s representing the files and directories found.
      *
-     * @throws IOException
+     * @throws IOException if any.
      */
-    public static SortedSet<Path> getFileList(String sourceDir, String pattern, boolean recursive, int vlevel) throws IOException {
+    public static SortedSet<Path> getFileList(Path srcPath, String pattern, boolean recursive, int vlevel) throws IOException {
         Path currentDir = FileSystems.getDefault().getPath("").toAbsolutePath();
 
+        // Debug output.
         if (vlevel >= 1)
         {
             System.err.println("PWD: " + currentDir);
         }
 
         Finder finder = new Finder(pattern != null ? pattern : "*" + DefaultMD, vlevel);
-        Path srcPath = (sourceDir != null ? of(sourceDir) : of(""));
 
         Files.walkFileTree(srcPath, EnumSet.noneOf(FileVisitOption.class), recursive ? MAX_VALUE : 1, finder);
 
@@ -90,8 +97,8 @@ public class Find {
     /**
      * Provides a list of files that need to be updated.
      *
-     * @param sourceDir Start file search from this directory. (Default: "" - Current Working Directory)
-     * @param destDir   Prepare return list with this directory merged into output file paths. (Default: &lt;sourceDir&gt;)
+     * @param srcPath   Start file search from this directory. (Default: "" - Current Working Directory)
+     * @param destPath  Prepare return list with this directory merged into output file paths. (Default: &lt;sourceDir&gt;)
      * @param pattern   Glob file search pattern. (Default: "{@code *.md}")
      * @param outExtn   Output file extension. (Default: "{@code .html}")
      * @param recursive {@code True} sets recursive directory tree walk.
@@ -102,24 +109,25 @@ public class Find {
      *
      * @return List containing Path arrays. Each with two elements. [0] Source file, [1] Destination file.
      *
-     * @throws IOException
+     * @throws IOException if any.
      */
-    public static List<Path[]> getUpdateList(String sourceDir, String destDir, String pattern, String outExtn, boolean recursive, int vlevel) throws IOException {
+    public static List<Path[]> getUpdateList(Path srcPath, Path destPath, File pattern, String outExtn, boolean recursive, int vlevel) throws IOException {
         Path currentDir = FileSystems.getDefault().getPath("").toAbsolutePath();
 
+        // Debug output.
         if (vlevel >= 1)
         {
             System.err.println("PWD: " + currentDir);
         }
 
-        Finder finder = new Finder(pattern != null ? pattern : "*" + DefaultMD, vlevel);
-        Path srcPath = (sourceDir != null ? of(sourceDir) : of(""));
+        Finder finder = new Finder(pattern != null ? pattern.toString() : "*" + DefaultMD, vlevel);
 
         Files.walkFileTree(srcPath, EnumSet.noneOf(FileVisitOption.class), recursive ? MAX_VALUE : 1, finder);
 
         SortedSet<Path> inpList = finder.done();
         List<Path[]> outList = new ArrayList<>(inpList.size());
 
+        // Debug output.
         if (vlevel >= 2)
         {
             System.err.println("inpList:");
@@ -129,7 +137,7 @@ public class Find {
         {
             Matcher m;
 
-            if (srcPath.toString().isEmpty() || destDir == null)
+            if (srcPath.toString().isEmpty() || destPath == null)
             {
                 m = Pattern.compile("^(?<basename>.*?)(?:[.]\\w+)?$").matcher(inPath.toString());
             } else
@@ -140,7 +148,7 @@ public class Find {
             if (m.find())
             {
                 String basename = m.group("basename");
-                Path outPath = of(destDir != null ? destDir : "", basename + (outExtn != null ? outExtn : DefaultHTML));
+                Path outPath = of(destPath != null ? destPath.toString() : "", basename + (outExtn != null ? outExtn : DefaultHTML));
 
                 if (notExists(outPath) || getLastModifiedTime(inPath).compareTo(getLastModifiedTime(outPath)) > 0)
                 {
@@ -150,6 +158,7 @@ public class Find {
                     files[1] = outPath;
                     outList.add(files);
 
+                    // Debug output.
                     if (vlevel >= 2)
                     {
                         System.err.println(outPath);
@@ -158,6 +167,7 @@ public class Find {
             }
         }
 
+        // Debug output.
         if (vlevel >= 2)
         {
             System.err.println("outList:");
@@ -171,16 +181,17 @@ public class Find {
         return outList;
     }
 
+    /**
+     * For testing purposes only.
+     *
+     * @param args N/A.
+     *
+     * @throws IOException if any.
+     */
     public static void main(String[] args) throws IOException {
 
-//        List<Path[]> fileList = Find.getUpdateList("src", "target", null, null, true, 2);
-        SortedSet<Path> fileList = getFileList("target/manual", "*", true, 2);
-    }
-
-    static void usage() {
-        System.err.println("java Find <path>"
-                           + " -name \"<glob_pattern>\"");
-        System.exit(-1);
+        List<Path[]> fileList = Find.getUpdateList(of("src"), of("target"), null, null, true, 2);
+        SortedSet<Path> fileSet = getFileList(of("target/manual"), "*", true, 2);
     }
 
     public static class Finder extends SimpleFileVisitor<Path> {
@@ -191,8 +202,7 @@ public class Find {
         private final SortedSet<Path> filenames = new TreeSet<>();
 
         Finder(String pattern, int vlevel) {
-            matcher = FileSystems.getDefault()
-                    .getPathMatcher("glob:" + pattern);
+            matcher = FileSystems.getDefault().getPathMatcher("glob:" + pattern);
             this.vlevel = vlevel;
         }
 
@@ -204,6 +214,7 @@ public class Find {
             {
                 numMatches++;
 
+                // Debug output.
                 if (vlevel >= 2)
                 {
                     System.err.println(file);
@@ -216,6 +227,7 @@ public class Find {
         // Prints the total number of
         // matches to standard out.
         SortedSet<Path> done() {
+            // Debug output.
             if (vlevel >= 1)
             {
                 System.err.println("Matched: "
@@ -236,7 +248,6 @@ public class Find {
         // method on each directory.
         @Override
         public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
-//            find(dir);
             return CONTINUE;
         }
 

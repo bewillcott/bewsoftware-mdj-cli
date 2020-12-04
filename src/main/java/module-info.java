@@ -27,7 +27,7 @@
  * @version 1.0
  */
 module MdjCli {
-    requires jsap;
+    requires commons.cli;
     requires BEWFiles;
     requires BEWProperty;
     requires BEWCommon;

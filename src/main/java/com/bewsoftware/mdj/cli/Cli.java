@@ -22,7 +22,6 @@ package com.bewsoftware.mdj.cli;
 import com.bewsoftware.fileio.ini.IniDocument;
 import com.bewsoftware.fileio.ini.IniFile;
 import com.bewsoftware.fileio.ini.IniFileFormatException;
-import com.martiansoftware.jsap.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -35,13 +34,13 @@ import java.util.jar.Manifest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.bewsoftware.mdj.core.MarkdownProcessor;
+import com.bewsoftware.mdj.core.POMProperties;
 import com.bewsoftware.mdj.core.TextEditor;
+import java.io.*;
+import java.util.ArrayList;
 
 import static com.bewsoftware.fileio.BEWFiles.copyDirTree;
 import static com.bewsoftware.fileio.BEWFiles.getResource;
-import static com.martiansoftware.jsap.JSAP.INTEGER_PARSER;
-import static com.martiansoftware.jsap.JSAP.NO_LONGFLAG;
-import static com.martiansoftware.jsap.JSAP.STRING_PARSER;
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 import static java.nio.file.Path.of;
 import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
@@ -53,14 +52,14 @@ import static java.util.regex.Pattern.DOTALL;
 import static java.util.regex.Pattern.MULTILINE;
 import static com.bewsoftware.mdj.cli.Find.getFileList;
 import static com.bewsoftware.mdj.cli.Jar.getManifest;
-import static com.bewsoftware.mdj.cli.POMProperties.INSTANCE;
+import static com.bewsoftware.mdj.cli.MCPOMProperties.INSTANCE;
 
 /**
  *
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 0.1
- * @version 1.0
+ * @version 1.0.7
  */
 public class Cli {
 
@@ -70,14 +69,14 @@ public class Cli {
     public static final String CONF_FILENAME = "mdj-cli.ini";
 
     /**
+     * The single instance of the {@link POMProperties} class.
+     */
+    public static final MCPOMProperties POM = INSTANCE;
+
+    /**
      * The single instance of the {@link MarkdownProcessor} class.
      */
     private static final MarkdownProcessor MARKDOWN = new MarkdownProcessor();
-
-    /**
-     * The single instance of the {@link POMProperties} class.
-     */
-    private static final POMProperties POM = INSTANCE;
 
     /**
      * The pattern used for substitutions.
@@ -105,7 +104,7 @@ public class Cli {
      *
      * @return result.
      */
-    private static String getString(String section, String key, String use) {
+    private static String getString(final String section, final String key, final String use) {
         return conf.iniDoc.getString(section, key, conf.iniDoc.getString(use, key, ""));
     }
 
@@ -138,7 +137,7 @@ public class Cli {
                 if (vlevel >= 3)
                 {
                     System.out.println("key = " + key + "\n"
-                                       + "vlaue = " + value);
+                                       + "value = " + value);
                 }
 
                 conf.iniDoc.setString("page", key, value);
@@ -183,7 +182,7 @@ public class Cli {
      *
      * @throws IOException If any.
      */
-    private static void processTemplate(String use, String template) throws IOException {
+    private static void processTemplate(final String use, final String template) throws IOException {
         StringBuilder sbin = new StringBuilder();
 
         Path docRootPath = of(conf.iniDoc.getString("project", "root", ""))
@@ -235,131 +234,18 @@ public class Cli {
      *
      * @throws IOException If any.
      */
-    static int createJarFile(String jarFilename, String jarSrcDir, int vlevel) throws IOException {
-        SortedSet<Path> fileList = getFileList(jarSrcDir, "*", true, vlevel);
-        Manifest manifest = getManifest();
+    static int createJarFile(final File jarFile, final Path jarSourcePath, final int vlevel) throws IOException {
+        SortedSet<Path> fileSet = getFileList(jarSourcePath, "*", true, vlevel);
+        Manifest manifest = getManifest(POM.title + "" + POM.version);
 
-        Jar.createJAR(jarFilename, fileList, manifest);
+        Jar.createJAR(jarFile, new ArrayList<>(fileSet), manifest);
         return 0;
-    }
-
-    /**
-     * Initialize the JSAP object.
-     *
-     * @return new JSAP instance.
-     *
-     * @throws JSAPException If any.
-     */
-    static JSAP initialiseJSAP() throws JSAPException {
-        JSAP jsap = new JSAP();
-
-        // '-i' : Input filename/pattern
-        FlaggedOption opt1 = new FlaggedOption("input")
-                .setStringParser(STRING_PARSER)
-                .setUsageName("file name")
-                .setShortFlag('i')
-                .setLongFlag(NO_LONGFLAG);
-
-        opt1.setHelp("The markdown input file to parse. (default extn: \".md\")");
-        jsap.registerParameter(opt1);
-
-        // '-o' : Output filename/pattern
-        FlaggedOption opt2 = new FlaggedOption("output")
-                .setStringParser(STRING_PARSER)
-                .setUsageName("file name")
-                .setShortFlag('o')
-                .setLongFlag(NO_LONGFLAG);
-
-        opt2.setHelp("The HTML output file. (default extn: \".html\")");
-        jsap.registerParameter(opt2);
-
-        // '-s' : Source directory
-        FlaggedOption opt3 = new FlaggedOption("source")
-                .setStringParser(STRING_PARSER)
-                .setUsageName("directory path")
-                .setShortFlag('s')
-                .setLongFlag(NO_LONGFLAG);
-
-        opt3.setHelp("The source directory for markdown files.");
-        jsap.registerParameter(opt3);
-
-        // '-d' : Destination directory
-        FlaggedOption opt4 = new FlaggedOption("destination")
-                .setStringParser(STRING_PARSER)
-                .setUsageName("directory path")
-                .setShortFlag('d')
-                .setLongFlag(NO_LONGFLAG);
-
-        opt4.setHelp("The destination directory for HTML files.");
-        jsap.registerParameter(opt4);
-
-        // '-r' : Resursive directory processing
-        Switch sw2 = new Switch("recursive")
-                .setShortFlag('r')
-                .setLongFlag(NO_LONGFLAG);
-
-        sw2.setHelp("Recursively process directories.");
-        jsap.registerParameter(sw2);
-
-        // '-w' : Process meta block
-        Switch sw4 = new Switch("wrapper")
-                .setShortFlag('w')
-                .setLongFlag(NO_LONGFLAG);
-
-        sw4.setHelp("Process meta block, wrapping your document with templates and stylesheets.");
-        jsap.registerParameter(sw4);
-
-        // '-v' : Verbose processing
-        QualifiedSwitch sw1 = (QualifiedSwitch) (new QualifiedSwitch("verbose")
-                                                 .setStringParser(INTEGER_PARSER)
-                                                 .setUsageName("verbose level [1-3]")
-                                                 .setShortFlag('v')
-                                                 .setLongFlag(NO_LONGFLAG));
-
-        sw1.setHelp("Verbose processing.  List files as they are processed.\n"
-                    + "Set verbose level with \"-v[:[1-3]]\".\n"
-                    + "\"-v\" defaults to level '1'");
-        jsap.registerParameter(sw1);
-
-        // '-j' : Copy html output target directory into a new 'jar' file
-        QualifiedSwitch sw5 = (QualifiedSwitch) (new QualifiedSwitch("jar")
-                                                 .setStringParser(STRING_PARSER)
-                                                 .setList(true)
-                                                 .setListSeparator(';')
-                                                 .setUsageName("jarOption")
-                                                 .setShortFlag('j')
-                                                 .setLongFlag(NO_LONGFLAG));
-
-        sw5.setHelp("Copy html output target directory into a new 'jar' file.\n"
-                    + "NOTE: Can NOT be used with any other switches, except \"-v:n\".");
-        jsap.registerParameter(sw5);
-
-        // '-W' : Initialise wrapper directories and files
-        QualifiedSwitch sw6 = (QualifiedSwitch) (new QualifiedSwitch("initialise")
-                                                 .setStringParser(STRING_PARSER)
-                                                 .setUsageName("document root directory")
-                                                 .setShortFlag('W')
-                                                 .setLongFlag(NO_LONGFLAG));
-
-        sw6.setHelp("Initialise wrapper directories and files.\n"
-                    + "NOTE: Can NOT be used with any other switches, except \"-v:n\".");
-        jsap.registerParameter(sw6);
-
-        // '-h' or '--help' : Provide online help
-        Switch sw3 = new Switch("help")
-                .setShortFlag('h')
-                .setLongFlag("help");
-
-        sw3.setHelp("Provide this online help.");
-        jsap.registerParameter(sw3);
-
-        return jsap;
     }
 
     /**
      * Initialize the wrapper directories and files.
      *
-     * @param docRootDir The document root directory.
+     * @param docRootPath The document root directory.
      *
      * @return Always '0'.
      *
@@ -368,11 +254,10 @@ public class Cli {
      * @throws URISyntaxException     If any.
      *
      * @since 0.1
-     * @version 1.1
+     * @version 1.0.7
      */
-    static int initialiseWrappers(String docRootDir)
+    static int initialiseWrappers(final Path docRootPath)
             throws IOException, IniFileFormatException, URISyntaxException {
-        Path docRootPath = of(docRootDir).normalize().toAbsolutePath();
 
         if (vlevel >= 3)
         {
@@ -451,12 +336,12 @@ public class Cli {
     /**
      * Load the configuration file: {@link #CONF_FILENAME}
      *
-     * @param srcDir Initial directory to look for the file.
+     * @param srcDirPath Initial directory to look for the file.
      *
      * @throws IOException            If any.
      * @throws IniFileFormatException If any.
      */
-    static void loadConf(String srcDir) throws IOException, IniFileFormatException {
+    static void loadConf(final Path srcDirPath) throws IOException, IniFileFormatException {
         Path iniPath = of(CONF_FILENAME).toAbsolutePath();
 
         if (vlevel >= 3)
@@ -469,9 +354,9 @@ public class Cli {
             System.err.println("iniPath: " + iniPath.toString());
         }
 
-        if (Files.notExists(iniPath, NOFOLLOW_LINKS) && (srcDir != null))
+        if (Files.notExists(iniPath, NOFOLLOW_LINKS) && (srcDirPath != null))
         {
-            Path srcPath = of(srcDir).toAbsolutePath();
+            Path srcPath = of(srcDirPath.toString());
 
             try
             {
@@ -522,7 +407,7 @@ public class Cli {
      *
      * @throws IOException If any.
      */
-    static void processFile(Path inpPath, Path outPath, boolean wrapper) throws IOException {
+    static void processFile(final Path inpPath, final Path outPath, final boolean wrapper) throws IOException {
         StringBuilder sb = new StringBuilder();
         IniDocument iniDoc = conf.iniDoc;
         String template = "";
@@ -618,28 +503,6 @@ public class Cli {
         } while (textEd.wasFound());
 
         return textEd.toString();
-    }
-
-    /**
-     * Provide usage help.
-     *
-     * @param msg  Error message.
-     * @param jsap instance.
-     */
-    static void provideUsageHelp(String msg, JSAP jsap) {
-        System.err.println();
-
-        if (msg != null && !msg.isBlank())
-        {
-            System.err.println(msg);
-        }
-
-        System.err.println("Usage: java -jar " + POM.filename);
-        System.err.println("            " + jsap.getUsage());
-        System.err.println();
-
-        // show full help as well
-        System.err.println(jsap.getHelp());
     }
 
     private Cli() {
