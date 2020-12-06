@@ -45,14 +45,16 @@ public class Jar {
     /**
      * Create a 'jar' file containing the files whose paths are supplied.
      *
-     * @param jarFile   The new jar file.
-     * @param filePaths Paths to the files to include.
-     * @param manifest  The manifest to include.
+     * @param jarFile       The new jar file.
+     * @param filePaths     Paths to the files to include.
+     * @param jarSourcePath Directory to process.
+     * @param manifest      The manifest to include.
      *
      * @throws IOException If any.
      */
-    public static void createJAR(File jarFile, List<Path> filePaths,
-                                 Manifest manifest) throws IOException {
+    public static void createJAR(final File jarFile, final List<Path> filePaths,
+                                 final Path jarSourcePath,
+                                 final Manifest manifest) throws IOException {
 
         // Hold the exceptions.
         List<IOException> exceptions = new ArrayList<>();
@@ -63,13 +65,16 @@ public class Jar {
 
             jos.setLevel(Deflater.BEST_COMPRESSION);
 
-            filePaths.stream().<File>map(Path::toFile).filter(File::exists)
+            filePaths.stream().<File>map(Path::toFile)
+                    .filter(name -> name.exists() && !name.isDirectory())
                     .map(File::toPath)
                     .forEachOrdered(filePath ->
                     {
                         try
                         {
-                            jos.putNextEntry(new JarEntry(filePath.toString()));
+                            jos.putNextEntry(new JarEntry(
+                                    jarSourcePath.relativize(filePath).toString()));
+
                             addEntryContent(jos, filePath);
                             jos.closeEntry();
                         } catch (IOException ex)
@@ -116,7 +121,7 @@ public class Jar {
         entries[0] = of("manual/index.html");
         entries[1] = of("manual/css/style.css");
 
-        createJAR(jarFile, Arrays.asList(entries), manifest);
+        createJAR(jarFile, Arrays.asList(entries), of("manual"), manifest);
     }
 
     /**

@@ -148,12 +148,13 @@ public class Main {
         // '-j' jar file creation
         if (cmd.jar())
         {
-            if (cmd.inputFile() != null
-                || cmd.outputFile() != null
-                || cmd.source() != null
-                || cmd.destination() != null
-                || cmd.isRecursive()
-                || cmd.initialize())
+            if (cmd.hasOption('i')
+                || cmd.hasOption('o')
+                || cmd.hasOption('s')
+                || cmd.hasOption('d')
+                || cmd.hasOption('r')
+                || cmd.hasOption('W')
+                || cmd.hasOption('w'))
             {
                 String msg = "Too many switches for \"-j\"\n\n";
 
@@ -167,12 +168,13 @@ public class Main {
         // '-W' initialise wrapper functionality
         if (cmd.initialize())
         {
-            if (cmd.inputFile() != null
-                || cmd.outputFile() != null
-                || cmd.source() != null
-                || cmd.destination() != null
-                || cmd.isRecursive()
-                || cmd.jar())
+            if (cmd.hasOption('i')
+                || cmd.hasOption('o')
+                || cmd.hasOption('s')
+                || cmd.hasOption('d')
+                || cmd.hasOption('r')
+                || cmd.hasOption('j')
+                || cmd.hasOption('w'))
             {
                 String msg = "Too many switches for \"-W\"\n\n";
 

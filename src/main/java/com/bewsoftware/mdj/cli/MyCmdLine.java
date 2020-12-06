@@ -86,7 +86,7 @@ public final class MyCmdLine implements CmdLine {
                       + "NOTE: Can NOT be used with any other switches, except \"-v <level>\".")
                 .numberOfArgs(2)
                 .valueSeparator(';')
-                .argName("jarfile;directory")
+                .argName("jarfile;srcDir")
                 .build());
 
         // Add verbosity: '-v'

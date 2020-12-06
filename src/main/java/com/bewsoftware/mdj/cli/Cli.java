@@ -124,7 +124,11 @@ public class Cli {
 
             if (vlevel >= 3)
             {
-                System.out.println("file metablock:\n" + metaBlock);
+                System.out.println("\n============================================\n"
+                                   + "file metablock:\n"
+                                   + "--------------------------------------------\n"
+                                   + metaBlock
+                                   + "\n--------------------------------------------");
             }
 
             Matcher m2 = Pattern.compile("^\\s*(?<key>\\w+)\\s*:\\s*(?<value>.*?)?\\s*?$", MULTILINE).matcher(metaBlock);
@@ -142,6 +146,12 @@ public class Cli {
 
                 conf.iniDoc.setString("page", key, value);
             }
+
+            if (vlevel >= 3)
+            {
+                System.out.println("============================================\n");
+            }
+
         }
 
         conf.iniDoc.setString("page", "text", text);
@@ -161,8 +171,10 @@ public class Cli {
 
                     if (vlevel >= 3)
                     {
-                        System.out.println("name: " + name + "\n"
-                                           + "metablock:\n" + metaBlock);
+                        System.out.println("============================================\n"
+                                           + "name: " + name + "\n"
+                                           + "metablock:\n" + metaBlock
+                                           + "\n============================================\n");
                     }
 
                     conf.iniDoc.setString("page", name, metaBlock);
@@ -236,9 +248,9 @@ public class Cli {
      */
     static int createJarFile(final File jarFile, final Path jarSourcePath, final int vlevel) throws IOException {
         SortedSet<Path> fileSet = getFileList(jarSourcePath, "*", true, vlevel);
-        Manifest manifest = getManifest(POM.title + "" + POM.version);
+        Manifest manifest = getManifest(POM.title + " (" + POM.version + ")");
 
-        Jar.createJAR(jarFile, new ArrayList<>(fileSet), manifest);
+        Jar.createJAR(jarFile, new ArrayList<>(fileSet), jarSourcePath, manifest);
         return 0;
     }
 
@@ -346,7 +358,8 @@ public class Cli {
 
         if (vlevel >= 3)
         {
-            System.err.println("loadConf()");
+            System.err.println(""
+                               + "loadConf()");
         }
 
         if (vlevel >= 2)
@@ -429,7 +442,8 @@ public class Cli {
         {
             if (vlevel >= 3)
             {
-                System.out.println("process wrapper...");
+                System.out.println("\n--------------------------------------------\n"
+                                   + "process wrapper...");
             }
 
             processMetaBlock();
@@ -455,8 +469,10 @@ public class Cli {
         {
             if (vlevel >= 3)
             {
-                System.out.println("Write file: " + outPath);
-                System.out.println("page.html:\n" + iniDoc.getString("page", "html", "No HTML content."));
+                System.out.println("\n--------------------------------------------\n"
+                                   + "Write file: " + outPath);
+                System.out.println("page.html:\n" + iniDoc.getString("page", "html", "No HTML content.")
+                                   + "--------------------------------------------\n");
             }
 
             outWriter.write(iniDoc.getString("page", "html", iniDoc.getString("page", "content", "Error during processing.")));
@@ -481,7 +497,7 @@ public class Cli {
 
                           if (vlevel >= 3)
                           {
-                              System.out.println(m.group());
+                              System.out.println("m.group: " + m.group());
                           }
 
                           String group = m.group("group");
@@ -495,7 +511,7 @@ public class Cli {
 
                           if (vlevel >= 3)
                           {
-                              System.out.println(rtn);
+                              System.out.println("rtn: " + rtn);
                           }
 
                           return rtn;
@@ -505,6 +521,9 @@ public class Cli {
         return textEd.toString();
     }
 
+    /**
+     * Not meant to be instantiated.
+     */
     private Cli() {
     }
 }
