@@ -88,13 +88,15 @@ public class Main {
      * @throws IniFileFormatException If any.
      *
      * @since 1.0.4
-     * @version 1.0.4
+     * @version 1.0.14
      */
     @SuppressWarnings("fallthrough")
     public static int execute(String[] args)
             throws IOException, URISyntaxException, IniFileFormatException {
 
+        //
         // Process command-line
+        //
         CmdLine cmd = new MyCmdLine(args);
 
         // check whether the command line was valid, and if it wasn't,
@@ -145,7 +147,9 @@ public class Main {
             default:
         }
 
+        //
         // '-j' jar file creation
+        //
         if (cmd.jar())
         {
             if (cmd.hasOption('i')
@@ -162,10 +166,24 @@ public class Main {
                 return 5;
             }
 
+            // Load configuration file data
+            try
+            {
+                loadConf(cmd.docRootPath());
+            } catch (FileNotFoundException ex)
+            {
+                if (vlevel >= 2)
+                {
+                    System.err.println(ex);
+                }
+            }
+
             return createJarFile(cmd.jarFile(), cmd.jarSourcePath(), vlevel);
         }
 
+        //
         // '-W' initialise wrapper functionality
+        //
         if (cmd.initialize())
         {
             if (cmd.hasOption('i')
@@ -185,7 +203,9 @@ public class Main {
             return initialiseWrappers(cmd.docRootPath());
         }
 
+        //
         // if '-w' switch active, copy 'css' files to destination directory
+        //
         if (cmd.isWrapping())
         {
             // Load configuration file data
@@ -217,15 +237,15 @@ public class Main {
 
             if (conf.iniDoc.containsSection("includeDirs"))
             {
-                List< IniProperty<Object>> props = conf.iniDoc.getSection("includeDirs");
+                List<IniProperty<String>> props = conf.iniDoc.getSection("includeDirs");
 
-                for (IniProperty<Object> prop : props)
+                for (IniProperty<String> prop : props)
                 {
-                    String value = (String) prop.value();
+                    String value = prop.value();
 
                     if (value != null)
                     {
-                        value = Cli.processSubstitutions(value, null);
+                        value = Cli.processSubstitutions(value, null, new Cli.BooleanReturn());
 
                         if (!value.isEmpty())
                         {
@@ -243,7 +263,9 @@ public class Main {
 
         conf.iniDoc.setString("system", "date", new Date().toString());
 
+        //
         // Get files to process
+        //
         List<Path[]> fileList = getUpdateList(cmd.source(),
                                               cmd.destination(),
                                               cmd.inputFile(), null, cmd.isRecursive(), vlevel);

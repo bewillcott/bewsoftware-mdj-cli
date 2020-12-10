@@ -25,9 +25,12 @@ package com.bewsoftware.mdj.cli;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 0.1
- * @version 1.0.7
+ * @version 1.0.14
  */
+import com.bewsoftware.fileio.ini.IniFile;
 import java.io.*;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,6 +41,7 @@ import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.Deflater;
 
+import static com.bewsoftware.fileio.BEWFiles.getResource;
 import static java.nio.file.Path.of;
 
 public class Jar {
@@ -45,16 +49,24 @@ public class Jar {
     /**
      * Create a 'jar' file containing the files whose paths are supplied.
      *
-     * @param jarFile       The new jar file.
-     * @param filePaths     Paths to the files to include.
-     * @param jarSourcePath Directory to process.
-     * @param manifest      The manifest to include.
+     * @param jarFile        The new jar file.
+     * @param jarFilePaths   Jar file paths to include.
+     * @param jarFileDirPath Jar file directory path.
+     * @param filePaths      Paths to the files to include.
+     * @param fileDirPath    Directory to process.
+     * @param manifest       The manifest to include.
+     * @param vlevel         Reporting verbosity level.
      *
-     * @throws IOException If any.
+     * @throws IOException        if any.
+     * @throws URISyntaxException if any.
      */
-    public static void createJAR(final File jarFile, final List<Path> filePaths,
-                                 final Path jarSourcePath,
-                                 final Manifest manifest) throws IOException {
+    public static void createJAR(final File jarFile,
+                                 final List<Path> jarFilePaths,
+                                 final Path jarFileDirPath,
+                                 final List<Path> filePaths,
+                                 final Path fileDirPath,
+                                 final Manifest manifest, final int vlevel)
+            throws IOException, URISyntaxException {
 
         // Hold the exceptions.
         List<IOException> exceptions = new ArrayList<>();
@@ -65,6 +77,30 @@ public class Jar {
 
             jos.setLevel(Deflater.BEST_COMPRESSION);
 
+            //
+            // Copy files from MDj-CLI jar file...
+            //
+            jarFilePaths.stream().<File>map(Path::toFile)
+                    .filter(name -> name.exists() && !name.isDirectory())
+                    .map(File::toPath)
+                    .forEachOrdered(jarFilePath ->
+                    {
+                        try
+                        {
+                            jos.putNextEntry(new JarEntry(
+                                    jarFileDirPath.relativize(jarFilePath).toString()));
+
+                            addEntryContent(jos, jarFilePath);
+                            jos.closeEntry();
+                        } catch (IOException ex)
+                        {
+                            exceptions.add(ex);
+                        }
+                    });
+
+            //
+            // Copy files from the user's docs directory...
+            //
             filePaths.stream().<File>map(Path::toFile)
                     .filter(name -> name.exists() && !name.isDirectory())
                     .map(File::toPath)
@@ -73,7 +109,7 @@ public class Jar {
                         try
                         {
                             jos.putNextEntry(new JarEntry(
-                                    jarSourcePath.relativize(filePath).toString()));
+                                    fileDirPath.relativize(filePath).toString()));
 
                             addEntryContent(jos, filePath);
                             jos.closeEntry();
@@ -93,35 +129,52 @@ public class Jar {
     /**
      * Create a new Manifest.
      *
-     * @param progName The name of the program.
+     * @param pom  The program's POM properties.
+     * @param conf The document's configuration data.
      *
      * @return the new Manifest.
      */
-    public static Manifest getManifest(String progName) {
-        Manifest manifest = new Manifest();
-        Attributes mainAttribs = manifest.getMainAttributes();
-        mainAttribs.put(Attributes.Name.MANIFEST_VERSION, "1.0");
-        mainAttribs.put(new Attributes.Name("Created-By"), progName);
-        mainAttribs.put(Attributes.Name.CONTENT_TYPE, "text/html");
+    public static Manifest getManifest(final MCPOMProperties pom, final IniFile conf) {
+        Manifest manifest = getManifest(pom.title + " (" + pom.version + ")");
+
+        if (conf != null)
+        {
+            System.out.println("adding [MANIFEST.mf] entries");
+            if (conf.iniDoc.containsSection("MANIFEST.mf"))
+            {
+                Attributes mainAttribs = manifest.getMainAttributes();
+
+                conf.iniDoc.getSection("MANIFEST.mf").forEach(prop
+                        -> mainAttribs.put(new Attributes.Name(prop.key()), prop.value()));
+            }
+        } else
+        {
+            System.out.println("=== No conf! ===");
+        }
 
         return manifest;
     }
 
     /**
-     * For testing purposes only.
+     * Create a new Manifest.
      *
-     * @param args if any.
+     * @param progname The program name - should include version data:
+     *                 {@code <program name> (<version>)}
      *
-     * @throws IOException if any.
+     * @return the new Manifest.
      */
-    public static void main(String[] args) throws IOException {
-        Manifest manifest = getManifest("MDj CLI Test");
-        File jarFile = new File("jartest.jar");
-        Path[] entries = new Path[2];
-        entries[0] = of("manual/index.html");
-        entries[1] = of("manual/css/style.css");
+    public static Manifest getManifest(final String progname) {
 
-        createJAR(jarFile, Arrays.asList(entries), of("manual"), manifest);
+        Manifest manifest = new Manifest();
+        Attributes mainAttribs = manifest.getMainAttributes();
+        mainAttribs.put(Attributes.Name.MANIFEST_VERSION, "1.0");
+        mainAttribs.put(new Attributes.Name("Created-By"), progname);
+        mainAttribs.put(Attributes.Name.CONTENT_TYPE, "text/html");
+        mainAttribs.put(new Attributes.Name("Build-Jdk-Spec"), "12");
+        mainAttribs.put(new Attributes.Name("HTTPServer-version"), "2.5.2");
+        mainAttribs.put(Attributes.Name.MAIN_CLASS, "com.bewsoftware.httpserver.HTTPServer");
+
+        return manifest;
     }
 
     /**
@@ -132,7 +185,7 @@ public class Jar {
      *
      * @throws IOException if any.
      */
-    private static void addEntryContent(JarOutputStream jos, Path entryFilePath)
+    private static void addEntryContent(final JarOutputStream jos, final Path entryFilePath)
             throws IOException {
 
         try ( BufferedInputStream bis = new BufferedInputStream(

@@ -14,11 +14,18 @@ on ${system.date}
     </head>
     <body>
         <article>
+            <header>
+                ${document.title}
+                <hr>
+            </header>
 ${page.content}
+
 <footer>
     <hr>
+    
 ${document.copyright}<br>
 Last updated: ${system.date}
+
 </footer>
         </article>
     </body>

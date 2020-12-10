@@ -1,10 +1,10 @@
 @@@
 use : articles
-title: ${program.title}
+title: ${document.name}
 @@@
 
 
-#[#top] ${program.title}
+#[#top] ${document.name}
 ---
 
 This is a command-line program that uses the MDj Core library.
@@ -19,14 +19,14 @@ The default extensions are:
 
 The program has a number of options. For details see the [Options][opt] page.
 
-##[#toc] Table of Contents [&uarr;](#top)
+##[#toc] Table of Contents ##[&uarr;](#top)
 
 - [ToDo List][todo]
 - [Configuration][conf]
 - [Command-Line Options][opt]
 - [Meta Blocks][mb]
 - [Named Meta Blocks][nmb]
-- [License][lic]
+- [Licence][lic]
 
 
 ## Under Construction

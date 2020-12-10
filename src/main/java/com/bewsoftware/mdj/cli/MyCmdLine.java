@@ -32,7 +32,7 @@ import static org.apache.commons.cli.Option.builder;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.0.7
- * @version 1.0.7
+ * @version 1.0.14
  */
 public final class MyCmdLine implements CmdLine {
 
@@ -44,11 +44,27 @@ public final class MyCmdLine implements CmdLine {
     private static Options initializeOptions() {
         Options options = new Options();
 
+        // Add destination directory: '-d'
+        options.addOption(builder("d")
+                .desc("The destination directory for HTML files. (default: \"\" - current directory)")
+                .hasArg()
+                .argName("directory")
+                .build());
+
         // Add input file: '-i'
         options.addOption(builder("i")
                 .desc("The markdown input file to parse. (*.md)")
                 .hasArg()
                 .argName("file name")
+                .build());
+
+        // Add jar file creation: '-j'
+        options.addOption(builder("j")
+                .desc("Copy HTML files from directory into a new 'jar' file.\n"
+                      + "NOTE: Can NOT be used with any other switches, except \"-v <level>\".")
+                .numberOfArgs(3)
+                .valueSeparator(';')
+                .argName("jarfile;jarSrcDir;docRootDir")
                 .build());
 
         // Add ouput file: '-o'
@@ -58,35 +74,16 @@ public final class MyCmdLine implements CmdLine {
                 .argName("file name")
                 .build());
 
+        // Add resursive directory processing: '-r'
+        options.addOption(builder("r")
+                .desc("Recursively process directories.")
+                .build());
+
         // Add source directory: '-s'
         options.addOption(builder("s")
                 .desc("The source directory for markdown files. (default: \"\" - current directory)")
                 .hasArg()
                 .argName("directory")
-                .build());
-
-        // Add destination directory: '-d'
-        options.addOption(builder("d")
-                .desc("The destination directory for HTML files. (default: \"\" - current directory)")
-                .hasArg()
-                .argName("directory")
-                .build());
-
-        // Add initialization of wrapper directories and files: '-W'
-        options.addOption(builder("W")
-                .desc("Initialise wrapper directories and files.\n"
-                      + "NOTE: Can NOT be used with any other switches, except \"-v <level>\".")
-                .optionalArg(true)
-                .argName("document root directory")
-                .build());
-
-        // Add jar file creation: '-j'
-        options.addOption(builder("j")
-                .desc("Copy HTML files from directory into a new 'jar' file.\n"
-                      + "NOTE: Can NOT be used with any other switches, except \"-v <level>\".")
-                .numberOfArgs(2)
-                .valueSeparator(';')
-                .argName("jarfile;srcDir")
                 .build());
 
         // Add verbosity: '-v'
@@ -97,20 +94,23 @@ public final class MyCmdLine implements CmdLine {
                 .argName("level")
                 .build());
 
+        // Add meta block processing: '-w'
+        options.addOption(builder("w")
+                .desc("Process meta block, wrapping your document with templates and stylesheets.")
+                .build());
+
+        // Add initialization of wrapper directories and files: '-W'
+        options.addOption(builder("W")
+                .desc("Initialise wrapper directories and files.\n"
+                      + "NOTE: Can NOT be used with any other switches, except \"-v <level>\".")
+                .optionalArg(true)
+                .argName("docRootDir")
+                .build());
+
         // Add help: '-h' or '--help'
         options.addOption(builder("h")
                 .desc("Display this help.")
                 .longOpt("help")
-                .build());
-
-        // Add resursive directory processing: '-r'
-        options.addOption(builder("r")
-                .desc("Recursively process directories.")
-                .build());
-
-        // Add meta block processing: '-w'
-        options.addOption(builder("w")
-                .desc("Process meta block, wrapping your document with templates and stylesheets.")
                 .build());
 
         return options;
@@ -217,15 +217,18 @@ public final class MyCmdLine implements CmdLine {
             destination = hasOption('d')
                           ? of(cmdLine.getOptionValue('d', "")).normalize().toAbsolutePath()
                           : of("").toAbsolutePath();
-            docRootPath = hasOption('W')
-                          ? of(cmdLine.getOptionValue('W', "")).normalize().toAbsolutePath()
-                          : of("").toAbsolutePath();
+            docRootPath = hasOption('j')
+                          ? of(cmdLine.getOptionValues('j')[2]).normalize().toAbsolutePath()
+                          : hasOption('W')
+                            ? of(cmdLine.getOptionValue('W', "")).normalize().toAbsolutePath()
+                            : null;
             help = hasOption('h');
             initialize = hasOption('W');
             inputFile = hasOption('i') ? new File(cmdLine.getOptionValue('i')) : null;
             jar = hasOption('j');
             jarFile = hasOption('j') ? new File(cmdLine.getOptionValues('j')[0]) : null;
-            jarSourcePath = hasOption('j') ? of(cmdLine.getOptionValues('j')[1]) : null;
+            jarSourcePath = hasOption('j')
+                            ? of(cmdLine.getOptionValues('j')[1]).normalize().toAbsolutePath() : null;
             outputFile = hasOption('o') ? new File(cmdLine.getOptionValue('o')) : null;
             recursive = hasOption('r');
             source = hasOption('s')
@@ -239,7 +242,8 @@ public final class MyCmdLine implements CmdLine {
             {
                 throw new InvalidParameterValueException("Verbosity setting out of range [1-3]: " + verbosity);
             }
-        } catch (Exception ex)
+        } catch (InvalidParameterValueException | NumberFormatException
+                 | ParseException | NullPointerException ex)
         {
             exceptions.add(ex);
         }

@@ -36,6 +36,7 @@ import java.util.regex.Pattern;
 import com.bewsoftware.mdj.core.MarkdownProcessor;
 import com.bewsoftware.mdj.core.POMProperties;
 import com.bewsoftware.mdj.core.TextEditor;
+import com.bewsoftware.property.IniProperty;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -59,7 +60,7 @@ import static com.bewsoftware.mdj.cli.MCPOMProperties.INSTANCE;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 0.1
- * @version 1.0.7
+ * @version 1.0.14
  */
 public class Cli {
 
@@ -228,7 +229,7 @@ public class Cli {
             }
         }
 
-        TextEditor textEd = new TextEditor(processSubstitutions(sbin.toString(), use));
+        TextEditor textEd = new TextEditor(processSubstitutions(sbin.toString(), use, new BooleanReturn()));
         textEd.replaceAllLiteral("\\\\\\$", "$");
         textEd.replaceAllLiteral("\\\\\\[", "[");
 
@@ -244,13 +245,29 @@ public class Cli {
      *
      * @return Always '0'.
      *
-     * @throws IOException If any.
+     * @throws IOException        if any.
+     * @throws URISyntaxException if any.
      */
-    static int createJarFile(final File jarFile, final Path jarSourcePath, final int vlevel) throws IOException {
-        SortedSet<Path> fileSet = getFileList(jarSourcePath, "*", true, vlevel);
-        Manifest manifest = getManifest(POM.title + " (" + POM.version + ")");
+    static int createJarFile(final File jarFile, final Path jarSourcePath, final int vlevel)
+            throws IOException, URISyntaxException {
 
-        Jar.createJAR(jarFile, new ArrayList<>(fileSet), jarSourcePath, manifest);
+        // Get source directory from jar file.
+        Path jarDirPath = getResource(Jar.class, "/docs/jar").toAbsolutePath();
+
+        if (vlevel >= 2)
+        {
+            System.err.println("srcDirPath: " + jarDirPath);
+            System.err.println("srcDirPath exists: " + Files.exists(jarDirPath));
+        }
+
+        SortedSet<Path> jarFileSet = getFileList(jarDirPath, "*", true, vlevel);
+
+        SortedSet<Path> fileSet = getFileList(jarSourcePath, "*", true, vlevel);
+
+        Manifest manifest = getManifest(POM, conf);
+
+        Jar.createJAR(jarFile, new ArrayList<>(jarFileSet), jarDirPath,
+                      new ArrayList<>(fileSet), jarSourcePath, manifest, vlevel);
         return 0;
     }
 
@@ -276,13 +293,14 @@ public class Cli {
             System.out.println("docRootPath:\n" + docRootPath);
         }
 
+        // Create directories.
         if (Files.notExists(docRootPath))
         {
             Files.createDirectories(docRootPath);
         }
 
         // Get source directory from jar file.
-        Path srcDirPath = getResource(Cli.class, "/docs").toAbsolutePath();
+        Path srcDirPath = getResource(Cli.class, "/docs/init").toAbsolutePath();
 
         if (vlevel >= 2)
         {
@@ -309,7 +327,7 @@ public class Cli {
         }
 
         copyDirTree(srcDirPath, docRootPath,
-                    "*.{html,css}", vlevel, COPY_ATTRIBUTES, REPLACE_EXISTING);
+                    "*", vlevel, COPY_ATTRIBUTES, REPLACE_EXISTING);
 
         // If there already exists an ini file, then...
         if (Files.exists(destIniPath))
@@ -375,6 +393,11 @@ public class Cli {
             {
                 while (Files.notExists(srcPath.resolve(CONF_FILENAME), NOFOLLOW_LINKS))
                 {
+                    if (Files.exists(srcPath.resolve("pom.xml"), NOFOLLOW_LINKS))
+                    {
+                        throw new FileNotFoundException(CONF_FILENAME);
+                    }
+
                     srcPath = srcPath.getParent();
 
                     if (vlevel >= 2)
@@ -396,7 +419,6 @@ public class Cli {
         }
 
         conf = new IniFile(iniPath).loadFile();
-        conf.iniDoc.setString("project", "root", iniPath.getParent().toString());
         conf.iniDoc.setString("program", "artifactId", POM.artifactId, "# The identifier for this artifact that is unique within the group given by the groupID");
         conf.iniDoc.setString("program", "description", POM.description, "# Project description");
         conf.iniDoc.setString("program", "filename", POM.filename, "# The filename of the binary output files");
@@ -404,6 +426,38 @@ public class Cli {
         conf.iniDoc.setString("program", "title", POM.title, "# Project Name");
         conf.iniDoc.setString("program", "version", POM.version, "# The version of the artifact");
         conf.iniDoc.setString("program", "details", POM.toString(), "# All of the above information laid out");
+
+        BooleanReturn brtn = new BooleanReturn();
+
+        do
+        {
+            brtn.value = false;
+
+            conf.iniDoc.getSections()
+                    .forEach(section ->
+                    {
+                        for (IniProperty<String> prop : conf.iniDoc.getSection(section))
+                        {
+                            BooleanReturn rtn = new BooleanReturn();
+
+                            if (prop.value() != null)
+                            {
+                                if (vlevel >= 3)
+                                {
+                                    System.out.println(prop);
+                                }
+
+                                String value = processSubstitutions(prop.value(), null, rtn);
+
+                                if (rtn.value)
+                                {
+                                    conf.iniDoc.setString(section, prop.key(), value, prop.comment());
+                                    brtn.value = true;
+                                }
+                            }
+                        }
+                    });
+        } while (brtn.value);
 
         if (vlevel >= 2)
         {
@@ -451,7 +505,9 @@ public class Cli {
 
             use = iniDoc.getString("page", "use", null);
             template = getString("page", "template", use);
-            iniDoc.setString("page", "content", MARKDOWN.markdown(processSubstitutions(iniDoc.getString("page", "text", ""), use)));
+            iniDoc.setString("page", "content",
+                             MARKDOWN.markdown(processSubstitutions(
+                                     iniDoc.getString("page", "text", ""), use, new BooleanReturn())));
 
             if (!template.isBlank())
             {
@@ -461,11 +517,13 @@ public class Cli {
 
         } else
         {
-            iniDoc.setString("page", "content", MARKDOWN.markdown(iniDoc.getString("page", "text", "")));
+            iniDoc.setString("page", "content",
+                             MARKDOWN.markdown(iniDoc.getString("page", "text", "")));
 
         }
 
-        try ( BufferedWriter outWriter = Files.newBufferedWriter(outPath, CREATE, TRUNCATE_EXISTING, WRITE))
+        try ( BufferedWriter outWriter
+                             = Files.newBufferedWriter(outPath, CREATE, TRUNCATE_EXISTING, WRITE))
         {
             if (vlevel >= 3)
             {
@@ -475,7 +533,8 @@ public class Cli {
                                    + "--------------------------------------------\n");
             }
 
-            outWriter.write(iniDoc.getString("page", "html", iniDoc.getString("page", "content", "Error during processing.")));
+            outWriter.write(iniDoc.getString("page", "html",
+                                             iniDoc.getString("page", "content", "Error during processing.")));
         }
     }
 
@@ -487,8 +546,9 @@ public class Cli {
      *
      * @return result.
      */
-    static String processSubstitutions(final String text, final String use) {
+    static String processSubstitutions(final String text, final String use, BooleanReturn found) {
         TextEditor textEd = new TextEditor(text);
+        found.value = false;
 
         do
         {
@@ -516,6 +576,11 @@ public class Cli {
 
                           return rtn;
                       });
+
+            if (textEd.wasFound())
+            {
+                found.value = true;
+            }
         } while (textEd.wasFound());
 
         return textEd.toString();
@@ -525,5 +590,16 @@ public class Cli {
      * Not meant to be instantiated.
      */
     private Cli() {
+    }
+
+    /**
+     * A simple struct to return a boolean value through a method parameter.
+     */
+    public static class BooleanReturn {
+
+        /**
+         * The return value.
+         */
+        public boolean value = false;
     }
 }

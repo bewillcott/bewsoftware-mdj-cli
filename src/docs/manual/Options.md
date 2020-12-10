@@ -4,7 +4,6 @@ title: ${program.title} | Command-Line Options
 @@@
 
 [Home]
-
 ---
 
 ## Command-Line Options
@@ -14,15 +13,15 @@ These are the available options:
 Command Line Options
 |Option|Description|
 |----|----|
-|`-i <filename>`|Input file|
-|`-o <filename>`|Output file|
-|`-s <Directory>`|Source directory (default: "")|
-|`-d <Directory>`|Destination directory (default: "")|
-|`-r`|Recursive processing of directory tree.|
-|`-w`|Process meta block, providing access to stylesheets and templates.|
-|`-v:n`|Verbose processing.  List files as they are processed.<br>Set verbose level with "`-v:1`" or "`-v:2`".  "`-v`" defaults to level '1' |
-|`-j[:]`|Copy html output target directory into a new 'jar' file.<br>**Note:** Can *not* be used with any other switches, except `-v:n`.|
-|`-W[:docRootDir]`|Create directories: `css` and `templates` in current directory.<br>**Note:** Can *not* be used with any other switches, except `-v:n`.|
-|`-h --help`|Online help|[total]
+|`-d <directory>`|The destination directory for HTML files. (default: "" - current directory)|
+|`-i <filename>`|The markdown input file to parse. (`*.md`)|
+|`-j <jarFilename>;<sourceDir>`|Copy HTML files from directory into a new `jar` file.<br>**Note:** Can *not* be used with any other switches,<br>except `-v [<level>]`.|
+|`-o <filename>`|The HTML output file. (`*.html`)|
+|`-r`|Recursively process directories.|
+|`-s <directory>`|The source directory for markdown files. (default: "" - current directory)|
+|`-v [<level>]`|Verbosity. (default: `<level>` = `0`, or `1` if set with no level [`1`-`3`])|
+|`-w`|Process meta block, wrapping your document with templates and stylesheets.|
+|`-W [<docRootDir>]`|Initialise wrapper directories and files.<br>**Note:** Can *not* be used with any other switches,<br>except `-v [<level>]`.|
+|`-h --help`|Display this help|[total]
 
 [Home]:index.html
