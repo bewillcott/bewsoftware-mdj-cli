@@ -24,6 +24,7 @@ import com.bewsoftware.common.InvalidProgramStateException;
 import com.bewsoftware.fileio.ini.IniFile;
 import com.bewsoftware.fileio.ini.IniFileFormatException;
 import com.bewsoftware.property.IniProperty;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -53,10 +54,33 @@ import static com.bewsoftware.mdj.cli.Find.getUpdateList;
  */
 public class Main {
 
-    private static final String SYNTAX = "mdj-cli [OPTION]...\n\noptions:";
+    private static final String SYNTAX = "java -jar /path/to/mdj-cli-<version>.jar [OPTION]...\n\noptions:";
     private static final String HELP_HEADER = "\n" + Cli.POM.description + "\n\n";
-    private static final String HELP_FOOTER = "\n" + Cli.POM.title + " " + Cli.POM.version
-                                              + "\nCopyright (c) 2020 Bradley Willcott\n\n";
+    private static final String HELP_FOOTER = "\nYou must use at least one of the following options:"
+                                              + "\n    '-c', -i', '-s', '-j', '-m', '-W', or '-h|--help'\n"
+                                              + "\n" + Cli.POM.title + " " + Cli.POM.version
+                                              + "\nCopyright (c) 2020 Bradley Willcott\n"
+                                              + "\nThis program comes with ABSOLUTELY NO WARRANTY; for details use option '-c'."
+                                              + "\nThis is free software, and you are welcome to redistribute it"
+                                              + "\nunder certain conditions; use option '-m', then goto the Lisense page for details.";
+
+    private static final String COPYRIGHT
+                                = " This is the MDj Command-line Interface program (aka: mdj-cli).\n"
+                                  + "\n"
+                                  + " Copyright (C) 2020 Bradley Willcott\n"
+                                  + "\n"
+                                  + " mdj-cli is free software: you can redistribute it and/or modify\n"
+                                  + " it under the terms of the GNU General Public License as published by\n"
+                                  + " the Free Software Foundation, either version 3 of the License, or\n"
+                                  + " (at your option) any later version.\n"
+                                  + "\n"
+                                  + " mdj-cli is distributed in the hope that it will be useful,\n"
+                                  + " but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+                                  + " MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+                                  + " GNU General Public License for more details.\n"
+                                  + "\n"
+                                  + " You should have received a copy of the GNU General Public License\n"
+                                  + " along with this program.  If not, see <http://www.gnu.org/licenses/>.\n";
 
     /**
      * Executed from command-line.
@@ -101,8 +125,9 @@ public class Main {
 
         // check whether the command line was valid, and if it wasn't,
         // display usage information and exit.
-        if (!cmd.success() || cmd.hasOption('h'))
+        if (!cmd.success())
         {
+
             StringBuilder sb = new StringBuilder();
 
             // print out specific error messages describing the problems
@@ -111,13 +136,75 @@ public class Main {
             cmd.exceptions().forEach(ex -> sb.append(ex).append('\n'));
 
             cmd.printHelp(sb.toString(), SYNTAX, HELP_HEADER, HELP_FOOTER, true);
+            return -1;
+        }
 
-            if (cmd.hasOption('h'))
+        //
+        // if '-h' or '--help' then, display help message.
+        //
+        if (cmd.hasOption('h'))
+        {
+            cmd.printHelp(SYNTAX, HELP_HEADER, HELP_FOOTER, true);
+            return 0;
+        }
+
+        //
+        // if '-c' then, display Copyright notice.
+        //
+        if (cmd.hasOption('c'))
+        {
+            System.out.println(COPYRIGHT);;
+            return 0;
+        }
+
+        //
+        // if '-m' then, display manual.
+        //
+        if (cmd.hasOption('m'))
+        {
+            System.out.println("Displaying manual...");;
+            return 0;
+        }
+
+        //
+        // if '-i' switch active, check and set others as necessary.
+        //
+        if (cmd.hasOption('i'))
+        {
+            String parent = cmd.inputFile().getParent();
+
+            if (parent != null)
             {
-                return 0;
-            } else
+                cmd.inputFile(new File(cmd.inputFile().getName()));
+            }
+
+            Path srcPath = of(parent != null ? parent : "");
+
+            if (!cmd.hasOption('s'))
             {
-                return -1;
+                cmd.source(srcPath);
+            }
+
+            if (!cmd.hasOption('d'))
+            {
+                cmd.destination(srcPath);
+            }
+
+            if (!cmd.hasOption('o'))
+            {
+                File outFile = new File(cmd.inputFile().getName().replace(".md", ".html"));
+                cmd.outputFile(outFile);
+            }
+        }
+
+        //
+        // if '-s' switch active, check and set others as necessary.
+        //
+        if (cmd.hasOption('s'))
+        {
+            if (!cmd.hasOption('d'))
+            {
+                cmd.destination(cmd.source());
             }
         }
 
@@ -131,16 +218,16 @@ public class Main {
                 System.err.println("output: |" + cmd.outputFile() + "|");
                 System.err.println("source: |" + cmd.source() + "|");
                 System.err.println("destination: |" + cmd.destination() + "|");
-                System.err.println("recursive: |" + cmd.isRecursive() + "|");
-                System.err.println("wrapper: |" + cmd.isWrapping() + "|");
-                System.err.println("initialise: |" + cmd.initialize() + "|");
+                System.err.println("recursive: |" + cmd.hasOption('r') + "|");
+                System.err.println("wrapper: |" + cmd.hasOption('w') + "|");
+                System.err.println("initialise: |" + cmd.hasOption('W') + "|");
                 System.err.println("docRootDir: |" + cmd.docRootPath() + "|");
-                System.err.println("jar: |" + cmd.jar() + "|");
+                System.err.println("jar: |" + cmd.hasOption('j') + "|");
                 System.err.println("jarFilename: |" + cmd.jarFile() + "|");
                 System.err.println("jarSrcDir: |" + cmd.jarSourcePath() + "|");
 
             case 1:
-                System.err.println("verbose: |" + cmd.isVerbose() + "|");
+                System.err.println("verbose: |" + cmd.hasOption('v') + "|");
                 System.err.println("verbose level: |" + vlevel + "|");
                 break;
 
@@ -150,7 +237,7 @@ public class Main {
         //
         // '-j' jar file creation
         //
-        if (cmd.jar())
+        if (cmd.hasOption('j'))
         {
             if (cmd.hasOption('i')
                 || cmd.hasOption('o')
@@ -184,7 +271,7 @@ public class Main {
         //
         // '-W' initialise wrapper functionality
         //
-        if (cmd.initialize())
+        if (cmd.hasOption('W'))
         {
             if (cmd.hasOption('i')
                 || cmd.hasOption('o')
@@ -206,7 +293,7 @@ public class Main {
         //
         // if '-w' switch active, copy 'css' files to destination directory
         //
-        if (cmd.isWrapping())
+        if (cmd.hasOption('w'))
         {
             // Load configuration file data
             Path srcDir = of("");
@@ -268,7 +355,7 @@ public class Main {
         //
         List<Path[]> fileList = getUpdateList(cmd.source(),
                                               cmd.destination(),
-                                              cmd.inputFile(), null, cmd.isRecursive(), vlevel);
+                                              cmd.inputFile(), null, cmd.hasOption('r'), vlevel);
 
         // Process files
         if (!fileList.isEmpty())
@@ -317,7 +404,7 @@ public class Main {
 
             for (Path[] filePairs : fileList)
             {
-                processFile(filePairs[0], filePairs[1], cmd.isWrapping());
+                processFile(filePairs[0], filePairs[1], cmd.hasOption('w'));
             }
         }
 

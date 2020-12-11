@@ -1,5 +1,5 @@
 @@@
-use:articles
+use:articles2
 title: ${program.title} | Meta Blocks
 @@@
 
@@ -23,7 +23,7 @@ title: ${program.title} | Meta Blocks
 
 ## Meta Blocks
 
-A meta block is a collection of key/value pairs located at the very top of a Markdown file.  
+A meta block is a collection of key/value pairs located at the very top of a markdown file.  
 It begins with a fence of 3 at signs: "@@@" alone at the beginning of the first line
 of the file.  This is followed by any number of key/value pairs.
 
@@ -36,20 +36,20 @@ substitution into the template and/or the document as it is processed.
 
 However, there are some keys that are used by the application:
 
-[Markdownj CLI Page Level Keys]
+[MDj CLI Page Level Keys]
 |Key|Description|[2]
 |-:-|:--|[3]
 |`use:`|Set this to the program configuration file [section] containing your desired settings for this page.|[]
 |`template:`|Name of the template file to wrap the page's markdown output into.|
 |`stylesheet:`|The stylesheet to use in the template for the page.|
 
-Markdownj CLI provides some preset keys:
+MDj CLI provides some preset keys:
 
-[Markdownj CLI Preset Keys]
+[MDj CLI Preset Keys]
 |Key|Description|[2]
 |-:-|:--|[3]
 |`system.date`|Current date/time (`Date.toString()`: dow mon dd hh:mm:ss zzz yyyy).|[]
-|`program.version`|Version of Markdownj-cli used to create html output file.|
+|`program.version`|Version of **mdj-cli** used to create html output file.|
 |`page.content`|Markdown processed page text (html).|
 
 The default template has a set of key substitutions:
@@ -58,7 +58,7 @@ The default template has a set of key substitutions:
 |Key|Description|[2]
 |-:-|:--|[3]
 |`\${program.title}`|The name of the program used to create html output file.|[]
-|`\${program.version}`|Version of Markdownj-cli used to create html output file.|[]
+|`\${program.version}`|Version of **mdj-cli** used to create html output file.|[]
 |`\${system.date}`|Current date/time (`Date.toString()`: dow mon dd hh:mm:ss zzz yyyy).|
 |`\${page.title}`|Header Title for web page.|
 |`\${page.stylesheet}`|Same as above, but used by template.|
@@ -71,7 +71,7 @@ Sections or groups are a collection of information with a common relationship.
 
 ####[#program] Program ####[&uarr;](#top)
 
-The `program` group contains information related to the Markdownj CLI application,  
+The `program` group contains information related to the MDj CLI application,  
 taken from its project pom.properties file. This information may or may not be of any interest to you.
 
 [`program` group]
@@ -92,7 +92,7 @@ The following is a copy of the top of the source file for this page:
 ~~~
 @@@
 use:articles
-title: Markdownj CLI | Meta Blocks
+title: MDj CLI | Meta Blocks
 @@@
 ~~~
 
@@ -100,7 +100,7 @@ title: Markdownj CLI | Meta Blocks
 `use` is a reserved key word in the context of `page`: `page.use`.
 
 As you can see, there is a `use` key with a value of `articles`.  If you were to check the configuration file:
-`markdownj-cli.ini` in the root directory of this project, you will find a section labeled as `[articles]`.
+`mdj-cli.ini` in the root directory of this project, you will find a section labeled as `[articles]`.
 The key/value pairs in this section are the ones being used for this page.  If needed, you could add any
 number of additional such pairs, and they would be available to any page set to `use : articles`.
 

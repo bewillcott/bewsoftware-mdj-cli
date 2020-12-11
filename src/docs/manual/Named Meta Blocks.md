@@ -1,5 +1,5 @@
 @@@
-use:articles
+use:articles2
 title: ${program.title} | Named Meta Blocks
 @@@
 

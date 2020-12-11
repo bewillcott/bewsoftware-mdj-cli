@@ -38,6 +38,13 @@ public interface CmdLine {
     public Path destination();
 
     /**
+     * Set the destination directory.
+     *
+     * @param path The new destination.
+     */
+    public void destination(Path path);
+
+    /**
      * Document root directory
      *
      * @return the directory.
@@ -75,13 +82,6 @@ public interface CmdLine {
     public boolean hasOption(String opt);
 
     /**
-     * Do we initialize the wrapper directories and files?
-     *
-     * @return result.
-     */
-    public boolean initialize();
-
-    /**
      * Get the input file.
      *
      * @return the file.
@@ -89,39 +89,11 @@ public interface CmdLine {
     public File inputFile();
 
     /**
-     * Is help requested?
+     * Set the input file.
      *
-     * @return result.
+     * @param file The new input file.
      */
-    public boolean isHelp();
-
-    /**
-     * Recursively process directories?
-     *
-     * @return result.
-     */
-    public boolean isRecursive();
-
-    /**
-     * Is verbosity turned on?
-     *
-     * @return result.
-     */
-    public boolean isVerbose();
-
-    /**
-     * Wrapping - process meta block.
-     *
-     * @return result.
-     */
-    public boolean isWrapping();
-
-    /**
-     * Do we create a jar file?
-     *
-     * @return result.
-     */
-    public boolean jar();
+    public void inputFile(File file);
 
     /**
      * Get Jar file.
@@ -143,6 +115,13 @@ public interface CmdLine {
      * @return the file.
      */
     public File outputFile();
+
+    /**
+     * Set the output file.
+     *
+     * @param file The new output file.
+     */
+    public void outputFile(File file);
 
     /**
      * Print default help message.
@@ -184,6 +163,13 @@ public interface CmdLine {
      * @return the directory.
      */
     public Path source();
+
+    /**
+     * Set the source directory.
+     *
+     * @param path The new source directory.
+     */
+    public void source(Path path);
 
     /**
      * Processed args successfully.

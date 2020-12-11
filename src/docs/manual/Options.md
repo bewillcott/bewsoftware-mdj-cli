@@ -1,10 +1,12 @@
 @@@
-use : articles
+use : articles3
 title: ${program.title} | Command-Line Options
+width: 61em;
 @@@
 
 [Home]
 ---
+
 
 ## Command-Line Options
 
@@ -13,15 +15,15 @@ These are the available options:
 Command Line Options
 |Option|Description|
 |----|----|
-|`-d <directory>`|The destination directory for HTML files. (default: "" - current directory)|
+|`-d <directory>`|The destination directory for HTML files.<br>(default: "" - current directory)|
 |`-i <filename>`|The markdown input file to parse. (`*.md`)|
-|`-j <jarFilename>;<sourceDir>`|Copy HTML files from directory into a new `jar` file.<br>**Note:** Can *not* be used with any other switches,<br>except `-v [<level>]`.|
+|`-j <jarfile>;<jarSrcDir>;<docRootDir>`|Copy HTML files from directory into a new `jar` file.<br>**Note:** Can *not* be used with any other switches, except `-v [<level>]`.|
 |`-o <filename>`|The HTML output file. (`*.html`)|
 |`-r`|Recursively process directories.|
-|`-s <directory>`|The source directory for markdown files. (default: "" - current directory)|
+|`-s <directory>`|The source directory for markdown files.<br>(default: "" - current directory)|
 |`-v [<level>]`|Verbosity. (default: `<level>` = `0`, or `1` if set with no level [`1`-`3`])|
 |`-w`|Process meta block, wrapping your document with templates and stylesheets.|
-|`-W [<docRootDir>]`|Initialise wrapper directories and files.<br>**Note:** Can *not* be used with any other switches,<br>except `-v [<level>]`.|
+|`-W [<docRootDir>]`|Initialise wrapper directories and files.<br>**Note:** Can *not* be used with any other switches, except `-v [<level>]`.|
 |`-h --help`|Display this help|[total]
 
 [Home]:index.html

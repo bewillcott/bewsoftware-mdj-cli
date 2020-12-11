@@ -44,9 +44,14 @@ public final class MyCmdLine implements CmdLine {
     private static Options initializeOptions() {
         Options options = new Options();
 
+        // Add resursive directory processing: '-c'
+        options.addOption(builder("c")
+                .desc("Display Copyright notice.")
+                .build());
+
         // Add destination directory: '-d'
         options.addOption(builder("d")
-                .desc("The destination directory for HTML files. (default: \"\" - current directory)")
+                .desc("The destination directory for HTML files.\n(default: \"\" - current directory)")
                 .hasArg()
                 .argName("directory")
                 .build());
@@ -61,10 +66,15 @@ public final class MyCmdLine implements CmdLine {
         // Add jar file creation: '-j'
         options.addOption(builder("j")
                 .desc("Copy HTML files from directory into a new 'jar' file.\n"
-                      + "NOTE: Can NOT be used with any other switches, except \"-v <level>\".")
+                      + "NOTE: Can NOT be used with any other switches,\nexcept \"-v <level>\".")
                 .numberOfArgs(3)
                 .valueSeparator(';')
                 .argName("jarfile;jarSrcDir;docRootDir")
+                .build());
+
+        // Add resursive directory processing: '-m'
+        options.addOption(builder("m")
+                .desc("Display web based manual in system default web browser.")
                 .build());
 
         // Add ouput file: '-o'
@@ -81,7 +91,7 @@ public final class MyCmdLine implements CmdLine {
 
         // Add source directory: '-s'
         options.addOption(builder("s")
-                .desc("The source directory for markdown files. (default: \"\" - current directory)")
+                .desc("The source directory for markdown files.\n(default: \"\" - current directory)")
                 .hasArg()
                 .argName("directory")
                 .build());
@@ -102,7 +112,8 @@ public final class MyCmdLine implements CmdLine {
         // Add initialization of wrapper directories and files: '-W'
         options.addOption(builder("W")
                 .desc("Initialise wrapper directories and files.\n"
-                      + "NOTE: Can NOT be used with any other switches, except \"-v <level>\".")
+                      + "NOTE: Can NOT be used with any other switches,\nexcept \"-v <level>\".")
+                .hasArg()
                 .optionalArg(true)
                 .argName("docRootDir")
                 .build());
@@ -137,24 +148,9 @@ public final class MyCmdLine implements CmdLine {
     private final List<Exception> exceptions = new ArrayList<>();
 
     /**
-     * Is help requested?
-     */
-    private boolean help;
-
-    /**
-     * Do we initialize the wrapper directories and files?
-     */
-    private boolean initialize;
-
-    /**
      * The input filename.
      */
     private File inputFile;
-
-    /**
-     * Do we create a jar file?
-     */
-    private boolean jar;
 
     /**
      * Jar file.
@@ -177,11 +173,6 @@ public final class MyCmdLine implements CmdLine {
     private File outputFile;
 
     /**
-     * Recursive directory processing.
-     */
-    private boolean recursive;
-
-    /**
      * The source directory name.
      */
     private Path source;
@@ -194,11 +185,6 @@ public final class MyCmdLine implements CmdLine {
      * The level of verbosity.
      */
     private int verbosity;
-
-    /**
-     * Wrapping - process meta block.
-     */
-    private boolean wrap;
 
     /**
      * Create an immutable instance of MyCmdLine.
@@ -216,32 +202,45 @@ public final class MyCmdLine implements CmdLine {
 
             destination = hasOption('d')
                           ? of(cmdLine.getOptionValue('d', "")).normalize().toAbsolutePath()
-                          : of("").toAbsolutePath();
+                          : null;
             docRootPath = hasOption('j')
                           ? of(cmdLine.getOptionValues('j')[2]).normalize().toAbsolutePath()
                           : hasOption('W')
                             ? of(cmdLine.getOptionValue('W', "")).normalize().toAbsolutePath()
                             : null;
-            help = hasOption('h');
-            initialize = hasOption('W');
             inputFile = hasOption('i') ? new File(cmdLine.getOptionValue('i')) : null;
-            jar = hasOption('j');
             jarFile = hasOption('j') ? new File(cmdLine.getOptionValues('j')[0]) : null;
             jarSourcePath = hasOption('j')
                             ? of(cmdLine.getOptionValues('j')[1]).normalize().toAbsolutePath() : null;
             outputFile = hasOption('o') ? new File(cmdLine.getOptionValue('o')) : null;
-            recursive = hasOption('r');
             source = hasOption('s')
                      ? of(cmdLine.getOptionValue('s')).normalize().toAbsolutePath()
-                     : of("").toAbsolutePath();
+                     : null;
             verbose = hasOption('v');
             verbosity = hasOption('v') ? Integer.parseInt(cmdLine.getOptionValue('v', "1")) : 0;
-            wrap = hasOption('w');
 
             if (verbose && (verbosity < 1 || verbosity > 3))
             {
                 throw new InvalidParameterValueException("Verbosity setting out of range [1-3]: " + verbosity);
             }
+
+            if (verbosity >= 2 && hasOption('W'))
+            {
+                System.out.println("docRootPath:\n" + docRootPath);
+                System.out.println("-W: " + of(cmdLine.getOptionValue('W')));
+            }
+
+            //
+            // Check for minimum switches: '-i', or '-s', or '-j', or '-W', -h, or --help.
+            //
+            if (!(hasOption('c') || hasOption('i') || hasOption('m') || hasOption('s')
+                  || hasOption('j') || hasOption('W') || hasOption('h')))
+            {
+                String msg = "\nYou must use at least one of the following options:"
+                             + "\n\t'-c', -i', '-s', '-j', '-m', '-W', or '-h|--help'\n";
+                throw new MissingOptionException(msg);
+            }
+
         } catch (InvalidParameterValueException | NumberFormatException
                  | ParseException | NullPointerException ex)
         {
@@ -252,6 +251,11 @@ public final class MyCmdLine implements CmdLine {
     @Override
     public Path destination() {
         return destination;
+    }
+
+    @Override
+    public void destination(Path path) {
+        destination = path;
     }
 
     @Override
@@ -275,38 +279,13 @@ public final class MyCmdLine implements CmdLine {
     }
 
     @Override
-    public boolean initialize() {
-        return initialize;
-    }
-
-    @Override
     public File inputFile() {
         return inputFile;
     }
 
     @Override
-    public boolean isHelp() {
-        return help;
-    }
-
-    @Override
-    public boolean isRecursive() {
-        return recursive;
-    }
-
-    @Override
-    public boolean isVerbose() {
-        return verbose;
-    }
-
-    @Override
-    public boolean isWrapping() {
-        return wrap;
-    }
-
-    @Override
-    public boolean jar() {
-        return jar;
+    public void inputFile(File file) {
+        inputFile = file;
     }
 
     @Override
@@ -325,14 +304,21 @@ public final class MyCmdLine implements CmdLine {
     }
 
     @Override
+    public void outputFile(File file) {
+        outputFile = file;
+    }
+
+    @Override
     public void printHelp(String cmdLineSyntax) {
         HelpFormatter formatter = new HelpFormatter();
+        formatter.setWidth(100);
         formatter.printHelp(cmdLineSyntax, options);
     }
 
     @Override
     public void printHelp(String cmdLineSyntax, String header, String footer, boolean autoUsage) {
         HelpFormatter formatter = new HelpFormatter();
+        formatter.setWidth(100);
         formatter.printHelp(cmdLineSyntax, header, options, footer, autoUsage);
     }
 
@@ -348,16 +334,20 @@ public final class MyCmdLine implements CmdLine {
     }
 
     @Override
+    public void source(Path path) {
+        source = path;
+    }
+
+    @Override
     public boolean success() {
         return exceptions.isEmpty();
     }
 
     @Override
     public String toString() {
-        return "MyCmdLine{\n" + "\tdestination = " + destination + ","
+        return "MyCmdLine{"
+               + "\n\tdestination = " + destination + ","
                + "\n\tinputFile = " + inputFile + ","
-               + "\n\tisHelp = " + help + ","
-               + "\n\tisVerbose = " + verbose + ","
                + "\n\toutputFile = " + outputFile + ","
                + "\n\tsource = " + source + ","
                + "\n\tverbosity = " + verbosity
