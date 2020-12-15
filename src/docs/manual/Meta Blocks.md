@@ -3,9 +3,6 @@ use:articles2
 title: ${program.title} | Meta Blocks
 @@@
 
-[Home]
-
----
 
 ####[#top]Table of Page Contents
 
@@ -13,11 +10,11 @@ title: ${program.title} | Meta Blocks
     - [Sections](#sections)
         - [Program](#program)
     - [More information about keys](#keys)
-        - [Use](#page.use)
-        - [Title](#page.title)
+        - [Use](#page_use)
+        - [Title](#page_title)
         - [Template](#template)
         - [Stylesheet](#stylesheet)
-        - [Text](#page.text)
+        - [Text](#page_text)
 
 ---
 
@@ -157,6 +154,29 @@ It contains the unprocessed markdown text of the body of the document.
 
 
 
-
-[Home]:index.html
 [w3s]:https://www.w3schools.com/tags/tag_title.asp
+
+@@@[navbar]
+- [Home]
+- [@dropdown] [Setup][@dropbtn]
+[@dropdown-content]
+    - [Configuration]
+    - [Command-line Options]
+- [@dropdown active] [Meta Blocks][@dropbtn](#)
+[@dropdown-content]
+    - [Named Meta Blocks]
+- [@right dropdown] [About][@dropbtn]
+[@dropdown-content]
+    - [ToDo List]
+    - [License]
+
+[About]:About.html
+[Configuration]:Configuration.html
+[Home]:index.html
+[License]:LICENSE.html
+[Meta Blocks]:Meta Blocks.html
+[Named Meta Blocks]:Named Meta Blocks.html
+[Command-line Options]:Options.html
+[Setup]:Setup.html
+[ToDo List]:ToDo.html
+@@@

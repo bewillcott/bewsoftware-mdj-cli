@@ -4,10 +4,7 @@ title: ${document.name}
 @@@
 
 
-#[#top] ${document.name}
-[About][a]
-
----
+#${document.name}
 
 This is a command-line program that uses the MDj Core library.  It processes
 markdown conformant files into static html files.
@@ -22,21 +19,7 @@ The default extensions are:
 
 The program has a number of options. For details see the [Options][opt] page.
 
-##[#toc] Table of Contents ##[&uarr;](#top)
 
-- [Setup][setup]
-- [Configuration][conf]
-- [Command-Line Options][opt]
-- [Meta Blocks][mb]
-- [Named Meta Blocks][nmb]
-- [ToDo List][todo]
-- [Licence][lic]
-
-
-## Under Construction
-
-
-[a]:About.html
 [conf]:Configuration.html
 [lic]:LICENSE.html
 [mb]:Meta Blocks.html
@@ -44,3 +27,28 @@ The program has a number of options. For details see the [Options][opt] page.
 [opt]:Options.html
 [setup]:Setup.html
 [todo]:ToDo.html
+
+@@@[navbar]
+- [@active] [Home](#)
+- [@dropdown] [Setup][@dropbtn]
+[@dropdown-content]
+    - [Configuration]
+    - [Command-line Options]
+- [@dropdown] [Meta Blocks][@dropbtn]
+[@dropdown-content]
+    - [Named Meta Blocks]
+- [@right dropdown] [About][@dropbtn]
+[@dropdown-content]
+    - [ToDo List]
+    - [License]
+
+[About]:About.html
+[Configuration]:Configuration.html
+[Home]:index.html
+[License]:LICENSE.html
+[Meta Blocks]:Meta Blocks.html
+[Named Meta Blocks]:Named Meta Blocks.html
+[Command-line Options]:Options.html
+[Setup]:Setup.html
+[ToDo List]:ToDo.html
+@@@

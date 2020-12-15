@@ -33,16 +33,12 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.Deflater;
-
-import static com.bewsoftware.fileio.BEWFiles.getResource;
-import static java.nio.file.Path.of;
 
 public class Jar {
 
@@ -68,6 +64,11 @@ public class Jar {
                                  final Manifest manifest, final int vlevel)
             throws IOException, URISyntaxException {
 
+        if (vlevel >= 3)
+        {
+            System.out.println("jarFile: |" + jarFile + "|");
+        }
+
         // Hold the exceptions.
         List<IOException> exceptions = new ArrayList<>();
 
@@ -80,9 +81,7 @@ public class Jar {
             //
             // Copy files from MDj-CLI jar file...
             //
-            jarFilePaths.stream().<File>map(Path::toFile)
-                    .filter(name -> name.exists() && !name.isDirectory())
-                    .map(File::toPath)
+            jarFilePaths.stream()
                     .forEachOrdered(jarFilePath ->
                     {
                         try
@@ -189,7 +188,7 @@ public class Jar {
             throws IOException {
 
         try ( BufferedInputStream bis = new BufferedInputStream(
-                new FileInputStream(entryFilePath.toFile())))
+                Files.newInputStream(entryFilePath)))
         {
 
             byte[] buffer = new byte[1024];

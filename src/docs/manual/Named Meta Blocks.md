@@ -3,9 +3,6 @@ use:articles2
 title: ${program.title} | Named Meta Blocks
 @@@
 
-[Home]
-
----
 
 ${page.myTOC}
 
@@ -67,4 +64,27 @@ Further, the substitution could just as easily have been made into the template 
 this page.
 
 
-[mb]:Meta Blocks.html
+@@@[navbar]
+- [Home]
+- [@dropdown] [Setup][@dropbtn]
+[@dropdown-content]
+    - [Configuration]
+    - [Command-line Options]
+- [@dropdown] [Meta Blocks][@dropbtn]
+[@dropdown-content]
+    - [@active] [Named Meta Blocks](#)
+- [@right dropdown] [About][@dropbtn]
+[@dropdown-content]
+    - [ToDo List]
+    - [License]
+
+[About]:About.html
+[Configuration]:Configuration.html
+[Home]:index.html
+[License]:LICENSE.html
+[Meta Blocks]:Meta Blocks.html
+[Named Meta Blocks]:Named Meta Blocks.html
+[Command-line Options]:Options.html
+[Setup]:Setup.html
+[ToDo List]:ToDo.html
+@@@

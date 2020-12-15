@@ -201,20 +201,20 @@ public final class MyCmdLine implements CmdLine {
             cmdLine = parser.parse(options, args);
 
             destination = hasOption('d')
-                          ? of(cmdLine.getOptionValue('d', "")).normalize().toAbsolutePath()
+                          ? of(cmdLine.getOptionValue('d', "").replace('\\', '/')).normalize().toAbsolutePath()
                           : null;
             docRootPath = hasOption('j')
-                          ? of(cmdLine.getOptionValues('j')[2]).normalize().toAbsolutePath()
+                          ? of(cmdLine.getOptionValues('j')[2].replace('\\', '/')).normalize().toAbsolutePath()
                           : hasOption('W')
-                            ? of(cmdLine.getOptionValue('W', "")).normalize().toAbsolutePath()
+                            ? of(cmdLine.getOptionValue('W', "").replace('\\', '/')).normalize().toAbsolutePath()
                             : null;
-            inputFile = hasOption('i') ? new File(cmdLine.getOptionValue('i')) : null;
-            jarFile = hasOption('j') ? new File(cmdLine.getOptionValues('j')[0]) : null;
+            inputFile = hasOption('i') ? new File(cmdLine.getOptionValue('i').replace('\\', '/')) : null;
+            jarFile = hasOption('j') ? new File(cmdLine.getOptionValues('j')[0].replace('\\', '/')) : null;
             jarSourcePath = hasOption('j')
-                            ? of(cmdLine.getOptionValues('j')[1]).normalize().toAbsolutePath() : null;
-            outputFile = hasOption('o') ? new File(cmdLine.getOptionValue('o')) : null;
+                            ? of(cmdLine.getOptionValues('j')[1].replace('\\', '/')).normalize().toAbsolutePath() : null;
+            outputFile = hasOption('o') ? new File(cmdLine.getOptionValue('o').replace('\\', '/')) : null;
             source = hasOption('s')
-                     ? of(cmdLine.getOptionValue('s')).normalize().toAbsolutePath()
+                     ? of(cmdLine.getOptionValue('s').replace('\\', '/')).normalize().toAbsolutePath()
                      : null;
             verbose = hasOption('v');
             verbosity = hasOption('v') ? Integer.parseInt(cmdLine.getOptionValue('v', "1")) : 0;

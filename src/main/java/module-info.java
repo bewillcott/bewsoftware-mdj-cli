@@ -33,4 +33,5 @@ module MdjCli {
     requires BEWCommon;
     requires org.apache.logging.log4j;
     requires MdjCore;
+    requires java.desktop;
 }

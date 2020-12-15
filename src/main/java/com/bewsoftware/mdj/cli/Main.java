@@ -23,6 +23,7 @@ import com.bewsoftware.common.InvalidParameterValueException;
 import com.bewsoftware.common.InvalidProgramStateException;
 import com.bewsoftware.fileio.ini.IniFile;
 import com.bewsoftware.fileio.ini.IniFileFormatException;
+import com.bewsoftware.httpserver.HTTPServer;
 import com.bewsoftware.property.IniProperty;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -62,7 +63,7 @@ public class Main {
                                               + "\nCopyright (c) 2020 Bradley Willcott\n"
                                               + "\nThis program comes with ABSOLUTELY NO WARRANTY; for details use option '-c'."
                                               + "\nThis is free software, and you are welcome to redistribute it"
-                                              + "\nunder certain conditions; use option '-m', then goto the Lisense page for details.";
+                                              + "\nunder certain conditions; use option '-m', then goto the License page for details.";
 
     private static final String COPYRIGHT
                                 = " This is the MDj Command-line Interface program (aka: mdj-cli).\n"
@@ -87,15 +88,16 @@ public class Main {
      *
      * @param args the command line arguments
      *
-     * @throws IOException
-     * @throws InvalidParameterValueException
-     * @throws IniFileFormatException
-     * @throws URISyntaxException
+     * @throws IOException                    if any.
+     * @throws InvalidParameterValueException if any.
+     * @throws IniFileFormatException         if any.
+     * @throws URISyntaxException             if any.
+     * @throws InterruptedException           if any.
      */
     public static void main(String[] args)
             throws IOException, InvalidParameterValueException,
                    IniFileFormatException, InvalidProgramStateException,
-                   URISyntaxException {
+                   URISyntaxException, InterruptedException {
 
         exit(execute(args));
     }
@@ -107,16 +109,17 @@ public class Main {
      *
      * @return The exit code.
      *
-     * @throws IOException            If any.
-     * @throws URISyntaxException     If any.
-     * @throws IniFileFormatException If any.
+     * @throws IOException            if any.
+     * @throws URISyntaxException     if any.
+     * @throws IniFileFormatException if any.
+     * @throws InterruptedException   if any.
      *
      * @since 1.0.4
      * @version 1.0.14
      */
     @SuppressWarnings("fallthrough")
     public static int execute(String[] args)
-            throws IOException, URISyntaxException, IniFileFormatException {
+            throws IOException, URISyntaxException, IniFileFormatException, InterruptedException {
 
         //
         // Process command-line
@@ -162,7 +165,8 @@ public class Main {
         //
         if (cmd.hasOption('m'))
         {
-            System.out.println("Displaying manual...");;
+            System.out.println("Displaying manual...");
+            HTTPServer.execute();
             return 0;
         }
 

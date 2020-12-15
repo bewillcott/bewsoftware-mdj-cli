@@ -54,6 +54,7 @@ import static java.util.regex.Pattern.MULTILINE;
 import static com.bewsoftware.mdj.cli.Find.getFileList;
 import static com.bewsoftware.mdj.cli.Jar.getManifest;
 import static com.bewsoftware.mdj.cli.MCPOMProperties.INSTANCE;
+import static org.apache.commons.cli.HelpFormatter.DEFAULT_DESC_PAD;
 
 /**
  *
@@ -159,7 +160,27 @@ public class Cli {
     }
 
     /**
-     * Process named meta blocks.
+     * Process Named Meta Blocks.
+     * <p>
+     * A named meta block looks like this:
+     * <hr>
+     * <pre><code>
+     *
+     * &#64;&#64;&#64;[name]
+     *
+     * Some text.
+     * Some more text.
+     *
+     * &#64;&#64;&#64;
+     * </code></pre>
+     * <hr>
+     * The line spacing is <b>required</b>.<br>
+     * '{@code name}' is used to refer to this block in the markup text for
+     * substitution: ${page.name}.
+     * <p>
+     * Bradley Willcott
+     *
+     * @since 14/12/2020
      */
     private static void processNamedMetaBlocks() {
         TextEditor text = new TextEditor(conf.iniDoc.getString("page", "text", ""));
@@ -169,6 +190,12 @@ public class Cli {
                 {
                     String name = m.group("name");
                     String metaBlock = m.group("metablock");
+
+                    //
+                    // Add <divX class="<name>"></div> wrapping.
+                    // This will allow css control of the formatting of the
+                    // contents.
+                    metaBlock = "\n<div class=\"" + name + "\">\n" + MARKDOWN.markdown(metaBlock) + "\n</div>\n";
 
                     if (vlevel >= 3)
                     {
@@ -244,9 +271,9 @@ public class Cli {
     /**
      * Create jar file.
      *
-     * @param jarFilename Output file name.
-     * @param jarSrcDir   Directory to process.
-     * @param vlevel      Verbosity level.
+     * @param jarFile   Output file name.
+     * @param jarSrcDir Directory to process.
+     * @param vlevel    Verbosity level.
      *
      * @return Always '0'.
      *
@@ -509,19 +536,20 @@ public class Cli {
 
             processMetaBlock();
             processNamedMetaBlocks();
+            String preprocessed = processSubstitutions(
+                    iniDoc.getString("page", "text", ""), use, new BooleanReturn());
 
             use = iniDoc.getString("page", "use", null);
             template = getString("page", "template", use);
             iniDoc.setString("page", "content",
                              MARKDOWN.markdown(processSubstitutions(
-                                     iniDoc.getString("page", "text", ""), use, new BooleanReturn())));
+                                     preprocessed, use, new BooleanReturn())));
 
             if (!template.isBlank())
             {
                 iniDoc.setString("page", "srcFile", inpPath.toAbsolutePath().toString());
                 processTemplate(use, template);
             }
-
         } else
         {
             iniDoc.setString("page", "content",
