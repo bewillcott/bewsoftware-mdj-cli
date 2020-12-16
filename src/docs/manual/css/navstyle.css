@@ -43,6 +43,14 @@ div.navbar li a {
     text-decoration: none;
 }
 
+div.navbar li a.icon, a.icon {
+    margin: 0;
+    padding-top: 2px;
+    padding-bottom: 0;
+    padding-left: 4px;
+    padding-right: 6px;
+}
+
 div.navbar * li:not(.active) a:hover {
     background-color: #555;
     color: white;
@@ -63,6 +71,10 @@ div.navbar li.dropdown:hover a.dropbtn {
 
 div.navbar li.dropdown {
     display: inline-block;
+}
+
+div.navbar li.dropdown li.active {
+    background-color: lightgreen;
 }
 
 div.navbar ul.dropdown-content {
@@ -102,12 +114,14 @@ div.navbar li.dropdown:hover ul.dropdown-content {
 header {
     background-color: #33b5e5;
     display: block;
+    margin: 0;
+    padding: 2px;
 }
 
 header p {
-    font-size:22px;
+    font-size:20px;
     text-align: center;
-    margin: 5;
-    padding: 10px;
+    margin: 0;
+    padding: 5px;
     font-weight: bold;
 }

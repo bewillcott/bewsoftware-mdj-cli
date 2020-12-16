@@ -5,7 +5,7 @@ width: 54em;
 @@@
 
 
-##[#top] Configuration
+## Configuration
 
 MDj CLI is configured via an _ini_ file: `mdj-cli.ini`.  If [setup] properly,
 this file should be either in your project directory, or in the root directory of the

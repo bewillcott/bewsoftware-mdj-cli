@@ -40,7 +40,7 @@ address:
 
 http://localhost:<port>
 
-The port number will be found in the dialog box, that will also
+The port number will be found in the dialog box that will also
 have a button to stop the server.  You can start and stop the
 server as many times as you want/need.  The only limit, is it
 has been set to use a port in the range: 9000 - 9010 (inclusive).

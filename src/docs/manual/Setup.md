@@ -5,7 +5,7 @@ width: 54em;
 @@@
 
 
-##[#top] Setup
+## Setup
 
 To setup everything, run the following from either your project or document root
 directory:

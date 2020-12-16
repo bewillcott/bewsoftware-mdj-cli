@@ -6,7 +6,7 @@
     
     <groupId>com.bewsoftware</groupId>
     <artifactId>mdj-cli</artifactId>
-    <version>1.0.22</version>
+    <version>1.0.24</version>
     <packaging>jar</packaging>
 
     <name>MDj CLI</name>
@@ -111,7 +111,7 @@
                                 </goals>
                                 <configuration>
                                     <executable>java</executable>
-                                    <commandlineArgs>-classpath %classpath com.bewsoftware.mdj.cli.Main -v -s src/docs/manual -d target/docs/manual -wr</commandlineArgs>
+                                    <commandlineArgs>-classpath %classpath com.bewsoftware.mdj.cli.Main -v3 -s src/docs/manual -d target/docs/manual -wr</commandlineArgs>
                                     <workingDirectory></workingDirectory>
                                     <includeProjectDependencies>false</includeProjectDependencies>
                                     <includePluginDependencies>true</includePluginDependencies>

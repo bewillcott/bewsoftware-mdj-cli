@@ -4,7 +4,7 @@ title: ${program.title} | Meta Blocks
 @@@
 
 
-####[#top]Table of Page Contents
+#### Table of Page Contents
 
 - [Meta Blocks](#top)
     - [Sections](#sections)

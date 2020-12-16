@@ -87,6 +87,7 @@ ul {
 table {
     border: 4px solid black;
     border-collapse: collapse;
+    font-size: 12px;
 }
 
 caption {

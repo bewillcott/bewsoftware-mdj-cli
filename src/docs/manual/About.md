@@ -4,7 +4,7 @@ title: ${program.title} | About
 @@@
 
 
-##[#top] About
+## About
 
     MDj CLI (mdj-cli) is a command-line utility for processing markdown 
     text files into static html files.

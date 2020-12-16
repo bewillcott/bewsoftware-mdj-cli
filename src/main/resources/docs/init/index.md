@@ -4,9 +4,9 @@ title: Your Manual
 @@@
 
 
-#[#top] Your Manual
+# Your Manual
 ---
-It is advisable the the first file you create be this file.  Since the final
+It is advisable that the first file you create be this file.  Since the final
 'jar' file will contain a stand-alone http server, it will be looking for
 the `index.html` file to serve up first.
 

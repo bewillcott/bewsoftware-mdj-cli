@@ -408,7 +408,7 @@ public class Main {
 
             for (Path[] filePairs : fileList)
             {
-                processFile(filePairs[0], filePairs[1], cmd.hasOption('w'));
+                processFile(filePairs[0], filePairs[1], cmd.destination(), cmd.hasOption('w'));
             }
         }
 

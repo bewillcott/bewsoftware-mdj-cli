@@ -896,17 +896,20 @@ public class HTTPServer {
      *
      * @param url Address to open.
      *
+     * @return process exit value: '0' is normal exit.
+     *
      * @throws IOException          if any.
      * @throws InterruptedException if any.
      */
-    public static void openURL(URL url) throws IOException, InterruptedException {
+    public static int openURL(URL url) throws IOException, InterruptedException {
         Runtime rt = Runtime.getRuntime();
+        int rtn = 0;
 
         try
         {
             if (isWindows())
             {
-                rt.exec("rundll32 url.dll,FileProtocolHandler " + url).waitFor();
+                rtn = rt.exec("rundll32 url.dll,FileProtocolHandler " + url).waitFor();
                 System.out.println("Browser: " + url);
             } else if (isMac())
             {
@@ -914,7 +917,7 @@ public class HTTPServer {
                 {
                     "open", url.toString()
                 };
-                rt.exec(cmd).waitFor();
+                rtn = rt.exec(cmd).waitFor();
                 System.out.println("Browser: " + url);
             } else if (isUnix())
             {
@@ -922,7 +925,7 @@ public class HTTPServer {
                 {
                     "xdg-open", url.toString()
                 };
-                rt.exec(cmd).waitFor();
+                rtn = rt.exec(cmd).waitFor();
                 System.out.println("Browser: " + url);
             } else
             {
@@ -939,6 +942,8 @@ public class HTTPServer {
         {
             throw ex;
         }
+
+        return rtn;
     }
 
     /**

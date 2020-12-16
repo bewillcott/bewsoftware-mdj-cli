@@ -39,6 +39,8 @@ import com.bewsoftware.mdj.core.TextEditor;
 import com.bewsoftware.property.IniProperty;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import static com.bewsoftware.fileio.BEWFiles.copyDirTree;
 import static com.bewsoftware.fileio.BEWFiles.getResource;
@@ -54,7 +56,7 @@ import static java.util.regex.Pattern.MULTILINE;
 import static com.bewsoftware.mdj.cli.Find.getFileList;
 import static com.bewsoftware.mdj.cli.Jar.getManifest;
 import static com.bewsoftware.mdj.cli.MCPOMProperties.INSTANCE;
-import static org.apache.commons.cli.HelpFormatter.DEFAULT_DESC_PAD;
+import static java.util.regex.Pattern.compile;
 
 /**
  *
@@ -97,6 +99,66 @@ public class Cli {
     static int vlevel;
 
     /**
+     * Process the <i>use</i> section looking for filenames with a {@code .css} extension.
+     * <p>
+     * Prepend the <i>document.cssDir</i> directory to each one.
+     */
+    private static void configureStylesheetPaths() {
+        final String extn = ".css";
+
+        String use = conf.iniDoc.getString("page", "use", null);
+        String cssDir = conf.iniDoc.getString("document", "cssDir", "");
+        String systemDate = conf.iniDoc.getString("system", "date", null);
+
+        if (systemDate == null)
+        {
+            systemDate = new Date().toString();
+            conf.iniDoc.setString("system", "date", systemDate);
+        }
+
+        // Process stylesheet names from the inifile section.
+        if (use != null && !use.isBlank())
+        {
+            String done = conf.iniDoc.getString(use, systemDate, null);
+
+            if (done == null)
+            {
+                // Process the '.css' filenames...
+                List<IniProperty<String>> keys = conf.iniDoc.getSection(use);
+
+                keys.stream()
+                        .filter(key -> key.value().endsWith(extn))
+                        .forEachOrdered(key
+                                -> conf.iniDoc.setString(use, key.key(),
+                                                         of(cssDir, key.value()).toString(),
+                                                         key.comment()));
+
+                // Record that we have already processed the '.css' filenames.
+                conf.iniDoc.setString(use, systemDate, "done");
+            }
+        }
+
+        // Process stylesheet names from the metablock, stoed under section: "page".
+        String done = conf.iniDoc.getString("page", systemDate, null);
+
+        if (done == null)
+        {
+            // Process the '.css' filenames...
+            List<IniProperty<String>> keys = conf.iniDoc.getSection("page");
+
+            keys.stream()
+                    .filter(key -> key.value().endsWith(extn))
+                    .forEachOrdered(key
+                            -> conf.iniDoc.setString("page", key.key(),
+                                                     of(cssDir, key.value()).toString()));
+
+            // Record that we have already processed the '.css' filenames.
+            conf.iniDoc.setString("page", systemDate, "done");
+        }
+
+    }
+
+    /**
      * Convenience method to access the iniDoc
      * {@link IniDocument#getString(java.lang.String, java.lang.String, java.lang.String) getString()}.
      *
@@ -115,7 +177,7 @@ public class Cli {
      */
     private static void processMetaBlock() {
         String text = conf.iniDoc.getString("page", "text", "");
-        Matcher m = Pattern.compile("\\A(?:@@@\\n(?<metablock>.*?)\\n@@@\\n)(?<body>.*)\\z", DOTALL)
+        Matcher m = compile("\\A(?:@@@\\n(?<metablock>.*?)\\n@@@\\n)(?<body>.*)\\z", DOTALL)
                 .matcher(text);
         conf.iniDoc.removeSection("page");
 
@@ -133,7 +195,7 @@ public class Cli {
                                    + "\n--------------------------------------------");
             }
 
-            Matcher m2 = Pattern.compile("^\\s*(?<key>\\w+)\\s*:\\s*(?<value>.*?)?\\s*?$", MULTILINE).matcher(metaBlock);
+            Matcher m2 = compile("^\\s*(?<key>\\w+)\\s*:\\s*(?<value>.*?)?\\s*?$", MULTILINE).matcher(metaBlock);
 
             while (m2.find())
             {
@@ -184,7 +246,7 @@ public class Cli {
      */
     private static void processNamedMetaBlocks() {
         TextEditor text = new TextEditor(conf.iniDoc.getString("page", "text", ""));
-        Pattern p = Pattern.compile("(?<=\\n)(?:@@@\\[(?<name>\\w+)\\]\\n(?<metablock>.*?)\\n@@@\\n)", DOTALL);
+        Pattern p = compile("(?<=\\n)(?:@@@\\[(?<name>\\w+)\\]\\n(?<metablock>.*?)\\n@@@\\n)", DOTALL);
 
         text.replaceAll(p, m ->
                 {
@@ -230,25 +292,26 @@ public class Cli {
                                                + "on ${system.date}\n"
                                                + "-->\n");
 
-        Path docRootPath = of(conf.iniDoc.getString("project", "root", ""))
-                .resolve(conf.iniDoc.getString("document", "docRootDir", "")).toAbsolutePath();
+        IniDocument iniDoc = conf.iniDoc;
 
-        Path templatesPath = docRootPath.resolve(conf.iniDoc.getString("document", "templatesDir", ""))
+        Path docRootPath = of(iniDoc.getString("project", "root", ""))
+                .resolve(iniDoc.getString("document", "docRootDir", "")).toAbsolutePath();
+
+        Path templatesPath = docRootPath.resolve(iniDoc.getString("document", "templatesDir", ""))
                 .resolve(template).toAbsolutePath();
 
-        // Relativize path to stylesheet
-        Path stylesheetPath = docRootPath.resolve(conf.iniDoc.getString("document", "cssDir", ""))
-                .resolve(getString("page", "stylesheet", use)).toAbsolutePath();
-
-        Path srcPath = of(conf.iniDoc.getString("page", "srcFile", ""));
-        Path cssPath = srcPath.getParent().relativize(stylesheetPath);
-
-        conf.iniDoc.setString("page", "stylesheet", cssPath.toString());
+        //
+        // Set the 'base' path.  <base href="<base>">
+        //
+        Path srcPath = of(iniDoc.getString("page", "srcFile", ""));
+        Path basePath = srcPath.getParent().relativize(docRootPath);
+        iniDoc.setString("page", "base", basePath.toString());
 
         if (vlevel >= 2)
         {
-            System.err.println("srcFile:\n" + srcPath.toString());
-            System.err.println("template:\n" + templatesPath.toString());
+            System.err.println("base:\n" + basePath);
+            System.err.println("srcFile:\n" + srcPath);
+            System.err.println("template:\n" + templatesPath);
         }
 
         try ( BufferedReader inReader = Files.newBufferedReader(templatesPath))
@@ -265,7 +328,41 @@ public class Cli {
         textEd.replaceAllLiteral("\\\\\\$", "$");
         textEd.replaceAllLiteral("\\\\\\[", "[");
 
-        conf.iniDoc.setString("page", "html", textEd.toString());
+        if (!basePath.toString().isBlank())
+        {
+            //
+            // Set the detination file path.
+            //
+            Path destPath = of(iniDoc.getString("page", "destFile", null));
+            Path destDirPath = of(iniDoc.getString("page", "destDir", null));
+            String destHTML = destDirPath.relativize(destPath).toString();
+
+            if (vlevel >= 3)
+            {
+                System.err.println("destPath:\n" + destPath);
+                System.err.println("destDirPath:\n" + destDirPath);
+                System.err.println("destHTML:\n" + destHTML);
+            }
+
+            Pattern p = compile("href\\=\"(?<ref>#[^\"]*)?\"");
+
+            textEd.replaceAll(p, (Matcher m) ->
+                      {
+                          String text = m.group();
+                          String ref = m.group("ref");
+
+                          if (vlevel >= 3)
+                          {
+                              System.err.println("text: " + text);
+                              System.err.println("ref: " + ref);
+                          }
+
+                          return text.replace(ref, destHTML + ref);
+                      });
+
+        }
+
+        iniDoc.setString("page", "html", textEd.toString());
     }
 
     /**
@@ -502,13 +599,14 @@ public class Cli {
     /**
      * Process a markdown text file.
      *
-     * @param inpPath Path of source file (.md).
-     * @param outPath Path of destination files (.html).
-     * @param wrapper Process wrapper files?
+     * @param inpPath     Path of source file (.md).
+     * @param outPath     Path of destination files (.html).
+     * @param destDirPath Path of the destination directory.
+     * @param wrapper     Process wrapper files?
      *
      * @throws IOException If any.
      */
-    static void processFile(final Path inpPath, final Path outPath, final boolean wrapper) throws IOException {
+    static void processFile(final Path inpPath, final Path outPath, final Path destDirPath, final boolean wrapper) throws IOException {
         StringBuilder sb = new StringBuilder();
         IniDocument iniDoc = conf.iniDoc;
         String template = "";
@@ -535,6 +633,7 @@ public class Cli {
             }
 
             processMetaBlock();
+            configureStylesheetPaths();
             processNamedMetaBlocks();
             String preprocessed = processSubstitutions(
                     iniDoc.getString("page", "text", ""), use, new BooleanReturn());
@@ -547,7 +646,9 @@ public class Cli {
 
             if (!template.isBlank())
             {
-                iniDoc.setString("page", "srcFile", inpPath.toAbsolutePath().toString());
+                iniDoc.setString("page", "srcFile", inpPath.toString());
+                iniDoc.setString("page", "destFile", outPath.toString());
+                iniDoc.setString("page", "destDir", destDirPath.toString());
                 processTemplate(use, template);
             }
         } else
