@@ -553,11 +553,8 @@ public class HTTPServer {
     //=====================================================================================
     /**
      * Starts a stand-alone HTTP server, serving files from disk.
-     *
-     * @throws URISyntaxException   if any.
-     * @throws InterruptedException if any.
      */
-    public static void execute() throws URISyntaxException, InterruptedException {
+    public static void execute() {
         HTTPServer server = null;
 
         try
@@ -606,8 +603,10 @@ public class HTTPServer {
                                          null, options, null);
 
             server.stop();
+            msg = TITLE + " (" + VERSION + ") on port " + server.port + " has terminated.";
+            System.out.println(msg);
             exit(0);
-        } catch (IOException | NumberFormatException e)
+        } catch (IOException | NumberFormatException | URISyntaxException | InterruptedException e)
         {
             System.err.println("error: " + e);
         }

@@ -1,7 +1,6 @@
 @@@
-use : articles3
+use : articles2
 title: ${program.title} | ToDo List
-width: 55em;
 @@@
 
 
@@ -52,7 +51,7 @@ Add default versions of: `style.css` and `default.html`.
 - [@dropdown] [Meta Blocks][@dropbtn]
 [@dropdown-content]
     - [Named Meta Blocks]
-- [@right dropdown] [About][@dropbtn]
+- [@right dropdown subactive] [About][@dropbtn]
 [@dropdown-content]
     - [@active] [ToDo List](#)
     - [License]

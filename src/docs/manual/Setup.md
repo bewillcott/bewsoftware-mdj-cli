@@ -1,7 +1,6 @@
 @@@
-use : articles3
+use : articles2
 title: ${program.title} | Setup
-width: 54em;
 @@@
 
 

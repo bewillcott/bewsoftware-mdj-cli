@@ -138,7 +138,6 @@ public class Jar {
 
         if (conf != null)
         {
-            System.out.println("adding [MANIFEST.mf] entries");
             if (conf.iniDoc.containsSection("MANIFEST.mf"))
             {
                 Attributes mainAttribs = manifest.getMainAttributes();
@@ -146,9 +145,6 @@ public class Jar {
                 conf.iniDoc.getSection("MANIFEST.mf").forEach(prop
                         -> mainAttribs.put(new Attributes.Name(prop.key()), prop.value()));
             }
-        } else
-        {
-            System.out.println("=== No conf! ===");
         }
 
         return manifest;

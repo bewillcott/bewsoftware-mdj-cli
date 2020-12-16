@@ -55,16 +55,6 @@ import static com.bewsoftware.mdj.cli.Find.getUpdateList;
  */
 public class Main {
 
-    private static final String SYNTAX = "java -jar /path/to/mdj-cli-<version>.jar [OPTION]...\n\noptions:";
-    private static final String HELP_HEADER = "\n" + Cli.POM.description + "\n\n";
-    private static final String HELP_FOOTER = "\nYou must use at least one of the following options:"
-                                              + "\n    '-c', -i', '-s', '-j', '-m', '-W', or '-h|--help'\n"
-                                              + "\n" + Cli.POM.title + " " + Cli.POM.version
-                                              + "\nCopyright (c) 2020 Bradley Willcott\n"
-                                              + "\nThis program comes with ABSOLUTELY NO WARRANTY; for details use option '-c'."
-                                              + "\nThis is free software, and you are welcome to redistribute it"
-                                              + "\nunder certain conditions; use option '-m', then goto the License page for details.";
-
     private static final String COPYRIGHT
                                 = " This is the MDj Command-line Interface program (aka: mdj-cli).\n"
                                   + "\n"
@@ -82,25 +72,16 @@ public class Main {
                                   + "\n"
                                   + " You should have received a copy of the GNU General Public License\n"
                                   + " along with this program.  If not, see <http://www.gnu.org/licenses/>.\n";
+    private static final String HELP_FOOTER = "\nYou must use at least one of the following options:"
+                                              + "\n    '-c', -i', '-s', '-j', '-m', '-W', or '-h|--help'\n"
+                                              + "\n" + Cli.POM.title + " " + Cli.POM.version
+                                              + "\nCopyright (c) 2020 Bradley Willcott\n"
+                                              + "\nThis program comes with ABSOLUTELY NO WARRANTY; for details use option '-c'."
+                                              + "\nThis is free software, and you are welcome to redistribute it"
+                                              + "\nunder certain conditions; use option '-m', then goto the License page for details.";
+    private static final String HELP_HEADER = "\n" + Cli.POM.description + "\n\n";
 
-    /**
-     * Executed from command-line.
-     *
-     * @param args the command line arguments
-     *
-     * @throws IOException                    if any.
-     * @throws InvalidParameterValueException if any.
-     * @throws IniFileFormatException         if any.
-     * @throws URISyntaxException             if any.
-     * @throws InterruptedException           if any.
-     */
-    public static void main(String[] args)
-            throws IOException, InvalidParameterValueException,
-                   IniFileFormatException, InvalidProgramStateException,
-                   URISyntaxException, InterruptedException {
-
-        exit(execute(args));
-    }
+    private static final String SYNTAX = "java -jar /path/to/mdj-cli-<version>.jar [OPTION]...\n\noptions:";
 
     /**
      * Called from either {@link #main(java.lang.String[]) main()} or another process.
@@ -112,14 +93,13 @@ public class Main {
      * @throws IOException            if any.
      * @throws URISyntaxException     if any.
      * @throws IniFileFormatException if any.
-     * @throws InterruptedException   if any.
      *
      * @since 1.0.4
-     * @version 1.0.14
+     * @version 1.0.26
      */
     @SuppressWarnings("fallthrough")
     public static int execute(String[] args)
-            throws IOException, URISyntaxException, IniFileFormatException, InterruptedException {
+            throws IOException, URISyntaxException, IniFileFormatException {
 
         //
         // Process command-line
@@ -156,7 +136,7 @@ public class Main {
         //
         if (cmd.hasOption('c'))
         {
-            System.out.println(COPYRIGHT);;
+            System.out.println(COPYRIGHT);
             return 0;
         }
 
@@ -413,5 +393,24 @@ public class Main {
         }
 
         return 0;
+    }
+
+    /**
+     * Executed from command-line.
+     *
+     * @param args the command line arguments
+     *
+     * @throws IOException                    if any.
+     * @throws InvalidParameterValueException if any.
+     * @throws IniFileFormatException         if any.
+     * @throws URISyntaxException             if any.
+     * @throws InterruptedException           if any.
+     */
+    public static void main(String[] args)
+            throws IOException, InvalidParameterValueException,
+                   IniFileFormatException, InvalidProgramStateException,
+                   URISyntaxException, InterruptedException {
+
+        exit(execute(args));
     }
 }

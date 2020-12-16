@@ -718,7 +718,7 @@ Public License instead of this License.  But first, please read
 - [@dropdown] [Meta Blocks][@dropbtn]
 [@dropdown-content]
     - [Named Meta Blocks]
-- [@right dropdown] [About][@dropbtn]
+- [@right dropdown subactive] [About][@dropbtn]
 [@dropdown-content]
     - [ToDo List]
     - [@active] [License](#)

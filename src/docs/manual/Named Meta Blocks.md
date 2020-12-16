@@ -70,7 +70,7 @@ this page.
 [@dropdown-content]
     - [Configuration]
     - [Command-line Options]
-- [@dropdown] [Meta Blocks][@dropbtn]
+- [@dropdown subactive] [Meta Blocks][@dropbtn]
 [@dropdown-content]
     - [@active] [Named Meta Blocks](#)
 - [@right dropdown] [About][@dropbtn]

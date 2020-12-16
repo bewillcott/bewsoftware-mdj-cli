@@ -1,7 +1,6 @@
 @@@
-use : articles3
+use : articles2
 title: ${program.title} | Command-Line Options
-width: 61em;
 @@@
 
 
@@ -27,7 +26,7 @@ Command Line Options
 
 @@@[navbar]
 - [Home]
-- [@dropdown] [Setup][@dropbtn]
+- [@dropdown subactive] [Setup][@dropbtn]
 [@dropdown-content]
     - [Configuration]
     - [@active] [Command-line Options](#)

@@ -1,7 +1,6 @@
 @@@
-use : articles3
+use : articles2
 title: ${program.title} | Configuration
-width: 54em;
 @@@
 
 
@@ -17,7 +16,7 @@ Let us look at the default `mdj-cli.ini` file:
 
 @@@[navbar]
 - [Home]
-- [@dropdown] [Setup][@dropbtn]
+- [@dropdown subactive] [Setup][@dropbtn]
 [@dropdown-content]
     - [@active] [Configuration](#)
     - [Command-line Options]

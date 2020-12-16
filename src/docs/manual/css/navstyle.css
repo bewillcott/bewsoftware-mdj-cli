@@ -64,17 +64,12 @@ div.navbar li.right {
     float: right;
 }
 
-/*div.navbar li a:hover, 
-div.navbar li.dropdown:hover a.dropbtn {
-    background-color: red;
-}*/
+div.navbar li.dropdown.subactive {
+    background-color: lightgreen;
+}
 
 div.navbar li.dropdown {
     display: inline-block;
-}
-
-div.navbar li.dropdown li.active {
-    background-color: lightgreen;
 }
 
 div.navbar ul.dropdown-content {
@@ -91,16 +86,11 @@ div.navbar ul.dropdown-content li {
 
 div.navbar ul.dropdown-content a {
     color: black;
-    padding: 8px 10px;
+    padding: 10px 10px;
     text-decoration: none;
     display: block;
     text-align: left;
 }
-
-/*div.navbar ul.dropdown-content li:not(.active) a:hover {
-    color: black;
-    background-color: darkseagreen;
-}*/
 
 div.navbar li.dropdown:hover ul.dropdown-content {
     display: block;
