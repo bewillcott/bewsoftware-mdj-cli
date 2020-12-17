@@ -28,19 +28,79 @@ package com.bewsoftware.mdj.cli;
  * @version 1.0.14
  */
 import com.bewsoftware.fileio.ini.IniFile;
+import com.bewsoftware.httpserver.HTTPServer;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.Deflater;
 
+import static com.bewsoftware.fileio.BEWFiles.getResource;
+import static com.bewsoftware.mdj.cli.Cli.POM;
+import static com.bewsoftware.mdj.cli.Cli.conf;
+import static com.bewsoftware.mdj.cli.Find.getFileList;
+
 public class Jar {
+
+    /**
+     * Create jar file.
+     *
+     * @param jarFile   Output file name.
+     * @param jarSrcDir Directory to process.
+     * @param vlevel    Verbosity level.
+     *
+     * @return Always '0'.
+     *
+     * @throws IOException        if any.
+     * @throws URISyntaxException if any.
+     */
+    static int createJarFile(final File jarFile, final Path jarSourcePath, final int vlevel)
+            throws IOException, URISyntaxException {
+
+        // Get source directory from jar file.
+        Path jarDirPath = getResource(Jar.class, "/docs/jar").toAbsolutePath();
+
+        if (vlevel >= 2)
+        {
+            System.err.println("srcDirPath: " + jarDirPath);
+            System.err.println("srcDirPath exists: " + Files.exists(jarDirPath));
+        }
+
+        SortedSet<Path> jarFileSet = getFileList(jarDirPath, "*", true, vlevel);
+
+        SortedSet<Path> fileSet = getFileList(jarSourcePath, "*", true, vlevel);
+
+        Manifest manifest = getManifest(POM, conf);
+
+        Jar.createJAR(jarFile, new ArrayList<>(jarFileSet), jarDirPath,
+                      new ArrayList<>(fileSet), jarSourcePath, manifest, vlevel);
+        return 0;
+    }
+
+    /**
+     * Add the HTTP Server to an existing 'jar' file.
+     *
+     * @param jarFile      The existing jar file.
+     * @param jarFilePaths Jar file paths to include.
+     * @param manifest     The manifest to include.
+     * @param vlevel       Reporting verbosity level.
+     *
+     * @throws IOException if any.
+     */
+    public static void addHttpServer(final File jarFile,
+                                     final List<Path> jarFilePaths,
+                                     final Manifest manifest, final int vlevel)
+            throws IOException {
+
+        createJAR(jarFile, jarFilePaths, null, null, null, manifest, vlevel);
+    }
 
     /**
      * Create a 'jar' file containing the files whose paths are supplied.
@@ -53,8 +113,7 @@ public class Jar {
      * @param manifest       The manifest to include.
      * @param vlevel         Reporting verbosity level.
      *
-     * @throws IOException        if any.
-     * @throws URISyntaxException if any.
+     * @throws IOException if any.
      */
     public static void createJAR(final File jarFile,
                                  final List<Path> jarFilePaths,
@@ -62,7 +121,7 @@ public class Jar {
                                  final List<Path> filePaths,
                                  final Path fileDirPath,
                                  final Manifest manifest, final int vlevel)
-            throws IOException, URISyntaxException {
+            throws IOException {
 
         if (vlevel >= 3)
         {
@@ -100,9 +159,8 @@ public class Jar {
             //
             // Copy files from the user's docs directory...
             //
-            filePaths.stream().<File>map(Path::toFile)
-                    .filter(name -> name.exists() && !name.isDirectory())
-                    .map(File::toPath)
+            filePaths.stream()
+                    .filter(name -> Files.exists(name) && !Files.isDirectory(name))
                     .forEachOrdered(filePath ->
                     {
                         try
@@ -152,6 +210,9 @@ public class Jar {
 
     /**
      * Create a new Manifest.
+     * <p>
+     * Helper method that calls the following:
+     * {@link #getManifest(java.lang.String, java.util.jar.Manifest) getManifest(progname, null)}.
      *
      * @param progname The program name - should include version data:
      *                 {@code <program name> (<version>)}
@@ -159,14 +220,31 @@ public class Jar {
      * @return the new Manifest.
      */
     public static Manifest getManifest(final String progname) {
+        return getManifest(progname, null);
+    }
 
-        Manifest manifest = new Manifest();
+    /**
+     * Modify an existing manifest, or create a new one.
+     *
+     * @param progname The program name - should include version data:
+     *                 {@code <program name> (<version>)}
+     * @param manifest An existing manifest, or {@code null}.
+     *
+     * @return the new Manifest.
+     */
+    public static Manifest getManifest(final String progname, Manifest manifest) {
+
+        if (manifest == null)
+        {
+            manifest = new Manifest();
+        }
+
         Attributes mainAttribs = manifest.getMainAttributes();
         mainAttribs.put(Attributes.Name.MANIFEST_VERSION, "1.0");
         mainAttribs.put(new Attributes.Name("Created-By"), progname);
         mainAttribs.put(Attributes.Name.CONTENT_TYPE, "text/html");
         mainAttribs.put(new Attributes.Name("Build-Jdk-Spec"), "12");
-        mainAttribs.put(new Attributes.Name("HTTPServer-version"), "2.5.2");
+        mainAttribs.put(new Attributes.Name("HTTPServer-version"), HTTPServer.VERSION);
         mainAttribs.put(Attributes.Name.MAIN_CLASS, "com.bewsoftware.httpserver.HTTPServer");
 
         return manifest;

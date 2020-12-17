@@ -39,12 +39,12 @@ import static java.nio.file.Path.of;
 import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static com.bewsoftware.mdj.cli.Cli.conf;
-import static com.bewsoftware.mdj.cli.Cli.createJarFile;
 import static com.bewsoftware.mdj.cli.Cli.initialiseWrappers;
 import static com.bewsoftware.mdj.cli.Cli.loadConf;
 import static com.bewsoftware.mdj.cli.Cli.processFile;
 import static com.bewsoftware.mdj.cli.Cli.vlevel;
 import static com.bewsoftware.mdj.cli.Find.getUpdateList;
+import static com.bewsoftware.mdj.cli.Jar.createJarFile;
 
 /**
  *
@@ -73,7 +73,7 @@ public class Main {
                                   + " You should have received a copy of the GNU General Public License\n"
                                   + " along with this program.  If not, see <http://www.gnu.org/licenses/>.\n";
     private static final String HELP_FOOTER = "\nYou must use at least one of the following options:"
-                                              + "\n    '-c', -i', '-s', '-j', '-m', '-W', or '-h|--help'\n"
+                                              + "\n\t'-a', '-c', -i', '-s', '-j', '-m', '-W', or '-h|--help'\n"
                                               + "\n" + Cli.POM.title + " " + Cli.POM.version
                                               + "\nCopyright (c) 2020 Bradley Willcott\n"
                                               + "\nThis program comes with ABSOLUTELY NO WARRANTY; for details use option '-c'."
@@ -125,6 +125,8 @@ public class Main {
         //
         // if '-h' or '--help' then, display help message.
         //
+        // returns 0.
+        //
         if (cmd.hasOption('h'))
         {
             cmd.printHelp(SYNTAX, HELP_HEADER, HELP_FOOTER, true);
@@ -134,6 +136,8 @@ public class Main {
         //
         // if '-c' then, display Copyright notice.
         //
+        // returns 0.
+        //
         if (cmd.hasOption('c'))
         {
             System.out.println(COPYRIGHT);
@@ -142,6 +146,8 @@ public class Main {
 
         //
         // if '-m' then, display manual.
+        //
+        // returns 0.
         //
         if (cmd.hasOption('m'))
         {
@@ -219,11 +225,53 @@ public class Main {
         }
 
         //
+        // '-a' jar file creation
+        //
+        // returns 0 - successs
+        //         3 - fail.
+        //
+        if (cmd.hasOption('a'))
+        {
+            if (cmd.hasOption('i')
+                || cmd.hasOption('j')
+                || cmd.hasOption('o')
+                || cmd.hasOption('s')
+                || cmd.hasOption('d')
+                || cmd.hasOption('r')
+                || cmd.hasOption('W')
+                || cmd.hasOption('w'))
+            {
+                String msg = "Too many switches for \"-a\"\n\n";
+
+                cmd.printHelp(msg, SYNTAX, HELP_HEADER, HELP_FOOTER, true);
+                return 3;
+            }
+
+            // Load configuration file data
+            try
+            {
+                loadConf(cmd.docRootPath());
+            } catch (FileNotFoundException ex)
+            {
+                if (vlevel >= 2)
+                {
+                    System.err.println(ex);
+                }
+            }
+
+            return createJarFile(cmd.jarFile(), cmd.jarSourcePath(), vlevel);
+        }
+
+        //
         // '-j' jar file creation
+        //
+        // returns 0 - successs
+        //         5 - fail.
         //
         if (cmd.hasOption('j'))
         {
             if (cmd.hasOption('i')
+                || cmd.hasOption('a')
                 || cmd.hasOption('o')
                 || cmd.hasOption('s')
                 || cmd.hasOption('d')
@@ -255,9 +303,12 @@ public class Main {
         //
         // '-W' initialise wrapper functionality
         //
+        // returns 0.
+        //
         if (cmd.hasOption('W'))
         {
             if (cmd.hasOption('i')
+                || cmd.hasOption('a')
                 || cmd.hasOption('o')
                 || cmd.hasOption('s')
                 || cmd.hasOption('d')

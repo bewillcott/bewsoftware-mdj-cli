@@ -44,6 +44,14 @@ public final class MyCmdLine implements CmdLine {
     private static Options initializeOptions() {
         Options options = new Options();
 
+        // Add add http server to existing 'jar' file: '-a'
+        options.addOption(builder("a")
+                .desc("Copy HTTP Server files into an existing 'jar' file.\n"
+                      + "NOTE: Can NOT be used with any other switches,\nexcept \"-v <level>\".")
+                .hasArg()
+                .argName("jarfile")
+                .build());
+
         // Add resursive directory processing: '-c'
         options.addOption(builder("c")
                 .desc("Display Copyright notice.")
@@ -209,7 +217,8 @@ public final class MyCmdLine implements CmdLine {
                             ? of(cmdLine.getOptionValue('W', "").replace('\\', '/')).normalize().toAbsolutePath()
                             : null;
             inputFile = hasOption('i') ? new File(cmdLine.getOptionValue('i').replace('\\', '/')) : null;
-            jarFile = hasOption('j') ? new File(cmdLine.getOptionValues('j')[0].replace('\\', '/')) : null;
+            jarFile = hasOption('a') ? new File(cmdLine.getOptionValue('j').replace('\\', '/'))
+                      : hasOption('j') ? new File(cmdLine.getOptionValues('j')[0].replace('\\', '/')) : null;
             jarSourcePath = hasOption('j')
                             ? of(cmdLine.getOptionValues('j')[1].replace('\\', '/')).normalize().toAbsolutePath() : null;
             outputFile = hasOption('o') ? new File(cmdLine.getOptionValue('o').replace('\\', '/')) : null;
@@ -231,13 +240,14 @@ public final class MyCmdLine implements CmdLine {
             }
 
             //
-            // Check for minimum switches: '-i', or '-s', or '-j', or '-W', -h, or --help.
+            // Check for minimum switches: '-a', or '-c', or '-i', or '-s',
+            //                             or '-j', or '-W', -h, or --help.
             //
-            if (!(hasOption('c') || hasOption('i') || hasOption('m') || hasOption('s')
-                  || hasOption('j') || hasOption('W') || hasOption('h')))
+            if (!(hasOption('a') || hasOption('c') || hasOption('i') || hasOption('m')
+                  || hasOption('s') || hasOption('j') || hasOption('W') || hasOption('h')))
             {
                 String msg = "\nYou must use at least one of the following options:"
-                             + "\n\t'-c', -i', '-s', '-j', '-m', '-W', or '-h|--help'\n";
+                             + "\n\t'-a', '-c', -i', '-s', '-j', '-m', '-W', or '-h|--help'\n";
                 throw new MissingOptionException(msg);
             }
 

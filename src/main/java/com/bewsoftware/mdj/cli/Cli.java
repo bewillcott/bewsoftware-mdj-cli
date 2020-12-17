@@ -29,16 +29,12 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.SortedSet;
-import java.util.jar.Manifest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.bewsoftware.mdj.core.MarkdownProcessor;
 import com.bewsoftware.mdj.core.POMProperties;
 import com.bewsoftware.mdj.core.TextEditor;
 import com.bewsoftware.property.IniProperty;
-import java.io.*;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -53,8 +49,6 @@ import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.nio.file.StandardOpenOption.WRITE;
 import static java.util.regex.Pattern.DOTALL;
 import static java.util.regex.Pattern.MULTILINE;
-import static com.bewsoftware.mdj.cli.Find.getFileList;
-import static com.bewsoftware.mdj.cli.Jar.getManifest;
 import static com.bewsoftware.mdj.cli.MCPOMProperties.INSTANCE;
 import static java.util.regex.Pattern.compile;
 
@@ -366,41 +360,6 @@ public class Cli {
     }
 
     /**
-     * Create jar file.
-     *
-     * @param jarFile   Output file name.
-     * @param jarSrcDir Directory to process.
-     * @param vlevel    Verbosity level.
-     *
-     * @return Always '0'.
-     *
-     * @throws IOException        if any.
-     * @throws URISyntaxException if any.
-     */
-    static int createJarFile(final File jarFile, final Path jarSourcePath, final int vlevel)
-            throws IOException, URISyntaxException {
-
-        // Get source directory from jar file.
-        Path jarDirPath = getResource(Jar.class, "/docs/jar").toAbsolutePath();
-
-        if (vlevel >= 2)
-        {
-            System.err.println("srcDirPath: " + jarDirPath);
-            System.err.println("srcDirPath exists: " + Files.exists(jarDirPath));
-        }
-
-        SortedSet<Path> jarFileSet = getFileList(jarDirPath, "*", true, vlevel);
-
-        SortedSet<Path> fileSet = getFileList(jarSourcePath, "*", true, vlevel);
-
-        Manifest manifest = getManifest(POM, conf);
-
-        Jar.createJAR(jarFile, new ArrayList<>(jarFileSet), jarDirPath,
-                      new ArrayList<>(fileSet), jarSourcePath, manifest, vlevel);
-        return 0;
-    }
-
-    /**
      * Initialize the wrapper directories and files.
      *
      * @param docRootPath The document root directory.
@@ -507,8 +466,7 @@ public class Cli {
 
         if (vlevel >= 3)
         {
-            System.err.println(""
-                               + "loadConf()");
+            System.err.println("loadConf()");
         }
 
         if (vlevel >= 2)

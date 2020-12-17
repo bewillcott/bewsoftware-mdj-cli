@@ -7,8 +7,12 @@ title: ${program.title} | ToDo List
 ## ToDo List
 
 - [ ]! Revise manual.
-    - [x]! (12/12/2020) Add option to display copyright notice: `-c`.
-    - [x]! (12/12/2020) Add option to display web based manual in system default web browser: `-m`.
+- [x]! (12/12/2020) Add option to display copyright notice: `-c`.
+- [x]! (12/12/2020) Add option to display web based manual in system default web browser: `-m`.
+- [ ]! Add option to publish files in a directory of the file system, or from an
+        external 'jar' file: `-p`.
+- [ ]! Add option to insert the HTTP Server into an existing 'jar' file, to server pages
+from within.  For example: a program's javadoc.jar file: `-a`.
 - [ ]! Meta blocks:
     - [X]! Add file [meta block][mb]:
     - [x]! (14/12/2020) Add [named meta blocks][nmb]. `@@@[name]`
@@ -30,7 +34,7 @@ title: ${program.title} | ToDo List
     - [x]! Add options related to _jar_ file creation: `-j`
 - [x]! Add new [switches][opt]:
     - [x]! (26/02/2020)`-W` : Create new directories (css, templates) in current directory.  
-Add default versions of: `style.css` and `default.html`.
+            Add default versions of: `style.css` and `default.html`.
     - [x]! (26/02/2020)`-w` : Include/use the contents of these directories as needed.
 - [x]! -!(24/02/2020) Added JSAP functionality. Configure the [options][opt]![1]
 - [X]! +!(04/12/2020) Replaced JSAP with Apache Commons CLI. Configure the [options][opt]!
