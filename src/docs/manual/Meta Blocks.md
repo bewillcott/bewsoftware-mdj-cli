@@ -1,29 +1,26 @@
 @@@
-use:articles
-title: Markdownj CLI | Meta Blocks
+use:articles2
+title: ${program.title} | Meta Blocks
 @@@
 
-[Home]
 
----
-
-####[#top]Table of Page Contents
+#### Table of Page Contents
 
 - [Meta Blocks](#top)
     - [Sections](#sections)
         - [Program](#program)
     - [More information about keys](#keys)
-        - [Use](#page.use)
-        - [Title](#page.title)
+        - [Use](#page_use)
+        - [Title](#page_title)
         - [Template](#template)
         - [Stylesheet](#stylesheet)
-        - [Text](#page.text)
+        - [Text](#page_text)
 
 ---
 
 ## Meta Blocks
 
-A meta block is a collection of key/value pairs located at the very top of a Markdown file.  
+A meta block is a collection of key/value pairs located at the very top of a markdown file.  
 It begins with a fence of 3 at signs: "@@@" alone at the beginning of the first line
 of the file.  This is followed by any number of key/value pairs.
 
@@ -36,20 +33,20 @@ substitution into the template and/or the document as it is processed.
 
 However, there are some keys that are used by the application:
 
-[Markdownj CLI Page Level Keys]
+[MDj CLI Page Level Keys]
 |Key|Description|[2]
 |-:-|:--|[3]
 |`use:`|Set this to the program configuration file [section] containing your desired settings for this page.|[]
 |`template:`|Name of the template file to wrap the page's markdown output into.|
 |`stylesheet:`|The stylesheet to use in the template for the page.|
 
-Markdownj CLI provides some preset keys:
+MDj CLI provides some preset keys:
 
-[Markdownj CLI Preset Keys]
+[MDj CLI Preset Keys]
 |Key|Description|[2]
 |-:-|:--|[3]
 |`system.date`|Current date/time (`Date.toString()`: dow mon dd hh:mm:ss zzz yyyy).|[]
-|`program.version`|Version of Markdownj-cli used to create html output file.|
+|`program.version`|Version of **mdj-cli** used to create html output file.|
 |`page.content`|Markdown processed page text (html).|
 
 The default template has a set of key substitutions:
@@ -58,7 +55,7 @@ The default template has a set of key substitutions:
 |Key|Description|[2]
 |-:-|:--|[3]
 |`\${program.title}`|The name of the program used to create html output file.|[]
-|`\${program.version}`|Version of Markdownj-cli used to create html output file.|[]
+|`\${program.version}`|Version of **mdj-cli** used to create html output file.|[]
 |`\${system.date}`|Current date/time (`Date.toString()`: dow mon dd hh:mm:ss zzz yyyy).|
 |`\${page.title}`|Header Title for web page.|
 |`\${page.stylesheet}`|Same as above, but used by template.|
@@ -71,7 +68,7 @@ Sections or groups are a collection of information with a common relationship.
 
 ####[#program] Program ####[&uarr;](#top)
 
-The `program` group contains information related to the Markdownj CLI application,  
+The `program` group contains information related to the MDj CLI application,  
 taken from its project pom.properties file. This information may or may not be of any interest to you.
 
 [`program` group]
@@ -92,16 +89,15 @@ The following is a copy of the top of the source file for this page:
 ~~~
 @@@
 use:articles
-title: Markdownj CLI | Meta Blocks
+title: MDj CLI | Meta Blocks
 @@@
 ~~~
 
-
-####[#page.use] Use ####[&uarr;](#top)
+####[#page_use] Use ####[&uarr;](#top)
 `use` is a reserved key word in the context of `page`: `page.use`.
 
 As you can see, there is a `use` key with a value of `articles`.  If you were to check the configuration file:
-`markdownj-cli.ini` in the root directory of this project, you will find a section labeled as `[articles]`.
+`mdj-cli.ini` in the root directory of this project, you will find a section labeled as `[articles]`.
 The key/value pairs in this section are the ones being used for this page.  If needed, you could add any
 number of additional such pairs, and they would be available to any page set to `use : articles`.
 
@@ -114,7 +110,7 @@ stylesheet for a page, which is different to that provided by the section you ar
 by adding a `stylesheet : myspecial.css` to the meta block for the page.  Note, you would of course put the
 name of _your_ stylesheet instead of 'myspecial.css'.
 
-####[#page.title] Title ####[&uarr;](#top)
+####[#page_title] Title ####[&uarr;](#top)
 `title` is a reserved key word in the context of `program`: `program.title`
 
 Though it is _not_ reserved in any other context, by convention it should be used to set the page's title: 
@@ -125,7 +121,7 @@ If you have a look at that file, you will see how these parameters can be used. 
 `page.title` parameter is used inside `<title>\${page.title}</title>` tags.  It is highly recommended that every 
 web page has a title tag.
 
-According to [w3schools.com][w3s]!, 
+According to [w3schools.com][w3s]!:
 
 "_The `<title>` tag is required in all HTML documents and it defines the title of the document_".
 
@@ -136,7 +132,6 @@ Further,
 - _defines a title in the browser toolbar_
 - _provides a title for the page when it is added to favorites_
 - _displays a title for the page in search-engine results_"
-
 
 ####[#template] Template ####[&uarr;](#top)
 `template` is a reserved key word in all contexts.
@@ -152,13 +147,36 @@ It must only refer to an actual `.css` file.  This file must be located in the
 directory referred to by the `cssDir` key's value.  The initial entry being:
 `cssDir = css`.
 
-####[#page.text] Text ####[&uarr;](#top)
+####[#page_text] Text ####[&uarr;](#top)
 `text` is a reserved key word in the context of `page`: `page.text`.
 
 It contains the unprocessed markdown text of the body of the document.
 
 
 
-
-[Home]:index.html
 [w3s]:https://www.w3schools.com/tags/tag_title.asp
+
+@@@[navbar]
+- [Home]
+- [@dropdown] [Setup][@dropbtn]
+[@dropdown-content]
+    - [Configuration]
+    - [Command-line Options]
+- [@dropdown active] [Meta Blocks][@dropbtn](#)
+[@dropdown-content]
+    - [Named Meta Blocks]
+- [@right dropdown] [About][@dropbtn]
+[@dropdown-content]
+    - [ToDo List]
+    - [License]
+
+[About]:About.html
+[Configuration]:Configuration.html
+[Home]:index.html
+[License]:LICENSE.html
+[Meta Blocks]:Meta Blocks.html
+[Named Meta Blocks]:Named Meta Blocks.html
+[Command-line Options]:Options.html
+[Setup]:Setup.html
+[ToDo List]:ToDo.html
+@@@

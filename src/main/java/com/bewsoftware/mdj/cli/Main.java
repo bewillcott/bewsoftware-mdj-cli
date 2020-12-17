@@ -23,10 +23,9 @@ import com.bewsoftware.common.InvalidParameterValueException;
 import com.bewsoftware.common.InvalidProgramStateException;
 import com.bewsoftware.fileio.ini.IniFile;
 import com.bewsoftware.fileio.ini.IniFileFormatException;
+import com.bewsoftware.httpserver.HTTPServer;
 import com.bewsoftware.property.IniProperty;
-import com.martiansoftware.jsap.JSAP;
-import com.martiansoftware.jsap.JSAPException;
-import com.martiansoftware.jsap.JSAPResult;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -40,173 +39,310 @@ import static java.nio.file.Path.of;
 import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static com.bewsoftware.mdj.cli.Cli.conf;
-import static com.bewsoftware.mdj.cli.Cli.createJarFile;
-import static com.bewsoftware.mdj.cli.Cli.initialiseJSAP;
 import static com.bewsoftware.mdj.cli.Cli.initialiseWrappers;
 import static com.bewsoftware.mdj.cli.Cli.loadConf;
 import static com.bewsoftware.mdj.cli.Cli.processFile;
-import static com.bewsoftware.mdj.cli.Cli.provideUsageHelp;
 import static com.bewsoftware.mdj.cli.Cli.vlevel;
 import static com.bewsoftware.mdj.cli.Find.getUpdateList;
+import static com.bewsoftware.mdj.cli.Jar.createJarFile;
 
 /**
  *
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 0.1
- * @version 1.0
+ * @version 1.0.7
  */
 public class Main {
 
-//    private static final String CtlX = Character.toString(24);
+    private static final String COPYRIGHT
+                                = " This is the MDj Command-line Interface program (aka: mdj-cli).\n"
+                                  + "\n"
+                                  + " Copyright (C) 2020 Bradley Willcott\n"
+                                  + "\n"
+                                  + " mdj-cli is free software: you can redistribute it and/or modify\n"
+                                  + " it under the terms of the GNU General Public License as published by\n"
+                                  + " the Free Software Foundation, either version 3 of the License, or\n"
+                                  + " (at your option) any later version.\n"
+                                  + "\n"
+                                  + " mdj-cli is distributed in the hope that it will be useful,\n"
+                                  + " but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+                                  + " MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+                                  + " GNU General Public License for more details.\n"
+                                  + "\n"
+                                  + " You should have received a copy of the GNU General Public License\n"
+                                  + " along with this program.  If not, see <http://www.gnu.org/licenses/>.\n";
+    private static final String HELP_FOOTER = "\nYou must use at least one of the following options:"
+                                              + "\n\t'-a', '-c', -i', '-s', '-j', '-m', '-W', or '-h|--help'\n"
+                                              + "\n" + Cli.POM.title + " " + Cli.POM.version
+                                              + "\nCopyright (c) 2020 Bradley Willcott\n"
+                                              + "\nThis program comes with ABSOLUTELY NO WARRANTY; for details use option '-c'."
+                                              + "\nThis is free software, and you are welcome to redistribute it"
+                                              + "\nunder certain conditions; use option '-m', then goto the License page for details.";
+    private static final String HELP_HEADER = "\n" + Cli.POM.description + "\n\n";
+
+    private static final String SYNTAX = "java -jar /path/to/mdj-cli-<version>.jar [OPTION]...\n\noptions:";
+
     /**
-     * @param args the command line arguments
+     * Called from either {@link #main(java.lang.String[]) main()} or another process.
      *
-     * @throws java.io.IOException
+     * @param args Arguments to configure this cycle of processing.
+     *
+     * @return The exit code.
+     *
+     * @throws IOException            if any.
+     * @throws URISyntaxException     if any.
+     * @throws IniFileFormatException if any.
+     *
+     * @since 1.0.4
+     * @version 1.0.26
      */
     @SuppressWarnings("fallthrough")
-    public static void main(String[] args) throws IOException, JSAPException, InvalidParameterValueException, IniFileFormatException, InvalidProgramStateException, URISyntaxException {
+    public static int execute(String[] args)
+            throws IOException, URISyntaxException, IniFileFormatException {
 
-        Set<Path> dirs = new TreeSet<>();
-//        StringBuilder buf = new StringBuilder();
-//        BufferedReader in = null;
-//        Reader reader = null;
-
+        //
         // Process command-line
-        JSAP jsap = initialiseJSAP();
-        JSAPResult config = jsap.parse(args);
+        //
+        CmdLine cmd = new MyCmdLine(args);
 
         // check whether the command line was valid, and if it wasn't,
         // display usage information and exit.
-        if (!config.success() || config.getBoolean("help"))
+        if (!cmd.success())
         {
+
             StringBuilder sb = new StringBuilder();
 
             // print out specific error messages describing the problems
             // with the command line, THEN print usage, THEN print full
             // help.  This is called "beating the user with a clue stick."
-            for (@SuppressWarnings("unchecked") Iterator<String> errs = (Iterator<String>) config.getErrorMessageIterator();
-                 errs.hasNext();)
+            cmd.exceptions().forEach(ex -> sb.append(ex).append('\n'));
+
+            cmd.printHelp(sb.toString(), SYNTAX, HELP_HEADER, HELP_FOOTER, true);
+            return -1;
+        }
+
+        //
+        // if '-h' or '--help' then, display help message.
+        //
+        // returns 0.
+        //
+        if (cmd.hasOption('h'))
+        {
+            cmd.printHelp(SYNTAX, HELP_HEADER, HELP_FOOTER, true);
+            return 0;
+        }
+
+        //
+        // if '-c' then, display Copyright notice.
+        //
+        // returns 0.
+        //
+        if (cmd.hasOption('c'))
+        {
+            System.out.println(COPYRIGHT);
+            return 0;
+        }
+
+        //
+        // if '-m' then, display manual.
+        //
+        // returns 0.
+        //
+        if (cmd.hasOption('m'))
+        {
+            System.out.println("Displaying manual...");
+            HTTPServer.execute();
+            return 0;
+        }
+
+        //
+        // if '-i' switch active, check and set others as necessary.
+        //
+        if (cmd.hasOption('i'))
+        {
+            String parent = cmd.inputFile().getParent();
+
+            if (parent != null)
             {
-                sb.append("Error: ").append(errs.next()).append("\n");
+                cmd.inputFile(new File(cmd.inputFile().getName()));
             }
 
-            provideUsageHelp(sb.toString(), jsap);
+            Path srcPath = of(parent != null ? parent : "");
 
-            if (config.getBoolean("help"))
+            if (!cmd.hasOption('s'))
             {
-                exit(0);
-            } else
+                cmd.source(srcPath);
+            }
+
+            if (!cmd.hasOption('d'))
             {
-                exit(1);
+                cmd.destination(srcPath);
+            }
+
+            if (!cmd.hasOption('o'))
+            {
+                File outFile = new File(cmd.inputFile().getName().replace(".md", ".html"));
+                cmd.outputFile(outFile);
             }
         }
 
-        // Get command-line data
-        String input = config.getString("input");
-        input = (input != null ? input.trim() : null);
-        String output = config.getString("output");
-        output = (output != null ? output.trim() : null);
-        String source = config.getString("source");
-        source = (source != null ? source.trim() : null);
-        String destination = config.getString("destination");
-        destination = (destination != null ? destination.trim() : null);
-        boolean recursive = config.getBoolean("recursive");
-        boolean wrapper = config.getBoolean("wrapper");
-        boolean initialise = config.getBoolean("initialise");
-        String[] dirArr = config.getStringArray("initialise");
-        String docRootDir = (dirArr.length > 0 ? dirArr[0] : (initialise ? "" : null));
+        //
+        // if '-s' switch active, check and set others as necessary.
+        //
+        if (cmd.hasOption('s'))
+        {
+            if (!cmd.hasOption('d'))
+            {
+                cmd.destination(cmd.source());
+            }
+        }
 
-        boolean jar = config.getBoolean("jar");
-        String[] jarOptions = config.getStringArray("jar");
-
-        String jarFilename = (jarOptions.length >= 1 ? jarOptions[0] : "");
-        String jarSrcDir = (jarOptions.length == 2 ? jarOptions[1] : "");
-
-        boolean verbose = config.getBoolean("verbose");
-        int[] vlevelarr = config.getIntArray("verbose");
-
-        vlevel = (vlevelarr.length > 0 ? vlevelarr[0] : (verbose ? 1 : 0));
+        vlevel = cmd.verbosity();
 
         switch (vlevel)
         {
             case 3:
             case 2:
-                System.err.println("input: |" + input + "|");
-                System.err.println("output: |" + output + "|");
-                System.err.println("source: |" + source + "|");
-                System.err.println("destination: |" + destination + "|");
-                System.err.println("recursive: |" + recursive + "|");
-                System.err.println("wrapper: |" + wrapper + "|");
-                System.err.println("initialise: |" + initialise + "|");
-                System.err.println("docRootDir: |" + docRootDir + "|");
-                System.err.println("jar: |" + jar + "|");
-                System.err.println("jarFilename: |" + jarFilename + "|");
-                System.err.println("jarSrcDir: |" + jarSrcDir + "|");
+                System.err.println("input: |" + cmd.inputFile() + "|");
+                System.err.println("output: |" + cmd.outputFile() + "|");
+                System.err.println("source: |" + cmd.source() + "|");
+                System.err.println("destination: |" + cmd.destination() + "|");
+                System.err.println("recursive: |" + cmd.hasOption('r') + "|");
+                System.err.println("wrapper: |" + cmd.hasOption('w') + "|");
+                System.err.println("initialise: |" + cmd.hasOption('W') + "|");
+                System.err.println("docRootDir: |" + cmd.docRootPath() + "|");
+                System.err.println("jar: |" + cmd.hasOption('j') + "|");
+                System.err.println("jarFilename: |" + cmd.jarFile() + "|");
+                System.err.println("jarSrcDir: |" + cmd.jarSourcePath() + "|");
 
             case 1:
-                System.err.println("verbose: |" + verbose + "|");
+                System.err.println("verbose: |" + cmd.hasOption('v') + "|");
                 System.err.println("verbose level: |" + vlevel + "|");
                 break;
 
             default:
         }
 
+        //
+        // '-a' jar file creation
+        //
+        // returns 0 - successs
+        //         3 - fail.
+        //
+        if (cmd.hasOption('a'))
+        {
+            if (cmd.hasOption('i')
+                || cmd.hasOption('j')
+                || cmd.hasOption('o')
+                || cmd.hasOption('s')
+                || cmd.hasOption('d')
+                || cmd.hasOption('r')
+                || cmd.hasOption('W')
+                || cmd.hasOption('w'))
+            {
+                String msg = "Too many switches for \"-a\"\n\n";
+
+                cmd.printHelp(msg, SYNTAX, HELP_HEADER, HELP_FOOTER, true);
+                return 3;
+            }
+
+            // Load configuration file data
+            try
+            {
+                loadConf(cmd.docRootPath());
+            } catch (FileNotFoundException ex)
+            {
+                if (vlevel >= 2)
+                {
+                    System.err.println(ex);
+                }
+            }
+
+            return createJarFile(cmd.jarFile(), cmd.jarSourcePath(), vlevel);
+        }
+
+        //
         // '-j' jar file creation
-        if (jar)
+        //
+        // returns 0 - successs
+        //         5 - fail.
+        //
+        if (cmd.hasOption('j'))
         {
-            if (input != null
-                || output != null
-                || source != null
-                || destination != null
-                || recursive != false
-                || initialise != false)
+            if (cmd.hasOption('i')
+                || cmd.hasOption('a')
+                || cmd.hasOption('o')
+                || cmd.hasOption('s')
+                || cmd.hasOption('d')
+                || cmd.hasOption('r')
+                || cmd.hasOption('W')
+                || cmd.hasOption('w'))
             {
-                String msg = "Too many switches for \"-j\"";
+                String msg = "Too many switches for \"-j\"\n\n";
 
-                provideUsageHelp(msg, jsap);
-                exit(1);
+                cmd.printHelp(msg, SYNTAX, HELP_HEADER, HELP_FOOTER, true);
+                return 5;
             }
 
-            exit(createJarFile(jarFilename, jarSrcDir, vlevel));
+            // Load configuration file data
+            try
+            {
+                loadConf(cmd.docRootPath());
+            } catch (FileNotFoundException ex)
+            {
+                if (vlevel >= 2)
+                {
+                    System.err.println(ex);
+                }
+            }
+
+            return createJarFile(cmd.jarFile(), cmd.jarSourcePath(), vlevel);
         }
 
+        //
         // '-W' initialise wrapper functionality
-        if (initialise)
+        //
+        // returns 0.
+        //
+        if (cmd.hasOption('W'))
         {
-            if (input != null
-                || output != null
-                || source != null
-                || destination != null
-                || recursive != false
-                || jar != false)
+            if (cmd.hasOption('i')
+                || cmd.hasOption('a')
+                || cmd.hasOption('o')
+                || cmd.hasOption('s')
+                || cmd.hasOption('d')
+                || cmd.hasOption('r')
+                || cmd.hasOption('j')
+                || cmd.hasOption('w'))
             {
-                String msg = "Too many switches for \"-W\"";
+                String msg = "Too many switches for \"-W\"\n\n";
 
-                provideUsageHelp(msg, jsap);
-                exit(1);
+                cmd.printHelp(msg, SYNTAX, HELP_HEADER, HELP_FOOTER, true);
+                return 6;
             }
 
-            exit(initialiseWrappers(docRootDir));
+            return initialiseWrappers(cmd.docRootPath());
         }
 
-        // TODO: Rewrite to process "includeDirs" section of conf.iniDoc.
+        //
         // if '-w' switch active, copy 'css' files to destination directory
-        if (wrapper)
+        //
+        if (cmd.hasOption('w'))
         {
             // Load configuration file data
-            String srcDir = "";
+            Path srcDir = of("");
 
-            if (source != null)
+            if (cmd.source() != null)
             {
-                srcDir = source;
-            } else if (input != null)
+                srcDir = cmd.source();
+            } else if (cmd.inputFile() != null)
             {
-                Path inpPath = of(input).getParent();
+                Path inpPath = of(cmd.inputFile().toString()).getParent();
 
                 if (inpPath != null)
                 {
-                    srcDir = inpPath.toString();
+                    srcDir = inpPath;
                 }
             }
 
@@ -215,26 +351,27 @@ public class Main {
                 loadConf(srcDir);
             } catch (FileNotFoundException ex)
             {
-                provideUsageHelp("ERROR: " + ex.toString()
-                                 + "\nHave you initialised the wrapper functionality? '-W <Doc Root Dir>'\n", jsap);
-                exit(1);
+                String msg = ex.toString()
+                             + "\nHave you initialised the wrapper functionality? '-W <Doc Root Dir>'\n";
+                cmd.printHelp(msg, SYNTAX, HELP_HEADER, HELP_FOOTER, true);
+                return 4;
             }
 
             if (conf.iniDoc.containsSection("includeDirs"))
             {
-                List< IniProperty<Object>> props = conf.iniDoc.getSection("includeDirs");
+                List<IniProperty<String>> props = conf.iniDoc.getSection("includeDirs");
 
-                for (IniProperty<Object> prop : props)
+                for (IniProperty<String> prop : props)
                 {
-                    String value = (String) prop.value();
+                    String value = prop.value();
 
                     if (value != null)
                     {
-                        value = Cli.processSubstitutions(value, null);
+                        value = Cli.processSubstitutions(value, null, new Cli.BooleanReturn());
 
                         if (!value.isEmpty())
                         {
-                            copyDirTree(source + "/" + value, destination + "/" + value, "*",
+                            copyDirTree(cmd.source() + "/" + value, cmd.destination() + "/" + value, "*",
                                         vlevel, COPY_ATTRIBUTES, REPLACE_EXISTING);
                         }
                     }
@@ -248,17 +385,19 @@ public class Main {
 
         conf.iniDoc.setString("system", "date", new Date().toString());
 
+        //
         // Get files to process
-        List<Path[]> fileList = getUpdateList((source != null ? source : null),
-                                              (destination != null ? destination : null),
-                                              input, null, recursive, vlevel);
+        //
+        List<Path[]> fileList = getUpdateList(cmd.source(),
+                                              cmd.destination(),
+                                              cmd.inputFile(), null, cmd.hasOption('r'), vlevel);
 
         // Process files
-        if (fileList.size() > 0)
+        if (!fileList.isEmpty())
         {
-            if (output != null && fileList.size() == 1)
+            if (cmd.outputFile() != null && fileList.size() == 1)
             {
-                Path outPath = of(output);
+                Path outPath = cmd.outputFile().toPath();
 
                 if (outPath.isAbsolute())
                 {
@@ -269,6 +408,8 @@ public class Main {
                     fileList.get(0)[1] = target.resolve(outPath);
                 }
             }
+
+            Set<Path> dirs = new TreeSet<>();
 
             fileList.forEach(filePairs ->
             {
@@ -298,8 +439,29 @@ public class Main {
 
             for (Path[] filePairs : fileList)
             {
-                processFile(filePairs[0], filePairs[1], wrapper);
+                processFile(filePairs[0], filePairs[1], cmd.destination(), cmd.hasOption('w'));
             }
         }
+
+        return 0;
+    }
+
+    /**
+     * Executed from command-line.
+     *
+     * @param args the command line arguments
+     *
+     * @throws IOException                    if any.
+     * @throws InvalidParameterValueException if any.
+     * @throws IniFileFormatException         if any.
+     * @throws URISyntaxException             if any.
+     * @throws InterruptedException           if any.
+     */
+    public static void main(String[] args)
+            throws IOException, InvalidParameterValueException,
+                   IniFileFormatException, InvalidProgramStateException,
+                   URISyntaxException, InterruptedException {
+
+        exit(execute(args));
     }
 }

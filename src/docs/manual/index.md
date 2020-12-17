@@ -1,13 +1,13 @@
 @@@
-use : articles
-title: Markdownj CLI
+use : articles2
+title: ${document.name}
 @@@
 
 
-#[#top] ${program.title}
----
+#${document.name}
 
-This is a command-line program that uses the Markdownj Core library.
+This is a command-line program that uses the MDj Core library.  It processes
+markdown conformant files into static html files.
 
 It will process either a single file, all the files in a directory,
 or all the files in a directory tree.
@@ -19,23 +19,36 @@ The default extensions are:
 
 The program has a number of options. For details see the [Options][opt] page.
 
-##[#toc] Table of Contents ## [&uarr;](#top)
-
-- [ToDo List][todo]
-- [Configuration][conf]
-- [Command-Line Options][opt]
-- [Meta Blocks][mb]
-- [Named Meta Blocks][nmb]
-- [License][lic]
-
-
-## Under Construction
-
-
 
 [conf]:Configuration.html
 [lic]:LICENSE.html
 [mb]:Meta Blocks.html
 [nmb]:Named Meta Blocks.html
 [opt]:Options.html
+[setup]:Setup.html
 [todo]:ToDo.html
+
+@@@[navbar]
+- [@active] [Home](#)
+- [@dropdown] [Setup][@dropbtn]
+[@dropdown-content]
+    - [Configuration]
+    - [Command-line Options]
+- [@dropdown] [Meta Blocks][@dropbtn]
+[@dropdown-content]
+    - [Named Meta Blocks]
+- [@right dropdown] [About][@dropbtn]
+[@dropdown-content]
+    - [ToDo List]
+    - [License]
+
+[About]:About.html
+[Configuration]:Configuration.html
+[Home]:index.html
+[License]:LICENSE.html
+[Meta Blocks]:Meta Blocks.html
+[Named Meta Blocks]:Named Meta Blocks.html
+[Command-line Options]:Options.html
+[Setup]:Setup.html
+[ToDo List]:ToDo.html
+@@@

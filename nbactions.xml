@@ -7,10 +7,10 @@
             </packagings>
             <goals>
                 <goal>process-classes</goal>
-                <goal>org.codehaus.mojo:exec-maven-plugin:1.6.0:exec</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:3.0.0:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath com.bewsoftware.mdj.cli.Main -v:2 -s src/docs/manual  -wr</exec.args>
+                <exec.args>-classpath %classpath com.bewsoftware.mdj.cli.Main -v2 -s src/docs/manual  -wr</exec.args>
                 <exec.executable>java</exec.executable>
                 <exec.workingdir></exec.workingdir>
             </properties>
@@ -22,10 +22,10 @@
             </packagings>
             <goals>
                 <goal>process-classes</goal>
-                <goal>org.codehaus.mojo:exec-maven-plugin:1.6.0:exec</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:3.0.0:exec</goal>
             </goals>
             <properties>
-                <exec.args>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath com.bewsoftware.mdj.cli.Main -v:2 -s src/docs/manual  -wr</exec.args>
+                <exec.args>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath com.bewsoftware.mdj.cli.Main -v2 -s src/docs/manual  -wr</exec.args>
                 <exec.executable>java</exec.executable>
                 <jpda.listen>true</jpda.listen>
                 <exec.workingdir></exec.workingdir>
@@ -38,10 +38,10 @@
             </packagings>
             <goals>
                 <goal>process-classes</goal>
-                <goal>org.codehaus.mojo:exec-maven-plugin:1.6.0:exec</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:3.0.0:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath com.bewsoftware.mdj.cli.Main -v:2 -s src/docs/manual  -wr</exec.args>
+                <exec.args>-classpath %classpath com.bewsoftware.mdj.cli.Main -v2 -s src/docs/manual  -wr</exec.args>
                 <exec.executable>java</exec.executable>
                 <exec.workingdir></exec.workingdir>
             </properties>

@@ -1,50 +1,40 @@
 @@@
-use : articles
-title: Markdownj CLI | Configuration
+use : articles2
+title: ${program.title} | Configuration
 @@@
 
-[Home]
 
----
+## Configuration
 
-##[#top] Configuration
-
-Markdownj CLI is configured via an _ini_ file: `markdownj-cli.ini`.  If [setup] properly,
+MDj CLI is configured via an _ini_ file: `mdj-cli.ini`.  If [setup] properly,
 this file should be either in your project directory, or in the root directory of the
 document you are working on.
 
-For example, the Markdownj CLI project directory structure: (Linux)
+Let us look at the default `mdj-cli.ini` file:
 
-~~~
-~/NetBeansProjects/markdownj-cli
-    ├── jshell.history
-    ├── licenseheader.txt
-    ├── markdownj-cli.ini
-    ├── nbactions.xml
-    ├── nb-configuration.xml
-    ├── pom.xml
-    └── src
-        └── docs
-            └── manual
-                ├── configuration.html
-                ├── configuration.md
-                ├── css
-                │   └── style.css
-                ├── index.html
-                ├── index.md
-                ├── meta blocks.html
-                ├── meta blocks.md
-                ├── options.html
-                ├── options.md
-                ├── templates
-                │   ├── article.html
-                │   └── default.html
-                ├── todo.html
-                └── todo.md
-
-~~~
-
-
-
-[Home]:index.html
 [setup]:Setup.html
+
+@@@[navbar]
+- [Home]
+- [@dropdown subactive] [Setup][@dropbtn]
+[@dropdown-content]
+    - [@active] [Configuration](#)
+    - [Command-line Options]
+- [@dropdown] [Meta Blocks][@dropbtn]
+[@dropdown-content]
+    - [Named Meta Blocks]
+- [@right dropdown] [About][@dropbtn]
+[@dropdown-content]
+    - [ToDo List]
+    - [License]
+
+[About]:About.html
+[Configuration]:Configuration.html
+[Home]:index.html
+[License]:LICENSE.html
+[Meta Blocks]:Meta Blocks.html
+[Named Meta Blocks]:Named Meta Blocks.html
+[Command-line Options]:Options.html
+[Setup]:Setup.html
+[ToDo List]:ToDo.html
+@@@

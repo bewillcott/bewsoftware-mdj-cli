@@ -22,7 +22,6 @@ package com.bewsoftware.mdj.cli;
 import com.bewsoftware.fileio.ini.IniDocument;
 import com.bewsoftware.fileio.ini.IniFile;
 import com.bewsoftware.fileio.ini.IniFileFormatException;
-import com.martiansoftware.jsap.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -30,18 +29,17 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.SortedSet;
-import java.util.jar.Manifest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.bewsoftware.mdj.core.MarkdownProcessor;
+import com.bewsoftware.mdj.core.POMProperties;
 import com.bewsoftware.mdj.core.TextEditor;
+import com.bewsoftware.property.IniProperty;
+import java.util.Date;
+import java.util.List;
 
 import static com.bewsoftware.fileio.BEWFiles.copyDirTree;
 import static com.bewsoftware.fileio.BEWFiles.getResource;
-import static com.martiansoftware.jsap.JSAP.INTEGER_PARSER;
-import static com.martiansoftware.jsap.JSAP.NO_LONGFLAG;
-import static com.martiansoftware.jsap.JSAP.STRING_PARSER;
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 import static java.nio.file.Path.of;
 import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
@@ -51,33 +49,129 @@ import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.nio.file.StandardOpenOption.WRITE;
 import static java.util.regex.Pattern.DOTALL;
 import static java.util.regex.Pattern.MULTILINE;
-import static com.bewsoftware.mdj.cli.Find.getFileList;
-import static com.bewsoftware.mdj.cli.Jar.getManifest;
-import static com.bewsoftware.mdj.cli.POMProperties.INSTANCE;
+import static com.bewsoftware.mdj.cli.MCPOMProperties.INSTANCE;
+import static java.util.regex.Pattern.compile;
 
 /**
  *
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 0.1
- * @version 1.0
+ * @version 1.0.14
  */
 public class Cli {
 
-    private static final String CONF_FILENAME = "mdj-cli.ini";
+    /**
+     * The name of the configuration ini file.
+     */
+    public static final String CONF_FILENAME = "mdj-cli.ini";
+
+    /**
+     * The single instance of the {@link POMProperties} class.
+     */
+    public static final MCPOMProperties POM = INSTANCE;
+
+    /**
+     * The single instance of the {@link MarkdownProcessor} class.
+     */
     private static final MarkdownProcessor MARKDOWN = new MarkdownProcessor();
-    private static final POMProperties POM = INSTANCE;
-    private static final Pattern SUBSTITUTION_PATTERN = Pattern.compile("(?<!\\\\)(?:\\$\\{(?<group>\\w+)[.](?<key>\\w+)\\})");
+
+    /**
+     * The pattern used for substitutions.
+     */
+    private static final Pattern SUBSTITUTION_PATTERN
+                                 = Pattern.compile("(?<!\\\\)(?:\\$\\{(?<group>\\w+)[.](?<key>\\w+)\\})");
+
+    /**
+     * The configuration ini file.
+     */
     static IniFile conf;
+
+    /**
+     * The verbosity level.
+     */
     static int vlevel;
 
-    private static String getString(String section, String key, String use) {
+    /**
+     * Process the <i>use</i> section looking for filenames with a {@code .css} extension.
+     * <p>
+     * Prepend the <i>document.cssDir</i> directory to each one.
+     */
+    private static void configureStylesheetPaths() {
+        final String extn = ".css";
+
+        String use = conf.iniDoc.getString("page", "use", null);
+        String cssDir = conf.iniDoc.getString("document", "cssDir", "");
+        String systemDate = conf.iniDoc.getString("system", "date", null);
+
+        if (systemDate == null)
+        {
+            systemDate = new Date().toString();
+            conf.iniDoc.setString("system", "date", systemDate);
+        }
+
+        // Process stylesheet names from the inifile section.
+        if (use != null && !use.isBlank())
+        {
+            String done = conf.iniDoc.getString(use, systemDate, null);
+
+            if (done == null)
+            {
+                // Process the '.css' filenames...
+                List<IniProperty<String>> keys = conf.iniDoc.getSection(use);
+
+                keys.stream()
+                        .filter(key -> key.value().endsWith(extn))
+                        .forEachOrdered(key
+                                -> conf.iniDoc.setString(use, key.key(),
+                                                         of(cssDir, key.value()).toString(),
+                                                         key.comment()));
+
+                // Record that we have already processed the '.css' filenames.
+                conf.iniDoc.setString(use, systemDate, "done");
+            }
+        }
+
+        // Process stylesheet names from the metablock, stoed under section: "page".
+        String done = conf.iniDoc.getString("page", systemDate, null);
+
+        if (done == null)
+        {
+            // Process the '.css' filenames...
+            List<IniProperty<String>> keys = conf.iniDoc.getSection("page");
+
+            keys.stream()
+                    .filter(key -> key.value().endsWith(extn))
+                    .forEachOrdered(key
+                            -> conf.iniDoc.setString("page", key.key(),
+                                                     of(cssDir, key.value()).toString()));
+
+            // Record that we have already processed the '.css' filenames.
+            conf.iniDoc.setString("page", systemDate, "done");
+        }
+
+    }
+
+    /**
+     * Convenience method to access the iniDoc
+     * {@link IniDocument#getString(java.lang.String, java.lang.String, java.lang.String) getString()}.
+     *
+     * @param section label.
+     * @param key     name.
+     * @param use     Alternate section label.
+     *
+     * @return result.
+     */
+    private static String getString(final String section, final String key, final String use) {
         return conf.iniDoc.getString(section, key, conf.iniDoc.getString(use, key, ""));
     }
 
+    /**
+     * Process the file's meta block, if any.
+     */
     private static void processMetaBlock() {
         String text = conf.iniDoc.getString("page", "text", "");
-        Matcher m = Pattern.compile("\\A(?:@@@\\n(?<metablock>.*?)\\n@@@\\n)(?<body>.*)\\z", DOTALL)
+        Matcher m = compile("\\A(?:@@@\\n(?<metablock>.*?)\\n@@@\\n)(?<body>.*)\\z", DOTALL)
                 .matcher(text);
         conf.iniDoc.removeSection("page");
 
@@ -86,29 +180,86 @@ public class Cli {
             String metaBlock = m.group("metablock");
             text = m.group("body");
 
-            Matcher m2 = Pattern.compile("^\\s*(?<key>\\w+)\\s*:\\s*(?<value>.*?)?\\s*?$", MULTILINE).matcher(metaBlock);
-            StringBuilder sb = new StringBuilder();
+            if (vlevel >= 3)
+            {
+                System.out.println("\n============================================\n"
+                                   + "file metablock:\n"
+                                   + "--------------------------------------------\n"
+                                   + metaBlock
+                                   + "\n--------------------------------------------");
+            }
+
+            Matcher m2 = compile("^\\s*(?<key>\\w+)\\s*:\\s*(?<value>.*?)?\\s*?$", MULTILINE).matcher(metaBlock);
 
             while (m2.find())
             {
                 String key = m2.group("key");
                 String value = m2.group("value");
 
+                if (vlevel >= 3)
+                {
+                    System.out.println("key = " + key + "\n"
+                                       + "value = " + value);
+                }
+
                 conf.iniDoc.setString("page", key, value);
             }
+
+            if (vlevel >= 3)
+            {
+                System.out.println("============================================\n");
+            }
+
         }
 
         conf.iniDoc.setString("page", "text", text);
     }
 
+    /**
+     * Process Named Meta Blocks.
+     * <p>
+     * A named meta block looks like this:
+     * <hr>
+     * <pre><code>
+     *
+     * &#64;&#64;&#64;[name]
+     *
+     * Some text.
+     * Some more text.
+     *
+     * &#64;&#64;&#64;
+     * </code></pre>
+     * <hr>
+     * The line spacing is <b>required</b>.<br>
+     * '{@code name}' is used to refer to this block in the markup text for
+     * substitution: ${page.name}.
+     * <p>
+     * Bradley Willcott
+     *
+     * @since 14/12/2020
+     */
     private static void processNamedMetaBlocks() {
         TextEditor text = new TextEditor(conf.iniDoc.getString("page", "text", ""));
-        Pattern p = Pattern.compile("(?<=\\n)(?:@@@\\[(?<name>\\w+)\\]\\n(?<metablock>.*?)\\n@@@\\n)", DOTALL);
+        Pattern p = compile("(?<=\\n)(?:@@@\\[(?<name>\\w+)\\]\\n(?<metablock>.*?)\\n@@@\\n)", DOTALL);
 
         text.replaceAll(p, m ->
                 {
                     String name = m.group("name");
                     String metaBlock = m.group("metablock");
+
+                    //
+                    // Add <divX class="<name>"></div> wrapping.
+                    // This will allow css control of the formatting of the
+                    // contents.
+                    metaBlock = "\n<div class=\"" + name + "\">\n" + MARKDOWN.markdown(metaBlock) + "\n</div>\n";
+
+                    if (vlevel >= 3)
+                    {
+                        System.out.println("============================================\n"
+                                           + "name: " + name + "\n"
+                                           + "metablock:\n" + metaBlock
+                                           + "\n============================================\n");
+                    }
 
                     conf.iniDoc.setString("page", name, metaBlock);
                     return "";
@@ -119,28 +270,42 @@ public class Cli {
         conf.iniDoc.setString("page", "text", text.toString());
     }
 
-    private static void processTemplate(String use, String template) throws IOException {
-        StringBuilder sbin = new StringBuilder();
+    /**
+     * Process a template.
+     *
+     * @param use      Alternate section label.
+     * @param template name.
+     *
+     * @throws IOException If any.
+     */
+    private static void processTemplate(final String use, final String template) throws IOException {
+        StringBuilder sbin = new StringBuilder("<!DOCTYPE html>\n"
+                                               + "<!--\n"
+                                               + "Generated by ${program.title}\n"
+                                               + "version: ${program.version}\n"
+                                               + "on ${system.date}\n"
+                                               + "-->\n");
 
-        Path docRootPath = of(conf.iniDoc.getString("project", "root", ""))
-                .resolve(conf.iniDoc.getString("document", "docRootDir", "")).toAbsolutePath();
+        IniDocument iniDoc = conf.iniDoc;
 
-        Path templatesPath = docRootPath.resolve(conf.iniDoc.getString("document", "templatesDir", ""))
+        Path docRootPath = of(iniDoc.getString("project", "root", ""))
+                .resolve(iniDoc.getString("document", "docRootDir", "")).toAbsolutePath();
+
+        Path templatesPath = docRootPath.resolve(iniDoc.getString("document", "templatesDir", ""))
                 .resolve(template).toAbsolutePath();
 
-        // Relativize path to stylesheet
-        Path stylesheetPath = docRootPath.resolve(conf.iniDoc.getString("document", "cssDir", ""))
-                .resolve(getString("page", "stylesheet", use)).toAbsolutePath();
-
-        Path srcPath = of(conf.iniDoc.getString("page", "srcFile", ""));
-        Path cssPath = srcPath.getParent().relativize(stylesheetPath);
-
-        conf.iniDoc.setString("page", "stylesheet", cssPath.toString());
+        //
+        // Set the 'base' path.  <base href="<base>">
+        //
+        Path srcPath = of(iniDoc.getString("page", "srcFile", ""));
+        Path basePath = srcPath.getParent().relativize(docRootPath);
+        iniDoc.setString("page", "base", basePath.toString());
 
         if (vlevel >= 2)
         {
-            System.err.println("srcFile:\n" + srcPath.toString());
-            System.err.println("template:\n" + templatesPath.toString());
+            System.err.println("base:\n" + basePath);
+            System.err.println("srcFile:\n" + srcPath);
+            System.err.println("template:\n" + templatesPath);
         }
 
         try ( BufferedReader inReader = Files.newBufferedReader(templatesPath))
@@ -153,212 +318,175 @@ public class Cli {
             }
         }
 
-        TextEditor textEd = new TextEditor(processSubstitutions(sbin.toString(), use));
+        TextEditor textEd = new TextEditor(processSubstitutions(sbin.toString(), use, new BooleanReturn()));
         textEd.replaceAllLiteral("\\\\\\$", "$");
         textEd.replaceAllLiteral("\\\\\\[", "[");
 
-        conf.iniDoc.setString("page", "html", textEd.toString());
+        if (!basePath.toString().isBlank())
+        {
+            //
+            // Set the detination file path.
+            //
+            Path destPath = of(iniDoc.getString("page", "destFile", null));
+            Path destDirPath = of(iniDoc.getString("page", "destDir", null));
+            String destHTML = destDirPath.relativize(destPath).toString();
+
+            if (vlevel >= 3)
+            {
+                System.err.println("destPath:\n" + destPath);
+                System.err.println("destDirPath:\n" + destDirPath);
+                System.err.println("destHTML:\n" + destHTML);
+            }
+
+            Pattern p = compile("href\\=\"(?<ref>#[^\"]*)?\"");
+
+            textEd.replaceAll(p, (Matcher m) ->
+                      {
+                          String text = m.group();
+                          String ref = m.group("ref");
+
+                          if (vlevel >= 3)
+                          {
+                              System.err.println("text: " + text);
+                              System.err.println("ref: " + ref);
+                          }
+
+                          return text.replace(ref, destHTML + ref);
+                      });
+
+        }
+
+        iniDoc.setString("page", "html", textEd.toString());
     }
 
-    static int createJarFile(String jarFilename, String jarSrcDir, int vlevel) throws IOException {
-        SortedSet<Path> fileList = getFileList(jarSrcDir, "*", true, vlevel);
-        Manifest manifest = getManifest();
-
-        Jar.createJAR(jarFilename, fileList, manifest);
-        return 0;
-    }
-
-    static JSAP initialiseJSAP() throws JSAPException {
-        JSAP jsap = new JSAP();
-
-        // '-i' : Input filename/pattern
-        FlaggedOption opt1 = new FlaggedOption("input")
-                .setStringParser(STRING_PARSER)
-                .setUsageName("file name")
-                .setShortFlag('i')
-                .setLongFlag(NO_LONGFLAG);
-
-        opt1.setHelp("The markdown input file to parse. (default extn: \".md\")");
-        jsap.registerParameter(opt1);
-
-        // '-o' : Output filename/pattern
-        FlaggedOption opt2 = new FlaggedOption("output")
-                .setStringParser(STRING_PARSER)
-                .setUsageName("file name")
-                .setShortFlag('o')
-                .setLongFlag(NO_LONGFLAG);
-
-        opt2.setHelp("The HTML output file. (default extn: \".html\")");
-        jsap.registerParameter(opt2);
-
-        // '-s' : Source directory
-        FlaggedOption opt3 = new FlaggedOption("source")
-                .setStringParser(STRING_PARSER)
-                .setUsageName("directory path")
-                .setShortFlag('s')
-                .setLongFlag(NO_LONGFLAG);
-
-        opt3.setHelp("The source directory for markdown files.");
-        jsap.registerParameter(opt3);
-
-        // '-d' : Destination directory
-        FlaggedOption opt4 = new FlaggedOption("destination")
-                .setStringParser(STRING_PARSER)
-                .setUsageName("directory path")
-                .setShortFlag('d')
-                .setLongFlag(NO_LONGFLAG);
-
-        opt4.setHelp("The destination directory for HTML files.");
-        jsap.registerParameter(opt4);
-
-        // '-r' : Resursive directory processing
-        Switch sw2 = new Switch("recursive")
-                .setShortFlag('r')
-                .setLongFlag(NO_LONGFLAG);
-
-        sw2.setHelp("Recursively process directories.");
-        jsap.registerParameter(sw2);
-
-        // '-w' : Process meta block
-        Switch sw4 = new Switch("wrapper")
-                .setShortFlag('w')
-                .setLongFlag(NO_LONGFLAG);
-
-        sw4.setHelp("Process meta block, wrapping your document with templates and stylesheets.");
-        jsap.registerParameter(sw4);
-
-        // '-v' : Verbose processing
-        QualifiedSwitch sw1 = (QualifiedSwitch) (new QualifiedSwitch("verbose")
-                                                 .setStringParser(INTEGER_PARSER)
-                                                 .setUsageName("verbose level [1-2]")
-                                                 .setShortFlag('v')
-                                                 .setLongFlag(NO_LONGFLAG));
-
-        sw1.setHelp("Verbose processing.  List files as they are processed.\n"
-                    + "Set verbose level with \"-v:[1-3]\".\n"
-                    + "\"-v\" defaults to level '1'");
-        jsap.registerParameter(sw1);
-
-        // '-j' : Copy html output target directory into a new 'jar' file
-        QualifiedSwitch sw5 = (QualifiedSwitch) (new QualifiedSwitch("jar")
-                                                 .setStringParser(STRING_PARSER)
-                                                 .setList(true)
-                                                 .setListSeparator(';')
-                                                 .setUsageName("jarOption")
-                                                 .setShortFlag('j')
-                                                 .setLongFlag(NO_LONGFLAG));
-
-        sw5.setHelp("Copy html output target directory into a new 'jar' file.\n"
-                    + "NOTE: Can NOT be used with any other switches, except \"-v:n\".");
-        jsap.registerParameter(sw5);
-
-        // '-W' : Initialise wrapper directories and files
-        QualifiedSwitch sw6 = (QualifiedSwitch) (new QualifiedSwitch("initialise")
-                                                 .setStringParser(STRING_PARSER)
-                                                 .setUsageName("document root directory")
-                                                 .setShortFlag('W')
-                                                 .setLongFlag(NO_LONGFLAG));
-
-        sw6.setHelp("Initialise wrapper directories and files.\n"
-                    + "NOTE: Can NOT be used with any other switches, except \"-v:n\".");
-        jsap.registerParameter(sw6);
-
-        // '-h' or '--help' : Provide online help
-        Switch sw3 = new Switch("help")
-                .setShortFlag('h')
-                .setLongFlag("help");
-
-        sw3.setHelp("Provide this online help.");
-        jsap.registerParameter(sw3);
-
-        return jsap;
-    }
-
-    static int initialiseWrappers(String docRootDir)
+    /**
+     * Initialize the wrapper directories and files.
+     *
+     * @param docRootPath The document root directory.
+     *
+     * @return Always '0'.
+     *
+     * @throws IOException            If any.
+     * @throws IniFileFormatException If any.
+     * @throws URISyntaxException     If any.
+     *
+     * @since 0.1
+     * @version 1.0.7
+     */
+    static int initialiseWrappers(final Path docRootPath)
             throws IOException, IniFileFormatException, URISyntaxException {
-        Path docRootPath = of(docRootDir).normalize().toAbsolutePath();
 
+        if (vlevel >= 3)
+        {
+            System.out.println("docRootPath:\n" + docRootPath);
+        }
+
+        // Create directories.
         if (Files.notExists(docRootPath))
         {
             Files.createDirectories(docRootPath);
         }
 
-        Path srcPath = getResource(Cli.class, "/docs").toAbsolutePath();
+        // Get source directory from jar file.
+        Path srcDirPath = getResource(Cli.class, "/docs/init").toAbsolutePath();
 
         if (vlevel >= 2)
         {
-            System.err.println("srcPath: " + srcPath);
-            System.err.println("srcPath exists: " + Files.exists(srcPath));
+            System.err.println("srcDirPath: " + srcDirPath);
+            System.err.println("srcDirPath exists: " + Files.exists(srcDirPath));
         }
 
-        Path iniPath = getResource(Cli.class, "/" + CONF_FILENAME + "").toAbsolutePath();
+        // Get source ini file from jar file.
+        Path srcIniPath = getResource(Cli.class, "/" + CONF_FILENAME + "").toAbsolutePath();
 
         if (vlevel >= 2)
         {
-            System.err.println("iniPath: " + iniPath);
-            System.err.println("iniPath exists: " + Files.exists(iniPath));
+            System.err.println("srcIniPath: " + srcIniPath);
+            System.err.println("srcIniPath exists: " + Files.exists(srcIniPath));
         }
 
-        Path iniPath2 = of(CONF_FILENAME).toAbsolutePath();
+        // Get destination ini file path.
+        Path destIniPath = of(docRootPath.toString(), CONF_FILENAME);
 
         if (vlevel >= 2)
         {
-            System.err.println("iniPath2: " + iniPath2);
-            System.err.println("iniPath2 exists: " + Files.exists(iniPath2));
+            System.err.println("destIniPath: " + destIniPath);
+            System.err.println("destIniPath exists: " + Files.exists(destIniPath));
         }
 
-        copyDirTree(srcPath.toAbsolutePath(), of(docRootDir).toAbsolutePath(),
-                    "*.{html,css}", vlevel, COPY_ATTRIBUTES, REPLACE_EXISTING);
+        copyDirTree(srcDirPath, docRootPath,
+                    "*", vlevel, COPY_ATTRIBUTES, REPLACE_EXISTING);
 
-        if (Files.exists(iniPath2))
+        IniFile iniFile;
+
+        // If there already exists an ini file, then...
+        if (Files.exists(destIniPath))
         {
             if (vlevel >= 2)
             {
-                System.err.println("iniPath2 exists");
+                System.err.println("destIniPath exists");
             }
 
-            IniFile dest = new IniFile(iniPath2).loadFile().mergeFile(iniPath);
-            dest.iniDoc.setString("document", "docRootDir", docRootPath.toString());
-            dest.paddedEquals = true;
-            dest.saveFile();
+            iniFile = new IniFile(srcIniPath).loadFile().mergeFile(destIniPath);
         } else
         {
             if (vlevel >= 2)
             {
-                System.err.println("iniPath2 dosen't exist");
+                System.err.println("destIniPath dosen't exist");
             }
 
-            IniFile src = new IniFile(iniPath).loadFile();
-            src.iniDoc.setString("document", "docRootDir", docRootPath.toString());
-
-            if (vlevel >= 2)
-            {
-                System.err.println("document.docRootDir:" + src.iniDoc.getString("document", "docRootDir", "default"));
-            }
-
-            src.paddedEquals = true;
-            src.saveFileAs(iniPath2);
+            iniFile = new IniFile(srcIniPath).loadFile();
         }
+
+        iniFile.iniDoc.setString("document", "docRootDir", docRootPath.toString());
+        iniFile.iniDoc.setString(null, "iniVersion", POM.version, "; DO NOT REMOVE/MOVE OR MODIFY: iniVersion!");
+
+        if (vlevel >= 2)
+        {
+            System.err.println("document.docRootDir: " + iniFile.iniDoc.getString("document", "docRootDir", "default"));
+        }
+
+        iniFile.paddedEquals = true;
+
+        iniFile.saveFileAs(destIniPath);
 
         return 0;
     }
 
-    static void loadConf(String srcDir) throws IOException, IniFileFormatException {
+    /**
+     * Load the configuration file: {@link #CONF_FILENAME}
+     *
+     * @param srcDirPath Initial directory to look for the file.
+     *
+     * @throws IOException            If any.
+     * @throws IniFileFormatException If any.
+     */
+    static void loadConf(final Path srcDirPath) throws IOException, IniFileFormatException {
         Path iniPath = of(CONF_FILENAME).toAbsolutePath();
+
+        if (vlevel >= 3)
+        {
+            System.err.println("loadConf()");
+        }
 
         if (vlevel >= 2)
         {
             System.err.println("iniPath: " + iniPath.toString());
         }
 
-        if (Files.notExists(iniPath, NOFOLLOW_LINKS) && (srcDir != null))
+        if (Files.notExists(iniPath, NOFOLLOW_LINKS) && (srcDirPath != null))
         {
-            Path srcPath = of(srcDir).toAbsolutePath();
+            Path srcPath = of(srcDirPath.toString());
 
             try
             {
                 while (Files.notExists(srcPath.resolve(CONF_FILENAME), NOFOLLOW_LINKS))
                 {
+                    if (Files.exists(srcPath.resolve("pom.xml"), NOFOLLOW_LINKS))
+                    {
+                        throw new FileNotFoundException(CONF_FILENAME);
+                    }
+
                     srcPath = srcPath.getParent();
 
                     if (vlevel >= 2)
@@ -380,7 +508,6 @@ public class Cli {
         }
 
         conf = new IniFile(iniPath).loadFile();
-        conf.iniDoc.setString("project", "root", iniPath.getParent().toString());
         conf.iniDoc.setString("program", "artifactId", POM.artifactId, "# The identifier for this artifact that is unique within the group given by the groupID");
         conf.iniDoc.setString("program", "description", POM.description, "# Project description");
         conf.iniDoc.setString("program", "filename", POM.filename, "# The filename of the binary output files");
@@ -389,14 +516,55 @@ public class Cli {
         conf.iniDoc.setString("program", "version", POM.version, "# The version of the artifact");
         conf.iniDoc.setString("program", "details", POM.toString(), "# All of the above information laid out");
 
+        BooleanReturn brtn = new BooleanReturn();
+
+        do
+        {
+            brtn.value = false;
+
+            conf.iniDoc.getSections()
+                    .forEach(section ->
+                    {
+                        for (IniProperty<String> prop : conf.iniDoc.getSection(section))
+                        {
+                            BooleanReturn rtn = new BooleanReturn();
+
+                            if (prop.value() != null)
+                            {
+                                if (vlevel >= 3)
+                                {
+                                    System.out.println(prop);
+                                }
+
+                                String value = processSubstitutions(prop.value(), null, rtn);
+
+                                if (rtn.value)
+                                {
+                                    conf.iniDoc.setString(section, prop.key(), value, prop.comment());
+                                    brtn.value = true;
+                                }
+                            }
+                        }
+                    });
+        } while (brtn.value);
+
         if (vlevel >= 2)
         {
             System.out.println(POM);
         }
     }
 
-    static void processFile(Path inpPath, Path outPath, boolean wrapper) throws IOException {
-//        SortedMap<String, String> meta;
+    /**
+     * Process a markdown text file.
+     *
+     * @param inpPath     Path of source file (.md).
+     * @param outPath     Path of destination files (.html).
+     * @param destDirPath Path of the destination directory.
+     * @param wrapper     Process wrapper files?
+     *
+     * @throws IOException If any.
+     */
+    static void processFile(final Path inpPath, final Path outPath, final Path destDirPath, final boolean wrapper) throws IOException {
         StringBuilder sb = new StringBuilder();
         IniDocument iniDoc = conf.iniDoc;
         String template = "";
@@ -416,36 +584,65 @@ public class Cli {
 
         if (wrapper)
         {
-            processMetaBlock();
-            processNamedMetaBlocks();
-        }
+            if (vlevel >= 3)
+            {
+                System.out.println("\n--------------------------------------------\n"
+                                   + "process wrapper...");
+            }
 
-        if (wrapper)
-        {
+            processMetaBlock();
+            configureStylesheetPaths();
+            processNamedMetaBlocks();
+            String preprocessed = processSubstitutions(
+                    iniDoc.getString("page", "text", ""), use, new BooleanReturn());
+
             use = iniDoc.getString("page", "use", null);
             template = getString("page", "template", use);
-            iniDoc.setString("page", "content", MARKDOWN.markdown(processSubstitutions(iniDoc.getString("page", "text", ""), use)));
+            iniDoc.setString("page", "content",
+                             MARKDOWN.markdown(processSubstitutions(
+                                     preprocessed, use, new BooleanReturn())));
 
             if (!template.isBlank())
             {
-                iniDoc.setString("page", "srcFile", inpPath.toAbsolutePath().toString());
+                iniDoc.setString("page", "srcFile", inpPath.toString());
+                iniDoc.setString("page", "destFile", outPath.toString());
+                iniDoc.setString("page", "destDir", destDirPath.toString());
                 processTemplate(use, template);
             }
-
         } else
         {
-            iniDoc.setString("page", "content", MARKDOWN.markdown(iniDoc.getString("page", "text", "")));
+            iniDoc.setString("page", "content",
+                             MARKDOWN.markdown(iniDoc.getString("page", "text", "")));
 
         }
 
-        try ( BufferedWriter outWriter = Files.newBufferedWriter(outPath, CREATE, TRUNCATE_EXISTING, WRITE))
+        try ( BufferedWriter outWriter
+                             = Files.newBufferedWriter(outPath, CREATE, TRUNCATE_EXISTING, WRITE))
         {
-            outWriter.write(iniDoc.getString("page", "html", iniDoc.getString("page", "content", "Error during processing.")));
+            if (vlevel >= 3)
+            {
+                System.out.println("\n--------------------------------------------\n"
+                                   + "Write file: " + outPath);
+                System.out.println("page.html:\n" + iniDoc.getString("page", "html", "No HTML content.")
+                                   + "--------------------------------------------\n");
+            }
+
+            outWriter.write(iniDoc.getString("page", "html",
+                                             iniDoc.getString("page", "content", "Error during processing.")));
         }
     }
 
-    static String processSubstitutions(final String text, final String use) {
+    /**
+     * Process substitutions.
+     *
+     * @param text Text to be processed.
+     * @param use  Alternate section to use.
+     *
+     * @return result.
+     */
+    static String processSubstitutions(final String text, final String use, BooleanReturn found) {
         TextEditor textEd = new TextEditor(text);
+        found.value = false;
 
         do
         {
@@ -454,7 +651,7 @@ public class Cli {
 
                           if (vlevel >= 3)
                           {
-                              System.out.println(m.group());
+                              System.out.println("m.group: " + m.group());
                           }
 
                           String group = m.group("group");
@@ -466,29 +663,37 @@ public class Cli {
                               rtn = getString(group, key, use);
                           }
 
+                          if (vlevel >= 3)
+                          {
+                              System.out.println("rtn: " + rtn);
+                          }
+
                           return rtn;
                       });
+
+            if (textEd.wasFound())
+            {
+                found.value = true;
+            }
         } while (textEd.wasFound());
 
         return textEd.toString();
     }
 
-    static void provideUsageHelp(String msg, JSAP jsap) {
-        System.err.println();
-
-        if (msg != null && !msg.isBlank())
-        {
-            System.err.println(msg);
-        }
-
-        System.err.println("Usage: java -jar " + POM.filename);
-        System.err.println("            " + jsap.getUsage());
-        System.err.println();
-
-        // show full help as well
-        System.err.println(jsap.getHelp());
+    /**
+     * Not meant to be instantiated.
+     */
+    private Cli() {
     }
 
-    private Cli() {
+    /**
+     * A simple struct to return a boolean value through a method parameter.
+     */
+    public static class BooleanReturn {
+
+        /**
+         * The return value.
+         */
+        public boolean value = false;
     }
 }

@@ -84,15 +84,15 @@ import java.util.Properties;
  * @since 0.1
  * @version 1.0
  */
-public final class POMProperties {
+public final class MCPOMProperties {
 
     /**
      * Provides single instance of this class.
      */
-    public final static POMProperties INSTANCE = new POMProperties();
+    public static final MCPOMProperties INSTANCE = new MCPOMProperties();
 
     public static void main(String[] args) {
-        System.out.println(POMProperties.INSTANCE);
+        System.out.println(MCPOMProperties.INSTANCE);
     }
     /**
      * The identifier for this artifact that is unique within
@@ -127,11 +127,11 @@ public final class POMProperties {
      */
     public final String version;
 
-    private POMProperties() {
+    private MCPOMProperties() {
         Properties properties = new Properties();
         try
         {
-            properties.load(POMProperties.class.getResourceAsStream("/pom.properties"));
+            properties.load(MCPOMProperties.class.getResourceAsStream("/mcpom.properties"));
         } catch (IOException ex)
         {
             throw new RuntimeException("FileIOError", ex);
@@ -147,7 +147,7 @@ public final class POMProperties {
 
     @Override
     public String toString() {
-        return new StringBuilder(POMProperties.class.getName()).append(":\n")
+        return new StringBuilder(MCPOMProperties.class.getName()).append(":\n")
                 .append("  title: ").append(title).append("\n")
                 .append("  description: ").append(description).append("\n")
                 .append("  groupId: ").append(groupId).append("\n")
