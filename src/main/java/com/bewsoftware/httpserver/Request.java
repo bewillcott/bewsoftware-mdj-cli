@@ -64,7 +64,7 @@ public final class Request {
      * Constructs a Request from the data in the given input stream.
      *
      * @param in     the input stream from which the request is read
-     * @param server
+     * @param server The active server.
      *
      * @throws IOException if an error occurs
      */
@@ -216,7 +216,7 @@ public final class Request {
      *         or an empty list if there are none
      *
      * @throws IOException if an error occurs
-     * @see HTTPServer#parseParamsList(String)
+     * @see Utils#parseParamsList(String)
      */
     public List<String[]> getParamsList() throws IOException {
         List<String[]> queryParams = parseParamsList(uri.getRawQuery());

@@ -216,7 +216,7 @@ public class Response implements Closeable {
      * as the body. The text is sent in the UTF-8 charset. If a
      * Content-Type header was not explicitly set, it will be set to
      * text/html, and so the text must contain valid (and properly
-     * {@link HTTPServer#escapeHTML escaped}) HTML.
+     * {@link Utils#escapeHTML escaped}) HTML.
      *
      * @param status the response status
      * @param text   the text body (sent as text/html)
@@ -278,7 +278,7 @@ public class Response implements Closeable {
      * Sends an error response with the given status and detailed message.
      * An HTML body is created containing the status and its description,
      * as well as the message, which is escaped using the
-     * {@link HTTPServer#escapeHTML escape} method.
+     * {@link Utils#escapeHTML escape} method.
      *
      * @param status the response status
      * @param text   the text body (sent as text/html)

@@ -121,10 +121,11 @@ import static java.lang.System.exit;
  * the code into the API from there. Alternatively, you can just browse through
  * the classes and utility methods and read their documentation and code.
  * <p>
+ * &nbsp;</p>
  * <hr>
  * <b>Changes:</b>
  * <ul>
- * <li>(2020/12/08 - v2.5.2)</li>
+ * <li>(2020/12/08 - v2.5.2)
  * <ul>
  * <li>Made changes recommended by Netbeans 12.1.</li>
  * <li>Updated code to JDK 12.</li>
@@ -133,13 +134,13 @@ import static java.lang.System.exit;
  * <li>Changed package from: {@code net.freeutils.httpserver} to {@code com.bewsoftware.httpserver}.</li>
  * <li>Updated licence from GPLv2 to GPLv3.</li>
  * <li>To be embed inside 'jar' files containing the results of my MDj CLI program (.md -&lt; .html).</li>
- * </ul>
- * <li>(2020/12/18 - v2.5.3)</li>
+ * </ul></li>
+ * <li>(2020/12/18 - v2.5.3)
  * <ul>
  * <li>Made minor changes to improve embedding.</li>
  * <li>Due to the difficulty of working with such a large single file, I have split it up
  * into many smaller more manageable files.</li>
- * </ul>
+ * </ul></li>
  * </ul>
  * Bradley Willcott
  * <hr>
@@ -479,6 +480,71 @@ public class HTTPServer {
     public static boolean isWindows() {
         return OS.contains("win");
     }
+
+    //=====================================================================================
+    /**
+     * Starts a stand-alone HTTP server, serving files from disk.
+     *
+     * @param args the command line arguments
+     *
+     * @throws URISyntaxException   if any.
+     * @throws InterruptedException if any.
+     */
+    public static void main(String[] args) throws URISyntaxException, InterruptedException {
+        HTTPServer server = null;
+
+        try
+        {
+            server = new HTTPServer(DEFAULT_PORT_RANGE[0]);
+
+            Path dir = null;
+
+            // set up server
+            File f = new File("/etc/mime.types");
+
+            if (f.exists())
+            {
+                addContentTypes(new FileInputStream(f));
+            } else
+            {
+                addContentTypes(HTTPServer.class.getResourceAsStream("/etc/mime.types"));
+            }
+
+            VirtualHost host = server.getVirtualHost(null); // default host
+            host.setAllowGeneratedIndex(true); // with directory index pages
+            host.addContext("/", new JarContextHandler(dir, "/"));
+            host.addContext("/api/time", (Request req, Response resp) ->
+                    {
+                        long now = System.currentTimeMillis();
+                        resp.getHeaders().add("Content-Type", "text/plain");
+                        resp.send(200, String.format("Server time: %tF %<tT", now));
+                        return 0;
+                    });
+
+            server.start();
+            String msg = TITLE + " (" + VERSION + ") is listening on port " + server.port;
+            System.out.println(msg);
+            openURL(new URL("http", "localhost", server.port, "/"));
+
+            // GUI dialog to show server running, with button to
+            // shutdown server.
+            //
+            //Custom button text
+            Object[] options =
+            {
+                "Stop Server"
+            };
+            JOptionPane.showOptionDialog(null, msg, TITLE + " (" + VERSION + ")",
+                                         JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE,
+                                         null, options, null);
+
+            server.stop();
+            exit(0);
+        } catch (IOException | NumberFormatException e)
+        {
+            System.err.println("error: " + e);
+        }
+    } //=====================================================================================
 
     /**
      * Parses a date string in one of the supported {@link #DATE_PATTERNS}.
