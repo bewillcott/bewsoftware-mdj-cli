@@ -98,7 +98,7 @@
             <version>1.4</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>com.bewsoftware</groupId>
             <artifactId>bewsoftware-jlhttp</artifactId>
             <version>2.5.4</version>
         </dependency>
@@ -263,6 +263,49 @@
                                 <configuration>
                                     <release>true</release>
                                     <keepNumber>true</keepNumber>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>package-manual</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.bewsoftware.mojo</groupId>
+                        <artifactId>bewsoftware-mdj-plugin</artifactId>
+                        <executions>
+<!--                            <execution>
+                                <id>MDj-Compile(release)</id>
+                                <goals>
+                                    <goal>mdj</goal>
+                                </goals>
+                            </execution>-->
+                            <execution>
+                                <id>MDj-Package(HTML)</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <jarSrcDir>target/docs/manual</jarSrcDir>
+                                    <jarFilename>${project.build.finalName}-manual.jar</jarFilename>
+                                    <docRootDir>src/docs/manual</docRootDir>
+                                    <verbosity></verbosity>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>MDj-Package(SRC)</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <jarSrcDir>src/docs/manual</jarSrcDir>
+                                    <jarFilename>${project.build.finalName}-manual-src.jar</jarFilename>
+                                    <docRootDir>src/docs/manual</docRootDir>
+                                    <verbosity></verbosity>
                                 </configuration>
                             </execution>
                         </executions>
@@ -445,7 +488,7 @@
                 <plugin>
                     <groupId>com.bewsoftware.mojo</groupId>
                     <artifactId>bewsoftware-mdj-plugin</artifactId>
-                    <version>0.27.5</version>
+                    <version>0.28.6-SNAPSHOT</version>
                 </plugin>                
                 <plugin>                        
                     <groupId>com.bew.mojo</groupId>
@@ -556,7 +599,7 @@
                         <configuration>
                             <source>src/docs/manual</source>
                             <destination>target/docs/manual</destination>
-                            <verbosity>1</verbosity>
+                            <verbosity></verbosity>
                         </configuration>
                     </execution>
                 </executions>
