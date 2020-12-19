@@ -31,6 +31,7 @@ module bewsoftware.mdj.cli {
     requires bewsoftware.common;
     requires bewsoftware.mdj.core;
     requires bewsoftware.property;
+    requires bewsoftware.jlhttp;
     requires commons.cli;
     requires java.desktop;
     requires org.apache.logging.log4j;
