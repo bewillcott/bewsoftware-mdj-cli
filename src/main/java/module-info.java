@@ -26,12 +26,12 @@
  * @since 1.0
  * @version 1.0
  */
-module MdjCli {
+module bewsoftware.mdj.cli {
+    requires bewsoftware.files;
+    requires bewsoftware.common;
+    requires bewsoftware.mdj.core;
+    requires bewsoftware.property;
     requires commons.cli;
-    requires BEWFiles;
-    requires BEWProperty;
-    requires BEWCommon;
-    requires org.apache.logging.log4j;
-    requires MdjCore;
     requires java.desktop;
+    requires org.apache.logging.log4j;
 }

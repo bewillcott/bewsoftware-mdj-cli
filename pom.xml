@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     
     <groupId>com.bewsoftware</groupId>
-    <artifactId>mdj-cli</artifactId>
-    <version>1.0.26</version>
+    <artifactId>bewsoftware-mdj-cli</artifactId>
+    <version>1.0.27</version>
     <packaging>jar</packaging>
 
-    <name>MDj CLI</name>
+    <name>BEW Software MDj CLI</name>
     <description>Command-line program that uses the MDj Core library to process markdown text files into static html files.</description>
 
     <properties>
@@ -78,13 +78,19 @@
         </dependency>
         <dependency>
             <groupId>com.bewsoftware</groupId>
-            <artifactId>BEWFiles</artifactId>
+            <artifactId>bewsoftware-files</artifactId>
             <version>1.0.4</version>
         </dependency>
         <dependency>
             <groupId>com.bewsoftware</groupId>
-            <artifactId>mdj-core</artifactId>
-            <version>0.6.5</version>
+            <artifactId>bewsoftware-mdj-core</artifactId>
+            <version>0.6.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bewsoftware</groupId>
+            <artifactId>bewsoftware-mdj-core</artifactId>
+            <version>0.6.6</version>
+            <classifier>manual</classifier>
         </dependency>
         <dependency>
             <groupId>commons-cli</groupId>
@@ -100,7 +106,7 @@
                 <plugins>
                     <plugin>
                         <groupId>com.bewsoftware.mojo</groupId>
-                        <artifactId>mdj-maven-plugin</artifactId>
+                        <artifactId>bewsoftware-mdj-plugin</artifactId>
                         <executions>
                             <execution>
                                 <id>MDj-Clean</id>
@@ -123,7 +129,7 @@
                 <plugins>
                     <plugin>
                         <groupId>com.bewsoftware.mojo</groupId>
-                        <artifactId>mdj-maven-plugin</artifactId>
+                        <artifactId>bewsoftware-mdj-plugin</artifactId>
                         <executions>
                             <execution>
                                 <id>MDj-Compile(interim)</id>
@@ -133,7 +139,7 @@
                                 <configuration>
                                     <source>src/docs/manual</source>
                                     <destination>target/docs/manual</destination>
-                                    <verbosity>1</verbosity>
+                                    <verbosity></verbosity>
                                 </configuration>
                             </execution>
                         </executions>
@@ -148,7 +154,7 @@
                 <plugins>
                     <plugin>
                         <groupId>com.bewsoftware.mojo</groupId>
-                        <artifactId>mdj-maven-plugin</artifactId>
+                        <artifactId>bewsoftware-mdj-plugin</artifactId>
                         <executions>
                             <execution>
                                 <id>MDj-Clean-Compile</id>
@@ -159,7 +165,7 @@
                                 <configuration>
                                     <source>src/docs/manual</source>
                                     <destination>target/docs/manual</destination>
-                                    <verbosity>1</verbosity>
+                                    <verbosity></verbosity>
                                 </configuration>
                             </execution>
                         </executions>
@@ -174,10 +180,11 @@
                 <plugins>
                     <plugin>
                         <groupId>com.bewsoftware.mojo</groupId>
-                        <artifactId>mdj-maven-plugin</artifactId>
+                        <artifactId>bewsoftware-mdj-plugin</artifactId>
                         <executions>
                             <execution>
                                 <id>MDj-Manual</id>
+                                <phase>install</phase>
                                 <goals>
                                     <goal>manual</goal>
                                 </goals>
@@ -264,9 +271,9 @@
                 <plugins>                    
                     <plugin>
                         <groupId>com.bewsoftware.mojo</groupId>
-                        <artifactId>mdj-maven-plugin</artifactId>
+                        <artifactId>bewsoftware-mdj-plugin</artifactId>
                         <executions>
-                            <execution>
+<!--                            <execution>
                                 <id>MDj-Compile(release)</id>
                                 <goals>
                                     <goal>mdj</goal>
@@ -274,9 +281,9 @@
                                 <configuration>
                                     <source>src/docs/manual</source>
                                     <destination>target/docs/manual</destination>
-                                    <verbosity>1</verbosity>
+                                    <verbosity></verbosity>
                                 </configuration>
-                            </execution>
+                            </execution>-->
                             <execution>
                                 <id>MDj-Package(HTML)</id>
                                 <goals>
@@ -286,7 +293,7 @@
                                     <jarFilename>${project.build.finalName}-manual.jar</jarFilename>
                                     <jarSrcDir>target/docs/manual</jarSrcDir>
                                     <docRootDir>src/docs/manual</docRootDir>
-                                    <verbosity>1</verbosity>
+                                    <verbosity></verbosity>
                                 </configuration>
                             </execution>
                             <execution>
@@ -298,7 +305,7 @@
                                     <jarFilename>${project.build.finalName}-manual-src.jar</jarFilename>
                                     <jarSrcDir>src/docs/manual</jarSrcDir>
                                     <docRootDir>src/docs/manual</docRootDir>
-                                    <verbosity>1</verbosity>
+                                    <verbosity></verbosity>
                                 </configuration>
                             </execution>
                         </executions>
@@ -310,7 +317,7 @@
                         <executions>
                             <execution>
                                 <id>Zip Binary Jar and libs</id>
-                                <phase>package</phase>
+                                <phase>verify</phase>
                                 <goals>
                                     <goal>exec</goal>
                                 </goals>
@@ -432,9 +439,15 @@
             <plugins>
                 <plugin>
                     <groupId>com.bewsoftware.mojo</groupId>
-                    <artifactId>mdj-maven-plugin</artifactId>
-                    <version>0.26.4</version>
+                    <artifactId>bewsoftware-mdj-plugin</artifactId>
+                    <version>0.27.5</version>
+                </plugin>                
+                <plugin>                        
+                    <groupId>com.bew.mojo</groupId>
+                    <artifactId>simple-buildnumber-maven-plugin</artifactId>
+                    <version>1.0.15</version>
                 </plugin>
+
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
@@ -522,58 +535,26 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>3.0.0-M5</version>
                 </plugin>
-                <plugin>                        
-                    <groupId>com.bew.mojo</groupId>
-                    <artifactId>simple-buildnumber-maven-plugin</artifactId>
-                    <version>1.0.15</version>
-                </plugin>
             </plugins>
         </pluginManagement>
 
-        <plugins>     
+        <plugins>                       
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <release>${maven.compiler.target}</release>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-scm-plugin</artifactId>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.scm</groupId>
-                        <artifactId>maven-scm-provider-gitexe</artifactId>
-                        <version>1.11.2</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <showDeprecation>true</showDeprecation>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
-                    <release>${java.version}</release>
-                    <encoding>${source.encoding}</encoding>
-                    <compilerArgs>
-                        <arg>-Xlint:all</arg>
-                    </compilerArgs>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <configuration>
-                    <locales>en</locales>
-                </configuration>
+                <groupId>com.bewsoftware.mojo</groupId>
+                <artifactId>bewsoftware-mdj-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>MDj-Compile(default)</id>
+                        <goals>
+                            <goal>mdj</goal>
+                        </goals>
+                        <configuration>
+                            <source>src/docs/manual</source>
+                            <destination>target/docs/manual</destination>
+                            <verbosity>1</verbosity>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -600,14 +581,59 @@
                     </execution>
                 </executions>
             </plugin>
+  
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <release>${maven.compiler.target}</release>
+                </configuration>
+            </plugin>
+<!--            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+            </plugin>-->
+<!--            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.scm</groupId>
+                        <artifactId>maven-scm-provider-gitexe</artifactId>
+                        <version>1.11.2</version>
+                    </dependency>
+                </dependencies>
+            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <showDeprecation>true</showDeprecation>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <release>${java.version}</release>
+                    <encoding>${source.encoding}</encoding>
+                    <compilerArgs>
+                        <arg>-Xlint:all</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+<!--            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <configuration>
+                    <locales>en</locales>
+                </configuration>
+            </plugin>-->
+<!--            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-            </plugin>
-            <plugin>
+            </plugin>-->
+<!--            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
