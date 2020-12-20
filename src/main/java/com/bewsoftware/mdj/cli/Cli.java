@@ -35,6 +35,7 @@ import com.bewsoftware.mdj.core.MarkdownProcessor;
 import com.bewsoftware.mdj.core.POMProperties;
 import com.bewsoftware.mdj.core.TextEditor;
 import com.bewsoftware.property.IniProperty;
+import com.bewsoftware.utils.struct.BooleanReturn;
 import java.util.Date;
 import java.util.List;
 
@@ -520,7 +521,7 @@ public class Cli {
 
         do
         {
-            brtn.value = false;
+            brtn.val = false;
 
             conf.iniDoc.getSections()
                     .forEach(section ->
@@ -538,15 +539,15 @@ public class Cli {
 
                                 String value = processSubstitutions(prop.value(), null, rtn);
 
-                                if (rtn.value)
+                                if (rtn.val)
                                 {
                                     conf.iniDoc.setString(section, prop.key(), value, prop.comment());
-                                    brtn.value = true;
+                                    brtn.val = true;
                                 }
                             }
                         }
                     });
-        } while (brtn.value);
+        } while (brtn.val);
 
         if (vlevel >= 2)
         {
@@ -642,7 +643,7 @@ public class Cli {
      */
     static String processSubstitutions(final String text, final String use, BooleanReturn found) {
         TextEditor textEd = new TextEditor(text);
-        found.value = false;
+        found.val = false;
 
         do
         {
@@ -673,7 +674,7 @@ public class Cli {
 
             if (textEd.wasFound())
             {
-                found.value = true;
+                found.val = true;
             }
         } while (textEd.wasFound());
 
@@ -684,16 +685,5 @@ public class Cli {
      * Not meant to be instantiated.
      */
     private Cli() {
-    }
-
-    /**
-     * A simple struct to return a boolean value through a method parameter.
-     */
-    public static class BooleanReturn {
-
-        /**
-         * The return value.
-         */
-        public boolean value = false;
     }
 }

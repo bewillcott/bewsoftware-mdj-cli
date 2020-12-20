@@ -23,21 +23,22 @@ import com.bewsoftware.common.InvalidParameterValueException;
 import com.bewsoftware.common.InvalidProgramStateException;
 import com.bewsoftware.fileio.ini.IniFile;
 import com.bewsoftware.fileio.ini.IniFileFormatException;
-import com.bewsoftware.httpserver.HTTPServer;
+import com.bewsoftware.httpserver.ContextHandler;
+import com.bewsoftware.httpserver.JarContextHandler;
 import com.bewsoftware.property.IniProperty;
+import com.bewsoftware.utils.struct.BooleanReturn;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import static com.bewsoftware.fileio.BEWFiles.copyDirTree;
-import static java.lang.System.exit;
-import static java.nio.file.Path.of;
-import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static com.bewsoftware.mdj.cli.Cli.conf;
 import static com.bewsoftware.mdj.cli.Cli.initialiseWrappers;
 import static com.bewsoftware.mdj.cli.Cli.loadConf;
@@ -45,6 +46,10 @@ import static com.bewsoftware.mdj.cli.Cli.processFile;
 import static com.bewsoftware.mdj.cli.Cli.vlevel;
 import static com.bewsoftware.mdj.cli.Find.getUpdateList;
 import static com.bewsoftware.mdj.cli.Jar.createJarFile;
+import static java.lang.System.exit;
+import static java.nio.file.Path.of;
+import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 /**
  *
@@ -152,7 +157,7 @@ public class Main {
         if (cmd.hasOption('m'))
         {
             System.out.println("Displaying manual...");
-            HTTPServer.execute();
+            MCHttpServer.execute();
             return 0;
         }
 
@@ -367,7 +372,7 @@ public class Main {
 
                     if (value != null)
                     {
-                        value = Cli.processSubstitutions(value, null, new Cli.BooleanReturn());
+                        value = Cli.processSubstitutions(value, null, new BooleanReturn());
 
                         if (!value.isEmpty())
                         {
