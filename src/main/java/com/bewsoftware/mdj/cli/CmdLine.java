@@ -19,6 +19,7 @@ package com.bewsoftware.mdj.cli;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * CmdLine interface description.
@@ -62,6 +63,24 @@ public interface CmdLine {
      * @return the List. If no Exceptions, then the List will be empty.
      */
     public List<Exception> exceptions();
+
+    /**
+     * Retrieve the map of values associated to the option.
+     *
+     * @param opt name of the option.
+     *
+     * @return The Properties mapped by the option, never null even if the option doesn't exists.
+     */
+    public Properties getOptionProperties(char opt);
+
+    /**
+     * Retrieve the map of values associated to the option.
+     *
+     * @param opt name of the option.
+     *
+     * @return The Properties mapped by the option, never null even if the option doesn't exists.
+     */
+    public Properties getOptionProperties(String opt);
 
     /**
      * Has the option been set.

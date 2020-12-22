@@ -20,7 +20,7 @@ For additional info see http://www.freeutils.net/source/jlhttp/
 
 ========================================================================
 
-This archive ('jar' file) was created by MDj CLI.
+This archive ('jar' file) was created by BEWSoftware MDj CLI.
 A program that processes markdown files into static html files.
 Along with those files, there is a stand-alone http server
 included in this archive.
@@ -41,7 +41,7 @@ address:
 http://localhost:<port>
 
 The port number will be found in the dialog box that will also
-have a button to stop the server.  You can start and stop the
+have a button to [stop] the server.  You can start and stop the
 server as many times as you want/need.  The only limit, is it
 has been set to use a port in the range: 9000 - 9010 (inclusive).
 So, at most you can only have 11 copies running at once.  Though

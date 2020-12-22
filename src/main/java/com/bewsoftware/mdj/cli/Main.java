@@ -23,8 +23,6 @@ import com.bewsoftware.common.InvalidParameterValueException;
 import com.bewsoftware.common.InvalidProgramStateException;
 import com.bewsoftware.fileio.ini.IniFile;
 import com.bewsoftware.fileio.ini.IniFileFormatException;
-import com.bewsoftware.httpserver.ContextHandler;
-import com.bewsoftware.httpserver.JarContextHandler;
 import com.bewsoftware.property.IniProperty;
 import com.bewsoftware.utils.struct.BooleanReturn;
 import java.io.File;
@@ -157,7 +155,19 @@ public class Main {
         if (cmd.hasOption('m'))
         {
             System.out.println("Displaying manual...");
-            MCHttpServer.execute();
+            MCHttpServer.execute(cmd);
+            return 0;
+        }
+
+        //
+        // if '-p' then, publish http files from either: jarFile or docRootPath.
+        //
+        // returns 0.
+        //
+        if (cmd.hasOption('p'))
+        {
+            System.out.println("Publishing files...");
+            MCHttpServer.execute(cmd);
             return 0;
         }
 
@@ -229,44 +239,45 @@ public class Main {
             default:
         }
 
-        //
-        // '-a' jar file creation
-        //
-        // returns 0 - successs
-        //         3 - fail.
-        //
-        if (cmd.hasOption('a'))
-        {
-            if (cmd.hasOption('i')
-                || cmd.hasOption('j')
-                || cmd.hasOption('o')
-                || cmd.hasOption('s')
-                || cmd.hasOption('d')
-                || cmd.hasOption('r')
-                || cmd.hasOption('W')
-                || cmd.hasOption('w'))
-            {
-                String msg = "Too many switches for \"-a\"\n\n";
-
-                cmd.printHelp(msg, SYNTAX, HELP_HEADER, HELP_FOOTER, true);
-                return 3;
-            }
-
-            // Load configuration file data
-            try
-            {
-                loadConf(cmd.docRootPath());
-            } catch (FileNotFoundException ex)
-            {
-                if (vlevel >= 2)
-                {
-                    System.err.println(ex);
-                }
-            }
-
-            return createJarFile(cmd.jarFile(), cmd.jarSourcePath(), vlevel);
-        }
-
+//        //
+//        // '-a' jar file creation
+//        //
+//        // returns 0 - successs
+//        //         3 - fail.
+//        //
+//        if (cmd.hasOption('a'))
+//        {
+//            if (cmd.hasOption('i')
+//                || cmd.hasOption('j')
+//                || cmd.hasOption('o')
+//                || cmd.hasOption('s')
+//                || cmd.hasOption('d')
+//                || cmd.hasOption('p')
+//                || cmd.hasOption('r')
+//                || cmd.hasOption('W')
+//                || cmd.hasOption('w'))
+//            {
+//                String msg = "Too many switches for \"-a\"\n\n";
+//
+//                cmd.printHelp(msg, SYNTAX, HELP_HEADER, HELP_FOOTER, true);
+//                return 3;
+//            }
+//
+//            // Load configuration file data
+//            try
+//            {
+//                loadConf(cmd.docRootPath());
+//            } catch (FileNotFoundException ex)
+//            {
+//                if (vlevel >= 2)
+//                {
+//                    System.err.println(ex);
+//                }
+//            }
+//
+//            return createJarFile(cmd.jarFile(), cmd.jarSourcePath(), vlevel);
+//        }
+//
         //
         // '-j' jar file creation
         //
@@ -276,10 +287,10 @@ public class Main {
         if (cmd.hasOption('j'))
         {
             if (cmd.hasOption('i')
-                || cmd.hasOption('a')
                 || cmd.hasOption('o')
                 || cmd.hasOption('s')
                 || cmd.hasOption('d')
+                || cmd.hasOption('p')
                 || cmd.hasOption('r')
                 || cmd.hasOption('W')
                 || cmd.hasOption('w'))
@@ -313,12 +324,11 @@ public class Main {
         if (cmd.hasOption('W'))
         {
             if (cmd.hasOption('i')
-                || cmd.hasOption('a')
                 || cmd.hasOption('o')
                 || cmd.hasOption('s')
                 || cmd.hasOption('d')
+                || cmd.hasOption('p')
                 || cmd.hasOption('r')
-                || cmd.hasOption('j')
                 || cmd.hasOption('w'))
             {
                 String msg = "Too many switches for \"-W\"\n\n";
