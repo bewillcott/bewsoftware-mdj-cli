@@ -10,7 +10,7 @@ package basename of: `com.bewsoftware.mdj.*`.  `bewsoftware.com` is a domain
 name that I now own.
 
 ## Manual
-The current manual can viewed [here](manual/index.html).
+The current manual can viewed [here].
 
 ## Status
 This is a program under active development.  It is not yet ready for release.
@@ -32,6 +32,7 @@ Repository.  Once I have everything ship-shape, then I will.
 The original source code project: [Markdownj].
 
 
+[here]:manual/
 [Markdownj]:https://github.com/myabc/markdownj
 [bewl]:https://github.com/bewillcott/bewsoftware-libs
 [mjc]:https://github.com/bewillcott/bewsoftware-mdj
