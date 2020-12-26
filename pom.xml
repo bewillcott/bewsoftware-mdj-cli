@@ -642,7 +642,7 @@
                 <plugin>
                     <groupId>com.bewsoftware.mojo</groupId>
                     <artifactId>bewsoftware-mdj-plugin</artifactId>
-                    <version>1.0.33-SNAPSHOT</version>
+                    <version>1.0.33</version>
                 </plugin>                
                 <plugin>                        
                     <groupId>com.bew.mojo</groupId>
