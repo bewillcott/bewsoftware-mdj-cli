@@ -9,6 +9,9 @@ rename was necessary.  Further, the code in both has been refactored to a new
 package basename of: `com.bewsoftware.mdj.*`.  `bewsoftware.com` is a domain 
 name that I now own.
 
+## Manual
+The current manual can viewed [here](manual/index.html).
+
 ## Status
 This is a program under active development.  It is not yet ready for release.
 However, I have placed it here for public reference purposes.
