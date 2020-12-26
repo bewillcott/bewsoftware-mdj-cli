@@ -32,7 +32,7 @@ Repository.  Once I have everything ship-shape, then I will.
 The original source code project: [Markdownj].
 
 
-[here]:manual/
+[here]:https://github.com/bewillcott/bewsoftware-mdj-cli/blob/master/manual/index.html
 [Markdownj]:https://github.com/myabc/markdownj
 [bewl]:https://github.com/bewillcott/bewsoftware-libs
 [mjc]:https://github.com/bewillcott/bewsoftware-mdj

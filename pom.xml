@@ -637,7 +637,7 @@
             </resource>
             <resource>
                 <directory>
-                    manual
+                    docs
                 </directory>
                 <excludes>
                     <exclude>
@@ -799,7 +799,7 @@
                         </goals>
                         <phase>prepare-package</phase>
                         <configuration>
-                            <outputDirectory>${basedir}</outputDirectory>
+                            <outputDirectory>${basedir}/docs</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>
