@@ -803,7 +803,7 @@
                             <resources>
                                 <resource>
                                     <directory>
-                                        target/docs
+                                        target/docs/manual
                                     </directory>
                                 </resource>
                             </resources>
