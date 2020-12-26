@@ -635,6 +635,16 @@
                     </exclude>
                 </excludes>
             </resource>
+            <resource>
+                <directory>
+                    manual
+                </directory>
+                <excludes>
+                    <exclude>
+                        **/*
+                    </exclude>
+                </excludes>
+            </resource>
         </resources>
 
         <pluginManagement>
