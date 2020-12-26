@@ -766,12 +766,30 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>Copy-Manual-to-build</id>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
                         <phase>prepare-package</phase>
                         <configuration>
                             <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>
+                                        target/docs
+                                    </directory>
+                                </resource>
+                            </resources>
+                        </configuration>                    
+                    </execution>
+                    <execution>                        
+                        <id>Copy-Manual-to-basedir</id>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <outputDirectory>${basedir}</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>
