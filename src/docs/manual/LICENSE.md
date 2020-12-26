@@ -711,14 +711,14 @@ Public License instead of this License.  But first, please read
 
 @@@[navbar]
 - [Home]
-- [@dropdown] [Setup][@dropbtn]
+- [@dropdown] [Setup]
 [@dropdown-content]
     - [Configuration]
     - [Command-line Options]
-- [@dropdown] [Meta Blocks][@dropbtn]
+- [@dropdown] [Meta Blocks]
 [@dropdown-content]
     - [Named Meta Blocks]
-- [@right dropdown subactive] [About][@dropbtn]
+- [@right dropdown subactive] [About]
 [@dropdown-content]
     - [ToDo List]
     - [@active] [License](#)

@@ -144,8 +144,16 @@ public final class MyCmdLine implements CmdLine {
         options.addOption(builder()
                 .desc("Allow a directory listing to be generated, if no 'index' file found.\n"
                       + "Use with option: '-p'.\n"
-                      + "(default: 'false'.")
+                      + "(default: 'false')")
                 .longOpt("allowGeneratedIndex")
+                .build());
+
+        // Add "--disallowBrowserFileCaching"
+        options.addOption(builder()
+                .desc("Disallow web browsers caching the files sent by this instance of the web server.\n"
+                      + "Use with option: '-p'.\n"
+                      + "(default: 'false')")
+                .longOpt("disallowBrowserFileCaching")
                 .build());
 
         // Add help: '-h' or '--help'
@@ -241,7 +249,21 @@ public final class MyCmdLine implements CmdLine {
                           : hasOption('W')
                             ? of(cmdLine.getOptionValue('W', "").replace('\\', '/')).normalize().toAbsolutePath()
                             : null;
-            inputFile = hasOption('i') ? new File(cmdLine.getOptionValue('i').replace('\\', '/')) : null;
+
+            if (hasOption('i'))
+            {
+                File inputFile = new File(cmdLine.getOptionValue('i').replace('\\', '/'));
+
+                if (inputFile.getName().endsWith(".md"))
+                {
+                    this.inputFile = inputFile;
+                } else
+                {
+                    throw new InvalidParameterValueException("'-i <filename>' must have an extension of '.md':\n" + inputFile);
+                }
+            }
+
+//            inputFile = hasOption('i') ? new File(cmdLine.getOptionValue('i').replace('\\', '/')) : null;
             jarFile = hasOption('a') ? new File(cmdLine.getOptionValue('a').replace('\\', '/'))
                       : hasOption('j') ? new File(cmdLine.getOptionValues('j')[0].replace('\\', '/')) : null;
             jarSourcePath = hasOption('j')

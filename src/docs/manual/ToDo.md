@@ -9,8 +9,10 @@ title: ${program.title} | ToDo List
 - [ ]! Revise manual.
 - [x]! (12/12/2020) Add option to display copyright notice: `-c`.
 - [x]! (12/12/2020) Add option to display web based manual in system default web browser: `-m`.
-- [ ]! Add option to publish files in a directory of the file system, or from an
+- [x]! (24/12/2020) Add option to publish files in a directory of the file system, or from an
         external 'jar' file: `-p`.
+    - [x]! (24/12/2020) Add switch to allow the generation of directory listings: `--allowGeneratedIndex`.
+    - [x]! (24/12/2020) Add switch to disallow browsers caching files: `--disallowBrowserFileCaching`.
 - [ ]! Add option to insert the HTTP Server into an existing 'jar' file, to server pages
 from within.  For example: a program's javadoc.jar file: `-a`.
 - [ ]! Meta blocks:
@@ -48,14 +50,14 @@ from within.  For example: a program's javadoc.jar file: `-a`.
 
 @@@[navbar]
 - [Home]
-- [@dropdown] [Setup][@dropbtn]
+- [@dropdown] [Setup]
 [@dropdown-content]
     - [Configuration]
     - [Command-line Options]
-- [@dropdown] [Meta Blocks][@dropbtn]
+- [@dropdown] [Meta Blocks]
 [@dropdown-content]
     - [Named Meta Blocks]
-- [@right dropdown subactive] [About][@dropbtn]
+- [@right dropdown subactive] [About]
 [@dropdown-content]
     - [@active] [ToDo List](#)
     - [License]

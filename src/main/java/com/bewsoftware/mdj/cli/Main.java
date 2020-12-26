@@ -176,6 +176,14 @@ public class Main {
         //
         if (cmd.hasOption('i'))
         {
+            String filename = cmd.inputFile().getName();
+            int dotIdx = filename.lastIndexOf('.');
+
+            if (dotIdx <= 0 || dotIdx == filename.length() - 1)
+            {
+
+            }
+
             String parent = cmd.inputFile().getParent();
 
             if (parent != null)

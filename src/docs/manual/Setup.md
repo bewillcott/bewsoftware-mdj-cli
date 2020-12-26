@@ -9,7 +9,9 @@ title: ${program.title} | Setup
 To setup everything, run the following from either your project or document root
 directory:
 
-`java -jar /path/to/mdj-cli-<version>.jar -v -W [<docRootDir>]`
+~~~
+java -jar /path/to/mdj-cli-<version>.jar -v -W [<docRootDir>]
+~~~
 
 For example - a new project directory structure: (Linux)
 
@@ -71,14 +73,14 @@ To setup this up, run the following command from inside the book root directory:
 
 @@@[navbar]
 - [Home]
-- [@dropdown active] [Setup][@dropbtn](#)
+- [@dropdown active] [Setup](#)
 [@dropdown-content]
     - [Configuration]
     - [Command-line Options]
-- [@dropdown] [Meta Blocks][@dropbtn]
+- [@dropdown] [Meta Blocks]
 [@dropdown-content]
     - [Named Meta Blocks]
-- [@right dropdown] [About][@dropbtn]
+- [@right dropdown] [About]
 [@dropdown-content]
     - [ToDo List]
     - [License]
