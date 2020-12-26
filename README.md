@@ -17,10 +17,10 @@ Feel free to clone what is here, but realize that I am still working on it.
 The documentation is limited.  That is part of the work in progress.
 
 ## Dependencies
-You will also need two other repositories to compile this one:
+You will also need two other projects to compile this one:
 
-- [BEWSoftware Libraries][bewl]!
-- [BEWSoftware MDj Core Library][mjc]!
+- [BEWSoftware Libraries][bewl]
+- [BEWSoftware MDj Core Library][mjc]
 
 Sorry, but I have not as yet uploaded any of these libraries to the Maven
 Repository.  Once I have everything ship-shape, then I will.
