@@ -511,7 +511,7 @@ public class Cli {
         conf = new IniFile(iniPath).loadFile();
         conf.iniDoc.setString("program", "artifactId", POM.artifactId, "# The identifier for this artifact that is unique within the group given by the groupID");
         conf.iniDoc.setString("program", "description", POM.description, "# Project description");
-        conf.iniDoc.setString("program", "filename", POM.filename, "# The filename of the binary output files");
+        conf.iniDoc.setString("program", "filename", POM.filename, "# The filename of the binary output file");
         conf.iniDoc.setString("program", "groupId", POM.groupId, "# Project GroupId");
         conf.iniDoc.setString("program", "title", POM.title, "# Project Name");
         conf.iniDoc.setString("program", "version", POM.version, "# The version of the artifact");

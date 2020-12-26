@@ -27,7 +27,7 @@ div.navbar ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    overflow: auto;
+    overflow: hidden;
     background-color: #f1f1f1;
 }
 
@@ -39,7 +39,7 @@ div.navbar li a {
     display: inline-block;
     color: black;
     text-align: center;
-    padding: 8px 10px;
+    padding: 10px 10px;
     text-decoration: none;
 }
 
@@ -51,25 +51,37 @@ div.navbar li a.icon, a.icon {
     padding-right: 6px;
 }
 
+div.navbar li.active {
+    background-color: #4CAF50;
+}
+
 div.navbar * li:not(.active) a:hover {
     background-color: #555;
     color: white;
 }
 
-div.navbar li.active {
-    background-color: #4CAF50;
+div.navbar li.centred{
+    float: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 div.navbar li.right {
     float: right;
 }
 
-div.navbar li.dropdown.subactive {
-    background-color: lightgreen;
-}
-
 div.navbar li.dropdown {
     display: inline-block;
+}
+
+div.navbar li.dropdown:hover ul.dropdown-content {
+    display: block;
+}
+
+div.navbar li.dropdown.subactive {
+    background-color: lightgreen;
 }
 
 div.navbar ul.dropdown-content {
@@ -92,8 +104,13 @@ div.navbar ul.dropdown-content a {
     text-align: left;
 }
 
-div.navbar li.dropdown:hover ul.dropdown-content {
-    display: block;
+div.navbar a.previous, 
+div.navbar a.previous:link, 
+div.navbar a.previous:visited, 
+div.navbar a.previous:active, 
+div.navbar a.previous:hover {
+    background: url(../etc/previous.png) right center no-repeat;
+    padding-right: 18px;
 }
 
 @media screen and (max-width: 600px) {

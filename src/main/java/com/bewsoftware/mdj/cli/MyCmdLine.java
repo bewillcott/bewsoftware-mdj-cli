@@ -18,9 +18,11 @@ package com.bewsoftware.mdj.cli;
 
 import com.bewsoftware.common.InvalidParameterValueException;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import org.apache.commons.cli.*;
 
 import static java.nio.file.Path.of;
@@ -44,14 +46,13 @@ public final class MyCmdLine implements CmdLine {
     private static Options initializeOptions() {
         Options options = new Options();
 
-        // Add add http server to existing 'jar' file: '-a'
-        options.addOption(builder("a")
-                .desc("Copy HTTP Server files into an existing 'jar' file.\n"
-                      + "NOTE: Can NOT be used with any other switches,\nexcept \"-v <level>\".")
-                .hasArg()
-                .argName("jarfile")
-                .build());
-
+//        // Add add http server to existing 'jar' file: '-a'
+//        options.addOption(builder("a")
+//                .desc("Copy HTTP Server files into an existing 'jar' file.\n"
+//                      + "NOTE: Can NOT be used with any other switches,\nexcept \"-v <level>\".")
+//                .hasArg()
+//                .argName("jarfile")
+//                .build());
         // Add resursive directory processing: '-c'
         options.addOption(builder("c")
                 .desc("Display Copyright notice.")
@@ -92,6 +93,19 @@ public final class MyCmdLine implements CmdLine {
                 .argName("file name")
                 .build());
 
+        // Add publish directory/jar file: '-p'
+        options.addOption(builder("p")
+                .desc("Publish the HTML files from either a directory, or a 'jar' file.\n"
+                      + " 'htmlSource' is either the directory to publish,\n"
+                      + " or the path to the 'jar' file (including it's name and extension).\n"
+                      + "(defaults: context: \"/\", htmlSource: \"\" - current directory)\n"
+                      + "Can be used multiple times to publish multiple sources at once.")
+                .numberOfArgs(2)
+                .optionalArg(true)
+                .valueSeparator()
+                .argName("context=htmlSource")
+                .build());
+
         // Add resursive directory processing: '-r'
         options.addOption(builder("r")
                 .desc("Recursively process directories.")
@@ -124,6 +138,22 @@ public final class MyCmdLine implements CmdLine {
                 .hasArg()
                 .optionalArg(true)
                 .argName("docRootDir")
+                .build());
+
+        // Add "--allowGeneratedIndex"
+        options.addOption(builder()
+                .desc("Allow a directory listing to be generated, if no 'index' file found.\n"
+                      + "Use with option: '-p'.\n"
+                      + "(default: 'false')")
+                .longOpt("allowGeneratedIndex")
+                .build());
+
+        // Add "--disallowBrowserFileCaching"
+        options.addOption(builder()
+                .desc("Disallow web browsers caching the files sent by this instance of the web server.\n"
+                      + "Use with option: '-p'.\n"
+                      + "(default: 'false')")
+                .longOpt("disallowBrowserFileCaching")
                 .build());
 
         // Add help: '-h' or '--help'
@@ -184,6 +214,7 @@ public final class MyCmdLine implements CmdLine {
      * The source directory name.
      */
     private Path source;
+
     /**
      * The state of verbosity.
      */
@@ -198,8 +229,10 @@ public final class MyCmdLine implements CmdLine {
      * Create an immutable instance of MyCmdLine.
      *
      * @param args The command-line args.
+     *
+     * @throws IOException if any.
      */
-    public MyCmdLine(final String[] args) {
+    public MyCmdLine(final String[] args) throws IOException {
         options = initializeOptions();
 
         CommandLineParser parser = new DefaultParser();
@@ -216,8 +249,22 @@ public final class MyCmdLine implements CmdLine {
                           : hasOption('W')
                             ? of(cmdLine.getOptionValue('W', "").replace('\\', '/')).normalize().toAbsolutePath()
                             : null;
-            inputFile = hasOption('i') ? new File(cmdLine.getOptionValue('i').replace('\\', '/')) : null;
-            jarFile = hasOption('a') ? new File(cmdLine.getOptionValue('j').replace('\\', '/'))
+
+            if (hasOption('i'))
+            {
+                File inputFile = new File(cmdLine.getOptionValue('i').replace('\\', '/'));
+
+                if (inputFile.getName().endsWith(".md"))
+                {
+                    this.inputFile = inputFile;
+                } else
+                {
+                    throw new InvalidParameterValueException("'-i <filename>' must have an extension of '.md':\n" + inputFile);
+                }
+            }
+
+//            inputFile = hasOption('i') ? new File(cmdLine.getOptionValue('i').replace('\\', '/')) : null;
+            jarFile = hasOption('a') ? new File(cmdLine.getOptionValue('a').replace('\\', '/'))
                       : hasOption('j') ? new File(cmdLine.getOptionValues('j')[0].replace('\\', '/')) : null;
             jarSourcePath = hasOption('j')
                             ? of(cmdLine.getOptionValues('j')[1].replace('\\', '/')).normalize().toAbsolutePath() : null;
@@ -239,20 +286,34 @@ public final class MyCmdLine implements CmdLine {
                 System.out.println("-W: " + of(cmdLine.getOptionValue('W')));
             }
 
+            // Handler publish option: '-p'
+            if (hasOption('p'))
+            {
+                String[] values = cmdLine.getOptionValues('p');
+
+                if (values == null)
+                {
+                    values = new String[]
+                    {
+                        "/", ""
+                    };
+                }
+            }
+
             //
-            // Check for minimum switches: '-a', or '-c', or '-i', or '-s',
-            //                             or '-j', or '-W', -h, or --help.
+            // Check for minimum switches: '-a', or '-c', or '-i', or '-j', or '-m',
+            //                             or '-p', or '-s', or '-W', -h, or --help.
             //
-            if (!(hasOption('a') || hasOption('c') || hasOption('i') || hasOption('m')
-                  || hasOption('s') || hasOption('j') || hasOption('W') || hasOption('h')))
+            if (!(hasOption('a') || hasOption('c') || hasOption('i') || hasOption('j')
+                  || hasOption('m') || hasOption('p') || hasOption('s') || hasOption('W') || hasOption('h')))
             {
                 String msg = "\nYou must use at least one of the following options:"
-                             + "\n\t'-a', '-c', -i', '-s', '-j', '-m', '-W', or '-h|--help'\n";
+                             //  + "\n\t'-a', '-c', -i', '-j', '-m', '-p', '-s', '-W', or '-h|--help'\n";
+                             + "\n\t'-c', -i', '-j', '-m', '-p', '-s', '-W', or '-h|--help'\n";
                 throw new MissingOptionException(msg);
             }
 
-        } catch (InvalidParameterValueException | NumberFormatException
-                 | ParseException | NullPointerException ex)
+        } catch (Exception ex)
         {
             exceptions.add(ex);
         }
@@ -276,6 +337,16 @@ public final class MyCmdLine implements CmdLine {
     @Override
     public List<Exception> exceptions() {
         return exceptions;
+    }
+
+    @Override
+    public Properties getOptionProperties(char opt) {
+        return getOptionProperties(String.valueOf(opt));
+    }
+
+    @Override
+    public Properties getOptionProperties(String opt) {
+        return cmdLine.getOptionProperties(opt);
     }
 
     @Override

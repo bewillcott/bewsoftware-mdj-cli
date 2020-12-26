@@ -66,14 +66,14 @@ this page.
 
 @@@[navbar]
 - [Home]
-- [@dropdown] [Setup][@dropbtn]
+- [@dropdown] [Setup]
 [@dropdown-content]
     - [Configuration]
     - [Command-line Options]
-- [@dropdown subactive] [Meta Blocks][@dropbtn]
+- [@dropdown subactive] [Meta Blocks]
 [@dropdown-content]
     - [@active] [Named Meta Blocks](#)
-- [@right dropdown] [About][@dropbtn]
+- [@right dropdown] [About]
 [@dropdown-content]
     - [ToDo List]
     - [License]

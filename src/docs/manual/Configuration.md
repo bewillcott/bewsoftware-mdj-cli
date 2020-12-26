@@ -16,14 +16,14 @@ Let us look at the default `mdj-cli.ini` file:
 
 @@@[navbar]
 - [Home]
-- [@dropdown subactive] [Setup][@dropbtn]
+- [@dropdown subactive] [Setup]
 [@dropdown-content]
     - [@active] [Configuration](#)
     - [Command-line Options]
-- [@dropdown] [Meta Blocks][@dropbtn]
+- [@dropdown] [Meta Blocks]
 [@dropdown-content]
     - [Named Meta Blocks]
-- [@right dropdown] [About][@dropbtn]
+- [@right dropdown] [About]
 [@dropdown-content]
     - [ToDo List]
     - [License]

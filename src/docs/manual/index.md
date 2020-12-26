@@ -30,14 +30,14 @@ The program has a number of options. For details see the [Options][opt] page.
 
 @@@[navbar]
 - [@active] [Home](#)
-- [@dropdown] [Setup][@dropbtn]
+- [@dropdown] [Setup]
 [@dropdown-content]
     - [Configuration]
     - [Command-line Options]
-- [@dropdown] [Meta Blocks][@dropbtn]
+- [@dropdown] [Meta Blocks]
 [@dropdown-content]
     - [Named Meta Blocks]
-- [@right dropdown] [About][@dropbtn]
+- [@right dropdown] [About]
 [@dropdown-content]
     - [ToDo List]
     - [License]

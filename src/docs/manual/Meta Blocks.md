@@ -158,14 +158,14 @@ It contains the unprocessed markdown text of the body of the document.
 
 @@@[navbar]
 - [Home]
-- [@dropdown] [Setup][@dropbtn]
+- [@dropdown] [Setup]
 [@dropdown-content]
     - [Configuration]
     - [Command-line Options]
-- [@dropdown active] [Meta Blocks][@dropbtn](#)
+- [@dropdown active] [Meta Blocks](#)
 [@dropdown-content]
     - [Named Meta Blocks]
-- [@right dropdown] [About][@dropbtn]
+- [@right dropdown] [About]
 [@dropdown-content]
     - [ToDo List]
     - [License]

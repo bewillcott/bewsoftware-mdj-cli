@@ -60,14 +60,14 @@ I might have a use for it as well.
 
 @@@[navbar]
 - [Home]
-- [@dropdown] [Setup][@dropbtn]
+- [@dropdown] [Setup]
 [@dropdown-content]
     - [Configuration]
     - [Command-line Options]
-- [@dropdown] [Meta Blocks][@dropbtn]
+- [@dropdown] [Meta Blocks]
 [@dropdown-content]
     - [Named Meta Blocks]
-- [@right dropdown active] [About][@dropbtn](#)
+- [@right dropdown active] [About](#)
 [@dropdown-content]
     - [ToDo List]
     - [License]
