@@ -799,7 +799,7 @@
                         </goals>
                         <phase>prepare-package</phase>
                         <configuration>
-                            <outputDirectory>${basedir}/docs</outputDirectory>
+                            <outputDirectory>docs</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>
