@@ -62,11 +62,11 @@ The default template has a set of key substitutions:
 |`\${page.content}`|Markdown processed page text (html).|
 
 
-###[#sections] Sections ###[&uarr;](#top)
+###[#sections] Sections ### [][@upArrow](#top)
 
 Sections or groups are a collection of information with a common relationship.
 
-####[#program] Program ####[&uarr;](#top)
+####[#program] Program
 
 The `program` group contains information related to the MDj CLI application,  
 taken from its project pom.properties file. This information may or may not be of any interest to you.
@@ -82,7 +82,7 @@ taken from its project pom.properties file. This information may or may not be o
 |`version`|The version of the artifact.|
 |`details`|All of the above information laid out.|
 
-###[#keys] More information about keys ###[&uarr;](#top)
+###[#keys] More information about keys ### [][@upArrow](#top)
 
 The following is a copy of the top of the source file for this page:
 
@@ -93,7 +93,7 @@ title: MDj CLI | Meta Blocks
 @@@
 ~~~
 
-####[#page_use] Use ####[&uarr;](#top)
+####[#page_use] Use
 `use` is a reserved key word in the context of `page`: `page.use`.
 
 As you can see, there is a `use` key with a value of `articles`.  If you were to check the configuration file:
@@ -110,7 +110,7 @@ stylesheet for a page, which is different to that provided by the section you ar
 by adding a `stylesheet : myspecial.css` to the meta block for the page.  Note, you would of course put the
 name of _your_ stylesheet instead of 'myspecial.css'.
 
-####[#page_title] Title ####[&uarr;](#top)
+####[#page_title] Title #### [][@upArrow](#top)
 `title` is a reserved key word in the context of `program`: `program.title`
 
 Though it is _not_ reserved in any other context, by convention it should be used to set the page's title: 
@@ -133,21 +133,21 @@ Further,
 - _provides a title for the page when it is added to favorites_
 - _displays a title for the page in search-engine results_"
 
-####[#template] Template ####[&uarr;](#top)
+####[#template] Template #### [][@upArrow](#top)
 `template` is a reserved key word in all contexts.
 
 It must only refer to an actual `.html` file.  This file must be located in the
 directory referred to by the `templatesDir` key's value.  The initial entry being:
 `templatesDir = templates`.
 
-####[#stylesheet] Stylesheet ####[&uarr;](#top)
+####[#stylesheet] Stylesheet
 `stylesheet` is a reserved key word in all contexts.
 
 It must only refer to an actual `.css` file.  This file must be located in the
 directory referred to by the `cssDir` key's value.  The initial entry being:
 `cssDir = css`.
 
-####[#page_text] Text ####[&uarr;](#top)
+####[#page_text] Text
 `text` is a reserved key word in the context of `page`: `page.text`.
 
 It contains the unprocessed markdown text of the body of the document.
