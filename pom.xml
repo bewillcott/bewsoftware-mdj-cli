@@ -6,7 +6,7 @@
     
     <groupId>com.bewsoftware</groupId>
     <artifactId>bewsoftware-mdj-cli</artifactId>
-    <version>1.0.33</version>
+    <version>1.0.34-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>BEWSoftware MDj CLI</name>
@@ -84,7 +84,7 @@
         <dependency>
             <groupId>com.bewsoftware</groupId>
             <artifactId>bewsoftware-mdj-core</artifactId>
-            <version>0.6.7</version>
+            <version>0.6.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.bewsoftware</groupId>
@@ -102,12 +102,12 @@
             <artifactId>commons-cli</artifactId>
             <version>1.4</version>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>com.bewsoftware</groupId>
             <artifactId>bewsoftware-mdj-core</artifactId>
-            <version>0.6.7</version>
+            <version>0.6.8-SNAPSHOT</version>
             <classifier>manual</classifier>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
     <profiles>
@@ -288,11 +288,11 @@
                                 <id>MDj-Clean-Publish-Manual</id>
                                 <goals>
                                     <goal>clean</goal>
-                                    <!--<goal>mdj</goal>-->                            
+                                    <goal>mdj</goal>                            
                                     <goal>publish</goal>
                                 </goals>
                                 <configuration>                                    
-                                    <!--<source>src/docs/manual</source>-->
+                                    <source>src/docs/manual</source>
                                     <destination>target/docs/manual</destination>
                                     <serverContexts>
                                         <serverContext>
@@ -417,12 +417,12 @@
                         <groupId>com.bewsoftware.mojo</groupId>
                         <artifactId>bewsoftware-mdj-plugin</artifactId>
                         <executions>
-                            <!--                            <execution>
+                            <execution>
                                 <id>MDj-Compile(release)</id>
                                 <goals>
                                     <goal>mdj</goal>
                                 </goals>
-                            </execution>-->
+                            </execution>
                             <execution>
                                 <id>MDj-Package(HTML)</id>
                                 <goals>
@@ -461,7 +461,7 @@
                         <groupId>com.bewsoftware.mojo</groupId>
                         <artifactId>bewsoftware-mdj-plugin</artifactId>
                         <executions>
-                            <!--                            <execution>
+                            <execution>
                                 <id>MDj-Compile(release)</id>
                                 <goals>
                                     <goal>mdj</goal>
@@ -471,7 +471,7 @@
                                     <destination>target/docs/manual</destination>
                                     <verbosity></verbosity>
                                 </configuration>
-                            </execution>-->
+                            </execution>
                             <execution>
                                 <id>MDj-Package(HTML)</id>
                                 <goals>
@@ -652,7 +652,7 @@
                 <plugin>
                     <groupId>com.bewsoftware.mojo</groupId>
                     <artifactId>bewsoftware-mdj-plugin</artifactId>
-                    <version>1.0.33</version>
+                    <version>1.0.34-SNAPSHOT</version>
                 </plugin>                
                 <plugin>                        
                     <groupId>com.bew.mojo</groupId>
@@ -751,7 +751,7 @@
         </pluginManagement>
 
         <plugins>                       
-            <plugin>
+<!--            <plugin>
                 <groupId>com.bewsoftware.mojo</groupId>
                 <artifactId>bewsoftware-mdj-plugin</artifactId>
                 <executions>
@@ -767,7 +767,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>

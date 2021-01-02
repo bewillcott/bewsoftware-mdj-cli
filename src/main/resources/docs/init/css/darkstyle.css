@@ -197,7 +197,7 @@ a.upArrow, a.upArrow:link, a.upArrow:visited, a.upArrow:active, a.upArrow:hover 
     padding: 18px;
 }
 
-a.newWindow, a.newWindow:link, a.newWindow:visited, a.newWindow:active, a.newWindow:hover {
-    background: url(../etc/newwindow.png) right center no-repeat;
+a.newTab, a.newTab:link, a.newTab:visited, a.newTab:active, a.newTab:hover {
+    background: url(../etc/newtab.png) right center no-repeat;
     padding-right: 18px;
 }
