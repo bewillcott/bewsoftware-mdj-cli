@@ -6,7 +6,7 @@
     
     <groupId>com.bewsoftware</groupId>
     <artifactId>bewsoftware-mdj-cli</artifactId>
-    <version>1.0.34-SNAPSHOT</version>
+    <version>1.0.34</version>
     <packaging>jar</packaging>
 
     <name>BEWSoftware MDj CLI</name>
@@ -84,7 +84,7 @@
         <dependency>
             <groupId>com.bewsoftware</groupId>
             <artifactId>bewsoftware-mdj-core</artifactId>
-            <version>0.6.8-SNAPSHOT</version>
+            <version>0.6.8</version>
         </dependency>
         <dependency>
             <groupId>com.bewsoftware</groupId>
@@ -102,17 +102,17 @@
             <artifactId>commons-cli</artifactId>
             <version>1.4</version>
         </dependency>
-<!--        <dependency>
+        <dependency>
             <groupId>com.bewsoftware</groupId>
             <artifactId>bewsoftware-mdj-core</artifactId>
-            <version>0.6.8-SNAPSHOT</version>
+            <version>0.6.8</version>
             <classifier>manual</classifier>
-        </dependency>-->
+        </dependency>
     </dependencies>
 
     <profiles>
         <profile>
-            <id>clean-manual</id>
+            <id>manual-clean</id>
             <build>
                 <plugins>
                     <plugin>
@@ -135,7 +135,7 @@
         </profile>    
 
         <profile>
-            <id>compile-manual</id>
+            <id>manual-compile</id>
             <build>
                 <plugins>
                     <plugin>
@@ -160,7 +160,7 @@
         </profile>    
 
         <profile>
-            <id>clean-compile-manual</id>
+            <id>manual-clean-compile</id>
             <build>
                 <plugins>
                     <plugin>
@@ -186,7 +186,7 @@
         </profile>
         
         <profile>
-            <id>display-mdj-manual</id>
+            <id>manual-display-mdj</id>
             <build>
                 <plugins>
                     <plugin>
@@ -220,7 +220,8 @@
                                     <goal>mdj</goal>                                    
                                     <goal>publish</goal>
                                 </goals>
-                                <configuration>                                    
+                                <configuration>                                     
+                                    <disallowBrowserFileCaching>true</disallowBrowserFileCaching>                                   
                                     <source>src/docs/manual</source>
                                     <destination>target/docs/manual</destination>
                                     <serverContexts>
@@ -246,7 +247,7 @@
         </profile>
         
         <profile>
-            <id>publish-manual</id>
+            <id>manual-publish</id>
             <build>
                 <plugins>
                     <plugin>
@@ -260,6 +261,7 @@
                                     <goal>publish</goal>
                                 </goals>
                                 <configuration>                                    
+                                    <disallowBrowserFileCaching>true</disallowBrowserFileCaching>
                                     <source>src/docs/manual</source>
                                     <destination>target/docs/manual</destination>
                                     <serverContexts>
@@ -277,7 +279,7 @@
         </profile>
         
         <profile>
-            <id>clean-publish-manual</id>
+            <id>manual-clean-publish</id>
             <build>
                 <plugins>
                     <plugin>
@@ -292,6 +294,7 @@
                                     <goal>publish</goal>
                                 </goals>
                                 <configuration>                                    
+                                    <disallowBrowserFileCaching>true</disallowBrowserFileCaching>
                                     <source>src/docs/manual</source>
                                     <destination>target/docs/manual</destination>
                                     <serverContexts>
@@ -322,6 +325,7 @@
                                     <goal>publish</goal>
                                 </goals>
                                 <configuration>
+                                    <disallowBrowserFileCaching>true</disallowBrowserFileCaching>
                                     <serverContexts>
                                         <serverContext>
                                             <context>/api</context>
@@ -410,7 +414,7 @@
         </profile>
         
         <profile>
-            <id>package-manual</id>
+            <id>manual-package</id>
             <build>
                 <plugins>
                     <plugin>
@@ -652,7 +656,7 @@
                 <plugin>
                     <groupId>com.bewsoftware.mojo</groupId>
                     <artifactId>bewsoftware-mdj-plugin</artifactId>
-                    <version>1.0.34-SNAPSHOT</version>
+                    <version>1.0.34</version>
                 </plugin>                
                 <plugin>                        
                     <groupId>com.bew.mojo</groupId>
@@ -751,7 +755,7 @@
         </pluginManagement>
 
         <plugins>                       
-<!--            <plugin>
+            <!--            <plugin>
                 <groupId>com.bewsoftware.mojo</groupId>
                 <artifactId>bewsoftware-mdj-plugin</artifactId>
                 <executions>

@@ -64,6 +64,9 @@ Further, the substitution could just as easily have been made into the template 
 this page.
 
 
+[mb]:Meta Blocks.html
+
+
 @@@[navbar]
 - [Home]
 - [@dropdown] [Setup]
