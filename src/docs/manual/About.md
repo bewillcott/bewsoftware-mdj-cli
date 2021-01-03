@@ -4,12 +4,12 @@ title: ${program.title} | About
 @@@
 
 
-## About
+## About : v${program.version}
 
-    MDj CLI (mdj-cli) is a command-line utility for processing markdown 
-    text files into static html files.
+    BEWSoftware MDj CLI (mdj-cli) is a command-line utility for processing 
+    markdown text files into static html files.
 
-    Copyright (C) 2020 Bradley Willcott
+    Copyright (C) 2020, 2021 Bradley Willcott
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

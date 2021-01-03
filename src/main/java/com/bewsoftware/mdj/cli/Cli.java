@@ -73,11 +73,6 @@ public class Cli {
     public static final MCPOMProperties POM = INSTANCE;
 
     /**
-     * The single instance of the {@link MarkdownProcessor} class.
-     */
-    private static final MarkdownProcessor MARKDOWN = new MarkdownProcessor();
-
-    /**
      * The pattern used for substitutions.
      */
     private static final Pattern SUBSTITUTION_PATTERN
@@ -252,7 +247,8 @@ public class Cli {
                     // Add <divX class="<name>"></div> wrapping.
                     // This will allow css control of the formatting of the
                     // contents.
-                    metaBlock = "\n<div class=\"" + name + "\">\n" + MARKDOWN.markdown(metaBlock) + "\n</div>\n";
+                    metaBlock = "\n<div class=\"" + name + "\">\n"
+                                + MarkdownProcessor.markdown(metaBlock) + "\n</div>\n";
 
                     if (vlevel >= 3)
                     {
@@ -600,7 +596,7 @@ public class Cli {
             use = iniDoc.getString("page", "use", null);
             template = getString("page", "template", use);
             iniDoc.setString("page", "content",
-                             MARKDOWN.markdown(processSubstitutions(
+                             MarkdownProcessor.markdown(processSubstitutions(
                                      preprocessed, use, new BooleanReturn())));
 
             if (!template.isBlank())
@@ -613,7 +609,7 @@ public class Cli {
         } else
         {
             iniDoc.setString("page", "content",
-                             MARKDOWN.markdown(iniDoc.getString("page", "text", "")));
+                             MarkdownProcessor.markdown(iniDoc.getString("page", "text", "")));
 
         }
 
