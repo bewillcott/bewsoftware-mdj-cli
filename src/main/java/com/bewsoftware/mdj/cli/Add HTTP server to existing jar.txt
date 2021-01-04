@@ -1,0 +1,19 @@
+Info on adding HTTP Server code to an existing jar file.
+
+new PrintWriter(Files.newBufferedWriter(Path))
+
+HashMap<String, String> env = new HashMap<>();
+env.put("create", "true");
+URI uri = URI.create("jar:file:/path/to/myfile.jar");
+
+try (FileSystem jarFs = FileSystems.newFileSystem(uri, env)){
+	Path manifestPath = jarFs.getPath(JarFile.MANIFEST_NAME);
+	try (** UPDATE MANIFEST **){
+		Files.newInputStream(Path):InputStream
+		Manifest(InputStream):Manifest
+	}
+}
+
+try (OutputStream os = Files.newOutputStream(manifestPath)){
+	manifest.write(os);
+}
