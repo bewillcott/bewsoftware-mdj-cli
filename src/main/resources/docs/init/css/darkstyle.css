@@ -81,11 +81,11 @@ h6 {
 }
 
 hr.bold { 
-  border-width: 2px;
+    border-width: 3px;
 }
 
 hr.thick { 
-  border-width: 3px;
+    border-width: 2px;
 }
 
 ul {
@@ -96,6 +96,11 @@ table {
     border: 4px solid black;
     border-collapse: collapse;
     font-size: 12px;
+}
+
+table.center {
+    margin-left: auto;
+    margin-right: auto;
 }
 
 caption {
