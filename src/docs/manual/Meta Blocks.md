@@ -37,26 +37,26 @@ However, there are some keys that are used by the application:
 |Key|Description|[2]
 |-:-|:--|[3]
 |`use:`|Set this to the program configuration file [section] containing your desired settings for this page.|[]
-|`template:`|Name of the template file to wrap the page's markdown output into.|
-|`stylesheet:`|The stylesheet to use in the template for the page.|
+|`template:`|Name of the template file to wrap the page's markdown output into.|[@alt]
+|`stylesheet:`|The stylesheet to use in the template for the page.|[0]
 
 MDj CLI provides some preset keys:
 
 [MDj CLI Preset Keys]
 |Key|Description|[2]
 |-:-|:--|[3]
-|`system.date`|Current date/time (`Date.toString()`: dow mon dd hh:mm:ss zzz yyyy).|[]
-|`program.version`|Version of **mdj-cli** used to create html output file.|
-|`page.content`|Markdown processed page text (html).|
+|`system.date`|Current date/time (`Date.toString()`: dow mon dd hh:mm:ss zzz yyyy).|
+|`program.version`|Version of **mdj-cli** used to create html output file.|[@alt]
+|`page.content`|Markdown processed page text (html).|[0]
 
 The default template has a set of key substitutions:
 
 [Default Template Keys]
 |Key|Description|[2]
 |-:-|:--|[3]
-|`\${program.title}`|The name of the program used to create html output file.|[]
-|`\${program.version}`|Version of **mdj-cli** used to create html output file.|[]
-|`\${system.date}`|Current date/time (`Date.toString()`: dow mon dd hh:mm:ss zzz yyyy).|
+|`\${program.title}`|The name of the program used to create html output file.|
+|`\${program.version}`|Version of **mdj-cli** used to create html output file.|[@alt]
+|`\${system.date}`|Current date/time (`Date.toString()`: dow mon dd hh:mm:ss zzz yyyy).|[@reset]
 |`\${page.title}`|Header Title for web page.|
 |`\${page.stylesheet}`|Same as above, but used by template.|
 |`\${page.content}`|Markdown processed page text (html).|
@@ -74,9 +74,9 @@ taken from its project pom.properties file. This information may or may not be o
 [`program` group]
 |Key|Description|[2]
 |-:-|:--|[3]
-|`artifactId`|The identifier for this artifact that is unique within the group given by the groupID.|[]
-|`description`|Project description.|
-|`filename`|The filename of the binary output file.|
+|`artifactId`|The identifier for this artifact that is unique within the group given by the groupID.|
+|`description`|Project description.|[@alt]
+|`filename`|The filename of the binary output file.|[@reset]
 |`groupId`|Project GroupId.|
 |`title`|Project Name.|
 |`version`|The version of the artifact.|
