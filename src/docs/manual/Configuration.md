@@ -12,6 +12,8 @@ document you are working on.
 
 Let us look at the default `mdj-cli.ini` file:
 
+**TODO:** Add more information!
+
 [setup]:Setup.html
 
 @@@[navbar]

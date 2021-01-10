@@ -87,6 +87,11 @@ table {
     border-collapse: collapse;
 }
 
+table.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 caption {
     border-left: 4px solid black;
     border-top: 4px solid black;
@@ -109,6 +114,13 @@ td {
     background-color: lightyellow;
     border: 1px solid black;
     padding: 5px;
+}
+
+td.alt {
+    background-color: wheat;
+}
+
+td.reset {
 }
 
 td.total {

@@ -11,8 +11,8 @@ Command Line Options
 |Option|Description|
 |----|----|
 |`-c`|Display Copyright notice.|
-|`-d <directory>`|The destination directory for HTML files.<br>(default: `""` - current directory)|
-|`-i <filename>`|The markdown input file to parse. (`*.md`)|
+|`-d <directory>`|The destination directory for HTML files.<br>(default: `""` - current directory)|[@alt]
+|`-i <filename>`|The markdown input file to parse. (`*.md`)|[@reset]
 |`-j <jarfile>;<jarSrcDir>;<docRootDir>`|Copy HTML files from directory into a new \
 'jar' file.<br>**Note:** Can *not* be used with any other switches, except `-v [<level>]`.|
 |`-m`|Display web based manual in system default web browser.|

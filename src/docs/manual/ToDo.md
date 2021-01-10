@@ -7,6 +7,7 @@ title: ${program.title} | ToDo List
 ## ToDo List
 
 - [ ]! Revise manual.
+    - [ ]! Configuration.md
 - [x]! (12/12/2020) Add option to display copyright notice: `-c`.
 - [x]! (12/12/2020) Add option to display web based manual in system default web browser: `-m`.
 - [x]! (24/12/2020) Add option to publish files in a directory of the file system, or from an
