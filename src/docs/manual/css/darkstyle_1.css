@@ -249,20 +249,23 @@ a.newTab:active {
 }
 
 a.next {
-    background: url(../etc/32px-Go-next-link.png) right center no-repeat;
-    background-size: 19px 16px;
+    background: url(../etc/16px-arrow-right.png) right center no-repeat;
+    background-size: auto 12px;
     padding: 12px;    
+    margin-right: 1px;
 }
 
 a.next:hover {
-    background-size: 21px 19px;
+    background-size: auto 15px;
     padding-top: 13px;
     padding-right: 13px;
+    margin-right: 0;
 }
 
 a.next:active {
-    background-size: 19px 16px;
+    background-size: auto 12px;
     padding: 12px;
+    margin-right: 1px;
 }
 
 a.previous {
