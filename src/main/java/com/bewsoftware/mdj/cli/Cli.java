@@ -214,11 +214,11 @@ public class Cli {
     /**
      * Process Named Meta Blocks.
      * <p>
-     * A named meta block looks like this:
+     * A named meta block looks like each of the following:
      * <hr>
      * <pre><code>
      *
-     * &#64;&#64;&#64;[name]
+     * &#64;&#64;&#64;[#name]
      *
      * Some text.
      * Some more text.
@@ -226,12 +226,25 @@ public class Cli {
      * &#64;&#64;&#64;
      * </code></pre>
      * <hr>
-     * The blank line before the beginning is <b>required</b>.<br>
-     * '{@code name}' is used to refer to this block in the markup text for
-     * substitution: ${page.name}.
-     * <p>
-     * The HTML will begin with something like this: {@code <div id="name">}.<br>
+     * The HTML from the above code will begin with something like this: {@code <div id="name">}.<br>
      * Therefore, you can set up formatting via CSS using the 'id' value: "{@code #name}".
+     * <hr>
+     * <pre><code>
+     *
+     * &#64;&#64;&#64;[@name]
+     *
+     * Some text.
+     * Some more text.
+     *
+     * &#64;&#64;&#64;
+     * </code></pre>
+     * <hr>
+     * The HTML from the above code will begin with something like this: {@code <div class="name">}.<br>
+     * Therefore, you can set up formatting via CSS using the 'class' value: "{@code .name}".
+     * <p>
+     * The blank line before the beginning is <b>required</b>.<br>
+     * '{@code name}' is used to refer to the block in the markup text for
+     * substitution: ${page.name}.
      * <p>
      * <b>Note:</b> The label "{@code name}" used throughout this comment is an example only.
      * You would use your own label as appropriate to your requirements.
@@ -242,33 +255,35 @@ public class Cli {
      */
     private static void processNamedMetaBlocks() {
         TextEditor text = new TextEditor(conf.iniDoc.getString("page", "text", ""));
-        Pattern p = compile("(?<=\\n)(?:@@@\\[(?<name>\\w+)\\]\\n(?<metablock>.*?)\\n@@@\\n)", DOTALL);
+        Pattern p = compile("(?<=\\n)(?:@@@\\[(?<type>[@#])(?<name>\\w+)\\]\\n(?<metablock>.*?)\\n@@@\\n)", DOTALL);
 
         text.replaceAll(p, m ->
                 {
+                    String type = m.group("type");
                     String name = m.group("name");
                     String metaBlock = m.group("metablock");
 
-                    //
-                    // Add <divX id="<name>"></div> wrapping.
-                    // This will allow css control of the formatting of the
-                    // contents.
-                    //
-                    // Changed from 'class' to 'id'.
-                    //
-                    // since: v1.0.36
-                    metaBlock = "\n<div id=\"" + name + "\">\n"
-                                + MarkdownProcessor.markdown(metaBlock) + "\n</div>\n";
+                    String html = "";
+
+                    if ("#".equals(type))
+                    {
+                        html = "\n<div id=\"" + name + "\">\n";
+                    } else if ("@".equals(type))
+                    {
+                        html = "\n<div class=\"" + name + "\">\n";
+                    }
+
+                    html += MarkdownProcessor.markdown(metaBlock) + "\n</div>\n";
 
                     if (vlevel >= 3)
                     {
                         System.out.println("============================================\n"
                                            + "name: " + name + "\n"
-                                           + "metablock:\n" + metaBlock
+                                           + "metablock:\n" + html
                                            + "\n============================================\n");
                     }
 
-                    conf.iniDoc.setString("page", name, metaBlock);
+                    conf.iniDoc.setString("page", name, html);
                     return "";
                 });
 

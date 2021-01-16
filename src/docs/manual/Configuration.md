@@ -16,7 +16,7 @@ Let us look at the default `mdj-cli.ini` file:
 
 [setup]:Setup.html
 
-@@@[navbar]
+@@@[#navbar]
 - [Home]
 - [@subactive] [Setup]
     - [@active] [Configuration](#)

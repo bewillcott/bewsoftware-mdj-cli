@@ -28,7 +28,9 @@ The program has a number of options. For details see the [Options][opt] page.
 [setup]:Setup.html
 [todo]:ToDo.html
 
-@@@[navbar]
+
+
+@@@[#navbar]
 - [@active] [Home](#)
 - [Setup]
     - [Configuration]

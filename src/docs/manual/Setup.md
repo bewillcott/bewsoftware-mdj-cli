@@ -71,7 +71,7 @@ To setup this up, run the following command from inside the book root directory:
 ~~~
 
 
-@@@[navbar]
+@@@[#navbar]
 - [Home]
 - [@active] [Setup](#)
     - [Configuration]

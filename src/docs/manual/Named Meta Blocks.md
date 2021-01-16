@@ -67,7 +67,7 @@ this page.
 [mb]:Meta Blocks.html
 
 
-@@@[navbar]
+@@@[#navbar]
 - [Home]
 - [Setup]
     - [Configuration]

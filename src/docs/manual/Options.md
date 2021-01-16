@@ -34,7 +34,7 @@ this instance of the web server.<br>Use with option: `-p`.<br>(default: `false`)
 *not* be used with any other switches, except `-v [<level>]`.|
 |`-h --help`|Display the help text.|[total]
 
-@@@[navbar]
+@@@[#navbar]
 - [Home]
 - [@subactive] [Setup]
     - [Configuration]

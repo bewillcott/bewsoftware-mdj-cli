@@ -58,7 +58,9 @@ I might have a use for it as well.
 [1]:#fn1 "Original source on Github"
 [markdownj]:https://github.com/myabc/markdownj
 
-@@@[navbar]
+
+
+@@@[#navbar]
 - [Home]
 - [Setup]
     - [Configuration]
