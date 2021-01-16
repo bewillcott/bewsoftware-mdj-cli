@@ -69,15 +69,12 @@ this page.
 
 @@@[navbar]
 - [Home]
-- [@dropdown] [Setup]
-[@dropdown-content]
+- [Setup]
     - [Configuration]
     - [Command-line Options]
-- [@dropdown subactive] [Meta Blocks]
-[@dropdown-content]
+- [@subactive] [Meta Blocks]
     - [@active] [Named Meta Blocks](#)
-- [@right dropdown] [About]
-[@dropdown-content]
+- [@right] [About]
     - [ToDo List]
     - [License]
 

@@ -36,15 +36,12 @@ this instance of the web server.<br>Use with option: `-p`.<br>(default: `false`)
 
 @@@[navbar]
 - [Home]
-- [@dropdown subactive] [Setup]
-[@dropdown-content]
+- [@subactive] [Setup]
     - [Configuration]
     - [@active] [Command-line Options](#)
-- [@dropdown] [Meta Blocks]
-[@dropdown-content]
+- [Meta Blocks]
     - [Named Meta Blocks]
-- [@right dropdown] [About]
-[@dropdown-content]
+- [@right] [About]
     - [ToDo List]
     - [License]
 

@@ -51,15 +51,12 @@ from within.  For example: a program's javadoc.jar file: `-a`.
 
 @@@[navbar]
 - [Home]
-- [@dropdown] [Setup]
-[@dropdown-content]
+- [Setup]
     - [Configuration]
     - [Command-line Options]
-- [@dropdown] [Meta Blocks]
-[@dropdown-content]
+- [Meta Blocks]
     - [Named Meta Blocks]
-- [@right dropdown subactive] [About]
-[@dropdown-content]
+- [@right subactive] [About]
     - [@active] [ToDo List](#)
     - [License]
 

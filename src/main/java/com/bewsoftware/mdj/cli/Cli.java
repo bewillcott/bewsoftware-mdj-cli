@@ -226,9 +226,15 @@ public class Cli {
      * &#64;&#64;&#64;
      * </code></pre>
      * <hr>
-     * The line spacing is <b>required</b>.<br>
+     * The blank line before the beginning is <b>required</b>.<br>
      * '{@code name}' is used to refer to this block in the markup text for
      * substitution: ${page.name}.
+     * <p>
+     * The HTML will begin with something like this: {@code <div id="name">}.<br>
+     * Therefore, you can set up formatting via CSS using the 'id' value: "{@code #name}".
+     * <p>
+     * <b>Note:</b> The label "{@code name}" used throughout this comment is an example only.
+     * You would use your own label as appropriate to your requirements.
      * <p>
      * Bradley Willcott
      *
@@ -244,10 +250,14 @@ public class Cli {
                     String metaBlock = m.group("metablock");
 
                     //
-                    // Add <divX class="<name>"></div> wrapping.
+                    // Add <divX id="<name>"></div> wrapping.
                     // This will allow css control of the formatting of the
                     // contents.
-                    metaBlock = "\n<div class=\"" + name + "\">\n"
+                    //
+                    // Changed from 'class' to 'id'.
+                    //
+                    // since: v1.0.36
+                    metaBlock = "\n<div id=\"" + name + "\">\n"
                                 + MarkdownProcessor.markdown(metaBlock) + "\n</div>\n";
 
                     if (vlevel >= 3)
