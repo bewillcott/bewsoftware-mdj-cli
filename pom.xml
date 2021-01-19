@@ -6,7 +6,7 @@
     
     <groupId>com.bewsoftware</groupId>
     <artifactId>bewsoftware-mdj-cli</artifactId>
-    <version>1.0.37</version>
+    <version>1.0.38</version>
     <packaging>jar</packaging>
 
     <name>BEWSoftware MDj CLI</name>
@@ -84,7 +84,7 @@
         <dependency>
             <groupId>com.bewsoftware</groupId>
             <artifactId>bewsoftware-mdj-core</artifactId>
-            <version>0.6.9</version>
+            <version>0.6.10</version>
         </dependency>
         <dependency>
             <groupId>com.bewsoftware</groupId>
@@ -105,7 +105,7 @@
         <dependency>
             <groupId>com.bewsoftware</groupId>
             <artifactId>bewsoftware-mdj-core</artifactId>
-            <version>0.6.9</version>
+            <version>0.6.10</version>
             <classifier>manual</classifier>
         </dependency>
     </dependencies>
@@ -656,7 +656,7 @@
                 <plugin>
                     <groupId>com.bewsoftware.mojo</groupId>
                     <artifactId>bewsoftware-mdj-plugin</artifactId>
-                    <version>1.0.37</version>
+                    <version>1.0.38</version>
                 </plugin>                
                 <plugin>                        
                     <groupId>com.bew.mojo</groupId>
