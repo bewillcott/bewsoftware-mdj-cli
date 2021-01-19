@@ -71,17 +71,14 @@ To setup this up, run the following command from inside the book root directory:
 ~~~
 
 
-@@@[navbar]
+@@@[#navbar]
 - [Home]
-- [@dropdown active] [Setup](#)
-[@dropdown-content]
+- [@active] [Setup](#)
     - [Configuration]
     - [Command-line Options]
-- [@dropdown] [Meta Blocks]
-[@dropdown-content]
+- [Meta Blocks]
     - [Named Meta Blocks]
-- [@right dropdown] [About]
-[@dropdown-content]
+- [@right] [About]
     - [ToDo List]
     - [License]
 

@@ -156,17 +156,14 @@ It contains the unprocessed markdown text of the body of the document.
 
 [w3s]:https://www.w3schools.com/tags/tag_title.asp
 
-@@@[navbar]
+@@@[#navbar]
 - [Home]
-- [@dropdown] [Setup]
-[@dropdown-content]
+- [Setup]
     - [Configuration]
     - [Command-line Options]
-- [@dropdown active] [Meta Blocks](#)
-[@dropdown-content]
+- [@active] [Meta Blocks](#)
     - [Named Meta Blocks]
-- [@right dropdown] [About]
-[@dropdown-content]
+- [@right] [About]
     - [ToDo List]
     - [License]
 

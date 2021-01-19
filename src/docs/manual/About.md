@@ -58,17 +58,16 @@ I might have a use for it as well.
 [1]:#fn1 "Original source on Github"
 [markdownj]:https://github.com/myabc/markdownj
 
-@@@[navbar]
+
+
+@@@[#navbar]
 - [Home]
-- [@dropdown] [Setup]
-[@dropdown-content]
+- [Setup]
     - [Configuration]
     - [Command-line Options]
-- [@dropdown] [Meta Blocks]
-[@dropdown-content]
+- [Meta Blocks]
     - [Named Meta Blocks]
-- [@right dropdown active] [About](#)
-[@dropdown-content]
+- [@right active] [About](#)
     - [ToDo List]
     - [License]
 

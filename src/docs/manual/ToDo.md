@@ -20,7 +20,10 @@ from within.  For example: a program's javadoc.jar file: `-a`.
     - [X]! Add file [meta block][mb]:
     - [x]! (14/12/2020) Add [named meta blocks][nmb]. `@@@[name]`
     - [ ]! Enhance usage of [named meta blocks][nmb]:
-        - [ ]! Wrap each in `<div class="<block-name>"></div>`
+        - [x]! Wrap each in `<div class="<name>"></div>`
+        - [ ]! Change `@@@[name]` to two options: 
+            - [ ]! `@@@[#name]` - `<div id="<name>"></div>`
+            - [ ]! `@@@[@name]` - `<div class="<name>"></div>`
         - [ ]! Add special meta block names: `navbar`, `footnotes`, `paging_navbar`.
     - [ ]! Add reading project POM file: `-p <path/to/pom.xml>`. `${project.*}`
     - [ ]! Add include file:
@@ -49,17 +52,14 @@ from within.  For example: a program's javadoc.jar file: `-a`.
 [opt]:Options.html
 [1]: "Deprecated"
 
-@@@[navbar]
+@@@[#navbar]
 - [Home]
-- [@dropdown] [Setup]
-[@dropdown-content]
+- [Setup]
     - [Configuration]
     - [Command-line Options]
-- [@dropdown] [Meta Blocks]
-[@dropdown-content]
+- [Meta Blocks]
     - [Named Meta Blocks]
-- [@right dropdown subactive] [About]
-[@dropdown-content]
+- [@right subactive] [About]
     - [@active] [ToDo List](#)
     - [License]
 

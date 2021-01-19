@@ -28,17 +28,16 @@ The program has a number of options. For details see the [Options][opt] page.
 [setup]:Setup.html
 [todo]:ToDo.html
 
-@@@[navbar]
+
+
+@@@[#navbar]
 - [@active] [Home](#)
-- [@dropdown] [Setup]
-[@dropdown-content]
+- [Setup]
     - [Configuration]
     - [Command-line Options]
-- [@dropdown] [Meta Blocks]
-[@dropdown-content]
+- [Meta Blocks]
     - [Named Meta Blocks]
-- [@right dropdown] [About]
-[@dropdown-content]
+- [@right] [About]
     - [ToDo List]
     - [License]
 
