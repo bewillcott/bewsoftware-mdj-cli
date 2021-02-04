@@ -1,6 +1,6 @@
 @@@
 use : articles2
-title: ${program.title} | Configuration
+title: ${document.name} | Configuration
 @@@
 
 
@@ -12,7 +12,8 @@ document you are working on.
 
 Let us look at the default `mdj-cli.ini` file:
 
-**TODO:** Add more information!
+**TODO:**  
+Add more information!
 
 [setup]:Setup.html
 

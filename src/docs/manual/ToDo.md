@@ -1,6 +1,6 @@
 @@@
 use : articles2
-title: ${program.title} | ToDo List
+title: ${document.name} | ToDo List
 @@@
 
 
@@ -15,17 +15,17 @@ title: ${program.title} | ToDo List
     - [x]! (24/12/2020) Add switch to allow the generation of directory listings: `--allowGeneratedIndex`.
     - [x]! (24/12/2020) Add switch to disallow browsers caching files: `--disallowBrowserFileCaching`.
 - [ ]! Add option to insert the HTTP Server into an existing 'jar' file, to server pages
-from within.  For example: a program's javadoc.jar file: `-a`.
+       from within.  For example: a program's javadoc.jar file: `-a`.
 - [ ]! Meta blocks:
     - [X]! Add file [meta block][mb]:
     - [x]! (14/12/2020) Add [named meta blocks][nmb]. `@@@[name]`
     - [ ]! Enhance usage of [named meta blocks][nmb]:
         - [x]! Wrap each in `<div class="<name>"></div>`
-        - [ ]! Change `@@@[name]` to two options: 
-            - [ ]! `@@@[#name]` - `<div id="<name>"></div>`
-            - [ ]! `@@@[@name]` - `<div class="<name>"></div>`
+        - [x]! Change `@@@[name]` to two options: 
+            - [x]! `@@@[#name]` - `<div id="<name>"></div>`
+            - [x]! `@@@[@name]` - `<div class="<name>"></div>`
         - [ ]! Add special meta block names: `navbar`, `footnotes`, `paging_navbar`.
-    - [ ]! Add reading project POM file: `-p <path/to/pom.xml>`. `${project.*}`
+    - [x]! Add reading project POM file: `-P <path/to/pom.xml>`. `${project.*}`
     - [ ]! Add include file:
         - [ ]! Include markdown file: `includeMD` : `filename.md`
         - [ ]! Include html file: `includeHTML` : `filename.html`

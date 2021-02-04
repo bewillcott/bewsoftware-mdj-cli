@@ -65,11 +65,20 @@ public final class MyCmdLine implements CmdLine {
                 .argName("directory")
                 .build());
 
+        // Add POM build property: '-D'
+        options.addOption(builder("D")
+                .desc("POM build property.\n"
+                      + "Is made available as: ${project.<property>}.")
+                .numberOfArgs(2)
+                .valueSeparator()
+                .argName("property=value")
+                .build());
+
         // Add input file: '-i'
         options.addOption(builder("i")
                 .desc("The markdown input file to parse. (*.md)")
                 .hasArg()
-                .argName("file name")
+                .argName("fileName")
                 .build());
 
         // Add jar file creation: '-j'
@@ -78,7 +87,7 @@ public final class MyCmdLine implements CmdLine {
                       + "NOTE: Can NOT be used with any other switches,\nexcept \"-v <level>\".")
                 .numberOfArgs(3)
                 .valueSeparator(';')
-                .argName("jarfile;jarSrcDir;docRootDir")
+                .argName("jarFile;jarSrcDir;docRootDir")
                 .build());
 
         // Add resursive directory processing: '-m'
@@ -90,7 +99,7 @@ public final class MyCmdLine implements CmdLine {
         options.addOption(builder("o")
                 .desc("The HTML output file. (*.html)")
                 .hasArg()
-                .argName("file name")
+                .argName("fileName")
                 .build());
 
         // Add publish directory/jar file: '-p'
@@ -104,6 +113,13 @@ public final class MyCmdLine implements CmdLine {
                 .optionalArg(true)
                 .valueSeparator()
                 .argName("context=htmlSource")
+                .build());
+
+        // Add pom.xml file: '-P'
+        options.addOption(builder("P")
+                .desc("The /path/to/the/pom.xml file. (pom.xml)")
+                .hasArg()
+                .argName("filePath")
                 .build());
 
         // Add resursive directory processing: '-r'
@@ -211,6 +227,11 @@ public final class MyCmdLine implements CmdLine {
     private File outputFile;
 
     /**
+     * The pom.xml file.
+     */
+    private File pomFile;
+
+    /**
      * The source directory name.
      */
     private Path source;
@@ -269,6 +290,7 @@ public final class MyCmdLine implements CmdLine {
             jarSourcePath = hasOption('j')
                             ? of(cmdLine.getOptionValues('j')[1].replace('\\', '/')).normalize().toAbsolutePath() : null;
             outputFile = hasOption('o') ? new File(cmdLine.getOptionValue('o').replace('\\', '/')) : null;
+            pomFile = hasOption('P') ? new File(cmdLine.getOptionValue('P').replace('\\', '/')) : null;
             source = hasOption('s')
                      ? of(cmdLine.getOptionValue('s').replace('\\', '/')).normalize().toAbsolutePath()
                      : null;
@@ -387,6 +409,11 @@ public final class MyCmdLine implements CmdLine {
     @Override
     public void outputFile(File file) {
         outputFile = file;
+    }
+
+    @Override
+    public File pomFile() {
+        return pomFile;
     }
 
     @Override

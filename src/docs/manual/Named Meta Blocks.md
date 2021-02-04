@@ -1,6 +1,6 @@
 @@@
 use:articles2
-title: ${program.title} | Named Meta Blocks
+title: ${document.name} | Named Meta Blocks
 @@@
 
 

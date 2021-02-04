@@ -36,8 +36,14 @@ import com.bewsoftware.mdj.core.POMProperties;
 import com.bewsoftware.mdj.core.TextEditor;
 import com.bewsoftware.property.IniProperty;
 import com.bewsoftware.utils.struct.BooleanReturn;
+import java.io.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
 import static com.bewsoftware.fileio.BEWFiles.copyDirTree;
 import static com.bewsoftware.fileio.BEWFiles.getResource;
@@ -325,12 +331,12 @@ public class Cli {
 
         if (vlevel >= 2)
         {
-            System.err.println("base:\n" + basePath);
-            System.err.println("srcFile:\n" + srcPath);
-            System.err.println("template:\n" + templatesPath);
+            System.out.println("base:\n" + basePath);
+            System.out.println("srcFile:\n" + srcPath);
+            System.out.println("template:\n" + templatesPath);
         }
 
-        try ( BufferedReader inReader = Files.newBufferedReader(templatesPath))
+        try (BufferedReader inReader = Files.newBufferedReader(templatesPath))
         {
             String line;
 
@@ -355,9 +361,9 @@ public class Cli {
 
             if (vlevel >= 3)
             {
-                System.err.println("destPath:\n" + destPath);
-                System.err.println("destDirPath:\n" + destDirPath);
-                System.err.println("destHTML:\n" + destHTML);
+                System.out.println("destPath:\n" + destPath);
+                System.out.println("destDirPath:\n" + destDirPath);
+                System.out.println("destHTML:\n" + destHTML);
             }
 
             Pattern p = compile("href\\=\"(?<ref>#[^\"]*)?\"");
@@ -369,8 +375,8 @@ public class Cli {
 
                           if (vlevel >= 3)
                           {
-                              System.err.println("text: " + text);
-                              System.err.println("ref: " + ref);
+                              System.out.println("text: " + text);
+                              System.out.println("ref: " + ref);
                           }
 
                           return text.replace(ref, destHTML + ref);
@@ -414,8 +420,8 @@ public class Cli {
 
         if (vlevel >= 2)
         {
-            System.err.println("srcDirPath: " + srcDirPath);
-            System.err.println("srcDirPath exists: " + Files.exists(srcDirPath));
+            System.out.println("srcDirPath: " + srcDirPath);
+            System.out.println("srcDirPath exists: " + Files.exists(srcDirPath));
         }
 
         // Get source ini file from jar file.
@@ -423,8 +429,8 @@ public class Cli {
 
         if (vlevel >= 2)
         {
-            System.err.println("srcIniPath: " + srcIniPath);
-            System.err.println("srcIniPath exists: " + Files.exists(srcIniPath));
+            System.out.println("srcIniPath: " + srcIniPath);
+            System.out.println("srcIniPath exists: " + Files.exists(srcIniPath));
         }
 
         // Get destination ini file path.
@@ -432,8 +438,8 @@ public class Cli {
 
         if (vlevel >= 2)
         {
-            System.err.println("destIniPath: " + destIniPath);
-            System.err.println("destIniPath exists: " + Files.exists(destIniPath));
+            System.out.println("destIniPath: " + destIniPath);
+            System.out.println("destIniPath exists: " + Files.exists(destIniPath));
         }
 
         copyDirTree(srcDirPath, docRootPath,
@@ -446,7 +452,7 @@ public class Cli {
         {
             if (vlevel >= 2)
             {
-                System.err.println("destIniPath exists");
+                System.out.println("destIniPath exists");
             }
 
             iniFile = new IniFile(srcIniPath).loadFile().mergeFile(destIniPath);
@@ -454,7 +460,7 @@ public class Cli {
         {
             if (vlevel >= 2)
             {
-                System.err.println("destIniPath dosen't exist");
+                System.out.println("destIniPath dosen't exist");
             }
 
             iniFile = new IniFile(srcIniPath).loadFile();
@@ -465,7 +471,7 @@ public class Cli {
 
         if (vlevel >= 2)
         {
-            System.err.println("document.docRootDir: " + iniFile.iniDoc.getString("document", "docRootDir", "default"));
+            System.out.println("document.docRootDir: " + iniFile.iniDoc.getString("document", "docRootDir", "default"));
         }
 
         iniFile.paddedEquals = true;
@@ -488,12 +494,12 @@ public class Cli {
 
         if (vlevel >= 3)
         {
-            System.err.println("loadConf()");
+            System.out.println("loadConf()");
         }
 
         if (vlevel >= 2)
         {
-            System.err.println("iniPath: " + iniPath.toString());
+            System.out.println("iniPath: " + iniPath.toString());
         }
 
         if (Files.notExists(iniPath, NOFOLLOW_LINKS) && (srcDirPath != null))
@@ -513,7 +519,7 @@ public class Cli {
 
                     if (vlevel >= 2)
                     {
-                        System.err.println("srcPath: " + srcPath.toString());
+                        System.out.println("srcPath: " + srcPath.toString());
                     }
                 }
             } catch (NullPointerException ex)
@@ -525,16 +531,23 @@ public class Cli {
 
             if (vlevel >= 2)
             {
-                System.err.println("iniPath: " + iniPath.toString());
+                System.out.println("iniPath: " + iniPath.toString());
             }
         }
 
-        conf = new IniFile(iniPath).loadFile();
+        if (conf == null)
+        {
+            conf = new IniFile(iniPath).loadFile();
+        } else
+        {
+            conf.mergeFile(iniPath);
+        }
+
         conf.iniDoc.setString("program", "artifactId", POM.artifactId, "# The identifier for this artifact that is unique within the group given by the groupID");
         conf.iniDoc.setString("program", "description", POM.description, "# Project description");
         conf.iniDoc.setString("program", "filename", POM.filename, "# The filename of the binary output file");
         conf.iniDoc.setString("program", "groupId", POM.groupId, "# Project GroupId");
-        conf.iniDoc.setString("program", "title", POM.title, "# Project Name");
+        conf.iniDoc.setString("program", "name", POM.name, "# Project Name");
         conf.iniDoc.setString("program", "version", POM.version, "# The version of the artifact");
         conf.iniDoc.setString("program", "details", POM.toString(), "# All of the above information laid out");
 
@@ -577,6 +590,60 @@ public class Cli {
     }
 
     /**
+     * Load the {@code pom.xml} file.
+     *
+     * @param pomFile The {@code pom.xml} file.
+     * @param props   Additional properties to be added to "project" section.
+     *
+     * @throws IOException If any.
+     */
+    static void loadPom(final File pomFile, Properties props) throws IOException {
+
+        SAXReader reader = new SAXReader();
+        Document document = null;
+
+        // Read file.
+        try
+        {
+            document = reader.read(pomFile);
+        } catch (DocumentException ex)
+        {
+            throw new IOException("\nError reading from '" + pomFile.getName() + "'", ex);
+        }
+
+        // root is 'project'.
+        Element projectElement = document.getRootElement();
+
+        if (conf == null)
+        {
+            conf = new IniFile();
+        }
+
+        conf.iniDoc.setString("project", "groupId", projectElement.element("groupId").getTextTrim(), "# Project GroupId");
+        conf.iniDoc.setString("project", "artifactId", projectElement.element("artifactId").getTextTrim(), "# The identifier for this artifact that is unique within the group given by the groupID");
+        conf.iniDoc.setString("project", "version", projectElement.element("version").getTextTrim(), "# The version of the artifact");
+        conf.iniDoc.setString("project", "name", projectElement.element("name").getTextTrim(), "# Project Name");
+        conf.iniDoc.setString("project", "description", projectElement.element("description").getTextTrim(), "# Project description");
+
+        // Process -Dkey=value properties from commandline.
+        // Add them to the "project" section.
+        if (props != null)
+        {
+            props.forEach((keyObj, valueObj) ->
+            {
+                String key = (String) keyObj;
+                String value = (String) valueObj;
+
+                conf.iniDoc.setString("project", key, value);
+            });
+        }
+
+        conf.iniDoc.getSection("project").forEach(prop
+                -> System.out.println("project." + prop.key() + ": " + prop.value())
+        );
+    }
+
+    /**
      * Process a markdown text file.
      *
      * @param inpPath     Path of source file (.md).
@@ -592,7 +659,7 @@ public class Cli {
         String template = "";
         String use = "";
 
-        try ( BufferedReader inReader = Files.newBufferedReader(inpPath))
+        try (BufferedReader inReader = Files.newBufferedReader(inpPath))
         {
             String line;
 
@@ -638,8 +705,8 @@ public class Cli {
 
         }
 
-        try ( BufferedWriter outWriter
-                             = Files.newBufferedWriter(outPath, CREATE, TRUNCATE_EXISTING, WRITE))
+        try (BufferedWriter outWriter
+                            = Files.newBufferedWriter(outPath, CREATE, TRUNCATE_EXISTING, WRITE))
         {
             if (vlevel >= 3)
             {

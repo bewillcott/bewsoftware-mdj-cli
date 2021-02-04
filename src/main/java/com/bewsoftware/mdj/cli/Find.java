@@ -84,7 +84,7 @@ public class Find {
         // Debug output.
         if (vlevel >= 1)
         {
-            System.err.println("PWD: " + currentDir);
+            System.out.println("PWD: " + currentDir);
         }
 
         Finder finder = new Finder(pattern != null ? pattern : "*" + DefaultMD, vlevel);
@@ -117,7 +117,7 @@ public class Find {
         // Debug output.
         if (vlevel >= 1)
         {
-            System.err.println("PWD: " + currentDir);
+            System.out.println("PWD: " + currentDir);
         }
 
         Finder finder = new Finder(pattern != null ? pattern.toString() : "*" + DefaultMD, vlevel);
@@ -130,7 +130,7 @@ public class Find {
         // Debug output.
         if (vlevel >= 2)
         {
-            System.err.println("inpList:");
+            System.out.println("inpList:");
         }
 
         for (Path inPath : inpList)
@@ -161,7 +161,7 @@ public class Find {
                     // Debug output.
                     if (vlevel >= 2)
                     {
-                        System.err.println(outPath);
+                        System.out.println(outPath);
                     }
                 }
             }
@@ -170,11 +170,11 @@ public class Find {
         // Debug output.
         if (vlevel >= 2)
         {
-            System.err.println("outList:");
+            System.out.println("outList:");
 
             outList.forEach((files) ->
             {
-                System.err.println(files[1]);
+                System.out.println(files[1]);
             });
         }
 
@@ -217,7 +217,7 @@ public class Find {
                 // Debug output.
                 if (vlevel >= 2)
                 {
-                    System.err.println(file);
+                    System.out.println(file);
                 }
 
                 filenames.add(file);
@@ -230,7 +230,7 @@ public class Find {
             // Debug output.
             if (vlevel >= 1)
             {
-                System.err.println("Matched: "
+                System.out.println("Matched: "
                                    + numMatches);
             }
             return filenames;
@@ -253,7 +253,7 @@ public class Find {
 
         @Override
         public FileVisitResult visitFileFailed(Path file, IOException exc) {
-            System.err.println("visitFileFailed: " + exc);
+            System.out.println("visitFileFailed: " + exc);
             return CONTINUE;
         }
     }
