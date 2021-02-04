@@ -4,7 +4,7 @@ title: ${document.name}
 @@@
 
 
-#${document.name}
+# ${document.name}
 
 This is a command-line program that uses the MDj Core library.  It processes
 markdown conformant files into static html files.

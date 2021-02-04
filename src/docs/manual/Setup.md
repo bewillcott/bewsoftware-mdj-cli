@@ -1,6 +1,6 @@
 @@@
 use : articles2
-title: ${program.title} | Setup
+title: ${document.name} | Setup
 @@@
 
 

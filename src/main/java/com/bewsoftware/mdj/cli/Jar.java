@@ -69,8 +69,8 @@ public class Jar {
 
         if (vlevel >= 2)
         {
-            System.err.println("srcDirPath: " + jarDirPath);
-            System.err.println("srcDirPath exists: " + Files.exists(jarDirPath));
+            System.out.println("srcDirPath: " + jarDirPath);
+            System.out.println("srcDirPath exists: " + Files.exists(jarDirPath));
         }
 
         SortedSet<Path> jarFileSet = getFileList(jarDirPath, "*", true, vlevel);
@@ -133,7 +133,7 @@ public class Jar {
         // Hold the exceptions.
         List<IOException> exceptions = new ArrayList<>();
 
-        try ( JarOutputStream jos = new JarOutputStream(new BufferedOutputStream(
+        try (JarOutputStream jos = new JarOutputStream(new BufferedOutputStream(
                 new FileOutputStream(jarFile)), manifest))
         {
 
@@ -194,7 +194,7 @@ public class Jar {
      * @return the new Manifest.
      */
     public static Manifest getManifest(final MCPOMProperties pom, final IniFile conf) {
-        Manifest manifest = getManifest(pom.title + " (" + pom.version + ")");
+        Manifest manifest = getManifest(pom.name + " (" + pom.version + ")");
 
         if (conf != null)
         {
@@ -263,7 +263,7 @@ public class Jar {
     private static void addEntryContent(final JarOutputStream jos, final Path entryFilePath)
             throws IOException {
 
-        try ( BufferedInputStream bis = new BufferedInputStream(
+        try (BufferedInputStream bis = new BufferedInputStream(
                 Files.newInputStream(entryFilePath)))
         {
 

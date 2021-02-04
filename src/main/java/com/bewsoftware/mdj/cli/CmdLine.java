@@ -143,6 +143,13 @@ public interface CmdLine {
     public void outputFile(File file);
 
     /**
+     * The pom.xml file.
+     *
+     * @return the file.
+     */
+    public File pomFile();
+
+    /**
      * Print default help message.
      *
      * @param cmdLineSyntax the syntax for this application

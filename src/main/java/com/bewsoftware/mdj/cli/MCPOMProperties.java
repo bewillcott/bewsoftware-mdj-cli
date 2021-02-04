@@ -35,13 +35,13 @@ import java.util.Properties;
  * Place the following text into that file, and save it:</p>
  * <pre>
  *<code>
- *title=${project.name}
- *description=${project.description}
- *artifactId=${project.artifactId}
- *groupId=${project.groupId}
- *version=${project.version}
- *filename=${project.build.finalName}.jar
- *</code>
+ * name=${project.name}
+ * description=${project.description}
+ * artifactId=${project.artifactId}
+ * groupId=${project.groupId}
+ * version=${project.version}
+ * filename=${project.build.finalName}.jar
+ * </code>
  * </pre>
  * </li><li><p>
  * Add the following to your projects <b>pom.xml</b> file:</p>
@@ -76,7 +76,7 @@ import java.util.Properties;
  * </p>
  * <pre><code>
  * POMProperties pom = POMProperties.INSTANCE;
- * System.out.println(pom.title):
+ * System.out.println(pom.name):
  * </code></pre>
  *
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
@@ -120,7 +120,7 @@ public final class MCPOMProperties {
     /**
      * Project Name
      */
-    public final String title;
+    public final String name;
 
     /**
      * The version of the artifact.
@@ -137,18 +137,18 @@ public final class MCPOMProperties {
             throw new RuntimeException("FileIOError", ex);
         }
 
-        title = properties.getProperty("title");
+        name = properties.getProperty("name");
         description = properties.getProperty("description");
-        version = properties.getProperty("version");
-        artifactId = properties.getProperty("artifactId");
         groupId = properties.getProperty("groupId");
+        artifactId = properties.getProperty("artifactId");
+        version = properties.getProperty("version");
         filename = properties.getProperty("filename");
     }
 
     @Override
     public String toString() {
         return new StringBuilder(MCPOMProperties.class.getName()).append(":\n")
-                .append("  title: ").append(title).append("\n")
+                .append("  name: ").append(name).append("\n")
                 .append("  description: ").append(description).append("\n")
                 .append("  groupId: ").append(groupId).append("\n")
                 .append("  artifactId: ").append(artifactId).append("\n")

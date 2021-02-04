@@ -31,10 +31,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import static com.bewsoftware.fileio.BEWFiles.copyDirTree;
 import static com.bewsoftware.mdj.cli.Cli.conf;
@@ -54,7 +51,7 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 0.1
- * @version 1.0.7
+ * @version 1.1.0
  */
 public class Main {
 
@@ -77,7 +74,7 @@ public class Main {
                                   + " along with this program.  If not, see <http://www.gnu.org/licenses/>.\n";
     private static final String HELP_FOOTER = "\nYou must use at least one of the following options:"
                                               + "\n\t'-a', '-c', -i', '-s', '-j', '-m', '-W', or '-h|--help'\n"
-                                              + "\n" + Cli.POM.title + " " + Cli.POM.version
+                                              + "\n" + Cli.POM.name + " " + Cli.POM.version
                                               + "\nCopyright (c) 2020 Bradley Willcott\n"
                                               + "\nThis program comes with ABSOLUTELY NO WARRANTY; for details use option '-c'."
                                               + "\nThis is free software, and you are welcome to redistribute it"
@@ -227,21 +224,29 @@ public class Main {
         {
             case 3:
             case 2:
-                System.err.println("input: |" + cmd.inputFile() + "|");
-                System.err.println("output: |" + cmd.outputFile() + "|");
-                System.err.println("source: |" + cmd.source() + "|");
-                System.err.println("destination: |" + cmd.destination() + "|");
-                System.err.println("recursive: |" + cmd.hasOption('r') + "|");
-                System.err.println("wrapper: |" + cmd.hasOption('w') + "|");
-                System.err.println("initialise: |" + cmd.hasOption('W') + "|");
-                System.err.println("docRootDir: |" + cmd.docRootPath() + "|");
-                System.err.println("jar: |" + cmd.hasOption('j') + "|");
-                System.err.println("jarFilename: |" + cmd.jarFile() + "|");
-                System.err.println("jarSrcDir: |" + cmd.jarSourcePath() + "|");
+                System.out.println("input: |" + cmd.inputFile() + "|");
+                System.out.println("output: |" + cmd.outputFile() + "|");
+                System.out.println("source: |" + cmd.source() + "|");
+                System.out.println("destination: |" + cmd.destination() + "|");
+                System.out.println("recursive: |" + cmd.hasOption('r') + "|");
+                System.out.println("wrapper: |" + cmd.hasOption('w') + "|");
+                System.out.println("initialise: |" + cmd.hasOption('W') + "|");
+                System.out.println("docRootDir: |" + cmd.docRootPath() + "|");
+                System.out.println("jar: |" + cmd.hasOption('j') + "|");
+                System.out.println("jarFilename: |" + cmd.jarFile() + "|");
+                System.out.println("jarSrcDir: |" + cmd.jarSourcePath() + "|");
+                System.out.println("pomFile: |" + cmd.pomFile() + "|");
+
+                if (cmd.hasOption('D'))
+                {
+                    cmd.getOptionProperties('D').forEach((key, value)
+                            -> System.out.println(key + ": |" + value + "|")
+                    );
+                }
 
             case 1:
-                System.err.println("verbose: |" + cmd.hasOption('v') + "|");
-                System.err.println("verbose level: |" + vlevel + "|");
+                System.out.println("verbose: |" + cmd.hasOption('v') + "|");
+                System.out.println("verbose level: |" + vlevel + "|");
                 break;
 
             default:
@@ -279,7 +284,7 @@ public class Main {
 //            {
 //                if (vlevel >= 2)
 //                {
-//                    System.err.println(ex);
+//                    System.out.println(ex);
 //                }
 //            }
 //
@@ -317,7 +322,7 @@ public class Main {
             {
                 if (vlevel >= 2)
                 {
-                    System.err.println(ex);
+                    System.out.println(ex);
                 }
             }
 
@@ -349,7 +354,22 @@ public class Main {
         }
 
         //
-        // if '-w' switch active, copy 'css' files to destination directory
+        // if '-P' Add pom.xml file
+        //
+        if (cmd.hasOption('P'))
+        {
+            Properties props = null;
+
+            if (cmd.hasOption('D'))
+            {
+                props = cmd.getOptionProperties('D');
+            }
+
+            Cli.loadPom(cmd.pomFile(), props);
+        }
+
+        //
+        // if '-w' switch active, copy filesin '[includeDirs]' to destination directory
         //
         if (cmd.hasOption('w'))
         {
@@ -438,8 +458,8 @@ public class Main {
             {
                 if (vlevel >= 1)
                 {
-                    System.err.println(filePairs[0]);
-                    System.err.println("    " + filePairs[1]);
+                    System.out.println(filePairs[0]);
+                    System.out.println("    " + filePairs[1]);
                 }
 
                 Path parent = filePairs[1].getParent();
@@ -454,7 +474,7 @@ public class Main {
             {
                 if (vlevel >= 2)
                 {
-                    System.err.println("    " + dir);
+                    System.out.println("    " + dir);
                 }
 
                 Files.createDirectories(dir);
