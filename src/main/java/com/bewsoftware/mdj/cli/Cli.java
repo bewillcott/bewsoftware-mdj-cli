@@ -619,11 +619,17 @@ public class Cli {
             conf = new IniFile();
         }
 
-        conf.iniDoc.setString("project", "groupId", projectElement.element("groupId").getTextTrim(), "# Project GroupId");
-        conf.iniDoc.setString("project", "artifactId", projectElement.element("artifactId").getTextTrim(), "# The identifier for this artifact that is unique within the group given by the groupID");
-        conf.iniDoc.setString("project", "version", projectElement.element("version").getTextTrim(), "# The version of the artifact");
-        conf.iniDoc.setString("project", "name", projectElement.element("name").getTextTrim(), "# Project Name");
-        conf.iniDoc.setString("project", "description", projectElement.element("description").getTextTrim(), "# Project description");
+        Element groupId = projectElement.element("groupId");
+        Element artifactId = projectElement.element("artifactId");
+        Element version = projectElement.element("version");
+        Element name = projectElement.element("name");
+        Element description = projectElement.element("description");
+
+        conf.iniDoc.setString("project", "groupId", groupId != null ? groupId.getTextTrim() : "", "# Project GroupId");
+        conf.iniDoc.setString("project", "artifactId", artifactId != null ? artifactId.getTextTrim() : "", "# The identifier for this artifact that is unique within the group given by the groupID");
+        conf.iniDoc.setString("project", "version", version != null ? version.getTextTrim() : "", "# The version of the artifact");
+        conf.iniDoc.setString("project", "name", name != null ? name.getTextTrim() : "", "# Project Name");
+        conf.iniDoc.setString("project", "description", description != null ? description.getTextTrim() : "", "# Project description");
 
         // Process -Dkey=value properties from commandline.
         // Add them to the "project" section.
