@@ -36,7 +36,7 @@ import static org.apache.commons.cli.Option.builder;
  * @since 1.0.7
  * @version 1.0.14
  */
-public final class MyCmdLine implements CmdLine {
+final class MyCmdLine implements CmdLine {
 
     /**
      * Initializes the command-line Options.

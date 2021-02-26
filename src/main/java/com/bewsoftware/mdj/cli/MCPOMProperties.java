@@ -84,7 +84,7 @@ import java.util.Properties;
  * @since 0.1
  * @version 1.0
  */
-public final class MCPOMProperties {
+final class MCPOMProperties {
 
     /**
      * Provides single instance of this class.

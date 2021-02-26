@@ -34,7 +34,7 @@ import static java.nio.file.FileVisitResult.*;
  * @since 0.1
  * @version 1.0
  */
-public class PrintFiles extends SimpleFileVisitor<Path> {
+class PrintFiles extends SimpleFileVisitor<Path> {
 
     // Print each directory visited.
     @Override

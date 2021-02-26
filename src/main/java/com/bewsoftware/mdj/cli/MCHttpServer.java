@@ -48,7 +48,7 @@ import static java.nio.file.Path.of;
  * @since 1.0.28
  * @version 1.0.28
  */
-public class MCHttpServer extends HTTPServer {
+class MCHttpServer extends HTTPServer {
 
     /**
      * Starts a stand-alone HTTP server, serving files from disk.

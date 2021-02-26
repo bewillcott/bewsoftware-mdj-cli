@@ -35,6 +35,7 @@ import static java.nio.file.Path.of;
 
 /**
  * Sample code that finds files that match the specified glob pattern.
+ * <p>
  * For more information on what constitutes a glob pattern, see
  * https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob
  * <p>
@@ -50,7 +51,7 @@ import static java.nio.file.Path.of;
  * @since 0.1
  * @version 1.0.7
  */
-public class Find {
+class Find {
 
     /**
      * Default HTML file extn.
@@ -194,7 +195,13 @@ public class Find {
         SortedSet<Path> fileSet = getFileList(of("target/manual"), "*", true, 2);
     }
 
-    public static class Finder extends SimpleFileVisitor<Path> {
+    /**
+     * Not meant to be instantiated.
+     */
+    private Find() {
+    }
+
+    private static class Finder extends SimpleFileVisitor<Path> {
 
         private final int vlevel;
         private final PathMatcher matcher;

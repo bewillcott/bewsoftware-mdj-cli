@@ -29,7 +29,7 @@ import java.util.Properties;
  * @since 1.0.7
  * @version 1.0.7
  */
-public interface CmdLine {
+interface CmdLine {
 
     /**
      * Get the destination directory.

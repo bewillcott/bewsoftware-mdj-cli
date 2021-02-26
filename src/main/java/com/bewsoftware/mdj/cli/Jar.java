@@ -47,7 +47,7 @@ import static com.bewsoftware.mdj.cli.Cli.POM;
 import static com.bewsoftware.mdj.cli.Cli.conf;
 import static com.bewsoftware.mdj.cli.Find.getFileList;
 
-public class Jar {
+class Jar {
 
     /**
      * Create jar file.
@@ -133,7 +133,7 @@ public class Jar {
         // Hold the exceptions.
         List<IOException> exceptions = new ArrayList<>();
 
-        try (JarOutputStream jos = new JarOutputStream(new BufferedOutputStream(
+        try ( JarOutputStream jos = new JarOutputStream(new BufferedOutputStream(
                 new FileOutputStream(jarFile)), manifest))
         {
 
@@ -263,7 +263,7 @@ public class Jar {
     private static void addEntryContent(final JarOutputStream jos, final Path entryFilePath)
             throws IOException {
 
-        try (BufferedInputStream bis = new BufferedInputStream(
+        try ( BufferedInputStream bis = new BufferedInputStream(
                 Files.newInputStream(entryFilePath)))
         {
 

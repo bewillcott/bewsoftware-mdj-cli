@@ -66,7 +66,7 @@ import static java.util.regex.Pattern.compile;
  * @since 0.1
  * @version 1.0.14
  */
-public class Cli {
+class Cli {
 
     /**
      * The name of the configuration ini file.
@@ -336,7 +336,7 @@ public class Cli {
             System.out.println("template:\n" + templatesPath);
         }
 
-        try (BufferedReader inReader = Files.newBufferedReader(templatesPath))
+        try ( BufferedReader inReader = Files.newBufferedReader(templatesPath))
         {
             String line;
 
@@ -597,7 +597,7 @@ public class Cli {
      *
      * @throws IOException If any.
      */
-    static void loadPom(final File pomFile, Properties props) throws IOException {
+    static void loadPom(final File pomFile, final Properties props) throws IOException {
 
         SAXReader reader = new SAXReader();
         Document document = null;
@@ -665,7 +665,7 @@ public class Cli {
         String template = "";
         String use = "";
 
-        try (BufferedReader inReader = Files.newBufferedReader(inpPath))
+        try ( BufferedReader inReader = Files.newBufferedReader(inpPath))
         {
             String line;
 
@@ -711,8 +711,8 @@ public class Cli {
 
         }
 
-        try (BufferedWriter outWriter
-                            = Files.newBufferedWriter(outPath, CREATE, TRUNCATE_EXISTING, WRITE))
+        try ( BufferedWriter outWriter
+                             = Files.newBufferedWriter(outPath, CREATE, TRUNCATE_EXISTING, WRITE))
         {
             if (vlevel >= 3)
             {
@@ -735,7 +735,7 @@ public class Cli {
      *
      * @return result.
      */
-    static String processSubstitutions(final String text, final String use, BooleanReturn found) {
+    static String processSubstitutions(final String text, final String use, final BooleanReturn found) {
         TextEditor textEd = new TextEditor(text);
         found.val = false;
 

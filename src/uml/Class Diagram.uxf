@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <help_text>fontsize=12
+fontfamily=Monospaced #SansSerif
+</help_text>
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>310</x>
+      <y>320</y>
+      <w>310</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>valign=center
+halign=center
+fontsize=16
+lw=2
+
+*bewsoftware-mdj-cli*
+v1.1.2
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>570</x>
+      <y>390</y>
+      <w>290</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>valign=center
+halign=center
+
+Copyright © 2020, 2021 Bradley Willcott
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>0</x>
+      <y>200</y>
+      <w>200</w>
+      <h>400</h>
+    </coordinates>
+    <panel_attributes>com.bewsoftware.mdj.cli
+--
+bg=orange
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>10</x>
+      <y>230</y>
+      <w>110</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>bg=cyan
+transparency=0
+layer=1
+Cli
+--
+_+CONF_FILENAME : String {final}_
+_+POM : MCPOMProperties {final}_
+_+SUBSTITUTION_PATTERN : Pattern {final}_
+_conf : IniFile_
+_vlevel : int_
+
+--
+-Cli()
+
+_-configureStylesheetPaths() : void_
+
+_-getString(_
+_    section:String{final},_
+_    key:String{final},_
+_    use:String{final}_
+_) : String_
+
+_-processMetaBlock() : void_
+_-processNamedMetaBlocks() : void_
+
+_-processTemplate(_
+_    use:String{final},_
+_    template:String{final}_
+_) : void_
+
+_initialiseWrappers(docRootPath:Path{final}) : int_
+_loadConf(srcDirPath:Path{final}) : void_
+
+_void loadPom(_
+_    pomFile:File{final},_
+_    props:Properties{final}_
+_) : void_
+
+_processFile(_
+_    inpPath:Path{final},_
+_    outPath:Path{final},_
+_    destDirPath:Path{final},_
+_    wrapper:boolean{final}_
+_) : void_
+
+_processSubstitutions(_
+_    text:String{final},_
+_    use:String{final},_
+_    found:BooleanReturn{final}_
+_) : String_
+
+
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>380</x>
+      <y>240</y>
+      <w>110</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>bg=cyan
+transparency=0
+layer=1
+Cli
+--
+_+CONF_FILENAME : String {final}_
+_+POM : MCPOMProperties {final}_
+_+SUBSTITUTION_PATTERN : Pattern {final}_
+_conf : IniFile_
+_vlevel : int_
+
+--
+-Cli()
+
+_-configureStylesheetPaths() : void_
+
+_-getString(_
+_    section:String{final},_
+_    key:String{final},_
+_    use:String{final}_
+_) : String_
+
+_-processMetaBlock() : void_
+_-processNamedMetaBlocks() : void_
+
+_-processTemplate(_
+_    use:String{final},_
+_    template:String{final}_
+_) : void_
+
+_initialiseWrappers(docRootPath:Path{final}) : int_
+_loadConf(srcDirPath:Path{final}) : void_
+
+_void loadPom(_
+_    pomFile:File{final},_
+_    props:Properties{final}_
+_) : void_
+
+_processFile(_
+_    inpPath:Path{final},_
+_    outPath:Path{final},_
+_    destDirPath:Path{final},_
+_    wrapper:boolean{final}_
+_) : void_
+
+_processSubstitutions(_
+_    text:String{final},_
+_    use:String{final},_
+_    found:BooleanReturn{final}_
+_) : String_
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>510</x>
+      <y>230</y>
+      <w>120</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>bg=green
+layer=1
+&lt;&lt;interface&gt;&gt;
+Callback
+--
+--
+/+processVersion(version:Version): boolean/
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>10</x>
+      <y>280</y>
+      <w>120</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>bg=green
+layer=1
+&lt;&lt;interface&gt;&gt;
+CmdLine
+--
+--
+/+destination() : Path/
+/+destination(path:Path) : void/
+/+docRootPath() : Path/
+/+exceptions() : List&lt;Exception&gt;/
+/+getOptionProperties(opt:char) : Properties/
+/+getOptionProperties(opt:String) : Properties/
+/+hasOption(opt:char) : boolean/
+/+hasOption(opt:String) : boolean/
+/+inputFile() : File/
+/+inputFile(file:File) : void/
+/+jarFile() : File/
+/+jarSourcePath	() : Path/
+/+outputFile() : Path/
+/+outputFile(file:File) : void/
+/+pomFile() : File/
+/+printHelp(cmdLineSyntax:String) : void/
+
+/+printHelp(
+    cmdLineSyntax:String,
+    header:String,
+    footer:String,
+    autoUsage:boolean
+) : void/
+
+/+source() : Path/
+/+source(path:Path) : void/
+/+success() : boolean/
+/+verbosity() : int/
+
+
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
