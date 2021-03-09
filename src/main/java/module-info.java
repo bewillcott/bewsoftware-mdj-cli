@@ -36,5 +36,4 @@ module bewsoftware.mdj.cli {
     requires commons.cli;
     requires dom4j;
     requires java.desktop;
-    requires org.apache.logging.log4j;
 }
