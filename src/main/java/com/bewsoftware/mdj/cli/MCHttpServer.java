@@ -20,12 +20,12 @@
 package com.bewsoftware.mdj.cli;
 
 import com.bewsoftware.httpserver.*;
-import com.bewsoftware.utils.struct.ExceptionReturn;
-import com.bewsoftware.utils.struct.StringReturn;
+import com.bewsoftware.utils.struct.Ref;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -95,8 +95,8 @@ class MCHttpServer extends HTTPServer {
             } else if (cmd.hasOption('p'))
             {
                 // An External directory or 'jar' file.
-                final ExceptionReturn er = new ExceptionReturn();
-                final StringReturn contextReturn = new StringReturn();
+                final Ref<Exception> exRtn = new Ref<>();
+                final Ref<String> ctRtn = new Ref<>();
                 final String contextDefault = context;
 
                 cmd.getOptionProperties('p').forEach((contextObj, textObj) ->
@@ -105,12 +105,12 @@ class MCHttpServer extends HTTPServer {
 
                     if (strContext.equals(contextDefault))
                     {
-                        contextReturn.val = strContext;
+                        ctRtn.val = strContext;
                     }
 
-                    if (contextReturn.val == null)
+                    if (ctRtn.val == null)
                     {
-                        contextReturn.val = strContext;
+                        ctRtn.val = strContext;
                     }
 
                     try
@@ -125,18 +125,18 @@ class MCHttpServer extends HTTPServer {
                             host.addContext(strContext, new JarContextHandler(
                                             URI.create("jar:" + publish.jarFile.toURI()), "/"));
                         }
-                    } catch (Exception ex)
+                    } catch (IOException | URISyntaxException | MissingArgumentException ex)
                     {
-                        er.val = ex;
+                        exRtn.val = ex;
                     }
                 });
 
-                if (er.val != null)
+                if (exRtn.val != null)
                 {
-                    throw er.val;
+                    throw exRtn.val;
                 }
 
-                context = contextReturn.val;
+                context = ctRtn.val;
             }
 
             server.start();

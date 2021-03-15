@@ -5,7 +5,7 @@
     
     <groupId>com.bewsoftware</groupId>
     <artifactId>bewsoftware-mdj-cli</artifactId>
-    <version>1.1.3</version>
+    <version>1.1.4</version>
     <packaging>jar</packaging>
 
     <name>BEWSoftware MDj CLI</name>
@@ -13,6 +13,8 @@
 
     <properties>
         <jar.manifest.mainClass>com.bewsoftware.mdj.cli.Main</jar.manifest.mainClass>
+        <docs.source>src/docs/manual</docs.source>
+        <docs.target>target/docs/manual</docs.target>
         <java.version>12</java.version>
         <source.encoding>UTF-8</source.encoding>
         <javadoc.source.version>${java.version}</javadoc.source.version>
@@ -84,7 +86,8 @@
         <dependency>
             <groupId>com.bewsoftware</groupId>
             <artifactId>bewsoftware-files</artifactId>
-            <version>1.0.6</version>
+            <version>1.0.7</version>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>com.bewsoftware</groupId>
@@ -99,7 +102,7 @@
         <dependency>
             <groupId>com.bewsoftware</groupId>
             <artifactId>bewsoftware-utils</artifactId>
-            <version>1.0.7</version>
+            <version>1.0.8</version>
         </dependency>
         <dependency>
             <groupId>commons-cli</groupId>
@@ -129,7 +132,7 @@
                                     <goal>clean</goal>
                                 </goals>
                                 <configuration>
-                                    <destination>target/docs/manual</destination>
+                                    <destination>${docs.target}</destination>
                                 </configuration>
                             </execution>
                         </executions>
@@ -152,8 +155,8 @@
                                     <goal>mdj</goal>
                                 </goals>
                                 <configuration>
-                                    <source>src/docs/manual</source>
-                                    <destination>target/docs/manual</destination>
+                                    <source>${docs.source}</source>
+                                    <destination>${docs.target}</destination>
                                     <verbosity/>
                                 </configuration>
                             </execution>
@@ -178,8 +181,8 @@
                                     <goal>mdj</goal>
                                 </goals>
                                 <configuration>
-                                    <source>src/docs/manual</source>
-                                    <destination>target/docs/manual</destination>
+                                    <source>${docs.source}</source>
+                                    <destination>${docs.target}</destination>
                                     <verbosity/>
                                 </configuration>
                             </execution>
@@ -226,12 +229,12 @@
                                 </goals>
                                 <configuration>                                     
                                     <disallowBrowserFileCaching>true</disallowBrowserFileCaching>                                   
-                                    <source>src/docs/manual</source>
-                                    <destination>target/docs/manual</destination>
+                                    <source>${docs.source}</source>
+                                    <destination>${docs.target}</destination>
                                     <serverContexts>
                                         <serverContext>
                                             <context>/</context>
-                                            <htmlSource>target/docs/manual</htmlSource>
+                                            <htmlSource>${docs.target}</htmlSource>
                                         </serverContext>
                                         <serverContext>
                                             <context>/site</context>
@@ -266,12 +269,12 @@
                                 </goals>
                                 <configuration>                                    
                                     <disallowBrowserFileCaching>true</disallowBrowserFileCaching>
-                                    <source>src/docs/manual</source>
-                                    <destination>target/docs/manual</destination>
+                                    <source>${docs.source}</source>
+                                    <destination>${docs.target}</destination>
                                     <serverContexts>
                                         <serverContext>
                                             <context>/</context>
-                                            <htmlSource>target/docs/manual</htmlSource>
+                                            <htmlSource>${docs.target}</htmlSource>
                                         </serverContext>
                                     </serverContexts>
                                 </configuration>
@@ -299,12 +302,12 @@
                                 </goals>
                                 <configuration>                                    
                                     <disallowBrowserFileCaching>true</disallowBrowserFileCaching>
-                                    <source>src/docs/manual</source>
-                                    <destination>target/docs/manual</destination>
+                                    <source>${docs.source}</source>
+                                    <destination>${docs.target}</destination>
                                     <serverContexts>
                                         <serverContext>
                                             <context>/</context>
-                                            <htmlSource>target/docs/manual</htmlSource>
+                                            <htmlSource>${docs.target}</htmlSource>
                                         </serverContext>
                                     </serverContexts>
                                 </configuration>
@@ -364,9 +367,9 @@
                                     <goal>jar</goal>
                                 </goals>
                                 <configuration>
-                                    <jarSrcDir>target/docs/manual</jarSrcDir>
+                                    <jarSrcDir>${docs.target}</jarSrcDir>
                                     <jarFilename>${project.build.finalName}-manual.jar</jarFilename>
-                                    <docRootDir>src/docs/manual</docRootDir>
+                                    <docRootDir>${docs.source}</docRootDir>
                                     <verbosity/>
                                 </configuration>
                             </execution>
@@ -376,9 +379,9 @@
                                     <goal>jar</goal>
                                 </goals>
                                 <configuration>
-                                    <jarSrcDir>src/docs/manual</jarSrcDir>
+                                    <jarSrcDir>${docs.source}</jarSrcDir>
                                     <jarFilename>${project.build.finalName}-manual-src.jar</jarFilename>
-                                    <docRootDir>src/docs/manual</docRootDir>
+                                    <docRootDir>${docs.source}</docRootDir>
                                     <verbosity/>
                                 </configuration>
                             </execution>
@@ -445,7 +448,7 @@
                                     <resources>
                                         <resource>
                                             <directory>
-                                                target/docs/manual
+                                                ${docs.target}
                                             </directory>
                                         </resource>
                                     </resources>
@@ -464,8 +467,8 @@
                                     <goal>mdj</goal>
                                 </goals>
                                 <configuration>
-                                    <source>src/docs/manual</source>
-                                    <destination>target/docs/manual</destination>
+                                    <source>${docs.source}</source>
+                                    <destination>${docs.target}</destination>
                                     <verbosity/>
                                 </configuration>
                             </execution>
@@ -476,8 +479,8 @@
                                 </goals>
                                 <configuration>
                                     <jarFilename>${finalBaseName}-manual.jar</jarFilename>
-                                    <jarSrcDir>target/docs/manual</jarSrcDir>
-                                    <docRootDir>src/docs/manual</docRootDir>
+                                    <jarSrcDir>${docs.target}</jarSrcDir>
+                                    <docRootDir>${docs.source}</docRootDir>
                                     <verbosity/>
                                 </configuration>
                             </execution>
@@ -488,8 +491,8 @@
                                 </goals>
                                 <configuration>
                                     <jarFilename>${finalBaseName}-manual-src.jar</jarFilename>
-                                    <jarSrcDir>src/docs/manual</jarSrcDir>
-                                    <docRootDir>src/docs/manual</docRootDir>
+                                    <jarSrcDir>${docs.source}</jarSrcDir>
+                                    <docRootDir>${docs.source}</docRootDir>
                                     <verbosity/>
                                 </configuration>
                             </execution>
@@ -624,7 +627,7 @@
             </resource>
             <resource>
                 <directory>
-                    src/docs/manual
+                    ${docs.source}
                 </directory>
                 <excludes>
                     <exclude>
@@ -634,7 +637,7 @@
             </resource>
             <resource>
                 <directory>
-                    target/docs/manual
+                    ${docs.target}
                 </directory>
                 <excludes>
                     <exclude>
@@ -659,7 +662,7 @@
                 <plugin>
                     <groupId>com.bewsoftware.mojo</groupId>
                     <artifactId>bewsoftware-mdj-plugin</artifactId>
-                    <version>1.1.3</version>
+                    <version>1.1.4</version>
                 </plugin>                
                 <plugin>                        
                     <groupId>com.bewsoftware.mojo</groupId>
