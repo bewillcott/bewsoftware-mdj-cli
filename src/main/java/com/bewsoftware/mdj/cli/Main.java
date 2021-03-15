@@ -24,7 +24,7 @@ import com.bewsoftware.common.InvalidProgramStateException;
 import com.bewsoftware.fileio.ini.IniFile;
 import com.bewsoftware.fileio.ini.IniFileFormatException;
 import com.bewsoftware.property.IniProperty;
-import com.bewsoftware.utils.struct.BooleanReturn;
+import com.bewsoftware.utils.struct.Ref;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -410,7 +410,7 @@ public class Main {
 
                     if (value != null)
                     {
-                        value = Cli.processSubstitutions(value, null, new BooleanReturn());
+                        value = Cli.processSubstitutions(value, null, new Ref<>());
 
                         if (!value.isEmpty())
                         {

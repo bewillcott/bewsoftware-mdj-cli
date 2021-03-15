@@ -35,7 +35,7 @@ import com.bewsoftware.mdj.core.MarkdownProcessor;
 import com.bewsoftware.mdj.core.POMProperties;
 import com.bewsoftware.mdj.core.TextEditor;
 import com.bewsoftware.property.IniProperty;
-import com.bewsoftware.utils.struct.BooleanReturn;
+import com.bewsoftware.utils.struct.Ref;
 import java.io.*;
 import java.util.Date;
 import java.util.List;
@@ -346,7 +346,7 @@ class Cli {
             }
         }
 
-        TextEditor textEd = new TextEditor(processSubstitutions(sbin.toString(), use, new BooleanReturn()));
+        TextEditor textEd = new TextEditor(processSubstitutions(sbin.toString(), use, new Ref<Boolean>()));
         textEd.replaceAllLiteral("\\\\\\$", "$");
         textEd.replaceAllLiteral("\\\\\\[", "[");
 
@@ -551,36 +551,32 @@ class Cli {
         conf.iniDoc.setString("program", "version", POM.version, "# The version of the artifact");
         conf.iniDoc.setString("program", "details", POM.toString(), "# All of the above information laid out");
 
-        BooleanReturn brtn = new BooleanReturn();
+        Ref<Boolean> brtn = new Ref<>();
 
         do
         {
             brtn.val = false;
 
             conf.iniDoc.getSections()
-                    .forEach(section ->
+                    .forEach(section -> conf.iniDoc.getSection(section)
+                    .forEach(prop ->
                     {
-                        for (IniProperty<String> prop : conf.iniDoc.getSection(section))
+                        Ref<Boolean> rtn = new Ref<>();
+                        if (prop.value() != null)
                         {
-                            BooleanReturn rtn = new BooleanReturn();
-
-                            if (prop.value() != null)
+                            if (vlevel >= 3)
                             {
-                                if (vlevel >= 3)
-                                {
-                                    System.out.println(prop);
-                                }
-
-                                String value = processSubstitutions(prop.value(), null, rtn);
-
-                                if (rtn.val)
-                                {
-                                    conf.iniDoc.setString(section, prop.key(), value, prop.comment());
-                                    brtn.val = true;
-                                }
+                                System.out.println(prop);
+                            }
+                            String value = processSubstitutions(prop.value(), null, rtn);
+                            if (rtn.val)
+                            {
+                                conf.iniDoc.setString(section, prop.key(), value, prop.comment());
+                                brtn.val = true;
                             }
                         }
-                    });
+                    }));
+
         } while (brtn.val);
 
         if (vlevel >= 2)
@@ -689,13 +685,13 @@ class Cli {
             configureStylesheetPaths();
             processNamedMetaBlocks();
             String preprocessed = processSubstitutions(
-                    iniDoc.getString("page", "text", ""), use, new BooleanReturn());
+                    iniDoc.getString("page", "text", ""), use, new Ref<>());
 
             use = iniDoc.getString("page", "use", null);
             template = getString("page", "template", use);
             iniDoc.setString("page", "content",
                              MarkdownProcessor.markdown(processSubstitutions(
-                                     preprocessed, use, new BooleanReturn())));
+                                     preprocessed, use, new Ref<>())));
 
             if (!template.isBlank())
             {
@@ -735,7 +731,7 @@ class Cli {
      *
      * @return result.
      */
-    static String processSubstitutions(final String text, final String use, final BooleanReturn found) {
+    static String processSubstitutions(final String text, final String use, final Ref<Boolean> found) {
         TextEditor textEd = new TextEditor(text);
         found.val = false;
 
