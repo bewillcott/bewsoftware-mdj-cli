@@ -309,7 +309,7 @@ a.previous:active {
 }
 
 a.upArrow {
-    background: url(../etc/16px-arrow-up2.png) right center no-repeat;
+    background: url(../etc/16px-arrow-up.png) right center no-repeat;
     background-size: auto 14px;
     padding: 10px;
 }
