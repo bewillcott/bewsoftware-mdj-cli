@@ -335,3 +335,13 @@ a.upArrow:active {
 p.centre{
     text-align: center;
 }
+
+sup {
+    vertical-align: super;
+    font-size: smaller;
+    font-style: normal;
+}
+
+.quote {
+    font-style: italic;
+}
