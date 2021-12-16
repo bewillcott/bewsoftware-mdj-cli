@@ -22,24 +22,19 @@ package com.bewsoftware.mdj.cli;
 import com.bewsoftware.fileio.ini.IniDocument;
 import com.bewsoftware.fileio.ini.IniFile;
 import com.bewsoftware.fileio.ini.IniFileFormatException;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import com.bewsoftware.mdj.core.MarkdownProcessor;
-import com.bewsoftware.mdj.core.POMProperties;
 import com.bewsoftware.mdj.core.TextEditor;
 import com.bewsoftware.property.IniProperty;
 import com.bewsoftware.utils.struct.Ref;
 import java.io.*;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -47,6 +42,7 @@ import org.dom4j.io.SAXReader;
 
 import static com.bewsoftware.fileio.BEWFiles.copyDirTree;
 import static com.bewsoftware.fileio.BEWFiles.getResource;
+import static com.bewsoftware.mdj.cli.MCPOMProperties.INSTANCE;
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 import static java.nio.file.Path.of;
 import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
@@ -56,7 +52,6 @@ import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.nio.file.StandardOpenOption.WRITE;
 import static java.util.regex.Pattern.DOTALL;
 import static java.util.regex.Pattern.MULTILINE;
-import static com.bewsoftware.mdj.cli.MCPOMProperties.INSTANCE;
 import static java.util.regex.Pattern.compile;
 
 /**
@@ -279,7 +274,7 @@ class Cli {
                         html = "\n<div class=\"" + name + "\">\n";
                     }
 
-                    html += MarkdownProcessor.markdown(metaBlock) + "\n</div>\n";
+                    html += MarkdownProcessor.convert(metaBlock) + "\n</div>\n";
 
                     if (vlevel >= 3)
                     {
@@ -690,8 +685,7 @@ class Cli {
             use = iniDoc.getString("page", "use", null);
             template = getString("page", "template", use);
             iniDoc.setString("page", "content",
-                             MarkdownProcessor.markdown(processSubstitutions(
-                                     preprocessed, use, new Ref<>())));
+                    MarkdownProcessor.convert(processSubstitutions(                                     preprocessed, use, new Ref<>())));
 
             if (!template.isBlank())
             {
@@ -703,7 +697,7 @@ class Cli {
         } else
         {
             iniDoc.setString("page", "content",
-                             MarkdownProcessor.markdown(iniDoc.getString("page", "text", "")));
+                    MarkdownProcessor.convert(iniDoc.getString("page", "text", "")));
 
         }
 

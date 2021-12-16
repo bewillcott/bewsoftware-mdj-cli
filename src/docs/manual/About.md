@@ -32,7 +32,7 @@ as I love having a computer do for me what I was too lazy to do for myself.
 I wanted a way of producing good looking documentation without having to 
 code html, or some other verbose descriptive language.  When I came
 across Markdownj, I believed I had found my solution.  Unfortunately, it
-was only part way there.  The library I found[1] had not been updated in
+was only part way there.  The library I found[^1] had not been updated in
 more than 7 years.  Further, I was not aware of any command-line utility 
 that used it.
 
