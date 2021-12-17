@@ -5,7 +5,7 @@
 
     <groupId>com.bewsoftware</groupId>
     <artifactId>bewsoftware-mdj-cli</artifactId>
-    <version>1.1.6-SNAPSHOT</version>
+    <version>1.1.6</version>
     <packaging>jar</packaging>
 
     <name>BEWSoftware MDj CLI</name>
@@ -17,6 +17,7 @@
         <docs.target>target/docs/manual</docs.target>
         <java.version>17</java.version>
         <source.encoding>UTF-8</source.encoding>
+        <bewsoftware.version>1.0.12</bewsoftware.version>
         <javadoc.source.version>${java.version}</javadoc.source.version>
         <jdk.version>${java.version}</jdk.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -108,6 +109,7 @@
             <classifier>manual</classifier>
         </dependency>
     </dependencies>
+
     <dependencyManagement>
         <dependencies>
             <!-- TESTING DEPENDENCIES -->
@@ -124,12 +126,12 @@
             <dependency>
                 <groupId>com.bewsoftware</groupId>
                 <artifactId>bewsoftware-files</artifactId>
-                <version>1.0.7</version>
+                <version>${bewsoftware.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.bewsoftware</groupId>
                 <artifactId>bewsoftware-mdj-core</artifactId>
-                <version>0.6.14-SNAPSHOT</version>
+                <version>0.6.14</version>
             </dependency>
             <dependency>
                 <groupId>com.bewsoftware</groupId>
@@ -139,7 +141,7 @@
             <dependency>
                 <groupId>com.bewsoftware</groupId>
                 <artifactId>bewsoftware-utils</artifactId>
-                <version>1.0.10</version>
+                <version>${bewsoftware.version}</version>
             </dependency>
             <dependency>
                 <groupId>commons-cli</groupId>
@@ -149,7 +151,7 @@
             <dependency>
                 <groupId>com.bewsoftware</groupId>
                 <artifactId>bewsoftware-mdj-core</artifactId>
-                <version>0.6.13</version>
+                <version>0.6.14</version>
                 <classifier>manual</classifier>
             </dependency>
         </dependencies>
@@ -537,33 +539,6 @@
                         </executions>
                     </plugin>
                     <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>Zip Binary Jar and libs</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <configuration>
-                                    <executable>zip</executable>
-                                    <workingDirectory>${project.build.directory}</workingDirectory>
-                                    <includeProjectDependencies>false</includeProjectDependencies>
-                                    <includePluginDependencies>true</includePluginDependencies>
-                                    <arguments>
-                                        <argument>-r</argument>
-                                        <argument>${finalBaseName}.zip</argument>
-                                        <argument>${finalBaseName}.jar</argument>
-                                        <argument>${finalBaseName}-manual.jar</argument>
-                                        <argument>${finalBaseName}-manual-src.jar</argument>
-                                        <argument>libs</argument>
-                                    </arguments>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-install-plugin</artifactId>
                         <executions>
@@ -620,6 +595,35 @@
                                 <id>site-jar</id>
                                 <goals>
                                     <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- Build the production 'jar' -->
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/assembly/distribution.xml</descriptor>
+                                <descriptor>src/assembly/deploy-linux.xml</descriptor>
+                                <descriptor>src/assembly/deploy-win.xml</descriptor>
+                            </descriptors>
+                            <archive>
+                                <manifest>
+                                    <!--                                    <addClasspath>true</addClasspath>
+                                    <classpathPrefix>./</classpathPrefix>-->
+                                    <mainClass>${jar.manifest.mainClass}</mainClass>
+                                    <addBuildEnvironmentEntries>true</addBuildEnvironmentEntries>
+                                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                </manifest>
+                            </archive>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>make-assembly</id> <!-- this is used for inheritance merges -->
+                                <phase>package</phase> <!-- bind to the packaging phase -->
+                                <goals>
+                                    <goal>single</goal>
                                 </goals>
                             </execution>
                         </executions>
@@ -722,6 +726,10 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>exec-maven-plugin</artifactId>
                     <version>3.0.0</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>3.3.0</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
@@ -847,9 +855,9 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <showDeprecation>true</showDeprecation>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
-                    <release>${java.version}</release>
+                    <!--                    <source>15</source>
+                    <target>15</target>
+                    <release>${java.version}</release>-->
                     <encoding>${source.encoding}</encoding>
                     <compilerArgs>
                         <arg>-Xlint:all</arg>
