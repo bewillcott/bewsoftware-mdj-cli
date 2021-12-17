@@ -3,7 +3,6 @@ use : articles2
 title: ${document.name}
 @@@
 
-
 # ${document.name}
 
 This is a command-line program that uses the MDj Core library.  It processes

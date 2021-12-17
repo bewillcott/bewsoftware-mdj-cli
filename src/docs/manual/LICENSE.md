@@ -3,7 +3,6 @@ use : articles2
 title: GNU GENERAL PUBLIC LICENSE v3
 @@@
 
-
 ####[#toc] Table of Contents
 
 - [GNU GENERAL PUBLIC LICENSE](#ggpl)

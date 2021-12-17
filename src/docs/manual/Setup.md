@@ -3,7 +3,6 @@ use : articles2
 title: ${document.name} | Setup
 @@@
 
-
 ## Setup
 
 To setup everything, run the following from either your project or document root
