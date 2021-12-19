@@ -36,6 +36,7 @@ import static com.bewsoftware.httpserver.HTTPServer.TITLE;
 import static com.bewsoftware.httpserver.HTTPServer.VERSION;
 import static com.bewsoftware.httpserver.HTTPServer.addContentTypes;
 import static com.bewsoftware.httpserver.Utils.openURL;
+import static com.bewsoftware.mdj.cli.Main.DISPLAY;
 import static java.lang.System.exit;
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 import static java.nio.file.Path.of;
@@ -48,7 +49,8 @@ import static java.nio.file.Path.of;
  * @since 1.0.28
  * @version 1.0.28
  */
-class MCHttpServer extends HTTPServer {
+public class MCHttpServer extends HTTPServer
+{
 
     /**
      * Starts a stand-alone HTTP server, serving files from disk.
@@ -95,8 +97,8 @@ class MCHttpServer extends HTTPServer {
             } else if (cmd.hasOption('p'))
             {
                 // An External directory or 'jar' file.
-                final Ref<Exception> exRtn = new Ref<>();
-                final Ref<String> ctRtn = new Ref<>();
+                final Ref<Exception> exRtn = Ref.val();
+                final Ref<String> ctRtn = Ref.val();
                 final String contextDefault = context;
 
                 cmd.getOptionProperties('p').forEach((contextObj, textObj) ->
@@ -141,7 +143,7 @@ class MCHttpServer extends HTTPServer {
 
             server.start();
             String msg = TITLE + " (" + VERSION + ") is listening on port " + server.port;
-            System.out.println(msg);
+            DISPLAY.println(msg);
             openURL(new URL("http", "localhost", server.port, context));
 
             // GUI dialog to show server running, with button to
@@ -158,11 +160,11 @@ class MCHttpServer extends HTTPServer {
 
             server.stop();
             msg = TITLE + " (" + VERSION + ") on port " + server.port + " has terminated.";
-            System.out.println(msg);
+            DISPLAY.println(msg);
             exit(0);
         } catch (Exception e)
         {
-            System.err.println("error: " + e);
+            DISPLAY.println("error: " + e);
         }
     }
 

@@ -22,11 +22,18 @@ package com.bewsoftware.mdj.cli;
 import com.bewsoftware.fileio.Finder;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
-import java.util.*;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.SortedSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.bewsoftware.mdj.cli.Main.DISPLAY;
 import static java.lang.Character.MAX_VALUE;
 import static java.nio.file.Files.getLastModifiedTime;
 import static java.nio.file.Files.notExists;
@@ -50,7 +57,8 @@ import static java.nio.file.Path.of;
  * @since 0.1
  * @version 1.0.7
  */
-class Find {
+class Find
+{
 
     /**
      * Default HTML file extn.
@@ -63,35 +71,49 @@ class Find {
     private static final String DEFAULT_MD = ".md";
 
     /**
+     * Not meant to be instantiated.
+     */
+    private Find()
+    {
+    }
+
+    /**
      * Provides a list of files.
      *
-     * @param srcPath   Start file search from this directory. (Default: "" - Current Working Directory)
+     * @param srcPath   Start file search from this directory. (Default: "" -
+     *                  Current Working Directory)
      * @param pattern   Glob file search pattern. (Default: "{@code *}")
      * @param recursive {@code True} sets recursive directory tree walk.
      *                  {@code False} keeps search to the current directory, only.
      * @param vlevel    {@code 0} Run silent ...
      *                  {@code 1} Printout basic information only.
-     *                  {@code 2} Printout progress/diagnostic information during processing.
+     *                  {@code 2} Printout progress/diagnostic information during
+     *                  processing.
      *
      *
-     * @return Set of {@code Path}s representing the files and directories found.
+     * @return Set of {@code Path}s representing the files and directories
+     *         found.
      *
      * @throws IOException if any.
      */
-    public static SortedSet<Path> getFileList(Path srcPath, String pattern, boolean recursive, int vlevel)
-            throws IOException {
+    public static SortedSet<Path> getFileList(Path srcPath, String pattern,
+            boolean recursive, int vlevel) throws IOException
+    {
 
         Path currentDir = FileSystems.getDefault().getPath("").toAbsolutePath();
 
         // Debug output.
         if (vlevel >= 1)
         {
-            System.out.println("PWD: " + currentDir);
+            DISPLAY.println("PWD: " + currentDir);
         }
 
         Finder finder = new Finder(pattern != null ? pattern : "*" + DEFAULT_MD, vlevel);
 
-        Files.walkFileTree(srcPath, EnumSet.noneOf(FileVisitOption.class), recursive ? MAX_VALUE : 1, finder);
+        Files.walkFileTree(
+                srcPath, EnumSet.noneOf(FileVisitOption.class),
+                recursive ? MAX_VALUE : 1, finder
+        );
 
         return finder.done();
     }
@@ -99,34 +121,42 @@ class Find {
     /**
      * Provides a list of files that need to be updated.
      *
-     * @param srcPath   Start file search from this directory. (Default: "" - Current Working Directory)
-     * @param destPath  Prepare return list with this directory merged into output file paths. (Default: &lt;sourceDir&gt;)
+     * @param srcPath   Start file search from this directory. (Default: "" -
+     *                  Current Working Directory)
+     * @param destPath  Prepare return list with this directory merged into
+     *                  output file paths. (Default: &lt;sourceDir&gt;)
      * @param pattern   Glob file search pattern. (Default: "{@code *.md}")
      * @param outExtn   Output file extension. (Default: "{@code .html}")
      * @param recursive {@code True} sets recursive directory tree walk.
      *                  {@code False} keeps search to the current directory, only.
      * @param vlevel    {@code 0} Run silent ...
      *                  {@code 1} Printout basic information only.
-     *                  {@code 2} Printout progress/diagnostic information during processing.
+     *                  {@code 2} Printout progress/diagnostic information during
+     *                  processing.
      *
-     * @return List containing Path arrays. Each with two elements. [0] Source file, [1] Destination file.
+     * @return List containing Path arrays. Each with two elements. [0] Source
+     *         file, [1] Destination file.
      *
      * @throws IOException if any.
      */
-    public static List<Path[]> getUpdateList(Path srcPath, Path destPath, File pattern, String outExtn,
-                                             boolean recursive, int vlevel) throws IOException {
+    public static List<Path[]> getUpdateList(Path srcPath, Path destPath, File pattern,
+            String outExtn,
+            boolean recursive, int vlevel) throws IOException
+    {
 
         Path currentDir = FileSystems.getDefault().getPath("").toAbsolutePath();
 
         // Debug output.
         if (vlevel >= 1)
         {
-            System.out.println("PWD: " + currentDir);
+            DISPLAY.println("PWD: " + currentDir);
         }
 
-        Finder finder = new Finder(pattern != null ? pattern.toString() : "*" + DEFAULT_MD, vlevel);
+        Finder finder = new Finder(
+                pattern != null ? pattern.toString() : "*" + DEFAULT_MD, vlevel);
 
-        Files.walkFileTree(srcPath, EnumSet.noneOf(FileVisitOption.class), recursive ? MAX_VALUE : 1, finder);
+        Files.walkFileTree(srcPath, EnumSet.noneOf(FileVisitOption.class),
+                recursive ? MAX_VALUE : 1, finder);
 
         SortedSet<Path> inpList = finder.done();
         List<Path[]> outList = new ArrayList<>(inpList.size());
@@ -134,7 +164,7 @@ class Find {
         // Debug output.
         if (vlevel >= 2)
         {
-            System.out.println("inpList:");
+            DISPLAY.println("inpList:");
         }
 
         for (Path inPath : inpList)
@@ -143,19 +173,22 @@ class Find {
 
             if (srcPath.toString().isEmpty() || destPath == null)
             {
-                m = Pattern.compile("^(?<basename>.*?)(?:[.]\\w+)?$").matcher(inPath.toString());
+                m = Pattern.compile("^(?<basename>.*?)(?:[.]\\w+)?$")
+                        .matcher(inPath.toString());
             } else
             {
-                m = Pattern.compile("^(?:" + srcPath + "/)(?<basename>.*?)(?:[.]\\w+)?$").matcher(inPath.toString());
+                m = Pattern.compile("^(?:" + srcPath + "/)(?<basename>.*?)(?:[.]\\w+)?$")
+                        .matcher(inPath.toString());
             }
 
             if (m.find())
             {
                 String basename = m.group("basename");
                 Path outPath = of(destPath != null ? destPath.toString() : "",
-                                  basename + (outExtn != null ? outExtn : DEFAULT_HTML));
+                        basename + (outExtn != null ? outExtn : DEFAULT_HTML));
 
-                if (notExists(outPath) || getLastModifiedTime(inPath).compareTo(getLastModifiedTime(outPath)) > 0)
+                if (notExists(outPath) || getLastModifiedTime(inPath).
+                        compareTo(getLastModifiedTime(outPath)) > 0)
                 {
                     Path[] files = new Path[2];
 
@@ -166,7 +199,7 @@ class Find {
                     // Debug output.
                     if (vlevel >= 2)
                     {
-                        System.out.println(outPath);
+                        DISPLAY.println(outPath);
                     }
                 }
             }
@@ -175,20 +208,10 @@ class Find {
         // Debug output.
         if (vlevel >= 2)
         {
-            System.out.println("outList:");
-
-            outList.forEach((files) ->
-            {
-                System.out.println(files[1]);
-            });
+            DISPLAY.println("outList:");
+            outList.forEach(files -> DISPLAY.println(files[1]));
         }
 
         return outList;
-    }
-
-    /**
-     * Not meant to be instantiated.
-     */
-    private Find() {
     }
 }

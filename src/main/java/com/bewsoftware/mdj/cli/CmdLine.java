@@ -29,7 +29,8 @@ import java.util.Properties;
  * @since 1.0.7
  * @version 1.0.7
  */
-interface CmdLine {
+public interface CmdLine
+{
 
     /**
      * Get the destination directory.
@@ -69,7 +70,9 @@ interface CmdLine {
      *
      * @param opt name of the option.
      *
-     * @return The Properties mapped by the option, never null even if the option doesn't exists.
+     * @return The Properties mapped by the option, never null even if the
+     *         option
+     *         doesn't exists.
      */
     public Properties getOptionProperties(char opt);
 
@@ -78,7 +81,9 @@ interface CmdLine {
      *
      * @param opt name of the option.
      *
-     * @return The Properties mapped by the option, never null even if the option doesn't exists.
+     * @return The Properties mapped by the option, never null even if the
+     *         option
+     *         doesn't exists.
      */
     public Properties getOptionProperties(String opt);
 
@@ -167,7 +172,8 @@ interface CmdLine {
      * @param autoUsage     whether to print an automatically generated
      *                      usage statement
      */
-    public void printHelp(String cmdLineSyntax, String header, String footer, boolean autoUsage);
+    public void printHelp(String cmdLineSyntax, String header, String footer,
+            boolean autoUsage);
 
     /**
      * Print the help with the specified command line syntax.
@@ -181,7 +187,8 @@ interface CmdLine {
      * @param autoUsage     whether to print an automatically generated
      *                      usage statement.
      */
-    public void printHelp(String errorMsg, String cmdLineSyntax, String header, String footer, boolean autoUsage);
+    public void printHelp(String errorMsg, String cmdLineSyntax, String header,
+            String footer, boolean autoUsage);
 
     /**
      * Get the source directory.

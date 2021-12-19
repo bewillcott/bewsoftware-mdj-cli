@@ -33,6 +33,7 @@ module bewsoftware.mdj.cli {
     requires bewsoftware.mdj.core;
     requires bewsoftware.property;
     requires bewsoftware.utils;
+    requires org.apache.commons.io;
     requires commons.cli;
     requires dom4j;
     requires java.desktop;

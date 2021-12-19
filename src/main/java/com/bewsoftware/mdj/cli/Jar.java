@@ -46,42 +46,15 @@ import static com.bewsoftware.fileio.BEWFiles.getResource;
 import static com.bewsoftware.mdj.cli.Cli.POM;
 import static com.bewsoftware.mdj.cli.Cli.conf;
 import static com.bewsoftware.mdj.cli.Find.getFileList;
+import static com.bewsoftware.mdj.cli.Main.DISPLAY;
 
-class Jar {
-
+public class Jar
+{
     /**
-     * Create jar file.
-     *
-     * @param jarFile   Output file name.
-     * @param jarSrcDir Directory to process.
-     * @param vlevel    Verbosity level.
-     *
-     * @return Always '0'.
-     *
-     * @throws IOException        if any.
-     * @throws URISyntaxException if any.
+     * Not meant to be instantiated.
      */
-    static int createJarFile(final File jarFile, final Path jarSourcePath, final int vlevel)
-            throws IOException, URISyntaxException {
-
-        // Get source directory from jar file.
-        Path jarDirPath = getResource(Jar.class, "/docs/jar").toAbsolutePath();
-
-        if (vlevel >= 2)
-        {
-            System.out.println("srcDirPath: " + jarDirPath);
-            System.out.println("srcDirPath exists: " + Files.exists(jarDirPath));
-        }
-
-        SortedSet<Path> jarFileSet = getFileList(jarDirPath, "*", true, vlevel);
-
-        SortedSet<Path> fileSet = getFileList(jarSourcePath, "*", true, vlevel);
-
-        Manifest manifest = getManifest(POM, conf);
-
-        Jar.createJAR(jarFile, new ArrayList<>(jarFileSet), jarDirPath,
-                      new ArrayList<>(fileSet), jarSourcePath, manifest, vlevel);
-        return 0;
+    private Jar()
+    {
     }
 
     /**
@@ -97,9 +70,10 @@ class Jar {
      * @throws IOException if any.
      */
     public static void addHttpServer(final File jarFile,
-                                     final List<Path> jarFilePaths,
-                                     final Manifest manifest, final int vlevel)
-            throws IOException {
+            final List<Path> jarFilePaths,
+            final Manifest manifest, final int vlevel)
+            throws IOException
+    {
 
         createJAR(jarFile, jarFilePaths, null, null, null, manifest, vlevel);
     }
@@ -118,22 +92,23 @@ class Jar {
      * @throws IOException if any.
      */
     public static void createJAR(final File jarFile,
-                                 final List<Path> jarFilePaths,
-                                 final Path jarFileDirPath,
-                                 final List<Path> filePaths,
-                                 final Path fileDirPath,
-                                 final Manifest manifest, final int vlevel)
-            throws IOException {
+            final List<Path> jarFilePaths,
+            final Path jarFileDirPath,
+            final List<Path> filePaths,
+            final Path fileDirPath,
+            final Manifest manifest, final int vlevel)
+            throws IOException
+    {
 
         if (vlevel >= 3)
         {
-            System.out.println("jarFile: |" + jarFile + "|");
+            DISPLAY.println("jarFile: |" + jarFile + "|");
         }
 
         // Hold the exceptions.
         List<IOException> exceptions = new ArrayList<>();
 
-        try ( JarOutputStream jos = new JarOutputStream(new BufferedOutputStream(
+        try (JarOutputStream jos = new JarOutputStream(new BufferedOutputStream(
                 new FileOutputStream(jarFile)), manifest))
         {
 
@@ -186,6 +161,42 @@ class Jar {
     }
 
     /**
+     * Create jar file.
+     *
+     * @param jarFile       Output file name.
+     * @param jarSourcePath Path of directory to process.
+     * @param vlevel        Verbosity level.
+     *
+     * @return Always '0'.
+     *
+     * @throws IOException        if any.
+     * @throws URISyntaxException if any.
+     */
+    public static int createJarFile(final File jarFile, final Path jarSourcePath, final int vlevel)
+            throws IOException, URISyntaxException
+    {
+
+        // Get source directory from jar file.
+        Path jarDirPath = getResource(Jar.class, "/docs/jar").toAbsolutePath();
+
+        if (vlevel >= 2)
+        {
+            DISPLAY.println("srcDirPath: " + jarDirPath);
+            DISPLAY.println("srcDirPath exists: " + Files.exists(jarDirPath));
+        }
+
+        SortedSet<Path> jarFileSet = getFileList(jarDirPath, "*", true, vlevel);
+
+        SortedSet<Path> fileSet = getFileList(jarSourcePath, "*", true, vlevel);
+
+        Manifest manifest = getManifest(POM, conf);
+
+        Jar.createJAR(jarFile, new ArrayList<>(jarFileSet), jarDirPath,
+                new ArrayList<>(fileSet), jarSourcePath, manifest, vlevel);
+        return 0;
+    }
+
+    /**
      * Create a new Manifest.
      *
      * @param pom  The program's POM properties.
@@ -193,7 +204,8 @@ class Jar {
      *
      * @return the new Manifest.
      */
-    public static Manifest getManifest(final MCPOMProperties pom, final IniFile conf) {
+    public static Manifest getManifest(final MCPOMProperties pom, final IniFile conf)
+    {
         Manifest manifest = getManifest(pom.name + " (" + pom.version + ")");
 
         if (conf != null)
@@ -221,7 +233,8 @@ class Jar {
      *
      * @return the new Manifest.
      */
-    public static Manifest getManifest(final String progname) {
+    public static Manifest getManifest(final String progname)
+    {
         return getManifest(progname, null);
     }
 
@@ -234,7 +247,8 @@ class Jar {
      *
      * @return the new Manifest.
      */
-    public static Manifest getManifest(final String progname, Manifest manifest) {
+    public static Manifest getManifest(final String progname, Manifest manifest)
+    {
 
         if (manifest == null)
         {
@@ -261,9 +275,10 @@ class Jar {
      * @throws IOException if any.
      */
     private static void addEntryContent(final JarOutputStream jos, final Path entryFilePath)
-            throws IOException {
+            throws IOException
+    {
 
-        try ( BufferedInputStream bis = new BufferedInputStream(
+        try (BufferedInputStream bis = new BufferedInputStream(
                 Files.newInputStream(entryFilePath)))
         {
 
@@ -277,9 +292,4 @@ class Jar {
         }
     }
 
-    /**
-     * Not meant to be instantiated.
-     */
-    private Jar() {
-    }
 }

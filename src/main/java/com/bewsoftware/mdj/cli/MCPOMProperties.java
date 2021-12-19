@@ -22,6 +22,8 @@ package com.bewsoftware.mdj.cli;
 import java.io.IOException;
 import java.util.Properties;
 
+import static com.bewsoftware.mdj.cli.Main.DISPLAY;
+
 /**
  * Provides access to some of the project's pom.properties.
  * <p>
@@ -76,7 +78,7 @@ import java.util.Properties;
  * </p>
  * <pre><code>
  * POMProperties pom = POMProperties.INSTANCE;
- * System.out.println(pom.name):
+ * DISPLAY.println(pom.name):
  * </code></pre>
  *
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
@@ -84,16 +86,14 @@ import java.util.Properties;
  * @since 0.1
  * @version 1.0
  */
-final class MCPOMProperties {
+public final class MCPOMProperties
+{
 
     /**
      * Provides single instance of this class.
      */
     public static final MCPOMProperties INSTANCE = new MCPOMProperties();
 
-    public static void main(String[] args) {
-        System.out.println(MCPOMProperties.INSTANCE);
-    }
     /**
      * The identifier for this artifact that is unique within
      * the group given by the group ID.
@@ -104,6 +104,7 @@ final class MCPOMProperties {
      * Project Description
      */
     public final String description;
+
     /**
      * The filename of the binary output file.
      * <p>
@@ -127,7 +128,8 @@ final class MCPOMProperties {
      */
     public final String version;
 
-    private MCPOMProperties() {
+    private MCPOMProperties()
+    {
         Properties properties = new Properties();
         try
         {
@@ -145,8 +147,14 @@ final class MCPOMProperties {
         filename = properties.getProperty("filename");
     }
 
+    public static void main(String[] args)
+    {
+        DISPLAY.println(MCPOMProperties.INSTANCE);
+    }
+
     @Override
-    public String toString() {
+    public String toString()
+    {
         return new StringBuilder(MCPOMProperties.class.getName()).append(":\n")
                 .append("  name: ").append(name).append("\n")
                 .append("  description: ").append(description).append("\n")

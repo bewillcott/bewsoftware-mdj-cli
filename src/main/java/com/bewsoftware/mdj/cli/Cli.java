@@ -43,6 +43,7 @@ import org.dom4j.io.SAXReader;
 import static com.bewsoftware.fileio.BEWFiles.copyDirTree;
 import static com.bewsoftware.fileio.BEWFiles.getResource;
 import static com.bewsoftware.mdj.cli.MCPOMProperties.INSTANCE;
+import static com.bewsoftware.mdj.cli.Main.DISPLAY;
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 import static java.nio.file.Path.of;
 import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
@@ -61,10 +62,11 @@ import static java.util.regex.Pattern.compile;
  * @since 0.1
  * @version 1.0.14
  */
-class Cli {
+public class Cli
+{
 
     /**
-     * The name of the configuration ini file.
+     * The name of the configuration INI file.
      */
     public static final String CONF_FILENAME = "mdj-cli.ini";
 
@@ -74,312 +76,25 @@ class Cli {
     public static final MCPOMProperties POM = INSTANCE;
 
     /**
-     * The pattern used for substitutions.
+     * The configuration INI file.
      */
-    private static final Pattern SUBSTITUTION_PATTERN
-                                 = Pattern.compile("(?<!\\\\)(?:\\$\\{(?<group>\\w+)[.](?<key>\\w+)\\})");
-
-    /**
-     * The configuration ini file.
-     */
-    static IniFile conf;
+    public static IniFile conf;
 
     /**
      * The verbosity level.
      */
-    static int vlevel;
+    public static int vlevel;
+
+    private static final String STYLESHEET_EXTN = ".css";
+
+    private static final Pattern SUBSTITUTION_PATTERN
+            = Pattern.compile("(?<!\\\\)(?:\\$\\{(?<group>\\w+)[.](?<key>\\w+)\\})");
 
     /**
-     * Process the <i>use</i> section looking for filenames with a {@code .css} extension.
-     * <p>
-     * Prepend the <i>document.cssDir</i> directory to each one.
+     * Not meant to be instantiated.
      */
-    private static void configureStylesheetPaths() {
-        final String extn = ".css";
-
-        String use = conf.iniDoc.getString("page", "use", null);
-        String cssDir = conf.iniDoc.getString("document", "cssDir", "");
-        String systemDate = conf.iniDoc.getString("system", "date", null);
-
-        if (systemDate == null)
-        {
-            systemDate = new Date().toString();
-            conf.iniDoc.setString("system", "date", systemDate);
-        }
-
-        // Process stylesheet names from the inifile section.
-        if (use != null && !use.isBlank())
-        {
-            String done = conf.iniDoc.getString(use, systemDate, null);
-
-            if (done == null)
-            {
-                // Process the '.css' filenames...
-                List<IniProperty<String>> keys = conf.iniDoc.getSection(use);
-
-                keys.stream()
-                        .filter(key -> key.value().endsWith(extn))
-                        .forEachOrdered(key
-                                -> conf.iniDoc.setString(use, key.key(),
-                                                         of(cssDir, key.value()).toString(),
-                                                         key.comment()));
-
-                // Record that we have already processed the '.css' filenames.
-                conf.iniDoc.setString(use, systemDate, "done");
-            }
-        }
-
-        // Process stylesheet names from the metablock, stoed under section: "page".
-        String done = conf.iniDoc.getString("page", systemDate, null);
-
-        if (done == null)
-        {
-            // Process the '.css' filenames...
-            List<IniProperty<String>> keys = conf.iniDoc.getSection("page");
-
-            keys.stream()
-                    .filter(key -> key.value().endsWith(extn))
-                    .forEachOrdered(key
-                            -> conf.iniDoc.setString("page", key.key(),
-                                                     of(cssDir, key.value()).toString()));
-
-            // Record that we have already processed the '.css' filenames.
-            conf.iniDoc.setString("page", systemDate, "done");
-        }
-
-    }
-
-    /**
-     * Convenience method to access the iniDoc
-     * {@link IniDocument#getString(java.lang.String, java.lang.String, java.lang.String) getString()}.
-     *
-     * @param section label.
-     * @param key     name.
-     * @param use     Alternate section label.
-     *
-     * @return result.
-     */
-    private static String getString(final String section, final String key, final String use) {
-        return conf.iniDoc.getString(section, key, conf.iniDoc.getString(use, key, ""));
-    }
-
-    /**
-     * Process the file's meta block, if any.
-     */
-    private static void processMetaBlock() {
-        String text = conf.iniDoc.getString("page", "text", "");
-        Matcher m = compile("\\A(?:@@@\\n(?<metablock>.*?)\\n@@@\\n)(?<body>.*)\\z", DOTALL)
-                .matcher(text);
-        conf.iniDoc.removeSection("page");
-
-        if (m.find())
-        {
-            String metaBlock = m.group("metablock");
-            text = m.group("body");
-
-            if (vlevel >= 3)
-            {
-                System.out.println("\n============================================\n"
-                                   + "file metablock:\n"
-                                   + "--------------------------------------------\n"
-                                   + metaBlock
-                                   + "\n--------------------------------------------");
-            }
-
-            Matcher m2 = compile("^\\s*(?<key>\\w+)\\s*:\\s*(?<value>.*?)?\\s*?$", MULTILINE).matcher(metaBlock);
-
-            while (m2.find())
-            {
-                String key = m2.group("key");
-                String value = m2.group("value");
-
-                if (vlevel >= 3)
-                {
-                    System.out.println("key = " + key + "\n"
-                                       + "value = " + value);
-                }
-
-                conf.iniDoc.setString("page", key, value);
-            }
-
-            if (vlevel >= 3)
-            {
-                System.out.println("============================================\n");
-            }
-
-        }
-
-        conf.iniDoc.setString("page", "text", text);
-    }
-
-    /**
-     * Process Named Meta Blocks.
-     * <p>
-     * A named meta block looks like each of the following:
-     * <hr>
-     * <pre><code>
-     *
-     * &#64;&#64;&#64;[#name]
-     *
-     * Some text.
-     * Some more text.
-     *
-     * &#64;&#64;&#64;
-     * </code></pre>
-     * <hr>
-     * The HTML from the above code will begin with something like this: {@code <div id="name">}.<br>
-     * Therefore, you can set up formatting via CSS using the 'id' value: "{@code #name}".
-     * <hr>
-     * <pre><code>
-     *
-     * &#64;&#64;&#64;[@name]
-     *
-     * Some text.
-     * Some more text.
-     *
-     * &#64;&#64;&#64;
-     * </code></pre>
-     * <hr>
-     * The HTML from the above code will begin with something like this: {@code <div class="name">}.<br>
-     * Therefore, you can set up formatting via CSS using the 'class' value: "{@code .name}".
-     * <p>
-     * The blank line before the beginning is <b>required</b>.<br>
-     * '{@code name}' is used to refer to the block in the markup text for
-     * substitution: ${page.name}.
-     * <p>
-     * <b>Note:</b> The label "{@code name}" used throughout this comment is an example only.
-     * You would use your own label as appropriate to your requirements.
-     * <p>
-     * Bradley Willcott
-     *
-     * @since 14/12/2020
-     */
-    private static void processNamedMetaBlocks() {
-        TextEditor text = new TextEditor(conf.iniDoc.getString("page", "text", ""));
-        Pattern p = compile("(?<=\\n)(?:@@@\\[(?<type>[@#])(?<name>\\w+)\\]\\n(?<metablock>.*?)\\n@@@\\n)", DOTALL);
-
-        text.replaceAll(p, m ->
-                {
-                    String type = m.group("type");
-                    String name = m.group("name");
-                    String metaBlock = m.group("metablock");
-
-                    String html = "";
-
-                    if ("#".equals(type))
-                    {
-                        html = "\n<div id=\"" + name + "\">\n";
-                    } else if ("@".equals(type))
-                    {
-                        html = "\n<div class=\"" + name + "\">\n";
-                    }
-
-                    html += MarkdownProcessor.convert(metaBlock) + "\n</div>\n";
-
-                    if (vlevel >= 3)
-                    {
-                        System.out.println("============================================\n"
-                                           + "name: " + name + "\n"
-                                           + "metablock:\n" + html
-                                           + "\n============================================\n");
-                    }
-
-                    conf.iniDoc.setString("page", name, html);
-                    return "";
-                });
-
-        text.replaceAll("\\\\@@@", "@@@");
-
-        conf.iniDoc.setString("page", "text", text.toString());
-    }
-
-    /**
-     * Process a template.
-     *
-     * @param use      Alternate section label.
-     * @param template name.
-     *
-     * @throws IOException If any.
-     */
-    private static void processTemplate(final String use, final String template) throws IOException {
-        StringBuilder sbin = new StringBuilder("<!DOCTYPE html>\n"
-                                               + "<!--\n"
-                                               + "Generated by ${program.title}\n"
-                                               + "version: ${program.version}\n"
-                                               + "on ${system.date}\n"
-                                               + "-->\n");
-
-        IniDocument iniDoc = conf.iniDoc;
-
-        Path docRootPath = of(iniDoc.getString("project", "root", ""))
-                .resolve(iniDoc.getString("document", "docRootDir", "")).toAbsolutePath();
-
-        Path templatesPath = docRootPath.resolve(iniDoc.getString("document", "templatesDir", ""))
-                .resolve(template).toAbsolutePath();
-
-        //
-        // Set the 'base' path.  <base href="<base>">
-        //
-        Path srcPath = of(iniDoc.getString("page", "srcFile", ""));
-        Path basePath = srcPath.getParent().relativize(docRootPath);
-        iniDoc.setString("page", "base", basePath.toString());
-
-        if (vlevel >= 2)
-        {
-            System.out.println("base:\n" + basePath);
-            System.out.println("srcFile:\n" + srcPath);
-            System.out.println("template:\n" + templatesPath);
-        }
-
-        try ( BufferedReader inReader = Files.newBufferedReader(templatesPath))
-        {
-            String line;
-
-            while ((line = inReader.readLine()) != null)
-            {
-                sbin.append(line).append("\n");
-            }
-        }
-
-        TextEditor textEd = new TextEditor(processSubstitutions(sbin.toString(), use, new Ref<Boolean>()));
-        textEd.replaceAllLiteral("\\\\\\$", "$");
-        textEd.replaceAllLiteral("\\\\\\[", "[");
-
-        if (!basePath.toString().isBlank())
-        {
-            //
-            // Set the detination file path.
-            //
-            Path destPath = of(iniDoc.getString("page", "destFile", null));
-            Path destDirPath = of(iniDoc.getString("page", "destDir", null));
-            String destHTML = destDirPath.relativize(destPath).toString();
-
-            if (vlevel >= 3)
-            {
-                System.out.println("destPath:\n" + destPath);
-                System.out.println("destDirPath:\n" + destDirPath);
-                System.out.println("destHTML:\n" + destHTML);
-            }
-
-            Pattern p = compile("href\\=\"(?<ref>#[^\"]*)?\"");
-
-            textEd.replaceAll(p, (Matcher m) ->
-                      {
-                          String text = m.group();
-                          String ref = m.group("ref");
-
-                          if (vlevel >= 3)
-                          {
-                              System.out.println("text: " + text);
-                              System.out.println("ref: " + ref);
-                          }
-
-                          return text.replace(ref, destHTML + ref);
-                      });
-
-        }
-
-        iniDoc.setString("page", "html", textEd.toString());
+    private Cli()
+    {
     }
 
     /**
@@ -396,12 +111,13 @@ class Cli {
      * @since 0.1
      * @version 1.0.7
      */
-    static int initialiseWrappers(final Path docRootPath)
-            throws IOException, IniFileFormatException, URISyntaxException {
+    public static int initialiseWrappers(final Path docRootPath)
+            throws IOException, IniFileFormatException, URISyntaxException
+    {
 
         if (vlevel >= 3)
         {
-            System.out.println("docRootPath:\n" + docRootPath);
+            DISPLAY.println("docRootPath:\n" + docRootPath);
         }
 
         // Create directories.
@@ -415,8 +131,8 @@ class Cli {
 
         if (vlevel >= 2)
         {
-            System.out.println("srcDirPath: " + srcDirPath);
-            System.out.println("srcDirPath exists: " + Files.exists(srcDirPath));
+            DISPLAY.println("srcDirPath: " + srcDirPath);
+            DISPLAY.println("srcDirPath exists: " + Files.exists(srcDirPath));
         }
 
         // Get source ini file from jar file.
@@ -424,8 +140,8 @@ class Cli {
 
         if (vlevel >= 2)
         {
-            System.out.println("srcIniPath: " + srcIniPath);
-            System.out.println("srcIniPath exists: " + Files.exists(srcIniPath));
+            DISPLAY.println("srcIniPath: " + srcIniPath);
+            DISPLAY.println("srcIniPath exists: " + Files.exists(srcIniPath));
         }
 
         // Get destination ini file path.
@@ -433,12 +149,12 @@ class Cli {
 
         if (vlevel >= 2)
         {
-            System.out.println("destIniPath: " + destIniPath);
-            System.out.println("destIniPath exists: " + Files.exists(destIniPath));
+            DISPLAY.println("destIniPath: " + destIniPath);
+            DISPLAY.println("destIniPath exists: " + Files.exists(destIniPath));
         }
 
         copyDirTree(srcDirPath, docRootPath,
-                    "*", vlevel, COPY_ATTRIBUTES, REPLACE_EXISTING);
+                "*", vlevel, COPY_ATTRIBUTES, REPLACE_EXISTING);
 
         IniFile iniFile;
 
@@ -447,7 +163,7 @@ class Cli {
         {
             if (vlevel >= 2)
             {
-                System.out.println("destIniPath exists");
+                DISPLAY.println("destIniPath exists");
             }
 
             iniFile = new IniFile(srcIniPath).loadFile().mergeFile(destIniPath);
@@ -455,7 +171,7 @@ class Cli {
         {
             if (vlevel >= 2)
             {
-                System.out.println("destIniPath dosen't exist");
+                DISPLAY.println("destIniPath dosen't exist");
             }
 
             iniFile = new IniFile(srcIniPath).loadFile();
@@ -466,7 +182,7 @@ class Cli {
 
         if (vlevel >= 2)
         {
-            System.out.println("document.docRootDir: " + iniFile.iniDoc.getString("document", "docRootDir", "default"));
+            DISPLAY.println("document.docRootDir: " + iniFile.iniDoc.getString("document", "docRootDir", "default"));
         }
 
         iniFile.paddedEquals = true;
@@ -484,17 +200,18 @@ class Cli {
      * @throws IOException            If any.
      * @throws IniFileFormatException If any.
      */
-    static void loadConf(final Path srcDirPath) throws IOException, IniFileFormatException {
+    public static void loadConf(final Path srcDirPath) throws IOException, IniFileFormatException
+    {
         Path iniPath = of(CONF_FILENAME).toAbsolutePath();
 
         if (vlevel >= 3)
         {
-            System.out.println("loadConf()");
+            DISPLAY.println("loadConf()");
         }
 
         if (vlevel >= 2)
         {
-            System.out.println("iniPath: " + iniPath.toString());
+            DISPLAY.println("iniPath: " + iniPath.toString());
         }
 
         if (Files.notExists(iniPath, NOFOLLOW_LINKS) && (srcDirPath != null))
@@ -514,7 +231,7 @@ class Cli {
 
                     if (vlevel >= 2)
                     {
-                        System.out.println("srcPath: " + srcPath.toString());
+                        DISPLAY.println("srcPath: " + srcPath.toString());
                     }
                 }
             } catch (NullPointerException ex)
@@ -526,7 +243,7 @@ class Cli {
 
             if (vlevel >= 2)
             {
-                System.out.println("iniPath: " + iniPath.toString());
+                DISPLAY.println("iniPath: " + iniPath.toString());
             }
         }
 
@@ -546,7 +263,7 @@ class Cli {
         conf.iniDoc.setString("program", "version", POM.version, "# The version of the artifact");
         conf.iniDoc.setString("program", "details", POM.toString(), "# All of the above information laid out");
 
-        Ref<Boolean> brtn = new Ref<>();
+        Ref<Boolean> brtn = Ref.val();
 
         do
         {
@@ -556,12 +273,12 @@ class Cli {
                     .forEach(section -> conf.iniDoc.getSection(section)
                     .forEach(prop ->
                     {
-                        Ref<Boolean> rtn = new Ref<>();
+                        Ref<Boolean> rtn = Ref.val();
                         if (prop.value() != null)
                         {
                             if (vlevel >= 3)
                             {
-                                System.out.println(prop);
+                                DISPLAY.println(prop);
                             }
                             String value = processSubstitutions(prop.value(), null, rtn);
                             if (rtn.val)
@@ -576,7 +293,7 @@ class Cli {
 
         if (vlevel >= 2)
         {
-            System.out.println(POM);
+            DISPLAY.println(POM);
         }
     }
 
@@ -588,7 +305,8 @@ class Cli {
      *
      * @throws IOException If any.
      */
-    static void loadPom(final File pomFile, final Properties props) throws IOException {
+    public static void loadPom(final File pomFile, final Properties props) throws IOException
+    {
 
         SAXReader reader = new SAXReader();
         Document document = null;
@@ -636,8 +354,375 @@ class Cli {
         }
 
         conf.iniDoc.getSection("project").forEach(prop
-                -> System.out.println("project." + prop.key() + ": " + prop.value())
+                -> DISPLAY.println("project." + prop.key() + ": " + prop.value())
         );
+    }
+
+    /**
+     * Process substitutions.
+     *
+     * @param text  Text to be processed.
+     * @param use   Alternate section to use.
+     * @param found {@code true} if found.
+     *
+     * @return result.
+     */
+    public static String processSubstitutions(final String text, final String use, final Ref<Boolean> found)
+    {
+        TextEditor textEd = new TextEditor(text);
+        found.val = false;
+
+        do
+        {
+            textEd.replaceAll(SUBSTITUTION_PATTERN, m ->
+            {
+                if (vlevel >= 3)
+                {
+                    DISPLAY.println("m.group: " + m.group());
+                }
+
+                String group = m.group("group");
+                String key = m.group("key");
+                String rtn = "ERROR: Substitution!";
+
+                if (group != null)
+                {
+                    rtn = getString(group, key, use);
+                }
+
+                if (vlevel >= 3)
+                {
+                    DISPLAY.println("rtn: " + rtn);
+                }
+
+                return rtn;
+            });
+
+            if (textEd.wasFound())
+            {
+                found.val = true;
+            }
+        } while (textEd.wasFound());
+
+        return textEd.toString();
+    }
+
+    /**
+     * Process the <i>use</i> section looking for filenames with a {@code .css}
+     * extension.
+     * <p>
+     * Prepend the <i>document.cssDir</i> directory to each one.
+     */
+    private static void configureStylesheetPaths()
+    {
+        String use = conf.iniDoc.getString("page", "use", null);
+        String cssDir = conf.iniDoc.getString("document", "cssDir", "");
+        String systemDate = conf.iniDoc.getString("system", "date", null);
+
+        systemDate = processSystemDate(systemDate);
+        processStylesheetNamesfromTheInifileSection(use, systemDate, cssDir);
+        processStylesheetNamesFromTheMetaBlock(systemDate, cssDir);
+    }
+
+    /**
+     * Convenience method to access the iniDoc
+     * {@link IniDocument#getString(java.lang.String, java.lang.String, java.lang.String) getString()}.
+     *
+     * @param section label.
+     * @param key     name.
+     * @param use     Alternate section label.
+     *
+     * @return result.
+     */
+    private static String getString(final String section, final String key, final String use)
+    {
+        return conf.iniDoc.getString(section, key, conf.iniDoc.getString(use, key, ""));
+    }
+
+    /**
+     * Process the file's meta block, if any.
+     */
+    private static void processMetaBlock()
+    {
+        String text = conf.iniDoc.getString("page", "text", "");
+        Matcher m = compile("\\A(?:@@@\\n(?<metablock>.*?)\\n@@@\\n)(?<body>.*)\\z", DOTALL)
+                .matcher(text);
+        conf.iniDoc.removeSection("page");
+
+        if (m.find())
+        {
+            String metaBlock = m.group("metablock");
+            text = m.group("body");
+
+            if (vlevel >= 3)
+            {
+                DISPLAY.println("\n============================================\n"
+                        + "file metablock:\n"
+                        + "--------------------------------------------\n"
+                        + metaBlock
+                        + "\n--------------------------------------------");
+            }
+
+            Matcher m2 = compile("^\\s*(?<key>\\w+)\\s*:\\s*(?<value>.*?)?\\s*?$", MULTILINE).matcher(metaBlock);
+
+            while (m2.find())
+            {
+                String key = m2.group("key");
+                String value = m2.group("value");
+
+                if (vlevel >= 3)
+                {
+                    DISPLAY.println("key = " + key + "\n"
+                            + "value = " + value);
+                }
+
+                conf.iniDoc.setString("page", key, value);
+            }
+
+            if (vlevel >= 3)
+            {
+                DISPLAY.println("============================================\n");
+            }
+
+        }
+
+        conf.iniDoc.setString("page", "text", text);
+    }
+
+    /**
+     * Process Named Meta Blocks.
+     * <p>
+     * A named meta block looks like each of the following:
+     * <hr>
+     * <pre><code>
+     *
+     * &#64;&#64;&#64;[#name]
+     *
+     * Some text.
+     * Some more text.
+     *
+     * &#64;&#64;&#64;
+     * </code></pre>
+     * <hr>
+     * The HTML from the above code will begin with something like this:
+     * {@code <div id="name">}.<br>
+     * Therefore, you can set up formatting via CSS using the 'id' value:
+     * "{@code #name}".
+     * <hr>
+     * <pre><code>
+     *
+     * &#64;&#64;&#64;[@name]
+     *
+     * Some text.
+     * Some more text.
+     *
+     * &#64;&#64;&#64;
+     * </code></pre>
+     * <hr>
+     * The HTML from the above code will begin with something like this:
+     * {@code <div class="name">}.<br>
+     * Therefore, you can set up formatting via CSS using the 'class' value:
+     * "{@code .name}".
+     * <p>
+     * The blank line before the beginning is <b>required</b>.<br>
+     * '{@code name}' is used to refer to the block in the markup text for
+     * substitution: ${page.name}.
+     * <p>
+     * <b>Note:</b> The label "{@code name}" used throughout this comment is an
+     * example only.
+     * You would use your own label as appropriate to your requirements.
+     * <p>
+     * Bradley Willcott
+     *
+     * @since 14/12/2020
+     */
+    private static void processNamedMetaBlocks()
+    {
+        TextEditor text = new TextEditor(conf.iniDoc.getString("page", "text", ""));
+        Pattern p = compile(
+                "(?<=\\n)(?:@@@\\[(?<type>[@#])(?<name>\\w+)\\]\\n(?<metablock>.*?)\\n@@@\\n)",
+                DOTALL);
+
+        text.replaceAll(p, m ->
+        {
+            String type = m.group("type");
+            String name = m.group("name");
+            String metaBlock = m.group("metablock");
+
+            String html = "";
+
+            if ("#".equals(type))
+            {
+                html = "\n<div id=\"" + name + "\">\n";
+            } else if ("@".equals(type))
+            {
+                html = "\n<div class=\"" + name + "\">\n";
+            }
+
+            html += MarkdownProcessor.convert(metaBlock) + "\n</div>\n";
+
+            if (vlevel >= 3)
+            {
+                DISPLAY.println(
+                        "============================================\n"
+                        + "name: " + name + "\n"
+                        + "metablock:\n" + html
+                        + "\n============================================\n");
+            }
+
+            conf.iniDoc.setString("page", name, html);
+            return "";
+        });
+
+        text.replaceAll("\\\\@@@", "@@@");
+
+        conf.iniDoc.setString("page", "text", text.toString());
+    }
+
+    private static void processStylesheetNamesFromTheMetaBlock(String systemDate, String cssDir)
+    {
+        String done = conf.iniDoc.getString("page", systemDate, null);
+
+        if (done == null)
+        {
+            // Process the '.css' filenames...
+            List<IniProperty<String>> keys = conf.iniDoc.getSection("page");
+
+            keys.stream()
+                    .filter(key -> key.value().endsWith(STYLESHEET_EXTN))
+                    .forEachOrdered(key
+                            -> conf.iniDoc.setString("page", key.key(),
+                            of(cssDir, key.value()).toString()));
+
+            // Record that we have already processed the '.css' filenames.
+            conf.iniDoc.setString("page", systemDate, "done");
+        }
+    }
+
+    private static void processStylesheetNamesfromTheInifileSection(
+            String use, String systemDate, String cssDir)
+    {
+        if (use != null && !use.isBlank())
+        {
+            String done = conf.iniDoc.getString(use, systemDate, null);
+
+            if (done == null)
+            {
+                // Process the '.css' filenames...
+                List<IniProperty<String>> keys = conf.iniDoc.getSection(use);
+
+                keys.stream()
+                        .filter(key -> key.value().endsWith(STYLESHEET_EXTN))
+                        .forEachOrdered(key
+                                -> conf.iniDoc.setString(use, key.key(),
+                                of(cssDir, key.value()).toString(),
+                                key.comment()));
+
+                // Record that we have already processed the '.css' filenames.
+                conf.iniDoc.setString(use, systemDate, "done");
+            }
+        }
+    }
+
+    private static String processSystemDate(String systemDate)
+    {
+        if (systemDate == null)
+        {
+            systemDate = new Date().toString();
+            conf.iniDoc.setString("system", "date", systemDate);
+        }
+
+        return systemDate;
+    }
+
+    /**
+     * Process a template.
+     *
+     * @param use      Alternate section label.
+     * @param template name.
+     *
+     * @throws IOException If any.
+     */
+    private static void processTemplate(final String use, final String template) throws IOException
+    {
+        StringBuilder sbin = new StringBuilder("<!DOCTYPE html>\n"
+                + "<!--\n"
+                + "Generated by ${program.title}\n"
+                + "version: ${program.version}\n"
+                + "on ${system.date}\n"
+                + "-->\n");
+
+        IniDocument iniDoc = conf.iniDoc;
+
+        Path docRootPath = of(iniDoc.getString("project", "root", ""))
+                .resolve(iniDoc.getString("document", "docRootDir", "")).toAbsolutePath();
+
+        Path templatesPath = docRootPath.resolve(iniDoc.getString("document", "templatesDir", ""))
+                .resolve(template).toAbsolutePath();
+
+        //
+        // Set the 'base' path.  <base href="<base>">
+        //
+        Path srcPath = of(iniDoc.getString("page", "srcFile", ""));
+        Path basePath = srcPath.getParent().relativize(docRootPath);
+        iniDoc.setString("page", "base", basePath.toString());
+
+        if (vlevel >= 2)
+        {
+            DISPLAY.println("base:\n" + basePath);
+            DISPLAY.println("srcFile:\n" + srcPath);
+            DISPLAY.println("template:\n" + templatesPath);
+        }
+
+        try (BufferedReader inReader = Files.newBufferedReader(templatesPath))
+        {
+            String line;
+
+            while ((line = inReader.readLine()) != null)
+            {
+                sbin.append(line).append("\n");
+            }
+        }
+
+        TextEditor textEd = new TextEditor(processSubstitutions(sbin.toString(), use, Ref.val()));
+        textEd.replaceAllLiteral("\\\\\\$", "$");
+        textEd.replaceAllLiteral("\\\\\\[", "[");
+
+        if (!basePath.toString().isBlank())
+        {
+            //
+            // Set the detination file path.
+            //
+            Path destPath = of(iniDoc.getString("page", "destFile", null));
+            Path destDirPath = of(iniDoc.getString("page", "destDir", null));
+            String destHTML = destDirPath.relativize(destPath).toString();
+
+            if (vlevel >= 3)
+            {
+                DISPLAY.println("destPath:\n" + destPath);
+                DISPLAY.println("destDirPath:\n" + destDirPath);
+                DISPLAY.println("destHTML:\n" + destHTML);
+            }
+
+            Pattern p = compile("href\\=\"(?<ref>#[^\"]*)?\"");
+
+            textEd.replaceAll(p, (Matcher m) ->
+            {
+                String text = m.group();
+                String ref = m.group("ref");
+
+                if (vlevel >= 3)
+                {
+                    DISPLAY.println("text: " + text);
+                    DISPLAY.println("ref: " + ref);
+                }
+
+                return text.replace(ref, destHTML + ref);
+            });
+
+        }
+
+        iniDoc.setString("page", "html", textEd.toString());
     }
 
     /**
@@ -650,13 +735,15 @@ class Cli {
      *
      * @throws IOException If any.
      */
-    static void processFile(final Path inpPath, final Path outPath, final Path destDirPath, final boolean wrapper) throws IOException {
+    static void processFile(final Path inpPath, final Path outPath, final Path destDirPath,
+            final boolean wrapper) throws IOException
+    {
         StringBuilder sb = new StringBuilder();
         IniDocument iniDoc = conf.iniDoc;
-        String template = "";
+        String template;
         String use = "";
 
-        try ( BufferedReader inReader = Files.newBufferedReader(inpPath))
+        try (BufferedReader inReader = Files.newBufferedReader(inpPath))
         {
             String line;
 
@@ -672,20 +759,21 @@ class Cli {
         {
             if (vlevel >= 3)
             {
-                System.out.println("\n--------------------------------------------\n"
-                                   + "process wrapper...");
+                DISPLAY.println("\n--------------------------------------------\n"
+                        + "process wrapper...");
             }
 
             processMetaBlock();
             configureStylesheetPaths();
             processNamedMetaBlocks();
             String preprocessed = processSubstitutions(
-                    iniDoc.getString("page", "text", ""), use, new Ref<>());
+                    iniDoc.getString("page", "text", ""), use, Ref.val());
 
             use = iniDoc.getString("page", "use", null);
             template = getString("page", "template", use);
             iniDoc.setString("page", "content",
-                    MarkdownProcessor.convert(processSubstitutions(                                     preprocessed, use, new Ref<>())));
+                    MarkdownProcessor.convert(processSubstitutions(preprocessed, use,
+                            Ref.val())));
 
             if (!template.isBlank())
             {
@@ -701,73 +789,21 @@ class Cli {
 
         }
 
-        try ( BufferedWriter outWriter
-                             = Files.newBufferedWriter(outPath, CREATE, TRUNCATE_EXISTING, WRITE))
+        try (BufferedWriter outWriter
+                = Files.newBufferedWriter(outPath, CREATE, TRUNCATE_EXISTING, WRITE))
         {
             if (vlevel >= 3)
             {
-                System.out.println("\n--------------------------------------------\n"
-                                   + "Write file: " + outPath);
-                System.out.println("page.html:\n" + iniDoc.getString("page", "html", "No HTML content.")
-                                   + "--------------------------------------------\n");
+                DISPLAY.println("\n--------------------------------------------\n"
+                        + "Write file: " + outPath);
+                DISPLAY.println("page.html:\n" + iniDoc.getString("page", "html",
+                        "No HTML content.")
+                        + "--------------------------------------------\n");
             }
 
             outWriter.write(iniDoc.getString("page", "html",
-                                             iniDoc.getString("page", "content", "Error during processing.")));
+                    iniDoc.getString("page", "content", "Error during processing.")));
         }
     }
 
-    /**
-     * Process substitutions.
-     *
-     * @param text Text to be processed.
-     * @param use  Alternate section to use.
-     *
-     * @return result.
-     */
-    static String processSubstitutions(final String text, final String use, final Ref<Boolean> found) {
-        TextEditor textEd = new TextEditor(text);
-        found.val = false;
-
-        do
-        {
-            textEd.replaceAll(SUBSTITUTION_PATTERN, m ->
-                      {
-
-                          if (vlevel >= 3)
-                          {
-                              System.out.println("m.group: " + m.group());
-                          }
-
-                          String group = m.group("group");
-                          String key = m.group("key");
-                          String rtn = "ERROR: Substitution!";
-
-                          if (group != null)
-                          {
-                              rtn = getString(group, key, use);
-                          }
-
-                          if (vlevel >= 3)
-                          {
-                              System.out.println("rtn: " + rtn);
-                          }
-
-                          return rtn;
-                      });
-
-            if (textEd.wasFound())
-            {
-                found.val = true;
-            }
-        } while (textEd.wasFound());
-
-        return textEd.toString();
-    }
-
-    /**
-     * Not meant to be instantiated.
-     */
-    private Cli() {
-    }
 }

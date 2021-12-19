@@ -25,7 +25,8 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
-import static java.nio.file.FileVisitResult.*;
+import static com.bewsoftware.mdj.cli.Main.DISPLAY;
+import static java.nio.file.FileVisitResult.CONTINUE;
 
 /**
  *
@@ -34,13 +35,15 @@ import static java.nio.file.FileVisitResult.*;
  * @since 0.1
  * @version 1.0
  */
-class PrintFiles extends SimpleFileVisitor<Path> {
+class PrintFiles extends SimpleFileVisitor<Path>
+{
 
     // Print each directory visited.
     @Override
     public FileVisitResult postVisitDirectory(Path dir,
-                                              IOException exc) {
-        System.out.format("Directory: %s%n", dir);
+            IOException exc)
+    {
+        DISPLAY.format("Directory: %s%n", dir);
         return CONTINUE;
     }
 
@@ -48,18 +51,19 @@ class PrintFiles extends SimpleFileVisitor<Path> {
     // each type of file.
     @Override
     public FileVisitResult visitFile(Path file,
-                                     BasicFileAttributes attr) {
+            BasicFileAttributes attr)
+    {
         if (attr.isSymbolicLink())
         {
-            System.out.format("Symbolic link: %s ", file);
+            DISPLAY.format("Symbolic link: %s ", file);
         } else if (attr.isRegularFile())
         {
-            System.out.format("Regular file: %s ", file);
+            DISPLAY.format("Regular file: %s ", file);
         } else
         {
-            System.out.format("Other: %s ", file);
+            DISPLAY.format("Other: %s ", file);
         }
-        System.out.println("(" + attr.size() + "bytes)");
+        DISPLAY.println("(" + attr.size() + "bytes)");
         return CONTINUE;
     }
 
@@ -70,8 +74,9 @@ class PrintFiles extends SimpleFileVisitor<Path> {
     // is thrown.
     @Override
     public FileVisitResult visitFileFailed(Path file,
-                                           IOException exc) {
-        System.err.println(exc);
+            IOException exc)
+    {
+        DISPLAY.println(exc);
         return CONTINUE;
     }
 }
