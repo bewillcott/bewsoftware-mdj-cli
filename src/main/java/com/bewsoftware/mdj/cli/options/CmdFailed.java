@@ -21,10 +21,12 @@
 package com.bewsoftware.mdj.cli.options;
 
 import com.bewsoftware.mdj.cli.CmdLine;
+import java.util.Optional;
 
 import static com.bewsoftware.mdj.cli.Main.HELP_FOOTER;
 import static com.bewsoftware.mdj.cli.Main.HELP_HEADER;
 import static com.bewsoftware.mdj.cli.Main.SYNTAX;
+import static java.util.Optional.of;
 
 /**
  * Check to see if the processing of the command-line caused an error condition.
@@ -45,9 +47,9 @@ public class CmdFailed implements Option
     }
 
     @Override
-    public Integer execute(CmdLine cmd)
+    public Optional<Integer> execute(CmdLine cmd)
     {
-        Integer rtn = null;
+        Optional<Integer> rtn = Optional.empty();
 
         // check whether the command line was valid, and if it wasn't,
         // display usage information and exit.
@@ -62,7 +64,7 @@ public class CmdFailed implements Option
             cmd.exceptions().forEach(ex -> sb.append(ex).append('\n'));
 
             cmd.printHelp(sb.toString(), SYNTAX, HELP_HEADER, HELP_FOOTER, true);
-            rtn = -1;
+            rtn = of(-1);
         }
 
         return rtn;

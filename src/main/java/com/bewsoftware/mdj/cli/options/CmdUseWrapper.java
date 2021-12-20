@@ -29,6 +29,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 
 import static com.bewsoftware.fileio.BEWFiles.copyDirTree;
 import static com.bewsoftware.mdj.cli.Cli.conf;
@@ -39,9 +40,9 @@ import static com.bewsoftware.mdj.cli.Main.DISPLAY;
 import static com.bewsoftware.mdj.cli.Main.HELP_FOOTER;
 import static com.bewsoftware.mdj.cli.Main.HELP_HEADER;
 import static com.bewsoftware.mdj.cli.Main.SYNTAX;
-import static java.nio.file.Path.of;
 import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import static java.util.Optional.of;
 
 /**
  * CmdUseWrapper class description.
@@ -60,10 +61,9 @@ public class CmdUseWrapper implements Option
     }
 
     @Override
-    public Integer execute(CmdLine cmd)
+    public Optional<Integer> execute(CmdLine cmd)
     {
-        Ref<Integer> rtn = Ref.val(null);
-
+        Ref<Optional<Integer>> rtn = Ref.val(Optional.empty());
         //
         // if '-w' switch active, copy files in '[includeDirs]' to destination directory
         //
@@ -80,7 +80,7 @@ public class CmdUseWrapper implements Option
         return rtn.val;
     }
 
-    private void copyFiles(String value, CmdLine cmd, Ref<Integer> rtn)
+    private void copyFiles(String value, CmdLine cmd, Ref<Optional<Integer>> rtn)
     {
         if (!value.isEmpty())
         {
@@ -98,12 +98,12 @@ public class CmdUseWrapper implements Option
                     DISPLAY.println(ex);
                 }
 
-                rtn.val = -1;
+                rtn.val = of(-1);
             }
         }
     }
 
-    private void loadConfigurationFile(Path srcDir, CmdLine cmd, Ref<Integer> rtn)
+    private void loadConfigurationFile(Path srcDir, CmdLine cmd, Ref<Optional<Integer>> rtn)
     {
         try
         {
@@ -113,7 +113,7 @@ public class CmdUseWrapper implements Option
             String msg = ex.toString()
                     + "\nHave you initialised the wrapper functionality? '-W <Doc Root Dir>'\n";
             cmd.printHelp(msg, SYNTAX, HELP_HEADER, HELP_FOOTER, true);
-            rtn.val = 4;
+            rtn.val = of(4);
         } catch (IOException | IniFileFormatException ex)
         {
             if (vlevel >= 2)
@@ -121,20 +121,20 @@ public class CmdUseWrapper implements Option
                 DISPLAY.println(ex);
             }
 
-            rtn.val = -1;
+            rtn.val = of(-1);
         }
     }
 
     private Path loadConfigurationFileData(CmdLine cmd)
     {
-        Path srcDir = of("");
+        Path srcDir = Path.of("");
 
         if (cmd.source() != null)
         {
             srcDir = cmd.source();
         } else if (cmd.inputFile() != null)
         {
-            Path inpPath = of(cmd.inputFile().toString()).getParent();
+            Path inpPath = Path.of(cmd.inputFile().toString()).getParent();
 
             if (inpPath != null)
             {
@@ -145,9 +145,9 @@ public class CmdUseWrapper implements Option
         return srcDir;
     }
 
-    private void processIncludeDirs(CmdLine cmd, Ref<Integer> rtn)
+    private void processIncludeDirs(CmdLine cmd, Ref<Optional<Integer>> rtn)
     {
-        if (rtn.val == null && conf.iniDoc.containsSection("includeDirs"))
+        if (rtn.val.isEmpty() && conf.iniDoc.containsSection("includeDirs"))
         {
             List<IniProperty<String>> props = conf.iniDoc.getSection("includeDirs");
 

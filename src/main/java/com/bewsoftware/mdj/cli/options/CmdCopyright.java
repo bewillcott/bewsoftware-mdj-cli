@@ -21,9 +21,11 @@
 package com.bewsoftware.mdj.cli.options;
 
 import com.bewsoftware.mdj.cli.CmdLine;
+import java.util.Optional;
 
 import static com.bewsoftware.mdj.cli.Main.COPYRIGHT;
 import static com.bewsoftware.mdj.cli.Main.DISPLAY;
+import static java.util.Optional.of;
 
 /**
  * Display Copyright notice.
@@ -42,9 +44,9 @@ public class CmdCopyright implements Option
     }
 
     @Override
-    public Integer execute(CmdLine cmd)
+    public Optional<Integer> execute(CmdLine cmd)
     {
-        Integer rtn = null;
+        Optional<Integer> rtn = Optional.empty();
 
         //
         // if '-c' then, display Copyright notice.
@@ -54,7 +56,7 @@ public class CmdCopyright implements Option
         if (cmd.hasOption('c'))
         {
             DISPLAY.println(COPYRIGHT);
-            rtn = 0;
+            rtn = of(0);
         }
 
         return rtn;

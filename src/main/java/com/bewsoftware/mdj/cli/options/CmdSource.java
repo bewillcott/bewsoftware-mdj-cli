@@ -21,6 +21,7 @@
 package com.bewsoftware.mdj.cli.options;
 
 import com.bewsoftware.mdj.cli.CmdLine;
+import java.util.Optional;
 
 /**
  * CmdSource class description.
@@ -38,9 +39,9 @@ public class CmdSource implements Option
     }
 
     @Override
-    public Integer execute(CmdLine cmd)
+    public Optional<Integer> execute(CmdLine cmd)
     {
-        Integer rtn = null;
+        Optional<Integer> rtn = Optional.empty();
 
         //
         // if '-s' switch active, check and set others as necessary.

@@ -24,6 +24,7 @@ import com.bewsoftware.mdj.cli.CmdLine;
 import com.bewsoftware.utils.struct.Ref;
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Optional;
 import org.apache.commons.io.FilenameUtils;
 
 import static com.bewsoftware.mdj.cli.Main.DEFAULT_MARKDOWN_EXTENSION;
@@ -50,9 +51,9 @@ public class CmdInputFile implements Option
     }
 
     @Override
-    public Integer execute(CmdLine cmd)
+    public Optional<Integer> execute(CmdLine cmd)
     {
-        Integer rtn = null;
+        Optional<Integer> rtn = Optional.empty();
 
         //
         // if '-i' switch active, check and set others as necessary.

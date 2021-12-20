@@ -24,6 +24,7 @@ import com.bewsoftware.fileio.ini.IniFileFormatException;
 import com.bewsoftware.mdj.cli.CmdLine;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Optional;
 
 import static com.bewsoftware.mdj.cli.Cli.initialiseWrappers;
 import static com.bewsoftware.mdj.cli.Cli.vlevel;
@@ -31,6 +32,7 @@ import static com.bewsoftware.mdj.cli.Main.DISPLAY;
 import static com.bewsoftware.mdj.cli.Main.HELP_FOOTER;
 import static com.bewsoftware.mdj.cli.Main.HELP_HEADER;
 import static com.bewsoftware.mdj.cli.Main.SYNTAX;
+import static java.util.Optional.of;
 
 /**
  * CmdWrapper class description.
@@ -49,9 +51,9 @@ public class CmdWrapper implements Option
     }
 
     @Override
-    public Integer execute(CmdLine cmd)
+    public Optional<Integer> execute(CmdLine cmd)
     {
-        Integer rtn = null;
+        Optional<Integer> rtn = Optional.empty();
         //
         // '-W' initialise wrapper functionality
         //
@@ -70,12 +72,12 @@ public class CmdWrapper implements Option
                 String msg = "Too many switches for \"-W\"\n\n";
 
                 cmd.printHelp(msg, SYNTAX, HELP_HEADER, HELP_FOOTER, true);
-                rtn = 6;
+                rtn = of(6);
             } else
             {
                 try
                 {
-                    rtn = initialiseWrappers(cmd.docRootPath());
+                    rtn = of(initialiseWrappers(cmd.docRootPath()));
                 } catch (IOException | IniFileFormatException | URISyntaxException ex)
                 {
                     if (vlevel >= 2)
@@ -83,7 +85,7 @@ public class CmdWrapper implements Option
                         DISPLAY.println(ex);
                     }
 
-                    rtn = -1;
+                    rtn = of(-1);
                 }
             }
         }

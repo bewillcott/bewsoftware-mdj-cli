@@ -22,11 +22,13 @@ package com.bewsoftware.mdj.cli.options;
 
 import com.bewsoftware.mdj.cli.CmdLine;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.Properties;
 
 import static com.bewsoftware.mdj.cli.Cli.loadPom;
 import static com.bewsoftware.mdj.cli.Cli.vlevel;
 import static com.bewsoftware.mdj.cli.Main.DISPLAY;
+import static java.util.Optional.of;
 
 /**
  * CmdPomAndProps class description.
@@ -44,9 +46,9 @@ public class CmdPomAndProps implements Option
     }
 
     @Override
-    public Integer execute(CmdLine cmd)
+    public Optional<Integer> execute(CmdLine cmd)
     {
-        Integer rtn = null;
+        Optional<Integer> rtn = Optional.empty();
 
         //
         // if '-P' Add pom.xml file
@@ -70,7 +72,7 @@ public class CmdPomAndProps implements Option
                     DISPLAY.println(ex);
                 }
 
-                rtn = -1;
+                rtn = of(-1);
             }
         }
 

@@ -57,7 +57,7 @@ import static java.nio.file.Path.of;
  * @since 0.1
  * @version 1.0.7
  */
-class Find
+public class Find
 {
 
     /**

@@ -22,8 +22,10 @@ package com.bewsoftware.mdj.cli.options;
 
 import com.bewsoftware.mdj.cli.CmdLine;
 import com.bewsoftware.mdj.cli.MCHttpServer;
+import java.util.Optional;
 
 import static com.bewsoftware.mdj.cli.Main.DISPLAY;
+import static java.util.Optional.of;
 
 /**
  * Display manual.
@@ -41,9 +43,9 @@ public class CmdManual implements Option
     }
 
     @Override
-    public Integer execute(CmdLine cmd)
+    public Optional<Integer> execute(CmdLine cmd)
     {
-        Integer rtn = null;
+        Optional<Integer> rtn = Optional.empty();
 
         //
         // if '-m' then, display manual.
@@ -54,7 +56,7 @@ public class CmdManual implements Option
         {
             DISPLAY.println("Displaying manual...");
             MCHttpServer.execute(cmd);
-            rtn = 0;
+            rtn = of(0);
         }
 
         return rtn;

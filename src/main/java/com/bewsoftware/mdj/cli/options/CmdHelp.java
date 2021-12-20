@@ -21,10 +21,12 @@
 package com.bewsoftware.mdj.cli.options;
 
 import com.bewsoftware.mdj.cli.CmdLine;
+import java.util.Optional;
 
 import static com.bewsoftware.mdj.cli.Main.HELP_FOOTER;
 import static com.bewsoftware.mdj.cli.Main.HELP_HEADER;
 import static com.bewsoftware.mdj.cli.Main.SYNTAX;
+import static java.util.Optional.of;
 
 /**
  * Display help message.
@@ -42,9 +44,9 @@ public class CmdHelp implements Option
     }
 
     @Override
-    public Integer execute(CmdLine cmd)
+    public Optional<Integer> execute(CmdLine cmd)
     {
-        Integer rtn = null;
+        Optional<Integer> rtn = Optional.empty();
 
         //
         // if '-h' or '--help' then, display help message.
@@ -54,10 +56,9 @@ public class CmdHelp implements Option
         if (cmd.hasOption('h'))
         {
             cmd.printHelp(SYNTAX, HELP_HEADER, HELP_FOOTER, true);
-            rtn = 0;
+            rtn = of(0);
         }
 
         return rtn;
     }
-
 }

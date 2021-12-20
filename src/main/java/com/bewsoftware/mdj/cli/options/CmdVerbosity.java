@@ -21,6 +21,7 @@
 package com.bewsoftware.mdj.cli.options;
 
 import com.bewsoftware.mdj.cli.CmdLine;
+import java.util.Optional;
 
 import static com.bewsoftware.mdj.cli.Cli.vlevel;
 import static com.bewsoftware.mdj.cli.Main.DISPLAY;
@@ -42,9 +43,9 @@ public class CmdVerbosity implements Option
 
     @Override
     @SuppressWarnings("fallthrough")
-    public Integer execute(CmdLine cmd)
+    public Optional<Integer> execute(CmdLine cmd)
     {
-        Integer rtn = null;
+        Optional<Integer> rtn = Optional.empty();
 
         vlevel = cmd.verbosity();
 

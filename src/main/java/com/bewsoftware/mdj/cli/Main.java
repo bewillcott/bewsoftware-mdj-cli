@@ -22,17 +22,8 @@ package com.bewsoftware.mdj.cli;
 import com.bewsoftware.utils.io.ConsoleIO;
 import com.bewsoftware.utils.io.Display;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.Optional;
 
-import static com.bewsoftware.mdj.cli.Cli.conf;
-import static com.bewsoftware.mdj.cli.Cli.processFile;
-import static com.bewsoftware.mdj.cli.Cli.vlevel;
-import static com.bewsoftware.mdj.cli.Find.getUpdateList;
 import static com.bewsoftware.mdj.cli.options.OptionInterlink.*;
 import static java.lang.System.exit;
 
@@ -100,52 +91,21 @@ public class Main
         // Process command-line
         //
         CmdLine cmd = new MyCmdLine(args);
-        Integer result;
+        Optional<Integer> result;
 
-        result = processCmdFailed(cmd);
-
-        if (result == null)
-        {
-            result = processCmdHelp(cmd);
-
-        }
-
-        if (result == null)
-        {
-            result = processCmdCopyright(cmd);
-
-        }
-
-        if (result == null)
-        {
-            result = processCmdManual(cmd);
-
-        }
-
-        if (result == null)
-        {
-            result = processCmdPublish(cmd);
-
-        }
-
-        if (result == null)
-        {
-            result = processCmdInputFile(cmd);
-
-        }
-
-        if (result == null)
-        {
-            result = processCmdSource(cmd);
-
-        }
-
-        if (result == null)
-        {
-            result = processCmdVerbosity(cmd);
-
-        }
-
+        result = processCmdFailed(cmd)
+                .or(() -> processCmdHelp(cmd))
+                .or(() -> processCmdCopyright(cmd))
+                .or(() -> processCmdManual(cmd))
+                .or(() -> processCmdPublish(cmd))
+                .or(() -> processCmdInputFile(cmd))
+                .or(() -> processCmdSource(cmd))
+                .or(() -> processCmdVerbosity(cmd))
+                .or(() -> processCmdCreateJar(cmd))
+                .or(() -> processCmdWrapper(cmd))
+                .or(() -> processCmdPomAndProps(cmd))
+                .or(() -> processCmdUseWrapper(cmd))
+                .or(() -> runMainProcessor(cmd));
 //        //
 //        // '-a' jar file creation
 //        //
@@ -185,37 +145,14 @@ public class Main
 //            return createJarFile(cmd.jarFile(), cmd.jarSourcePath(), vlevel);
 //        }
 //
-        if (result == null)
-        {
-            result = processCmdCreateJar(cmd);
-
-        }
-
-        if (result == null)
-        {
-            result = processCmdWrapper(cmd);
-
-        }
-
-        if (result == null)
-        {
-            result = processCmdPomAndProps(cmd);
-
-        }
-
-        if (result == null)
-        {
-            result = processCmdUseWrapper(cmd);
-
-        }
-
-        if (result == null)
-        {
-            conf.iniDoc.setString("system", "date", new Date().toString());
-            processFiles(cmd);
-        }
-
-        return result == null ? 0 : result;
+//        if (result == null)
+//        {
+//            conf.iniDoc.setString("system", "date", new Date().toString());
+//            processFiles(cmd);
+//        }
+//
+//        return result == null ? 0 : result;
+        return result.orElse(0);
     }
 
     /**
@@ -228,81 +165,6 @@ public class Main
     public static void main(String[] args) throws IOException
     {
         exit(execute(args));
-    }
-
-    private static void loadOutputDirs(List<Path[]> fileList, Set<Path> outputDirs)
-    {
-        fileList.forEach(filePairs ->
-        {
-            if (vlevel >= 1)
-            {
-                DISPLAY.println(filePairs[0]);
-                DISPLAY.println("    " + filePairs[1]);
-            }
-
-            Path parent = filePairs[1].getParent();
-
-            if (parent != null)
-            {
-                outputDirs.add(parent);
-            }
-        });
-    }
-
-    private static void processFiles(CmdLine cmd) throws IOException
-    {
-        //
-        // Get files to process
-        //
-        List<Path[]> fileList = getUpdateList(cmd.source(),
-                cmd.destination(),
-                cmd.inputFile(), null, cmd.hasOption('r'), vlevel);
-
-        // Process files
-        if (!fileList.isEmpty())
-        {
-            if (singleFileWithOutputFile(cmd, fileList))
-            {
-                updateFileList(cmd, fileList);
-            }
-
-            Set<Path> outputDirs = new TreeSet<>();
-            loadOutputDirs(fileList, outputDirs);
-
-            for (Path dir : outputDirs)
-            {
-                if (vlevel >= 2)
-                {
-                    DISPLAY.println("    " + dir);
-                }
-
-                Files.createDirectories(dir);
-            }
-
-            for (Path[] filePairs : fileList)
-            {
-                processFile(filePairs[0], filePairs[1], cmd.destination(), cmd.hasOption('w'));
-            }
-        }
-    }
-
-    private static boolean singleFileWithOutputFile(CmdLine cmd, List<Path[]> fileList)
-    {
-        return cmd.outputFile() != null && fileList.size() == 1;
-    }
-
-    private static void updateFileList(CmdLine cmd, List<Path[]> fileList)
-    {
-        Path outPath = cmd.outputFile().toPath();
-
-        if (outPath.isAbsolute())
-        {
-            fileList.get(0)[1] = outPath;
-        } else
-        {
-            Path target = fileList.get(0)[1].getParent();
-            fileList.get(0)[1] = target.resolve(outPath);
-        }
     }
 
 }

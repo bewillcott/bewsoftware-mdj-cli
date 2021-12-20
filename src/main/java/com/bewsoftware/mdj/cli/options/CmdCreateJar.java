@@ -24,6 +24,7 @@ import com.bewsoftware.fileio.ini.IniFileFormatException;
 import com.bewsoftware.mdj.cli.CmdLine;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Optional;
 
 import static com.bewsoftware.mdj.cli.Cli.loadConf;
 import static com.bewsoftware.mdj.cli.Cli.vlevel;
@@ -32,6 +33,7 @@ import static com.bewsoftware.mdj.cli.Main.DISPLAY;
 import static com.bewsoftware.mdj.cli.Main.HELP_FOOTER;
 import static com.bewsoftware.mdj.cli.Main.HELP_HEADER;
 import static com.bewsoftware.mdj.cli.Main.SYNTAX;
+import static java.util.Optional.of;
 
 /**
  * CmdCreateJar class description.
@@ -49,9 +51,9 @@ public class CmdCreateJar implements Option
     }
 
     @Override
-    public Integer execute(CmdLine cmd)
+    public Optional<Integer> execute(CmdLine cmd)
     {
-        Integer rtn = null;
+        Optional<Integer> rtn = Optional.empty();
 
         //
         // '-j' jar file creation
@@ -73,14 +75,14 @@ public class CmdCreateJar implements Option
                 String msg = "Too many switches for \"-j\"\n\n";
 
                 cmd.printHelp(msg, SYNTAX, HELP_HEADER, HELP_FOOTER, true);
-                rtn = 5;
+                rtn = of(5);
             } else
             {
                 try
                 {
                     loadConfigFileData(cmd);
 
-                    rtn = createJarFile(cmd.jarFile(), cmd.jarSourcePath(), vlevel);
+                    rtn = of(createJarFile(cmd.jarFile(), cmd.jarSourcePath(), vlevel));
                 } catch (IOException | URISyntaxException ex)
                 {
                     if (vlevel >= 2)
@@ -88,7 +90,7 @@ public class CmdCreateJar implements Option
                         DISPLAY.println(ex);
                     }
 
-                    rtn = -1;
+                    rtn = of(-1);
                 }
             }
         }

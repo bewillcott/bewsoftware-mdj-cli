@@ -22,8 +22,10 @@ package com.bewsoftware.mdj.cli.options;
 
 import com.bewsoftware.mdj.cli.CmdLine;
 import com.bewsoftware.mdj.cli.MCHttpServer;
+import java.util.Optional;
 
 import static com.bewsoftware.mdj.cli.Main.DISPLAY;
+import static java.util.Optional.of;
 
 /**
  * Publish HTTP files.
@@ -42,9 +44,9 @@ public class CmdPublish implements Option
     }
 
     @Override
-    public Integer execute(CmdLine cmd)
+    public Optional<Integer> execute(CmdLine cmd)
     {
-        Integer rtn = null;
+        Optional<Integer> rtn = Optional.empty();
 
         //
         // if '-p' then, publish http files from either: jarFile or docRootPath.
@@ -55,7 +57,7 @@ public class CmdPublish implements Option
         {
             DISPLAY.println("Publishing files...");
             MCHttpServer.execute(cmd);
-            rtn = 0;
+            rtn = of(0);
         }
 
         return rtn;

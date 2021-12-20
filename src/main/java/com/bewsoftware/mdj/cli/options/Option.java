@@ -21,6 +21,7 @@
 package com.bewsoftware.mdj.cli.options;
 
 import com.bewsoftware.mdj.cli.CmdLine;
+import java.util.Optional;
 
 /**
  * Option interface description.
@@ -37,7 +38,8 @@ public interface Option
      *
      * @param cmd The command-line parameters object.
      *
-     * @return {@code null} if successful, otherwise error number.
+     * @return {@linkplain Optional#empty() } if successful, otherwise error
+     *         number.
      */
-    public Integer execute(CmdLine cmd);
+    public Optional<Integer> execute(CmdLine cmd);
 }

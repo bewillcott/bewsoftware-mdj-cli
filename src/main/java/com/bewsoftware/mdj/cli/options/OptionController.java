@@ -23,6 +23,7 @@ package com.bewsoftware.mdj.cli.options;
 import com.bewsoftware.mdj.cli.CmdLine;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
@@ -52,7 +53,8 @@ public class OptionController
         "CmdCreateJar",
         "CmdWrapper",
         "CmdPomAndProps",
-        "CmdUseWrapper"
+        "CmdUseWrapper",
+        "MainProcessor"
     };
 
     private static final String OPTION_PACKAGE = "com.bewsoftware.mdj.cli.options.";
@@ -83,9 +85,9 @@ public class OptionController
         });
     }
 
-    public Integer runOption(String className, CmdLine cmd)
+    public Optional<Integer> runOption(String className, CmdLine cmd)
     {
-        Integer rtn = null;
+        Optional<Integer> rtn = null;
         Option option = options.get(className);
 
         if (option != null)

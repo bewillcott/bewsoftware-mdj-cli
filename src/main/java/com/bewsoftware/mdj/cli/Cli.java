@@ -735,7 +735,7 @@ public class Cli
      *
      * @throws IOException If any.
      */
-    static void processFile(final Path inpPath, final Path outPath, final Path destDirPath,
+    public static void processFile(final Path inpPath, final Path outPath, final Path destDirPath,
             final boolean wrapper) throws IOException
     {
         StringBuilder sb = new StringBuilder();

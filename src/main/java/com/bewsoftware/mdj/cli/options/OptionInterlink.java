@@ -21,6 +21,7 @@
 package com.bewsoftware.mdj.cli.options;
 
 import com.bewsoftware.mdj.cli.CmdLine;
+import java.util.Optional;
 
 /**
  * OptionInterlink class description.
@@ -38,62 +39,67 @@ public class OptionInterlink
     {
     }
 
-    public static Integer processCmdCopyright(CmdLine cmd)
+    public static Optional<Integer> processCmdCopyright(CmdLine cmd)
     {
         return OPTION_CONTROLLER.runOption("CmdCopyright", cmd);
     }
 
-    public static Integer processCmdCreateJar(CmdLine cmd)
+    public static Optional<Integer> processCmdCreateJar(CmdLine cmd)
     {
         return OPTION_CONTROLLER.runOption("CmdCreateJar", cmd);
     }
 
-    public static Integer processCmdFailed(CmdLine cmd)
+    public static Optional<Integer> processCmdFailed(CmdLine cmd)
     {
         return OPTION_CONTROLLER.runOption("CmdFailed", cmd);
     }
 
-    public static Integer processCmdHelp(CmdLine cmd)
+    public static Optional<Integer> processCmdHelp(CmdLine cmd)
     {
         return OPTION_CONTROLLER.runOption("CmdHelp", cmd);
     }
 
-    public static Integer processCmdInputFile(CmdLine cmd)
+    public static Optional<Integer> processCmdInputFile(CmdLine cmd)
     {
         return OPTION_CONTROLLER.runOption("CmdInputFile", cmd);
     }
 
-    public static Integer processCmdManual(CmdLine cmd)
+    public static Optional<Integer> runMainProcessor(CmdLine cmd)
+    {
+        return OPTION_CONTROLLER.runOption("MainProcessor", cmd);
+    }
+
+    public static Optional<Integer> processCmdManual(CmdLine cmd)
     {
         return OPTION_CONTROLLER.runOption("CmdManual", cmd);
     }
 
-    public static Integer processCmdPomAndProps(CmdLine cmd)
+    public static Optional<Integer> processCmdPomAndProps(CmdLine cmd)
     {
         return OPTION_CONTROLLER.runOption("CmdPomAndProps", cmd);
     }
 
-    public static Integer processCmdPublish(CmdLine cmd)
+    public static Optional<Integer> processCmdPublish(CmdLine cmd)
     {
         return OPTION_CONTROLLER.runOption("CmdPublish", cmd);
     }
 
-    public static Integer processCmdSource(CmdLine cmd)
+    public static Optional<Integer> processCmdSource(CmdLine cmd)
     {
         return OPTION_CONTROLLER.runOption("CmdSource", cmd);
     }
 
-    public static Integer processCmdUseWrapper(CmdLine cmd)
+    public static Optional<Integer> processCmdUseWrapper(CmdLine cmd)
     {
         return OPTION_CONTROLLER.runOption("CmdUseWrapper", cmd);
     }
 
-    public static Integer processCmdVerbosity(CmdLine cmd)
+    public static Optional<Integer> processCmdVerbosity(CmdLine cmd)
     {
         return OPTION_CONTROLLER.runOption("CmdVerbosity", cmd);
     }
 
-    public static Integer processCmdWrapper(CmdLine cmd)
+    public static Optional<Integer> processCmdWrapper(CmdLine cmd)
     {
         return OPTION_CONTROLLER.runOption("CmdWrapper", cmd);
     }
