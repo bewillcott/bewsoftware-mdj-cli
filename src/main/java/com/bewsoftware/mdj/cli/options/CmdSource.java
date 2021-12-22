@@ -20,7 +20,7 @@
 
 package com.bewsoftware.mdj.cli.options;
 
-import com.bewsoftware.mdj.cli.CmdLine;
+import com.bewsoftware.mdj.cli.util.CmdLine;
 import java.util.Optional;
 
 /**

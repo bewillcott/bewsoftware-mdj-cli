@@ -20,18 +20,28 @@
 
 package com.bewsoftware.mdj.cli.options;
 
+import com.bewsoftware.fileio.ini.IniFile;
 import com.bewsoftware.fileio.ini.IniFileFormatException;
-import com.bewsoftware.mdj.cli.CmdLine;
+import com.bewsoftware.mdj.cli.options.util.Cli;
+import com.bewsoftware.mdj.cli.util.CmdLine;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Optional;
 
-import static com.bewsoftware.mdj.cli.Cli.initialiseWrappers;
-import static com.bewsoftware.mdj.cli.Cli.vlevel;
-import static com.bewsoftware.mdj.cli.Main.DISPLAY;
-import static com.bewsoftware.mdj.cli.Main.HELP_FOOTER;
-import static com.bewsoftware.mdj.cli.Main.HELP_HEADER;
-import static com.bewsoftware.mdj.cli.Main.SYNTAX;
+import static com.bewsoftware.fileio.BEWFiles.copyDirTree;
+import static com.bewsoftware.fileio.BEWFiles.getResource;
+import static com.bewsoftware.mdj.cli.options.util.Cli.CONF_FILENAME;
+import static com.bewsoftware.mdj.cli.options.util.Cli.POM;
+import static com.bewsoftware.mdj.cli.options.util.Cli.vlevel;
+import static com.bewsoftware.mdj.cli.util.Constants.HELP_FOOTER;
+import static com.bewsoftware.mdj.cli.util.Constants.HELP_HEADER;
+import static com.bewsoftware.mdj.cli.util.Constants.SYNTAX;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
+import static java.nio.file.Path.of;
+import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static java.util.Optional.of;
 
 /**
@@ -48,6 +58,101 @@ public class CmdWrapper implements Option
     public CmdWrapper()
     {
         // NoOp
+    }
+
+    /**
+     * Initialize the wrapper directories and files.
+     *
+     * @param docRootPath The document root directory.
+     *
+     * @return Always '0'.
+     *
+     * @throws IOException            If any.
+     * @throws IniFileFormatException If any.
+     * @throws URISyntaxException     If any.
+     *
+     * @since 0.1
+     * @version 1.0.7
+     */
+    public static int initialiseWrappers(final Path docRootPath)
+            throws IOException, IniFileFormatException, URISyntaxException
+    {
+
+        if (vlevel >= 3)
+        {
+            DISPLAY.println("docRootPath:\n" + docRootPath);
+        }
+
+        // Create directories.
+        if (Files.notExists(docRootPath))
+        {
+            Files.createDirectories(docRootPath);
+        }
+
+        // Get source directory from jar file.
+        Path srcDirPath = getResource(Cli.class, "/docs/init").toAbsolutePath();
+
+        if (vlevel >= 2)
+        {
+            DISPLAY.println("srcDirPath: " + srcDirPath);
+            DISPLAY.println("srcDirPath exists: " + Files.exists(srcDirPath));
+        }
+
+        // Get source ini file from jar file.
+        Path srcIniPath = getResource(Cli.class, "/" + CONF_FILENAME + "").toAbsolutePath();
+
+        if (vlevel >= 2)
+        {
+            DISPLAY.println("srcIniPath: " + srcIniPath);
+            DISPLAY.println("srcIniPath exists: " + Files.exists(srcIniPath));
+        }
+
+        // Get destination ini file path.
+        Path destIniPath = of(docRootPath.toString(), CONF_FILENAME);
+
+        if (vlevel >= 2)
+        {
+            DISPLAY.println("destIniPath: " + destIniPath);
+            DISPLAY.println("destIniPath exists: " + Files.exists(destIniPath));
+        }
+
+        copyDirTree(srcDirPath, docRootPath,
+                "*", vlevel, COPY_ATTRIBUTES, REPLACE_EXISTING);
+
+        IniFile iniFile;
+
+        // If there already exists an ini file, then...
+        if (Files.exists(destIniPath))
+        {
+            if (vlevel >= 2)
+            {
+                DISPLAY.println("destIniPath exists");
+            }
+
+            iniFile = new IniFile(srcIniPath).loadFile().mergeFile(destIniPath);
+        } else
+        {
+            if (vlevel >= 2)
+            {
+                DISPLAY.println("destIniPath dosen't exist");
+            }
+
+            iniFile = new IniFile(srcIniPath).loadFile();
+        }
+
+        iniFile.iniDoc.setString("document", "docRootDir", docRootPath.toString());
+        iniFile.iniDoc.setString(null, "iniVersion", POM.version, "; DO NOT REMOVE/MOVE OR MODIFY: iniVersion!");
+
+        if (vlevel >= 2)
+        {
+            DISPLAY.println("document.docRootDir: " + iniFile.iniDoc.getString("document", "docRootDir", "default"));
+        }
+
+        iniFile.paddedEquals = true;
+
+        iniFile.saveFileAs(destIniPath);
+
+        return 0;
     }
 
     @Override
@@ -92,4 +197,5 @@ public class CmdWrapper implements Option
 
         return rtn;
     }
+
 }

@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.bewsoftware.mdj.cli;
+package com.bewsoftware.mdj.cli.util;
 
 import com.bewsoftware.httpserver.*;
 import com.bewsoftware.utils.struct.Ref;
@@ -36,7 +36,7 @@ import static com.bewsoftware.httpserver.HTTPServer.TITLE;
 import static com.bewsoftware.httpserver.HTTPServer.VERSION;
 import static com.bewsoftware.httpserver.HTTPServer.addContentTypes;
 import static com.bewsoftware.httpserver.Utils.openURL;
-import static com.bewsoftware.mdj.cli.Main.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
 import static java.lang.System.exit;
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 import static java.nio.file.Path.of;

@@ -20,11 +20,11 @@
 
 package com.bewsoftware.mdj.cli.options;
 
-import com.bewsoftware.mdj.cli.CmdLine;
+import com.bewsoftware.mdj.cli.util.CmdLine;
 import java.util.Optional;
 
-import static com.bewsoftware.mdj.cli.Main.COPYRIGHT;
-import static com.bewsoftware.mdj.cli.Main.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.Constants.COPYRIGHT;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
 import static java.util.Optional.of;
 
 /**

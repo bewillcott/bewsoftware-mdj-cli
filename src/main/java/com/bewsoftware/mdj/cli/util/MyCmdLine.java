@@ -14,18 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.bewsoftware.mdj.cli;
+package com.bewsoftware.mdj.cli.util;
 
 import com.bewsoftware.common.InvalidParameterValueException;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import org.apache.commons.cli.*;
 
-import static com.bewsoftware.mdj.cli.Main.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
 import static java.nio.file.Path.of;
 import static org.apache.commons.cli.Option.builder;
 
@@ -37,7 +36,7 @@ import static org.apache.commons.cli.Option.builder;
  * @since 1.0.7
  * @version 1.0.14
  */
-final class MyCmdLine implements CmdLine
+public final class MyCmdLine implements CmdLine
 {
 
     /**
@@ -109,8 +108,6 @@ final class MyCmdLine implements CmdLine
      * Create an immutable instance of MyCmdLine.
      *
      * @param args The command-line args.
-     *
-     * @throws IOException if any.
      */
     public MyCmdLine(final String[] args)
     {

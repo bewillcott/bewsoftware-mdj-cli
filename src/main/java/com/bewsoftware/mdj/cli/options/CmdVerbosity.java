@@ -20,11 +20,11 @@
 
 package com.bewsoftware.mdj.cli.options;
 
-import com.bewsoftware.mdj.cli.CmdLine;
+import com.bewsoftware.mdj.cli.util.CmdLine;
 import java.util.Optional;
 
-import static com.bewsoftware.mdj.cli.Cli.vlevel;
-import static com.bewsoftware.mdj.cli.Main.DISPLAY;
+import static com.bewsoftware.mdj.cli.options.util.Cli.vlevel;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
 
 /**
  * CmdVerbosity class description.

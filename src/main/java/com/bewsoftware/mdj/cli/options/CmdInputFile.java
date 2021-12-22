@@ -20,14 +20,14 @@
 
 package com.bewsoftware.mdj.cli.options;
 
-import com.bewsoftware.mdj.cli.CmdLine;
+import com.bewsoftware.mdj.cli.util.CmdLine;
 import com.bewsoftware.utils.struct.Ref;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.apache.commons.io.FilenameUtils;
 
-import static com.bewsoftware.mdj.cli.Main.DEFAULT_MARKDOWN_EXTENSION;
+import static com.bewsoftware.mdj.cli.util.Constants.DEFAULT_MARKDOWN_EXTENSION;
 import static java.nio.file.Path.of;
 
 /**

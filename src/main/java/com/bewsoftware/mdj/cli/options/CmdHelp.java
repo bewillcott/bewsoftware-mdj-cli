@@ -20,12 +20,12 @@
 
 package com.bewsoftware.mdj.cli.options;
 
-import com.bewsoftware.mdj.cli.CmdLine;
+import com.bewsoftware.mdj.cli.util.CmdLine;
 import java.util.Optional;
 
-import static com.bewsoftware.mdj.cli.Main.HELP_FOOTER;
-import static com.bewsoftware.mdj.cli.Main.HELP_HEADER;
-import static com.bewsoftware.mdj.cli.Main.SYNTAX;
+import static com.bewsoftware.mdj.cli.util.Constants.HELP_FOOTER;
+import static com.bewsoftware.mdj.cli.util.Constants.HELP_HEADER;
+import static com.bewsoftware.mdj.cli.util.Constants.SYNTAX;
 import static java.util.Optional.of;
 
 /**

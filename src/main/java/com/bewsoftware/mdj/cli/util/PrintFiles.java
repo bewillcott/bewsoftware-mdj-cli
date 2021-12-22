@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.bewsoftware.mdj.cli;
+package com.bewsoftware.mdj.cli.util;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -25,7 +25,6 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
-import static com.bewsoftware.mdj.cli.Main.DISPLAY;
 import static java.nio.file.FileVisitResult.CONTINUE;
 
 /**
@@ -43,7 +42,7 @@ class PrintFiles extends SimpleFileVisitor<Path>
     public FileVisitResult postVisitDirectory(Path dir,
             IOException exc)
     {
-        DISPLAY.format("Directory: %s%n", dir);
+        GlobalVariables.DISPLAY.format("Directory: %s%n", dir);
         return CONTINUE;
     }
 
@@ -55,15 +54,15 @@ class PrintFiles extends SimpleFileVisitor<Path>
     {
         if (attr.isSymbolicLink())
         {
-            DISPLAY.format("Symbolic link: %s ", file);
+            GlobalVariables.DISPLAY.format("Symbolic link: %s ", file);
         } else if (attr.isRegularFile())
         {
-            DISPLAY.format("Regular file: %s ", file);
+            GlobalVariables.DISPLAY.format("Regular file: %s ", file);
         } else
         {
-            DISPLAY.format("Other: %s ", file);
+            GlobalVariables.DISPLAY.format("Other: %s ", file);
         }
-        DISPLAY.println("(" + attr.size() + "bytes)");
+        GlobalVariables.DISPLAY.println("(" + attr.size() + "bytes)");
         return CONTINUE;
     }
 
@@ -76,7 +75,7 @@ class PrintFiles extends SimpleFileVisitor<Path>
     public FileVisitResult visitFileFailed(Path file,
             IOException exc)
     {
-        DISPLAY.println(exc);
+        GlobalVariables.DISPLAY.println(exc);
         return CONTINUE;
     }
 }

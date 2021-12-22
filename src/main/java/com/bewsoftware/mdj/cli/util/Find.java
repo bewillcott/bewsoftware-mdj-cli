@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.bewsoftware.mdj.cli;
+package com.bewsoftware.mdj.cli.util;
 
 import com.bewsoftware.fileio.Finder;
 import java.io.File;
@@ -33,7 +33,7 @@ import java.util.SortedSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.bewsoftware.mdj.cli.Main.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
 import static java.lang.Character.MAX_VALUE;
 import static java.nio.file.Files.getLastModifiedTime;
 import static java.nio.file.Files.notExists;

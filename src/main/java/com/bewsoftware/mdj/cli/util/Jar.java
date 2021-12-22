@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.bewsoftware.mdj.cli;
+package com.bewsoftware.mdj.cli.util;
 
 /**
  * Create a 'jar' file.
@@ -43,10 +43,10 @@ import java.util.jar.Manifest;
 import java.util.zip.Deflater;
 
 import static com.bewsoftware.fileio.BEWFiles.getResource;
-import static com.bewsoftware.mdj.cli.Cli.POM;
-import static com.bewsoftware.mdj.cli.Cli.conf;
-import static com.bewsoftware.mdj.cli.Find.getFileList;
-import static com.bewsoftware.mdj.cli.Main.DISPLAY;
+import static com.bewsoftware.mdj.cli.options.util.Cli.POM;
+import static com.bewsoftware.mdj.cli.options.util.Cli.conf;
+import static com.bewsoftware.mdj.cli.util.Find.getFileList;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
 
 public class Jar
 {

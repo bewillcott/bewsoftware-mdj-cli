@@ -20,7 +20,7 @@
 
 package com.bewsoftware.mdj.cli.options;
 
-import com.bewsoftware.mdj.cli.CmdLine;
+import com.bewsoftware.mdj.cli.util.CmdLine;
 import java.util.Optional;
 
 /**
@@ -37,6 +37,11 @@ public class OptionInterlink
 
     private OptionInterlink()
     {
+    }
+
+    public static Optional<Integer> processCmdAddHttpServer(CmdLine cmd)
+    {
+        return OPTION_CONTROLLER.runOption("CmdAddHttpServer", cmd);
     }
 
     public static Optional<Integer> processCmdCopyright(CmdLine cmd)
@@ -62,11 +67,6 @@ public class OptionInterlink
     public static Optional<Integer> processCmdInputFile(CmdLine cmd)
     {
         return OPTION_CONTROLLER.runOption("CmdInputFile", cmd);
-    }
-
-    public static Optional<Integer> runMainProcessor(CmdLine cmd)
-    {
-        return OPTION_CONTROLLER.runOption("MainProcessor", cmd);
     }
 
     public static Optional<Integer> processCmdManual(CmdLine cmd)
@@ -102,5 +102,10 @@ public class OptionInterlink
     public static Optional<Integer> processCmdWrapper(CmdLine cmd)
     {
         return OPTION_CONTROLLER.runOption("CmdWrapper", cmd);
+    }
+
+    public static Optional<Integer> runMainProcessor(CmdLine cmd)
+    {
+        return OPTION_CONTROLLER.runOption("MainProcessor", cmd);
     }
 }

@@ -20,26 +20,40 @@
 
 package com.bewsoftware.mdj.cli.options;
 
-import com.bewsoftware.mdj.cli.CmdLine;
+import com.bewsoftware.fileio.ini.IniDocument;
+import com.bewsoftware.mdj.cli.plugins.PluginInterlink;
+import com.bewsoftware.mdj.cli.util.CmdLine;
+import com.bewsoftware.mdj.core.MarkdownProcessor;
+import com.bewsoftware.mdj.core.TextEditor;
+import com.bewsoftware.utils.struct.Ref;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import static com.bewsoftware.mdj.cli.Cli.conf;
-import static com.bewsoftware.mdj.cli.Cli.processFile;
-import static com.bewsoftware.mdj.cli.Cli.vlevel;
-import static com.bewsoftware.mdj.cli.Find.getUpdateList;
-import static com.bewsoftware.mdj.cli.Main.DISPLAY;
+import static com.bewsoftware.mdj.cli.options.util.Cli.conf;
+import static com.bewsoftware.mdj.cli.options.util.Cli.getString;
+import static com.bewsoftware.mdj.cli.options.util.Cli.processSubstitutions;
+import static com.bewsoftware.mdj.cli.options.util.Cli.vlevel;
+import static com.bewsoftware.mdj.cli.util.Find.getUpdateList;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import static java.nio.file.StandardOpenOption.WRITE;
 import static java.util.Optional.of;
+import static java.util.regex.Pattern.compile;
 
 /**
- * MainProcessor class description.
+ * Process all the markdown files.
  *
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
- * @since 1.0
- * @version 1.0
+ * @since 1.1.7
+ * @version 1.1.7
  */
 public class MainProcessor implements Option
 {
@@ -143,5 +157,174 @@ public class MainProcessor implements Option
             fileList.get(0)[1] = target.resolve(outPath);
         }
     }
+    /**
+     * Process a markdown text file.
+     *
+     * @param inpPath     Path of source file (.md).
+     * @param outPath     Path of destination files (.html).
+     * @param destDirPath Path of the destination directory.
+     * @param wrapper     Process wrapper files?
+     *
+     * @throws IOException If any.
+     */
+    public static void processFile(final Path inpPath, final Path outPath, final Path destDirPath,
+            final boolean wrapper) throws IOException
+    {
+        StringBuilder sb = new StringBuilder();
+        IniDocument iniDoc = conf.iniDoc;
+        String template;
+        String use = "";
 
+        try (BufferedReader inReader = Files.newBufferedReader(inpPath))
+        {
+            String line;
+
+            while ((line = inReader.readLine()) != null)
+            {
+                sb.append(line).append("\n");
+            }
+        }
+
+        iniDoc.setString("page", "text", sb.toString());
+
+        if (wrapper)
+        {
+            if (vlevel >= 3)
+            {
+                DISPLAY.println("\n--------------------------------------------\n"
+                        + "process wrapper...");
+            }
+
+            PluginInterlink.processMetaBlock();
+            PluginInterlink.processStylesheets();
+            PluginInterlink.processNamedMetaBlocks();
+            String preprocessed = processSubstitutions(
+                    iniDoc.getString("page", "text", ""), use, Ref.val());
+
+            use = iniDoc.getString("page", "use", null);
+            template = getString("page", "template", use);
+            iniDoc.setString("page", "content",
+                    MarkdownProcessor.convert(processSubstitutions(preprocessed, use,
+                            Ref.val())));
+
+            if (!template.isBlank())
+            {
+                iniDoc.setString("page", "srcFile", inpPath.toString());
+                iniDoc.setString("page", "destFile", outPath.toString());
+                iniDoc.setString("page", "destDir", destDirPath.toString());
+                processTemplate(use, template);
+            }
+        } else
+        {
+            iniDoc.setString("page", "content",
+                    MarkdownProcessor.convert(iniDoc.getString("page", "text", "")));
+
+        }
+
+        try (BufferedWriter outWriter
+                = Files.newBufferedWriter(outPath, CREATE, TRUNCATE_EXISTING, WRITE))
+        {
+            if (vlevel >= 3)
+            {
+                DISPLAY.println("\n--------------------------------------------\n"
+                        + "Write file: " + outPath);
+                DISPLAY.println("page.html:\n" + iniDoc.getString("page", "html",
+                        "No HTML content.")
+                        + "--------------------------------------------\n");
+            }
+
+            outWriter.write(iniDoc.getString("page", "html",
+                    iniDoc.getString("page", "content", "Error during processing.")));
+        }
+    }
+
+    /**
+     * Process a template.
+     *
+     * @param use      Alternate section label.
+     * @param template name.
+     *
+     * @throws IOException If any.
+     */
+    private static void processTemplate(final String use, final String template) throws IOException
+    {
+        StringBuilder sbin = new StringBuilder("<!DOCTYPE html>\n"
+                + "<!--\n"
+                + "Generated by ${program.title}\n"
+                + "version: ${program.version}\n"
+                + "on ${system.date}\n"
+                + "-->\n");
+
+        IniDocument iniDoc = conf.iniDoc;
+
+        Path docRootPath = Path.of(iniDoc.getString("project", "root", ""))
+                .resolve(iniDoc.getString("document", "docRootDir", "")).toAbsolutePath();
+
+        Path templatesPath = docRootPath.resolve(iniDoc.getString("document", "templatesDir", ""))
+                .resolve(template).toAbsolutePath();
+
+        //
+        // Set the 'base' path.  <base href="<base>">
+        //
+        Path srcPath = Path.of(iniDoc.getString("page", "srcFile", ""));
+        Path basePath = srcPath.getParent().relativize(docRootPath);
+        iniDoc.setString("page", "base", basePath.toString());
+
+        if (vlevel >= 2)
+        {
+            DISPLAY.println("base:\n" + basePath);
+            DISPLAY.println("srcFile:\n" + srcPath);
+            DISPLAY.println("template:\n" + templatesPath);
+        }
+
+        try (BufferedReader inReader = Files.newBufferedReader(templatesPath))
+        {
+            String line;
+
+            while ((line = inReader.readLine()) != null)
+            {
+                sbin.append(line).append("\n");
+            }
+        }
+
+        TextEditor textEd = new TextEditor(processSubstitutions(sbin.toString(), use, Ref.val()));
+        textEd.replaceAllLiteral("\\\\\\$", "$");
+        textEd.replaceAllLiteral("\\\\\\[", "[");
+
+        if (!basePath.toString().isBlank())
+        {
+            //
+            // Set the detination file path.
+            //
+            Path destPath = Path.of(iniDoc.getString("page", "destFile", null));
+            Path destDirPath = Path.of(iniDoc.getString("page", "destDir", null));
+            String destHTML = destDirPath.relativize(destPath).toString();
+
+            if (vlevel >= 3)
+            {
+                DISPLAY.println("destPath:\n" + destPath);
+                DISPLAY.println("destDirPath:\n" + destDirPath);
+                DISPLAY.println("destHTML:\n" + destHTML);
+            }
+
+            Pattern p = compile("href\\=\"(?<ref>#[^\"]*)?\"");
+
+            textEd.replaceAll(p, (Matcher m) ->
+            {
+                String text = m.group();
+                String ref = m.group("ref");
+
+                if (vlevel >= 3)
+                {
+                    DISPLAY.println("text: " + text);
+                    DISPLAY.println("ref: " + ref);
+                }
+
+                return text.replace(ref, destHTML + ref);
+            });
+
+        }
+
+        iniDoc.setString("page", "html", textEd.toString());
+    }
 }

@@ -1,5 +1,5 @@
 /*
- *  File Name:    Option.java
+ *  File Name:    Plugin.java
  *  Project Name: bewsoftware-mdj-cli
  * 
  *  Copyright (c) 2021 Bradley Willcott
@@ -18,28 +18,20 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.bewsoftware.mdj.cli.options;
-
-import com.bewsoftware.mdj.cli.util.CmdLine;
-import java.util.Optional;
+package com.bewsoftware.mdj.cli.plugins;
 
 /**
- * Option interface description.
+ * Plugin interface description.
  *
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.1.7
  * @version 1.1.7
  */
-public interface Option
-{
+public interface Plugin {
+
     /**
-     * Process the code for the Option.
-     *
-     * @param cmd The command-line parameters object.
-     *
-     * @return {@linkplain Optional#empty() } if successful, otherwise error
-     *         number.
+     * Process the code for the Plugin.
      */
-    public Optional<Integer> execute(CmdLine cmd);
+    public void execute();
 }

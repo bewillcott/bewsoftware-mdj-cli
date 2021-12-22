@@ -1,5 +1,5 @@
 /*
- *  File Name:    OptionController.java
+ *  File Name:    PluginController.java
  *  Project Name: bewsoftware-mdj-cli
  *
  *  Copyright (c) 2021 Bradley Willcott
@@ -18,12 +18,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.bewsoftware.mdj.cli.options;
+package com.bewsoftware.mdj.cli.plugins;
 
-import com.bewsoftware.mdj.cli.util.CmdLine;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
@@ -31,71 +29,57 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * This class instantiates all the options and stores them for later use.
+ * PluginController class description.
  *
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.1.7
  * @version 1.1.7
  */
-public class OptionController
+public class PluginController
 {
-    private static final String[] ARRAY_OF_OPTIONS =
+    private static final String[] ARRAY_OF_PLUGINS =
     {
-        "CmdFailed",
-        "CmdHelp",
-        "CmdCopyright",
-        "CmdManual",
-        "CmdPublish",
-        "CmdInputFile",
-        "CmdSource",
-        "CmdVerbosity",
-        "CmdCreateJar",
-        "CmdWrapper",
-        "CmdPomAndProps",
-        "CmdUseWrapper",
-        "MainProcessor",
-        "CmdAddHttpServer"
+        "Stylesheets",
+        "MetaBlock",
+        "NamedMetaBlocks"
     };
 
-    private static final String OPTION_PACKAGE = "com.bewsoftware.mdj.cli.options.";
+    private static final String PLUGIN_PACKAGE = "com.bewsoftware.mdj.cli.plugins.";
 
-    private final ConcurrentHashMap<String, Option> options;
+    private final ConcurrentHashMap<String, Plugin> plugins;
 
-    public OptionController()
+    public PluginController()
     {
-        this.options = new ConcurrentHashMap<>();
+        this.plugins = new ConcurrentHashMap<>();
         SortedSet<String> classNames = new TreeSet<>();
-        classNames.addAll(Arrays.asList(ARRAY_OF_OPTIONS));
+        classNames.addAll(Arrays.asList(ARRAY_OF_PLUGINS));
 
         classNames.stream().forEachOrdered((className) ->
         {
             try
             {
-                Option option = (Option) Class.forName(OPTION_PACKAGE + className)
+                Plugin plugin = (Plugin) Class.forName(PLUGIN_PACKAGE + className)
                         .getDeclaredConstructor().newInstance();
 
-                options.put(className, option);
+                plugins.put(className, plugin);
             } catch (ClassNotFoundException | NoSuchMethodException | SecurityException
                     | InstantiationException | IllegalAccessException | IllegalArgumentException
                     | InvocationTargetException ex)
             {
-                Logger.getLogger(OptionController.class.getName()
+                Logger.getLogger(PluginController.class.getName()
                 ).log(Level.SEVERE, null, ex);
             }
         });
     }
 
-    public Optional<Integer> runOption(String className, CmdLine cmd)
+    public void runPlugin(String className)
     {
-        Optional<Integer> rtn = null;
-        Option option = options.get(className);
+        Plugin plugin = plugins.get(className);
 
-        if (option != null)
+        if (plugin != null)
         {
-            rtn = option.execute(cmd);
+            plugin.execute();
         }
-
-        return rtn;
     }
 }

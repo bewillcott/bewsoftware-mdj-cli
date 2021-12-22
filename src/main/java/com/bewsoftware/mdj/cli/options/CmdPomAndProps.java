@@ -20,14 +20,14 @@
 
 package com.bewsoftware.mdj.cli.options;
 
-import com.bewsoftware.mdj.cli.CmdLine;
+import com.bewsoftware.mdj.cli.util.CmdLine;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Properties;
 
-import static com.bewsoftware.mdj.cli.Cli.loadPom;
-import static com.bewsoftware.mdj.cli.Cli.vlevel;
-import static com.bewsoftware.mdj.cli.Main.DISPLAY;
+import static com.bewsoftware.mdj.cli.options.util.Cli.loadPom;
+import static com.bewsoftware.mdj.cli.options.util.Cli.vlevel;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
 import static java.util.Optional.of;
 
 /**

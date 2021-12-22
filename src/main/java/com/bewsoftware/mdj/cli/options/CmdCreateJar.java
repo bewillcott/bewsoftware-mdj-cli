@@ -21,18 +21,19 @@
 package com.bewsoftware.mdj.cli.options;
 
 import com.bewsoftware.fileio.ini.IniFileFormatException;
-import com.bewsoftware.mdj.cli.CmdLine;
+import com.bewsoftware.mdj.cli.util.CmdLine;
+import com.bewsoftware.mdj.cli.util.GlobalVariables;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Optional;
 
-import static com.bewsoftware.mdj.cli.Cli.loadConf;
-import static com.bewsoftware.mdj.cli.Cli.vlevel;
-import static com.bewsoftware.mdj.cli.Jar.createJarFile;
-import static com.bewsoftware.mdj.cli.Main.DISPLAY;
-import static com.bewsoftware.mdj.cli.Main.HELP_FOOTER;
-import static com.bewsoftware.mdj.cli.Main.HELP_HEADER;
-import static com.bewsoftware.mdj.cli.Main.SYNTAX;
+import static com.bewsoftware.mdj.cli.options.util.Cli.loadConf;
+import static com.bewsoftware.mdj.cli.options.util.Cli.vlevel;
+import static com.bewsoftware.mdj.cli.util.Constants.HELP_FOOTER;
+import static com.bewsoftware.mdj.cli.util.Constants.HELP_HEADER;
+import static com.bewsoftware.mdj.cli.util.Constants.SYNTAX;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.Jar.createJarFile;
 import static java.util.Optional.of;
 
 /**
@@ -108,7 +109,7 @@ public class CmdCreateJar implements Option
         {
             if (vlevel >= 2)
             {
-                DISPLAY.println(ex);
+                GlobalVariables.DISPLAY.println(ex);
             }
         }
     }
