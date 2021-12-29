@@ -1,5 +1,5 @@
 /*
- *  File Name:    CmdManual.java
+ *  File Name:    Keys.java
  *  Project Name: bewsoftware-mdj-cli
  *
  *  Copyright (c) 2021 Bradley Willcott
@@ -18,47 +18,34 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.bewsoftware.mdj.cli.options;
-
-import com.bewsoftware.mdj.cli.util.CmdLine;
-import com.bewsoftware.mdj.cli.util.MCHttpServer;
-import java.util.Optional;
-
-import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
-import static java.util.Optional.of;
+package com.bewsoftware.mdj.cli.util;
 
 /**
- * Display manual.
+ * Keys class description.
  *
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.1.7
  * @version 1.1.7
  */
-public class CmdManual implements Option
+public class Keys
 {
-    public CmdManual()
+    public static final String ARTIFACT_ID = "artifactId";
+
+    public static final String DESCRIPTION = "description";
+
+    public static final String DETAILS = "details";
+
+    public static final String FILENAME = "filename";
+
+    public static final String GROUP_ID = "groupId";
+
+    public static final String NAME = "name";
+
+    public static final String VERSION = "version";
+
+    private Keys()
     {
-        // NoOp
     }
 
-    @Override
-    public Optional<Integer> execute(CmdLine cmd)
-    {
-        Optional<Integer> rtn = Optional.empty();
-
-        //
-        // if '-m' then, display manual.
-        //
-        // returns 0.
-        //
-        if (cmd.hasOption('m'))
-        {
-            DISPLAY.level(0).println("Displaying manual...");
-            MCHttpServer.execute(cmd);
-            rtn = of(0);
-        }
-
-        return rtn;
-    }
 }

@@ -22,17 +22,15 @@ package com.bewsoftware.mdj.cli.options;
 
 import com.bewsoftware.fileio.ini.IniFileFormatException;
 import com.bewsoftware.mdj.cli.util.CmdLine;
-import com.bewsoftware.mdj.cli.util.GlobalVariables;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Optional;
 
 import static com.bewsoftware.mdj.cli.options.util.Cli.loadConf;
-import static com.bewsoftware.mdj.cli.options.util.Cli.vlevel;
+import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
 import static com.bewsoftware.mdj.cli.util.Constants.HELP_FOOTER;
 import static com.bewsoftware.mdj.cli.util.Constants.HELP_HEADER;
 import static com.bewsoftware.mdj.cli.util.Constants.SYNTAX;
-import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
 import static com.bewsoftware.mdj.cli.util.Jar.createJarFile;
 import static java.util.Optional.of;
 
@@ -75,7 +73,13 @@ public class CmdCreateJar implements Option
             {
                 String msg = "Too many switches for \"-j\"\n\n";
 
-                cmd.printHelp(msg, SYNTAX, HELP_HEADER, HELP_FOOTER, true);
+                cmd.printHelp(
+                        msg,
+                        SYNTAX,
+                        HELP_HEADER,
+                        HELP_FOOTER,
+                        true
+                );
                 rtn = of(5);
             } else
             {
@@ -83,14 +87,13 @@ public class CmdCreateJar implements Option
                 {
                     loadConfigFileData(cmd);
 
-                    rtn = of(createJarFile(cmd.jarFile(), cmd.jarSourcePath(), vlevel));
+                    rtn = of(createJarFile(
+                            cmd.jarFile(),
+                            cmd.jarSourcePath()
+                    ));
                 } catch (IOException | URISyntaxException ex)
                 {
-                    if (vlevel >= 2)
-                    {
-                        DISPLAY.println(ex);
-                    }
-
+                    DISPLAY.level(2).println(ex);
                     rtn = of(-1);
                 }
             }
@@ -107,10 +110,7 @@ public class CmdCreateJar implements Option
             loadConf(cmd.docRootPath());
         } catch (IOException | IniFileFormatException ex)
         {
-            if (vlevel >= 2)
-            {
-                GlobalVariables.DISPLAY.println(ex);
-            }
+            DISPLAY.level(2).println(ex);
         }
     }
 }

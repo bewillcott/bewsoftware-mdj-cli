@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Properties;
 import org.apache.commons.cli.*;
 
-import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
 import static java.nio.file.Path.of;
 import static org.apache.commons.cli.Option.builder;
 
@@ -57,7 +57,7 @@ public final class MyCmdLine implements CmdLine
     /**
      * List of Exceptions that are thrown during processing.
      */
-    private final List<Exception> exceptions = new ArrayList<>();
+    private final List<Exception> exceptions;
 
     /**
      * The input filename.
@@ -111,6 +111,7 @@ public final class MyCmdLine implements CmdLine
      */
     public MyCmdLine(final String[] args)
     {
+        exceptions = new ArrayList<>();
         options = initializeOptions();
 
         CommandLineParser parser = new DefaultParser();
@@ -119,66 +120,18 @@ public final class MyCmdLine implements CmdLine
         {
             cmdLine = parser.parse(options, args);
 
-            destination = hasOption('d')
-                    ? of(cmdLine.getOptionValue('d', "").replace('\\', '/')).normalize().toAbsolutePath()
-                    : null;
-            docRootPath = hasOption('j')
-                    ? of(cmdLine.getOptionValues('j')[2].replace('\\', '/')).normalize().toAbsolutePath()
-                    : hasOption('W')
-                    ? of(cmdLine.getOptionValue('W', "").replace('\\', '/')).normalize().toAbsolutePath()
-                    : null;
+            processOption_d();
+            processOption_j();
+            processOption_i();
+            processOption_a();
+            processOption_o();
+            processOption_P();
+            processOption_s();
+            processOption_v();
+            processOption_W();
+            processOption_p();
 
-            inputFile = hasOption('i') ? new File(cmdLine.getOptionValue('i').replace('\\', '/')) : null;
-            jarFile = hasOption('a') ? new File(cmdLine.getOptionValue('a').replace('\\', '/'))
-                    : hasOption('j') ? new File(cmdLine.getOptionValues('j')[0].replace('\\', '/')) : null;
-            jarSourcePath = hasOption('j')
-                    ? of(cmdLine.getOptionValues('j')[1].replace('\\', '/')).normalize().toAbsolutePath() : null;
-            outputFile = hasOption('o') ? new File(cmdLine.getOptionValue('o').replace('\\', '/')) : null;
-            pomFile = hasOption('P') ? new File(cmdLine.getOptionValue('P').replace('\\', '/')) : null;
-            source = hasOption('s')
-                    ? of(cmdLine.getOptionValue('s').replace('\\', '/')).normalize().toAbsolutePath()
-                    : null;
-            verbose = hasOption('v');
-            verbosity = hasOption('v') ? Integer.parseInt(cmdLine.getOptionValue('v', "1")) : 0;
-
-            if (verbose && (verbosity < 1 || verbosity > 3))
-            {
-                throw new InvalidParameterValueException("Verbosity setting out of range [1-3]: " + verbosity);
-            }
-
-            if (verbosity >= 2 && hasOption('W'))
-            {
-                DISPLAY.println("docRootPath:\n" + docRootPath);
-                DISPLAY.println("-W: " + of(cmdLine.getOptionValue('W')));
-            }
-
-            // Handler publish option: '-p'
-            if (hasOption('p'))
-            {
-                String[] values = cmdLine.getOptionValues('p');
-
-                if (values == null)
-                {
-                    // TODO: Sort this out - assigned value never used: values
-                    values = new String[]
-                    {
-                        "/", ""
-                    };
-                }
-            }
-
-            //
-            // Check for minimum switches: '-a', or '-c', or '-i', or '-j', or '-m',
-            //                             or '-p', or '-s', or '-W', -h, or --help.
-            //
-            if (!(hasOption('a') || hasOption('c') || hasOption('i') || hasOption('j')
-                    || hasOption('m') || hasOption('p') || hasOption('s') || hasOption('W') || hasOption('h')))
-            {
-                String msg = "\nYou must use at least one of the following options:"
-                        //  + "\n\t'-a', '-c', -i', '-j', '-m', '-p', '-s', '-W', or '-h|--help'\n";
-                        + "\n\t'-c', -i', '-j', '-m', '-p', '-s', '-W', or '-h|--help'\n";
-                throw new MissingOptionException(msg);
-            }
+            checkForMinimumSwitches();
 
         } catch (InvalidParameterValueException | NumberFormatException | ParseException ex)
         {
@@ -477,5 +430,107 @@ public final class MyCmdLine implements CmdLine
     public int verbosity()
     {
         return verbosity;
+    }
+
+    private void checkForMinimumSwitches() throws MissingOptionException
+    {
+        //
+        // Check for minimum switches: '-a', or '-c', or '-i', or '-j', or '-m',
+        //                             or '-p', or '-s', or '-W', -h, or --help.
+        //
+        if (!(hasOption('a') || hasOption('c') || hasOption('i') || hasOption('j')
+                || hasOption('m') || hasOption('p') || hasOption('s') || hasOption('W') || hasOption('h')))
+        {
+            String msg = "\nYou must use at least one of the following options:"
+                    //  + "\n\t'-a', '-c', -i', '-j', '-m', '-p', '-s', '-W', or '-h|--help'\n";
+                    + "\n\t'-c', -i', '-j', '-m', '-p', '-s', '-W', or '-h|--help'\n";
+            throw new MissingOptionException(msg);
+        }
+    }
+
+    private void processOption_P()
+    {
+        pomFile = hasOption('P') ? new File(cmdLine.getOptionValue('P').replace('\\', '/')) : null;
+    }
+
+    private void processOption_W()
+    {
+        if (hasOption('W'))
+        {
+            DISPLAY.level(2)
+                    .appendln("docRootPath:\n" + docRootPath)
+                    .println("-W: " + of(cmdLine.getOptionValue('W')));
+        }
+    }
+
+    private void processOption_a()
+    {
+        jarFile = hasOption('a') ? new File(cmdLine.getOptionValue('a').replace('\\', '/'))
+                : hasOption('j') ? new File(cmdLine.getOptionValues('j')[0].replace('\\', '/')) : null;
+    }
+
+    private void processOption_d()
+    {
+        destination = hasOption('d')
+                ? of(cmdLine.getOptionValue('d', "").replace('\\', '/')).normalize().toAbsolutePath()
+                : null;
+    }
+
+    private void processOption_i()
+    {
+        inputFile = hasOption('i') ? new File(cmdLine.getOptionValue('i').replace('\\', '/')) : null;
+    }
+
+    private void processOption_j()
+    {
+        docRootPath = hasOption('j')
+                ? of(cmdLine.getOptionValues('j')[2].replace('\\', '/')).normalize().toAbsolutePath()
+                : hasOption('W')
+                ? of(cmdLine.getOptionValue('W', "").replace('\\', '/')).normalize().toAbsolutePath()
+                : null;
+
+        jarSourcePath = hasOption('j')
+                ? of(cmdLine.getOptionValues('j')[1].replace('\\', '/')).normalize().toAbsolutePath() : null;
+    }
+
+    private void processOption_o()
+    {
+        outputFile = hasOption('o') ? new File(cmdLine.getOptionValue('o').replace('\\', '/')) : null;
+    }
+
+    private void processOption_p()
+    {
+        // Handler publish option: '-p'
+        if (hasOption('p'))
+        {
+            String[] values = cmdLine.getOptionValues('p');
+
+            if (values == null)
+            {
+                // TODO: Sort this out - assigned value never used: values
+                values = new String[]
+                {
+                    "/", ""
+                };
+            }
+        }
+    }
+
+    private void processOption_s()
+    {
+        source = hasOption('s')
+                ? of(cmdLine.getOptionValue('s').replace('\\', '/')).normalize().toAbsolutePath()
+                : null;
+    }
+
+    private void processOption_v() throws NumberFormatException, InvalidParameterValueException
+    {
+        verbose = hasOption('v');
+        verbosity = hasOption('v') ? Integer.parseInt(cmdLine.getOptionValue('v', "1")) : 0;
+
+        if (verbose && (verbosity < 1 || verbosity > 3))
+        {
+            throw new InvalidParameterValueException("Verbosity setting out of range [1-3]: " + verbosity);
+        }
     }
 }

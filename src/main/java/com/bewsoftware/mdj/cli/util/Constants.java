@@ -20,7 +20,10 @@
 
 package com.bewsoftware.mdj.cli.util;
 
-import com.bewsoftware.mdj.cli.options.util.Cli;
+import com.bewsoftware.utils.io.ConsoleIO;
+import com.bewsoftware.utils.io.Display;
+
+import static com.bewsoftware.mdj.cli.util.MCPOMProperties.INSTANCE;
 
 /**
  * Contains various constants.
@@ -32,6 +35,11 @@ import com.bewsoftware.mdj.cli.options.util.Cli;
  */
 public class Constants
 {
+    /**
+     * The name of the configuration INI file.
+     */
+    public static final String CONF_FILENAME = "mdj-cli.ini";
+
     public static final String COPYRIGHT
             = " This is the MDj Command-line Interface program (aka: mdj-cli).\n"
             + "\n"
@@ -50,19 +58,35 @@ public class Constants
             + " You should have received a copy of the GNU General Public License\n"
             + " along with this program.  If not, see <http://www.gnu.org/licenses/>.\n";
 
-    public static final String DEFAULT_MARKDOWN_EXTENSION = ".md";
+    public static final String DEFAULT_INPUT_FILE_EXTENSION = ".md";
 
-    public static final String HELP_FOOTER = "\nYou must use at least one of the following options:"
-            + "\n\t'-a', '-c', -i', '-s', '-j', '-m', '-W', or '-h|--help'\n"
-            + "\n" + Cli.POM.name + " " + Cli.POM.version
-            + "\nCopyright (c) 2020 Bradley Willcott\n"
-            + "\nThis program comes with ABSOLUTELY NO WARRANTY; for details use option '-c'."
-            + "\nThis is free software, and you are welcome to redistribute it"
-            + "\nunder certain conditions; use option '-m', then goto the License page for details.";
+    public static final String DEFAULT_OUTPUT_FILE_EXTENSION = ".html";
 
-    public static final String HELP_HEADER = "\n" + Cli.POM.description + "\n\n";
+    public static final Display DISPLAY = ConsoleIO.consoleDisplay("");
+
+    public static final String HELP_FOOTER;
+
+    public static final String HELP_HEADER;
+
+    /**
+     * The single instance of the {@link MCPOMProperties} class.
+     */
+    public static final MCPOMProperties POM = INSTANCE;
 
     public static final String SYNTAX = "java -jar /path/to/mdj-cli-<version>.jar [OPTION]...\n\noptions:";
+
+    static
+    {
+        HELP_FOOTER = "\nYou must use at least one of the following options:"
+                + "\n\t'-a', '-c', -i', '-s', '-j', '-m', '-W', or '-h|--help'\n"
+                + "\n" + POM.name + " " + POM.version
+                + "\nCopyright (c) 2020 Bradley Willcott\n"
+                + "\nThis program comes with ABSOLUTELY NO WARRANTY; for details use option '-c'."
+                + "\nThis is free software, and you are welcome to redistribute it"
+                + "\nunder certain conditions; use option '-m', then goto the License page for details.";
+
+        HELP_HEADER = "\n" + POM.description + "\n\n";
+    }
 
     private Constants()
     {

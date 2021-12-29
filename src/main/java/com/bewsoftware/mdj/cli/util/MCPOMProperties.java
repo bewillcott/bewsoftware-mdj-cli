@@ -22,7 +22,8 @@ package com.bewsoftware.mdj.cli.util;
 import java.io.IOException;
 import java.util.Properties;
 
-import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.Keys.*;
 
 /**
  * Provides access to some of the project's pom.properties.
@@ -139,17 +140,17 @@ public final class MCPOMProperties
             throw new RuntimeException("FileIOError", ex);
         }
 
-        name = properties.getProperty("name");
-        description = properties.getProperty("description");
-        groupId = properties.getProperty("groupId");
-        artifactId = properties.getProperty("artifactId");
-        version = properties.getProperty("version");
-        filename = properties.getProperty("filename");
+        name = properties.getProperty(NAME);
+        description = properties.getProperty(DESCRIPTION);
+        groupId = properties.getProperty(GROUP_ID);
+        artifactId = properties.getProperty(ARTIFACT_ID);
+        version = properties.getProperty(VERSION);
+        filename = properties.getProperty(FILENAME);
     }
 
     public static void main(String[] args)
     {
-        DISPLAY.println(MCPOMProperties.INSTANCE);
+        DISPLAY.level(0).println(MCPOMProperties.INSTANCE);
     }
 
     @Override

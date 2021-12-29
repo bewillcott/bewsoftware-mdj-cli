@@ -25,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
+import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
 import static java.nio.file.FileVisitResult.CONTINUE;
 
 /**
@@ -32,50 +33,44 @@ import static java.nio.file.FileVisitResult.CONTINUE;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 0.1
- * @version 1.0
+ * @version 1.1.7
  */
-class PrintFiles extends SimpleFileVisitor<Path>
+public class PrintFiles extends SimpleFileVisitor<Path>
 {
 
-    // Print each directory visited.
-    @Override
-    public FileVisitResult postVisitDirectory(Path dir,
-            IOException exc)
+    public PrintFiles()
     {
-        GlobalVariables.DISPLAY.format("Directory: %s%n", dir);
+        // NoOp
+    }
+
+    @Override
+    public FileVisitResult postVisitDirectory(Path dir, IOException ex)
+    {
+        DISPLAY.format("Directory: %s%n", dir);
         return CONTINUE;
     }
 
-    // Print information about
-    // each type of file.
     @Override
-    public FileVisitResult visitFile(Path file,
-            BasicFileAttributes attr)
+    public FileVisitResult visitFile(Path file, BasicFileAttributes attr)
     {
         if (attr.isSymbolicLink())
         {
-            GlobalVariables.DISPLAY.format("Symbolic link: %s ", file);
+            DISPLAY.format("Symbolic link: %s ", file);
         } else if (attr.isRegularFile())
         {
-            GlobalVariables.DISPLAY.format("Regular file: %s ", file);
+            DISPLAY.format("Regular file: %s ", file);
         } else
         {
-            GlobalVariables.DISPLAY.format("Other: %s ", file);
+            DISPLAY.format("Other: %s ", file);
         }
-        GlobalVariables.DISPLAY.println("(" + attr.size() + "bytes)");
+        DISPLAY.println("(" + attr.size() + "bytes)");
         return CONTINUE;
     }
 
-    // If there is some error accessing
-    // the file, let the user know.
-    // If you don't override this method
-    // and an error occurs, an IOException
-    // is thrown.
     @Override
-    public FileVisitResult visitFileFailed(Path file,
-            IOException exc)
+    public FileVisitResult visitFileFailed(Path file, IOException ex)
     {
-        GlobalVariables.DISPLAY.println(exc);
+        DISPLAY.println(ex);
         return CONTINUE;
     }
 }

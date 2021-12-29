@@ -24,7 +24,7 @@ import com.bewsoftware.mdj.cli.util.CmdLine;
 import com.bewsoftware.mdj.cli.util.MCHttpServer;
 import java.util.Optional;
 
-import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
 import static java.util.Optional.of;
 
 /**
@@ -55,7 +55,7 @@ public class CmdPublish implements Option
         //
         if (cmd.hasOption('p'))
         {
-            DISPLAY.println("Publishing files...");
+            DISPLAY.level(0).println("Publishing files...");
             MCHttpServer.execute(cmd);
             rtn = of(0);
         }

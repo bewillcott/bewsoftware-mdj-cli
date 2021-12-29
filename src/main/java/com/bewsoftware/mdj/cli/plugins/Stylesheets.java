@@ -25,7 +25,7 @@ import com.bewsoftware.property.IniProperty;
 import java.util.Date;
 import java.util.List;
 
-import static com.bewsoftware.mdj.cli.options.util.Cli.conf;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.conf;
 import static java.nio.file.Path.of;
 
 /**

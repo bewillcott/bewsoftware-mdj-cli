@@ -20,9 +20,7 @@
 
 package com.bewsoftware.mdj.cli.util;
 
-import com.bewsoftware.utils.io.ConsoleIO;
-import com.bewsoftware.utils.io.Display;
-
+import com.bewsoftware.fileio.ini.IniFile;
 /**
  * GlobalVariables class description.
  *
@@ -33,7 +31,15 @@ import com.bewsoftware.utils.io.Display;
  */
 public class GlobalVariables
 {
-    public static final Display DISPLAY = ConsoleIO.consoleDisplay("");
+    /**
+     * The configuration INI file.
+     */
+    public static IniFile conf;
+
+    /**
+     * The verbosity level.
+     */
+    public static int vlevel;
 
     private GlobalVariables()
     {

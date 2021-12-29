@@ -24,7 +24,7 @@ import com.bewsoftware.mdj.cli.util.CmdLine;
 import java.util.Optional;
 
 import static com.bewsoftware.mdj.cli.util.Constants.COPYRIGHT;
-import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
 import static java.util.Optional.of;
 
 /**
@@ -55,7 +55,7 @@ public class CmdCopyright implements Option
         //
         if (cmd.hasOption('c'))
         {
-            DISPLAY.println(COPYRIGHT);
+            DISPLAY.level(0).println(COPYRIGHT);
             rtn = of(0);
         }
 

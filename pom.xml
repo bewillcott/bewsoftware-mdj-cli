@@ -17,7 +17,7 @@
         <docs.target>target/docs/manual</docs.target>
         <java.version>17</java.version>
         <source.encoding>UTF-8</source.encoding>
-        <bewsoftware.version>1.0.12</bewsoftware.version>
+        <bewsoftware.version>2.0.1-SNAPSHOT</bewsoftware.version>
         <javadoc.source.version>${java.version}</javadoc.source.version>
         <jdk.version>${java.version}</jdk.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -141,7 +141,7 @@
             <dependency>
                 <groupId>com.bewsoftware</groupId>
                 <artifactId>bewsoftware-jlhttp</artifactId>
-                <version>2.5.8</version>
+                <version>2.6.0</version>
             </dependency>
             <dependency>
                 <groupId>com.bewsoftware</groupId>
@@ -914,7 +914,6 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <failOnError>false</failOnError>
-                    <verbose>true</verbose>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
                     <encoding>${source.encoding}</encoding>

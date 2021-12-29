@@ -27,7 +27,8 @@ import java.nio.file.Path;
 import java.util.Optional;
 import org.apache.commons.io.FilenameUtils;
 
-import static com.bewsoftware.mdj.cli.util.Constants.DEFAULT_MARKDOWN_EXTENSION;
+import static com.bewsoftware.mdj.cli.util.Constants.DEFAULT_INPUT_FILE_EXTENSION;
+import static com.bewsoftware.mdj.cli.util.Constants.DEFAULT_OUTPUT_FILE_EXTENSION;
 import static java.nio.file.Path.of;
 
 /**
@@ -78,7 +79,7 @@ public class CmdInputFile implements Option
 
         if (extn.isEmpty())
         {
-            extn = DEFAULT_MARKDOWN_EXTENSION;
+            extn = DEFAULT_INPUT_FILE_EXTENSION;
 
             if (fileNameEndsWithDot(fileName))
             {
@@ -128,7 +129,7 @@ public class CmdInputFile implements Option
 
         if (!cmd.hasOption('o'))
         {
-            cmd.outputFile(new File(baseName + ".html"));
+            cmd.outputFile(new File(baseName + DEFAULT_OUTPUT_FILE_EXTENSION));
         }
     }
 }

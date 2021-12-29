@@ -22,9 +22,8 @@ package com.bewsoftware.mdj.cli.plugins;
 
 import java.util.regex.Matcher;
 
-import static com.bewsoftware.mdj.cli.options.util.Cli.conf;
-import static com.bewsoftware.mdj.cli.options.util.Cli.vlevel;
-import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.conf;
 import static java.util.regex.Pattern.DOTALL;
 import static java.util.regex.Pattern.MULTILINE;
 import static java.util.regex.Pattern.compile;
@@ -57,14 +56,12 @@ public class MetaBlock implements Plugin
             String metaBlock = m.group("metablock");
             text = m.group("body");
 
-            if (vlevel >= 3)
-            {
-                DISPLAY.println("\n============================================\n"
-                        + "file metablock:\n"
-                        + "--------------------------------------------\n"
-                        + metaBlock
-                        + "\n--------------------------------------------");
-            }
+            DISPLAY.level(3)
+                    .appendln("\n============================================")
+                    .appendln("file metablock:")
+                    .appendln("--------------------------------------------")
+                    .appendln(metaBlock)
+                    .println("--------------------------------------------");
 
             Matcher m2 = compile("^\\s*(?<key>\\w+)\\s*:\\s*(?<value>.*?)?\\s*?$", MULTILINE)
                     .matcher(metaBlock);
@@ -74,20 +71,15 @@ public class MetaBlock implements Plugin
                 String key = m2.group("key");
                 String value = m2.group("value");
 
-                if (vlevel >= 3)
-                {
-                    DISPLAY.println("key = " + key + "\n"
-                            + "value = " + value);
-                }
+                DISPLAY.level(3)
+                        .append("key = ").appendln(key)
+                        .append("value = ").println(value);
 
                 conf.iniDoc.setString("page", key, value);
             }
 
-            if (vlevel >= 3)
-            {
-                DISPLAY.println("============================================\n");
-            }
-
+            DISPLAY.level(3)
+                    .println("============================================\n");
         }
 
         conf.iniDoc.setString("page", "text", text);

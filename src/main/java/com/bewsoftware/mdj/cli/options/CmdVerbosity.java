@@ -23,8 +23,8 @@ package com.bewsoftware.mdj.cli.options;
 import com.bewsoftware.mdj.cli.util.CmdLine;
 import java.util.Optional;
 
-import static com.bewsoftware.mdj.cli.options.util.Cli.vlevel;
-import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.vlevel;
 
 /**
  * CmdVerbosity class description.
@@ -49,37 +49,34 @@ public class CmdVerbosity implements Option
 
         vlevel = cmd.verbosity();
 
-        switch (vlevel)
+        DISPLAY.level(2)
+                .append("input: |").append(cmd.inputFile()).appendln("|")
+                .append("output: |").append(cmd.outputFile()).appendln("|")
+                .append("source: |").append(cmd.source()).appendln("|")
+                .append("destination: |").append(cmd.destination()).appendln("|")
+                .append("recursive: |").append(cmd.hasOption('r')).appendln("|")
+                .append("wrapper: |").append(cmd.hasOption('w')).appendln("|")
+                .append("initialise: |").append(cmd.hasOption('W')).appendln("|")
+                .append("docRootDir: |").append(cmd.docRootPath()).appendln("|")
+                .append("jar: |").append(cmd.hasOption('j')).appendln("|")
+                .append("jarFilename: |").append(cmd.jarFile()).appendln("|")
+                .append("jarSrcDir: |").append(cmd.jarSourcePath()).appendln("|")
+                .append("pomFile: |").append(cmd.pomFile()).println("|");
+
+        if (cmd.verbosity() >= 2 && cmd.hasOption('D'))
         {
-            case 3:
-            case 2:
-                DISPLAY.println("input: |" + cmd.inputFile() + "|");
-                DISPLAY.println("output: |" + cmd.outputFile() + "|");
-                DISPLAY.println("source: |" + cmd.source() + "|");
-                DISPLAY.println("destination: |" + cmd.destination() + "|");
-                DISPLAY.println("recursive: |" + cmd.hasOption('r') + "|");
-                DISPLAY.println("wrapper: |" + cmd.hasOption('w') + "|");
-                DISPLAY.println("initialise: |" + cmd.hasOption('W') + "|");
-                DISPLAY.println("docRootDir: |" + cmd.docRootPath() + "|");
-                DISPLAY.println("jar: |" + cmd.hasOption('j') + "|");
-                DISPLAY.println("jarFilename: |" + cmd.jarFile() + "|");
-                DISPLAY.println("jarSrcDir: |" + cmd.jarSourcePath() + "|");
-                DISPLAY.println("pomFile: |" + cmd.pomFile() + "|");
+            DISPLAY.level(2);
 
-                if (cmd.hasOption('D'))
-                {
-                    cmd.getOptionProperties('D').forEach((key, value)
-                            -> DISPLAY.println(key + ": |" + value + "|")
-                    );
-                }
+            cmd.getOptionProperties('D').forEach((key, value)
+                    -> DISPLAY.append(key).append(": |").append(value).appendln("|")
+            );
 
-            case 1:
-                DISPLAY.println("verbose: |" + cmd.hasOption('v') + "|");
-                DISPLAY.println("verbose level: |" + vlevel + "|");
-                break;
-
-            default:
+            DISPLAY.flush();
         }
+
+        DISPLAY.level(1)
+                .append("verbose: |").append(cmd.hasOption('v')).appendln("|")
+                .append("verbose level: |").append(vlevel).println("|");
 
         return rtn;
     }

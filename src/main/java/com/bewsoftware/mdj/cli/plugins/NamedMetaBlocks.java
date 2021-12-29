@@ -24,9 +24,8 @@ import com.bewsoftware.mdj.core.MarkdownProcessor;
 import com.bewsoftware.mdj.core.TextEditor;
 import java.util.regex.Pattern;
 
-import static com.bewsoftware.mdj.cli.options.util.Cli.conf;
-import static com.bewsoftware.mdj.cli.options.util.Cli.vlevel;
-import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.conf;
 import static java.util.regex.Pattern.DOTALL;
 import static java.util.regex.Pattern.compile;
 
@@ -88,7 +87,9 @@ public class NamedMetaBlocks implements Plugin
     @Override
     public void execute()
     {
-        TextEditor text = new TextEditor(conf.iniDoc.getString("page", "text", ""));
+        TextEditor text = new TextEditor(
+                conf.iniDoc.getString("page", "text", "")
+        );
         Pattern p = compile(
                 "(?<=\\n)(?:@@@\\[(?<type>[@#])(?<name>\\w+)\\]\\n(?<metablock>.*?)\\n@@@\\n)",
                 DOTALL);
@@ -111,21 +112,18 @@ public class NamedMetaBlocks implements Plugin
 
             html += MarkdownProcessor.convert(metaBlock) + "\n</div>\n";
 
-            if (vlevel >= 3)
-            {
-                DISPLAY.println(
-                        "============================================\n"
-                        + "name: " + name + "\n"
-                        + "metablock:\n" + html
-                        + "\n============================================\n");
-            }
+            DISPLAY.level(3)
+                    .appendln("============================================")
+                    .append("name: ").appendln(name)
+                    .appendln("metablock:")
+                    .appendln(html)
+                    .println("============================================\n");
 
             conf.iniDoc.setString("page", name, html);
             return "";
         });
 
         text.replaceAll("\\\\@@@", "@@@");
-
         conf.iniDoc.setString("page", "text", text.toString());
     }
 }

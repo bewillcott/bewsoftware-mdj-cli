@@ -43,11 +43,19 @@ import java.util.jar.Manifest;
 import java.util.zip.Deflater;
 
 import static com.bewsoftware.fileio.BEWFiles.getResource;
-import static com.bewsoftware.mdj.cli.options.util.Cli.POM;
-import static com.bewsoftware.mdj.cli.options.util.Cli.conf;
+import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.Constants.POM;
 import static com.bewsoftware.mdj.cli.util.Find.getFileList;
-import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.conf;
 
+/**
+ * Utility class providing static methods to work with JAR files.
+ *
+ * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
+ *
+ * @since 0.1
+ * @version 1.1.7
+ */
 public class Jar
 {
     /**
@@ -65,17 +73,23 @@ public class Jar
      * @param jarFile      The existing jar file.
      * @param jarFilePaths Jar file paths to include.
      * @param manifest     The manifest to include.
-     * @param vlevel       Reporting verbosity level.
      *
      * @throws IOException if any.
      */
-    public static void addHttpServer(final File jarFile,
+    public static void addHttpServer(
+            final File jarFile,
             final List<Path> jarFilePaths,
-            final Manifest manifest, final int vlevel)
-            throws IOException
+            final Manifest manifest
+    ) throws IOException
     {
-
-        createJAR(jarFile, jarFilePaths, null, null, null, manifest, vlevel);
+        createJAR(
+                jarFile,
+                jarFilePaths,
+                null,
+                null,
+                null,
+                manifest
+        );
     }
 
     /**
@@ -87,71 +101,35 @@ public class Jar
      * @param filePaths      Paths to the files to include.
      * @param fileDirPath    Directory to process.
      * @param manifest       The manifest to include.
-     * @param vlevel         Reporting verbosity level.
      *
      * @throws IOException if any.
      */
-    public static void createJAR(final File jarFile,
+    public static void createJAR(
+            final File jarFile,
             final List<Path> jarFilePaths,
             final Path jarFileDirPath,
             final List<Path> filePaths,
             final Path fileDirPath,
-            final Manifest manifest, final int vlevel)
-            throws IOException
+            final Manifest manifest
+    ) throws IOException
     {
 
-        if (vlevel >= 3)
-        {
-            DISPLAY.println("jarFile: |" + jarFile + "|");
-        }
+        DISPLAY.level(3)
+                .append("jarFile: |").append(jarFile).println("|");
 
-        // Hold the exceptions.
         List<IOException> exceptions = new ArrayList<>();
 
-        try (JarOutputStream jos = new JarOutputStream(new BufferedOutputStream(
-                new FileOutputStream(jarFile)), manifest))
+        try (JarOutputStream jos
+                = new JarOutputStream(
+                        new BufferedOutputStream(
+                                new FileOutputStream(jarFile)),
+                        manifest
+                ))
         {
 
             jos.setLevel(Deflater.BEST_COMPRESSION);
-
-            //
-            // Copy files from MDj-CLI jar file...
-            //
-            jarFilePaths.stream()
-                    .forEachOrdered(jarFilePath ->
-                    {
-                        try
-                        {
-                            jos.putNextEntry(new JarEntry(
-                                    jarFileDirPath.relativize(jarFilePath).toString()));
-
-                            addEntryContent(jos, jarFilePath);
-                            jos.closeEntry();
-                        } catch (IOException ex)
-                        {
-                            exceptions.add(ex);
-                        }
-                    });
-
-            //
-            // Copy files from the user's docs directory...
-            //
-            filePaths.stream()
-                    .filter(name -> Files.exists(name) && !Files.isDirectory(name))
-                    .forEachOrdered(filePath ->
-                    {
-                        try
-                        {
-                            jos.putNextEntry(new JarEntry(
-                                    fileDirPath.relativize(filePath).toString()));
-
-                            addEntryContent(jos, filePath);
-                            jos.closeEntry();
-                        } catch (IOException ex)
-                        {
-                            exceptions.add(ex);
-                        }
-                    });
+            copyFilesFromMDjCLIJarFile(jarFilePaths, jos, jarFileDirPath, exceptions);
+            copyFilesFromUserDocsDirectory(filePaths, jos, fileDirPath, exceptions);
 
             if (!exceptions.isEmpty())
             {
@@ -165,34 +143,38 @@ public class Jar
      *
      * @param jarFile       Output file name.
      * @param jarSourcePath Path of directory to process.
-     * @param vlevel        Verbosity level.
      *
      * @return Always '0'.
      *
      * @throws IOException        if any.
      * @throws URISyntaxException if any.
      */
-    public static int createJarFile(final File jarFile, final Path jarSourcePath, final int vlevel)
-            throws IOException, URISyntaxException
+    public static int createJarFile(
+            final File jarFile,
+            final Path jarSourcePath
+    ) throws IOException, URISyntaxException
     {
 
         // Get source directory from jar file.
         Path jarDirPath = getResource(Jar.class, "/docs/jar").toAbsolutePath();
 
-        if (vlevel >= 2)
-        {
-            DISPLAY.println("srcDirPath: " + jarDirPath);
-            DISPLAY.println("srcDirPath exists: " + Files.exists(jarDirPath));
-        }
+        DISPLAY.level(2)
+                .append("srcDirPath: ").appendln(jarDirPath)
+                .append("srcDirPath exists: ").println(Files.exists(jarDirPath));
 
-        SortedSet<Path> jarFileSet = getFileList(jarDirPath, "*", true, vlevel);
-
-        SortedSet<Path> fileSet = getFileList(jarSourcePath, "*", true, vlevel);
-
+        SortedSet<Path> jarFileSet = getFileList(jarDirPath, "*", true);
+        SortedSet<Path> fileSet = getFileList(jarSourcePath, "*", true);
         Manifest manifest = getManifest(POM, conf);
 
-        Jar.createJAR(jarFile, new ArrayList<>(jarFileSet), jarDirPath,
-                new ArrayList<>(fileSet), jarSourcePath, manifest, vlevel);
+        Jar.createJAR(
+                jarFile,
+                new ArrayList<>(jarFileSet),
+                jarDirPath,
+                new ArrayList<>(fileSet),
+                jarSourcePath,
+                manifest
+        );
+
         return 0;
     }
 
@@ -208,15 +190,16 @@ public class Jar
     {
         Manifest manifest = getManifest(pom.name + " (" + pom.version + ")");
 
-        if (conf != null)
+        if (conf != null && conf.iniDoc.containsSection("MANIFEST.mf"))
         {
-            if (conf.iniDoc.containsSection("MANIFEST.mf"))
-            {
-                Attributes mainAttribs = manifest.getMainAttributes();
+            Attributes mainAttribs = manifest.getMainAttributes();
 
-                conf.iniDoc.getSection("MANIFEST.mf").forEach(prop
-                        -> mainAttribs.put(new Attributes.Name(prop.key()), prop.value()));
-            }
+            conf.iniDoc.getSection("MANIFEST.mf").forEach(prop
+                    -> mainAttribs.put(
+                            new Attributes.Name(prop.key()),
+                            prop.value()
+                    )
+            );
         }
 
         return manifest;
@@ -274,16 +257,16 @@ public class Jar
      *
      * @throws IOException if any.
      */
-    private static void addEntryContent(final JarOutputStream jos, final Path entryFilePath)
-            throws IOException
+    private static void addEntryContent(
+            final JarOutputStream jos,
+            final Path entryFilePath
+    ) throws IOException
     {
-
         try (BufferedInputStream bis = new BufferedInputStream(
                 Files.newInputStream(entryFilePath)))
         {
-
             byte[] buffer = new byte[1024];
-            int count = -1;
+            int count;
 
             while ((count = bis.read(buffer)) != -1)
             {
@@ -292,4 +275,68 @@ public class Jar
         }
     }
 
+    private static void copyFilesFromMDjCLIJarFile(
+            final List<Path> jarFilePaths,
+            final JarOutputStream jos,
+            final Path jarFileDirPath,
+            final List<IOException> exceptions
+    )
+    {
+        jarFilePaths
+                .stream()
+                .forEachOrdered(
+                        jarFilePath ->
+                {
+                    try
+                    {
+                        jos.putNextEntry(
+                                new JarEntry(
+                                        jarFileDirPath
+                                                .relativize(jarFilePath)
+                                                .toString()
+                                )
+                        );
+
+                        addEntryContent(jos, jarFilePath);
+                        jos.closeEntry();
+                    } catch (IOException ex)
+                    {
+                        exceptions.add(ex);
+                    }
+                });
+    }
+
+    private static void copyFilesFromUserDocsDirectory(
+            final List<Path> filePaths,
+            final JarOutputStream jos,
+            final Path fileDirPath,
+            final List<IOException> exceptions
+    )
+    {
+        filePaths.stream()
+                .filter(
+                        name -> Files.exists(name)
+                        && !Files.isDirectory(name)
+                )
+                .forEachOrdered(
+                        filePath ->
+                {
+                    try
+                    {
+                        jos.putNextEntry(
+                                new JarEntry(
+                                        fileDirPath
+                                                .relativize(filePath)
+                                                .toString()
+                                )
+                        );
+
+                        addEntryContent(jos, filePath);
+                        jos.closeEntry();
+                    } catch (IOException ex)
+                    {
+                        exceptions.add(ex);
+                    }
+                });
+    }
 }

@@ -33,7 +33,9 @@ import java.util.SortedSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.Constants.DEFAULT_INPUT_FILE_EXTENSION;
+import static com.bewsoftware.mdj.cli.util.Constants.DEFAULT_OUTPUT_FILE_EXTENSION;
+import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
 import static java.lang.Character.MAX_VALUE;
 import static java.nio.file.Files.getLastModifiedTime;
 import static java.nio.file.Files.notExists;
@@ -55,20 +57,10 @@ import static java.nio.file.Path.of;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 0.1
- * @version 1.0.7
+ * @version 1.1.7
  */
 public class Find
 {
-
-    /**
-     * Default HTML file extn.
-     */
-    private static final String DEFAULT_HTML = ".html";
-
-    /**
-     * Default Markdown file extn.
-     */
-    private static final String DEFAULT_MD = ".md";
 
     /**
      * Not meant to be instantiated.
@@ -85,34 +77,32 @@ public class Find
      * @param pattern   Glob file search pattern. (Default: "{@code *}")
      * @param recursive {@code True} sets recursive directory tree walk.
      *                  {@code False} keeps search to the current directory, only.
-     * @param vlevel    {@code 0} Run silent ...
-     *                  {@code 1} Printout basic information only.
-     *                  {@code 2} Printout progress/diagnostic information during
-     *                  processing.
-     *
      *
      * @return Set of {@code Path}s representing the files and directories
      *         found.
      *
      * @throws IOException if any.
      */
-    public static SortedSet<Path> getFileList(Path srcPath, String pattern,
-            boolean recursive, int vlevel) throws IOException
+    public static SortedSet<Path> getFileList(
+            Path srcPath,
+            String pattern,
+            boolean recursive
+    ) throws IOException
     {
 
         Path currentDir = FileSystems.getDefault().getPath("").toAbsolutePath();
+        DISPLAY.level(1).println("PWD: " + currentDir);
 
-        // Debug output.
-        if (vlevel >= 1)
-        {
-            DISPLAY.println("PWD: " + currentDir);
-        }
-
-        Finder finder = new Finder(pattern != null ? pattern : "*" + DEFAULT_MD, vlevel);
+        Finder finder = new Finder(
+                DISPLAY,
+                pattern != null ? pattern : "*" + DEFAULT_INPUT_FILE_EXTENSION
+        );
 
         Files.walkFileTree(
-                srcPath, EnumSet.noneOf(FileVisitOption.class),
-                recursive ? MAX_VALUE : 1, finder
+                srcPath,
+                EnumSet.noneOf(FileVisitOption.class),
+                recursive ? MAX_VALUE : 1,
+                finder
         );
 
         return finder.done();
@@ -129,89 +119,129 @@ public class Find
      * @param outExtn   Output file extension. (Default: "{@code .html}")
      * @param recursive {@code True} sets recursive directory tree walk.
      *                  {@code False} keeps search to the current directory, only.
-     * @param vlevel    {@code 0} Run silent ...
-     *                  {@code 1} Printout basic information only.
-     *                  {@code 2} Printout progress/diagnostic information during
-     *                  processing.
      *
-     * @return List containing Path arrays. Each with two elements. [0] Source
-     *         file, [1] Destination file.
+     * @return List of {@linkplain FileData} objects.
      *
      * @throws IOException if any.
      */
-    public static List<Path[]> getUpdateList(Path srcPath, Path destPath, File pattern,
+    public static List<FileData> getUpdateList(
+            Path srcPath,
+            Path destPath,
+            File pattern,
             String outExtn,
-            boolean recursive, int vlevel) throws IOException
+            boolean recursive
+    ) throws IOException
     {
 
         Path currentDir = FileSystems.getDefault().getPath("").toAbsolutePath();
-
-        // Debug output.
-        if (vlevel >= 1)
-        {
-            DISPLAY.println("PWD: " + currentDir);
-        }
+        DISPLAY.level(1).println("PWD: " + currentDir);
 
         Finder finder = new Finder(
-                pattern != null ? pattern.toString() : "*" + DEFAULT_MD, vlevel);
+                DISPLAY,
+                pattern != null ? pattern.toString() : "*" + DEFAULT_INPUT_FILE_EXTENSION
+        );
 
-        Files.walkFileTree(srcPath, EnumSet.noneOf(FileVisitOption.class),
-                recursive ? MAX_VALUE : 1, finder);
+        Files.walkFileTree(
+                srcPath,
+                EnumSet.noneOf(FileVisitOption.class),
+                recursive ? MAX_VALUE : 1,
+                finder
+        );
 
-        SortedSet<Path> inpList = finder.done();
-        List<Path[]> outList = new ArrayList<>(inpList.size());
+        return displayFileOutList(
+                processFileInputList(finder, srcPath, destPath, outExtn)
+        );
+    }
 
-        // Debug output.
-        if (vlevel >= 2)
+    private static void addInPathToOutList(
+            Path outPath,
+            Path inPath,
+            List<FileData> outList
+    ) throws IOException
+    {
+        if (notExists(outPath)
+                || inPathFileIsNewerThanOutPathFile(inPath, outPath))
         {
-            DISPLAY.println("inpList:");
+            outList.add(new FileData(inPath, outPath));
         }
+    }
 
-        for (Path inPath : inpList)
-        {
-            Matcher m;
-
-            if (srcPath.toString().isEmpty() || destPath == null)
-            {
-                m = Pattern.compile("^(?<basename>.*?)(?:[.]\\w+)?$")
-                        .matcher(inPath.toString());
-            } else
-            {
-                m = Pattern.compile("^(?:" + srcPath + "/)(?<basename>.*?)(?:[.]\\w+)?$")
-                        .matcher(inPath.toString());
-            }
-
-            if (m.find())
-            {
-                String basename = m.group("basename");
-                Path outPath = of(destPath != null ? destPath.toString() : "",
-                        basename + (outExtn != null ? outExtn : DEFAULT_HTML));
-
-                if (notExists(outPath) || getLastModifiedTime(inPath).
-                        compareTo(getLastModifiedTime(outPath)) > 0)
-                {
-                    Path[] files = new Path[2];
-
-                    files[0] = inPath;
-                    files[1] = outPath;
-                    outList.add(files);
-
-                    // Debug output.
-                    if (vlevel >= 2)
-                    {
-                        DISPLAY.println(outPath);
-                    }
-                }
-            }
-        }
-
-        // Debug output.
-        if (vlevel >= 2)
-        {
-            DISPLAY.println("outList:");
-            outList.forEach(files -> DISPLAY.println(files[1]));
-        }
+    private static List<FileData> displayFileOutList(List<FileData> outList)
+    {
+        DISPLAY.level(2).appendln("outList:");
+        outList.forEach(fileData -> DISPLAY.appendln(fileData.destinationPath));
+        DISPLAY.flush();
 
         return outList;
+    }
+
+    private static boolean inPathFileIsNewerThanOutPathFile(
+            Path inPath,
+            Path outPath
+    ) throws IOException
+    {
+        return getLastModifiedTime(inPath).
+                compareTo(getLastModifiedTime(outPath)) > 0;
+    }
+
+    private static List<FileData> processFileInputList(
+            Finder finder,
+            Path srcPath,
+            Path destPath,
+            String outExtn
+    ) throws IOException
+    {
+        SortedSet<Path> inList = finder.done();
+        List<FileData> outList = new ArrayList<>(inList.size());
+
+        DISPLAY.level(2).appendln("inpList:");
+
+        for (Path inPath : inList)
+        {
+            processInPath(inPath, srcPath, destPath, outExtn, outList);
+        }
+
+        DISPLAY.flush();
+        return outList;
+    }
+
+    private static void processInPath(Path inPath, Path srcPath, Path destPath, String outExtn, List<FileData> outList) throws IOException
+    {
+        DISPLAY.appendln(inPath);
+        Matcher m;
+
+        if (srcPath.toString().isEmpty() || destPath == null)
+        {
+            m = Pattern.compile("^(?<basename>.*?)(?:[.]\\w+)?$")
+                    .matcher(inPath.toString());
+        } else
+        {
+            m = Pattern.compile("^(?:" + srcPath + "/)(?<basename>.*?)(?:[.]\\w+)?$")
+                    .matcher(inPath.toString());
+        }
+
+        if (m.find())
+        {
+            String basename = m.group("basename");
+            Path outPath = of(
+                    destPath != null ? destPath.toString() : "",
+                    basename + (outExtn != null ? outExtn : DEFAULT_OUTPUT_FILE_EXTENSION)
+            );
+
+            addInPathToOutList(outPath, inPath, outList);
+        }
+    }
+
+    public static class FileData
+    {
+        public Path destinationPath;
+
+        public Path sourcePath;
+
+        public FileData(Path sourcePath, Path destinationPath)
+        {
+            this.sourcePath = sourcePath;
+            this.destinationPath = destinationPath;
+        }
     }
 }

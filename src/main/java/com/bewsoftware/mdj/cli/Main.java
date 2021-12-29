@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static com.bewsoftware.mdj.cli.options.OptionInterlink.*;
+import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
 import static java.lang.System.exit;
 
 /**
@@ -57,6 +58,8 @@ public class Main
         // Process command-line
         //
         CmdLine cmd = new MyCmdLine(args);
+        DISPLAY.debugLevel(cmd.verbosity());
+
         Optional<Integer> result;
 
         result = processCmdFailed(cmd)

@@ -23,6 +23,7 @@ package com.bewsoftware.mdj.cli.options;
 import com.bewsoftware.fileio.ini.IniDocument;
 import com.bewsoftware.mdj.cli.plugins.PluginInterlink;
 import com.bewsoftware.mdj.cli.util.CmdLine;
+import com.bewsoftware.mdj.cli.util.Find.FileData;
 import com.bewsoftware.mdj.core.MarkdownProcessor;
 import com.bewsoftware.mdj.core.TextEditor;
 import com.bewsoftware.utils.struct.Ref;
@@ -35,12 +36,11 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.bewsoftware.mdj.cli.options.util.Cli.conf;
 import static com.bewsoftware.mdj.cli.options.util.Cli.getString;
 import static com.bewsoftware.mdj.cli.options.util.Cli.processSubstitutions;
-import static com.bewsoftware.mdj.cli.options.util.Cli.vlevel;
+import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
 import static com.bewsoftware.mdj.cli.util.Find.getUpdateList;
-import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.conf;
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.nio.file.StandardOpenOption.WRITE;
@@ -73,33 +73,36 @@ public class MainProcessor implements Option
             processFiles(cmd);
         } catch (IOException ex)
         {
-            if (vlevel >= 2)
-            {
-                DISPLAY.println(ex);
-            }
-
+            DISPLAY.level(2).println(ex);
             rtn = of(-1);
         }
 
         return rtn;
     }
-    private static void loadOutputDirs(List<Path[]> fileList, Set<Path> outputDirs)
-    {
-        fileList.forEach(filePairs ->
-        {
-            if (vlevel >= 1)
-            {
-                DISPLAY.println(filePairs[0]);
-                DISPLAY.println("    " + filePairs[1]);
-            }
 
-            Path parent = filePairs[1].getParent();
+    private static void loadOutputDirs(List<FileData> fileList, Set<Path> outputDirs)
+    {
+        DISPLAY.level(1).appendln("loadOutputDirs:");
+
+        fileList.forEach(fileData ->
+        {
+
+            DISPLAY.appendln(fileData.sourcePath)
+                    .append("    ")
+                    .appendln(fileData.destinationPath);
+
+            Path parent = fileData.destinationPath.getParent();
 
             if (parent != null)
             {
+                DISPLAY.append("    Destination Parent:")
+                        .appendln(parent);
+
                 outputDirs.add(parent);
             }
         });
+
+        DISPLAY.flush();
     }
 
     private static void processFiles(CmdLine cmd) throws IOException
@@ -107,9 +110,12 @@ public class MainProcessor implements Option
         //
         // Get files to process
         //
-        List<Path[]> fileList = getUpdateList(cmd.source(),
+        List<FileData> fileList = getUpdateList(
+                cmd.source(),
                 cmd.destination(),
-                cmd.inputFile(), null, cmd.hasOption('r'), vlevel);
+                cmd.inputFile(),
+                null,
+                cmd.hasOption('r'));
 
         // Process files
         if (!fileList.isEmpty())
@@ -121,42 +127,50 @@ public class MainProcessor implements Option
 
             Set<Path> outputDirs = new TreeSet<>();
             loadOutputDirs(fileList, outputDirs);
+            processDirectories(outputDirs);
 
-            for (Path dir : outputDirs)
+            for (FileData fileData : fileList)
             {
-                if (vlevel >= 2)
-                {
-                    DISPLAY.println("    " + dir);
-                }
-
-                Files.createDirectories(dir);
-            }
-
-            for (Path[] filePairs : fileList)
-            {
-                processFile(filePairs[0], filePairs[1], cmd.destination(), cmd.hasOption('w'));
+                processFile(
+                        fileData.sourcePath,
+                        fileData.destinationPath,
+                        cmd.destination(),
+                        cmd.hasOption('w')
+                );
             }
         }
     }
 
-    private static boolean singleFileWithOutputFile(CmdLine cmd, List<Path[]> fileList)
+    private static void processDirectories(Set<Path> outputDirs) throws IOException
+    {
+        DISPLAY.level(2);
+
+        for (Path dir : outputDirs)
+        {
+            DISPLAY.println("    " + dir);
+            Files.createDirectories(dir);
+        }
+    }
+
+    private static boolean singleFileWithOutputFile(CmdLine cmd, List<FileData> fileList)
     {
         return cmd.outputFile() != null && fileList.size() == 1;
     }
 
-    private static void updateFileList(CmdLine cmd, List<Path[]> fileList)
+    private static void updateFileList(CmdLine cmd, List<FileData> fileList)
     {
         Path outPath = cmd.outputFile().toPath();
 
         if (outPath.isAbsolute())
         {
-            fileList.get(0)[1] = outPath;
+            fileList.get(0).destinationPath = outPath;
         } else
         {
-            Path target = fileList.get(0)[1].getParent();
-            fileList.get(0)[1] = target.resolve(outPath);
+            Path target = fileList.get(0).destinationPath.getParent();
+            fileList.get(0).destinationPath = target.resolve(outPath);
         }
     }
+
     /**
      * Process a markdown text file.
      *
@@ -167,8 +181,8 @@ public class MainProcessor implements Option
      *
      * @throws IOException If any.
      */
-    public static void processFile(final Path inpPath, final Path outPath, final Path destDirPath,
-            final boolean wrapper) throws IOException
+    public static void processFile(final Path inpPath, final Path outPath,
+            final Path destDirPath, final boolean wrapper) throws IOException
     {
         StringBuilder sb = new StringBuilder();
         IniDocument iniDoc = conf.iniDoc;
@@ -189,23 +203,36 @@ public class MainProcessor implements Option
 
         if (wrapper)
         {
-            if (vlevel >= 3)
-            {
-                DISPLAY.println("\n--------------------------------------------\n"
-                        + "process wrapper...");
-            }
+            DISPLAY.level(3)
+                    .appendln("\n--------------------------------------------")
+                    .println("process wrapper...");
 
             PluginInterlink.processMetaBlock();
             PluginInterlink.processStylesheets();
             PluginInterlink.processNamedMetaBlocks();
             String preprocessed = processSubstitutions(
-                    iniDoc.getString("page", "text", ""), use, Ref.val());
+                    iniDoc.getString(
+                            "page",
+                            "text",
+                            ""
+                    ),
+                    use,
+                    Ref.val()
+            );
 
             use = iniDoc.getString("page", "use", null);
             template = getString("page", "template", use);
-            iniDoc.setString("page", "content",
-                    MarkdownProcessor.convert(processSubstitutions(preprocessed, use,
-                            Ref.val())));
+            iniDoc.setString(
+                    "page",
+                    "content",
+                    MarkdownProcessor.convert(
+                            processSubstitutions(
+                                    preprocessed,
+                                    use,
+                                    Ref.val()
+                            )
+                    )
+            );
 
             if (!template.isBlank())
             {
@@ -217,24 +244,42 @@ public class MainProcessor implements Option
         } else
         {
             iniDoc.setString("page", "content",
-                    MarkdownProcessor.convert(iniDoc.getString("page", "text", "")));
-
+                    MarkdownProcessor.convert(
+                            iniDoc.getString(
+                                    "page",
+                                    "text",
+                                    ""
+                            )
+                    ));
         }
 
         try (BufferedWriter outWriter
-                = Files.newBufferedWriter(outPath, CREATE, TRUNCATE_EXISTING, WRITE))
+                = Files.newBufferedWriter(
+                        outPath,
+                        CREATE,
+                        TRUNCATE_EXISTING,
+                        WRITE))
         {
-            if (vlevel >= 3)
-            {
-                DISPLAY.println("\n--------------------------------------------\n"
-                        + "Write file: " + outPath);
-                DISPLAY.println("page.html:\n" + iniDoc.getString("page", "html",
-                        "No HTML content.")
-                        + "--------------------------------------------\n");
-            }
+            DISPLAY.level(3)
+                    .appendln("\n--------------------------------------------")
+                    .appendln("Write file:")
+                    .appendln(outPath)
+                    .appendln("page.html:")
+                    .appendln(iniDoc.getString("page", "html",
+                            "No HTML content."))
+                    .println("--------------------------------------------\n");
 
-            outWriter.write(iniDoc.getString("page", "html",
-                    iniDoc.getString("page", "content", "Error during processing.")));
+            outWriter.write(
+                    iniDoc.getString(
+                            "page",
+                            "html",
+                            iniDoc.getString(
+                                    "page",
+                                    "content",
+                                    "Error during processing."
+                            )
+                    )
+            );
         }
     }
 
@@ -248,19 +293,40 @@ public class MainProcessor implements Option
      */
     private static void processTemplate(final String use, final String template) throws IOException
     {
-        StringBuilder sbin = new StringBuilder("<!DOCTYPE html>\n"
+        StringBuilder sbin = new StringBuilder(
+                "<!DOCTYPE html>\n"
                 + "<!--\n"
                 + "Generated by ${program.title}\n"
                 + "version: ${program.version}\n"
                 + "on ${system.date}\n"
-                + "-->\n");
+                + "-->\n"
+        );
 
         IniDocument iniDoc = conf.iniDoc;
 
-        Path docRootPath = Path.of(iniDoc.getString("project", "root", ""))
-                .resolve(iniDoc.getString("document", "docRootDir", "")).toAbsolutePath();
+        Path docRootPath = Path.of(
+                iniDoc.getString(
+                        "project",
+                        "root",
+                        ""
+                )
+        )
+                .resolve(
+                        iniDoc.getString(
+                                "document",
+                                "docRootDir",
+                                ""
+                        )
+                )
+                .toAbsolutePath();
 
-        Path templatesPath = docRootPath.resolve(iniDoc.getString("document", "templatesDir", ""))
+        Path templatesPath = docRootPath.resolve(
+                iniDoc.getString(
+                        "document",
+                        "templatesDir",
+                        ""
+                )
+        )
                 .resolve(template).toAbsolutePath();
 
         //
@@ -270,12 +336,13 @@ public class MainProcessor implements Option
         Path basePath = srcPath.getParent().relativize(docRootPath);
         iniDoc.setString("page", "base", basePath.toString());
 
-        if (vlevel >= 2)
-        {
-            DISPLAY.println("base:\n" + basePath);
-            DISPLAY.println("srcFile:\n" + srcPath);
-            DISPLAY.println("template:\n" + templatesPath);
-        }
+        DISPLAY.level(2)
+                .appendln("base:")
+                .appendln(basePath)
+                .appendln("srcFile:")
+                .appendln(srcPath)
+                .appendln("template:")
+                .println(templatesPath);
 
         try (BufferedReader inReader = Files.newBufferedReader(templatesPath))
         {
@@ -287,7 +354,13 @@ public class MainProcessor implements Option
             }
         }
 
-        TextEditor textEd = new TextEditor(processSubstitutions(sbin.toString(), use, Ref.val()));
+        TextEditor textEd = new TextEditor(
+                processSubstitutions(
+                        sbin.toString(),
+                        use,
+                        Ref.val()
+                )
+        );
         textEd.replaceAllLiteral("\\\\\\$", "$");
         textEd.replaceAllLiteral("\\\\\\[", "[");
 
@@ -296,16 +369,21 @@ public class MainProcessor implements Option
             //
             // Set the detination file path.
             //
-            Path destPath = Path.of(iniDoc.getString("page", "destFile", null));
-            Path destDirPath = Path.of(iniDoc.getString("page", "destDir", null));
+            Path destPath = Path.of(
+                    iniDoc.getString("page", "destFile", null)
+            );
+            Path destDirPath = Path.of(
+                    iniDoc.getString("page", "destDir", null)
+            );
             String destHTML = destDirPath.relativize(destPath).toString();
 
-            if (vlevel >= 3)
-            {
-                DISPLAY.println("destPath:\n" + destPath);
-                DISPLAY.println("destDirPath:\n" + destDirPath);
-                DISPLAY.println("destHTML:\n" + destHTML);
-            }
+            DISPLAY.level(3)
+                    .appendln("destPath:")
+                    .appendln(destPath)
+                    .appendln("destDirPath:")
+                    .appendln(destDirPath)
+                    .appendln("destHTML:")
+                    .println(destHTML);
 
             Pattern p = compile("href\\=\"(?<ref>#[^\"]*)?\"");
 
@@ -314,11 +392,9 @@ public class MainProcessor implements Option
                 String text = m.group();
                 String ref = m.group("ref");
 
-                if (vlevel >= 3)
-                {
-                    DISPLAY.println("text: " + text);
-                    DISPLAY.println("ref: " + ref);
-                }
+                DISPLAY.level(3)
+                        .append("text: ").appendln(text)
+                        .append("ref: ").println(ref);
 
                 return text.replace(ref, destHTML + ref);
             });

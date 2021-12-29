@@ -26,8 +26,7 @@ import java.util.Optional;
 import java.util.Properties;
 
 import static com.bewsoftware.mdj.cli.options.util.Cli.loadPom;
-import static com.bewsoftware.mdj.cli.options.util.Cli.vlevel;
-import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
 import static java.util.Optional.of;
 
 /**
@@ -67,11 +66,7 @@ public class CmdPomAndProps implements Option
                 loadPom(cmd.pomFile(), props);
             } catch (IOException ex)
             {
-                if (vlevel >= 2)
-                {
-                    DISPLAY.println(ex);
-                }
-
+                DISPLAY.level(2).println(ex);
                 rtn = of(-1);
             }
         }

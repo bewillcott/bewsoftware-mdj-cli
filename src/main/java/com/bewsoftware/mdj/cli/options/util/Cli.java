@@ -19,17 +19,19 @@
  */
 package com.bewsoftware.mdj.cli.options.util;
 
+import com.bewsoftware.common.InvalidParameterValueException;
 import com.bewsoftware.fileio.ini.IniDocument;
 import com.bewsoftware.fileio.ini.IniFile;
 import com.bewsoftware.fileio.ini.IniFileFormatException;
-import com.bewsoftware.mdj.cli.util.MCPOMProperties;
 import com.bewsoftware.mdj.core.TextEditor;
+import com.bewsoftware.property.IniProperty;
 import com.bewsoftware.utils.struct.Ref;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.regex.Pattern;
 import org.dom4j.Document;
@@ -37,8 +39,11 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
-import static com.bewsoftware.mdj.cli.util.MCPOMProperties.INSTANCE;
+import static com.bewsoftware.mdj.cli.util.Constants.CONF_FILENAME;
+import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.Constants.POM;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.conf;
+import static com.bewsoftware.mdj.cli.util.Keys.*;
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 import static java.nio.file.Path.of;
 
@@ -51,26 +56,9 @@ import static java.nio.file.Path.of;
  */
 public class Cli
 {
+    private static final String PROGRAM = "Program";
 
-    /**
-     * The name of the configuration INI file.
-     */
-    public static final String CONF_FILENAME = "mdj-cli.ini";
-
-    /**
-     * The single instance of the {@link MCPOMProperties} class.
-     */
-    public static final MCPOMProperties POM = INSTANCE;
-
-    /**
-     * The configuration INI file.
-     */
-    public static IniFile conf;
-
-    /**
-     * The verbosity level.
-     */
-    public static int vlevel;
+    private static final String PROJECT = "Project";
 
     private static final Pattern SUBSTITUTION_PATTERN
             = Pattern.compile("(?<!\\\\)(?:\\$\\{(?<group>\\w+)[.](?<key>\\w+)\\})");
@@ -92,9 +80,17 @@ public class Cli
      *
      * @return result.
      */
-    public static String getString(final String section, final String key, final String use)
+    public static String getString(
+            final String section,
+            final String key,
+            final String use
+    )
     {
-        return conf.iniDoc.getString(section, key, conf.iniDoc.getString(use, key, ""));
+        return conf.iniDoc.getString(
+                section,
+                key,
+                conf.iniDoc.getString(use, key, "")
+        );
     }
 
     /**
@@ -105,51 +101,17 @@ public class Cli
      * @throws IOException            If any.
      * @throws IniFileFormatException If any.
      */
-    public static void loadConf(final Path srcDirPath) throws IOException, IniFileFormatException
+    public static void loadConf(final Path srcDirPath)
+            throws IOException, IniFileFormatException
     {
         Path iniPath = of(CONF_FILENAME).toAbsolutePath();
 
-        if (vlevel >= 3)
+        DISPLAY.level(3).println("loadConf()");
+        DISPLAY.level(2).println("iniPath: " + iniPath.toString());
+
+        if (Files.notExists(iniPath, NOFOLLOW_LINKS) && srcDirPath != null)
         {
-            DISPLAY.println("loadConf()");
-        }
-
-        if (vlevel >= 2)
-        {
-            DISPLAY.println("iniPath: " + iniPath.toString());
-        }
-
-        if (Files.notExists(iniPath, NOFOLLOW_LINKS) && (srcDirPath != null))
-        {
-            Path srcPath = of(srcDirPath.toString());
-
-            try
-            {
-                while (Files.notExists(srcPath.resolve(CONF_FILENAME), NOFOLLOW_LINKS))
-                {
-                    if (Files.exists(srcPath.resolve("pom.xml"), NOFOLLOW_LINKS))
-                    {
-                        throw new FileNotFoundException(CONF_FILENAME);
-                    }
-
-                    srcPath = srcPath.getParent();
-
-                    if (vlevel >= 2)
-                    {
-                        DISPLAY.println("srcPath: " + srcPath.toString());
-                    }
-                }
-            } catch (NullPointerException ex)
-            {
-                throw new FileNotFoundException(CONF_FILENAME);
-            }
-
-            iniPath = srcPath.resolve(CONF_FILENAME);
-
-            if (vlevel >= 2)
-            {
-                DISPLAY.println("iniPath: " + iniPath.toString());
-            }
+            iniPath = findConfFile(srcDirPath);
         }
 
         if (conf == null)
@@ -160,46 +122,10 @@ public class Cli
             conf.mergeFile(iniPath);
         }
 
-        conf.iniDoc.setString("program", "artifactId", POM.artifactId, "# The identifier for this artifact that is unique within the group given by the groupID");
-        conf.iniDoc.setString("program", "description", POM.description, "# Project description");
-        conf.iniDoc.setString("program", "filename", POM.filename, "# The filename of the binary output file");
-        conf.iniDoc.setString("program", "groupId", POM.groupId, "# Project GroupId");
-        conf.iniDoc.setString("program", "name", POM.name, "# Project Name");
-        conf.iniDoc.setString("program", "version", POM.version, "# The version of the artifact");
-        conf.iniDoc.setString("program", "details", POM.toString(), "# All of the above information laid out");
+        addProgramSettings();
+        processAllSubstitutions();
 
-        Ref<Boolean> brtn = Ref.val();
-
-        do
-        {
-            brtn.val = false;
-
-            conf.iniDoc.getSections()
-                    .forEach(section -> conf.iniDoc.getSection(section)
-                    .forEach(prop ->
-                    {
-                        Ref<Boolean> rtn = Ref.val();
-                        if (prop.value() != null)
-                        {
-                            if (vlevel >= 3)
-                            {
-                                DISPLAY.println(prop);
-                            }
-                            String value = processSubstitutions(prop.value(), null, rtn);
-                            if (rtn.val)
-                            {
-                                conf.iniDoc.setString(section, prop.key(), value, prop.comment());
-                                brtn.val = true;
-                            }
-                        }
-                    }));
-
-        } while (brtn.val);
-
-        if (vlevel >= 2)
-        {
-            DISPLAY.println(POM);
-        }
+        DISPLAY.level(2).println(POM);
     }
 
     /**
@@ -210,57 +136,19 @@ public class Cli
      *
      * @throws IOException If any.
      */
-    public static void loadPom(final File pomFile, final Properties props) throws IOException
+    public static void loadPom(final File pomFile, final Properties props)
+            throws IOException
     {
-
-        SAXReader reader = new SAXReader();
-        Document document = null;
-
-        // Read file.
-        try
-        {
-            document = reader.read(pomFile);
-        } catch (DocumentException ex)
-        {
-            throw new IOException("\nError reading from '" + pomFile.getName() + "'", ex);
-        }
-
-        // root is 'project'.
-        Element projectElement = document.getRootElement();
+        Document document = readInPomFile(pomFile);
 
         if (conf == null)
         {
             conf = new IniFile();
         }
 
-        Element groupId = projectElement.element("groupId");
-        Element artifactId = projectElement.element("artifactId");
-        Element version = projectElement.element("version");
-        Element name = projectElement.element("name");
-        Element description = projectElement.element("description");
-
-        conf.iniDoc.setString("project", "groupId", groupId != null ? groupId.getTextTrim() : "", "# Project GroupId");
-        conf.iniDoc.setString("project", "artifactId", artifactId != null ? artifactId.getTextTrim() : "", "# The identifier for this artifact that is unique within the group given by the groupID");
-        conf.iniDoc.setString("project", "version", version != null ? version.getTextTrim() : "", "# The version of the artifact");
-        conf.iniDoc.setString("project", "name", name != null ? name.getTextTrim() : "", "# Project Name");
-        conf.iniDoc.setString("project", "description", description != null ? description.getTextTrim() : "", "# Project description");
-
-        // Process -Dkey=value properties from commandline.
-        // Add them to the "project" section.
-        if (props != null)
-        {
-            props.forEach((keyObj, valueObj) ->
-            {
-                String key = (String) keyObj;
-                String value = (String) valueObj;
-
-                conf.iniDoc.setString("project", key, value);
-            });
-        }
-
-        conf.iniDoc.getSection("project").forEach(prop
-                -> DISPLAY.println("project." + prop.key() + ": " + prop.value())
-        );
+        addProjectSettings(document);
+        processCommandlineProperties(props);
+        displayProjectProperties();
     }
 
     /**
@@ -272,7 +160,11 @@ public class Cli
      *
      * @return result.
      */
-    public static String processSubstitutions(final String text, final String use, final Ref<Boolean> found)
+    public static String processSubstitutions(
+            final String text,
+            final String use,
+            final Ref<Boolean> found
+    )
     {
         TextEditor textEd = new TextEditor(text);
         found.val = false;
@@ -281,10 +173,7 @@ public class Cli
         {
             textEd.replaceAll(SUBSTITUTION_PATTERN, m ->
             {
-                if (vlevel >= 3)
-                {
-                    DISPLAY.println("m.group: " + m.group());
-                }
+                DISPLAY.level(3).append("m.group: ").println(m.group());
 
                 String group = m.group("group");
                 String key = m.group("key");
@@ -295,11 +184,7 @@ public class Cli
                     rtn = getString(group, key, use);
                 }
 
-                if (vlevel >= 3)
-                {
-                    DISPLAY.println("rtn: " + rtn);
-                }
-
+                DISPLAY.level(3).append("rtn: ").println(rtn);
                 return rtn;
             });
 
@@ -310,6 +195,237 @@ public class Cli
         } while (textEd.wasFound());
 
         return textEd.toString();
+    }
+
+    private static void addProgramSettings()
+    {
+        Settings[] programSettings =
+        {
+            new Settings(
+            NAME,
+            POM.name,
+            "# Project Name"
+            ),
+            new Settings(
+            GROUP_ID,
+            POM.groupId,
+            "# Project GroupId"
+            ),
+            new Settings(
+            ARTIFACT_ID,
+            POM.artifactId,
+            "# The identifier for this artifact that is unique "
+            + "within the group given by the groupID"
+            ),
+            new Settings(
+            VERSION,
+            POM.version,
+            "# The version of the artifact"
+            ),
+            new Settings(
+            DESCRIPTION,
+            POM.description,
+            "# Project description"
+            ),
+            new Settings(
+            FILENAME,
+            POM.filename,
+            "# The filename of the binary output file"
+            ),
+            new Settings(
+            DETAILS,
+            POM.toString(),
+            "# All of the above information laid out"
+            )
+        };
+
+        Arrays.asList(programSettings)
+                .forEach(
+                        settings
+                        -> conf.iniDoc.setString(
+                                PROGRAM,
+                                settings.key,
+                                settings.value,
+                                settings.comment
+                        )
+                );
+    }
+
+    private static void addProjectSettings(Document document)
+            throws InvalidParameterValueException
+    {
+        // root is 'project'.
+        Element projectElement = document.getRootElement();
+
+        Element groupId = projectElement.element(GROUP_ID);
+        Element artifactId = projectElement.element(ARTIFACT_ID);
+        Element version = projectElement.element(VERSION);
+        Element name = projectElement.element(NAME);
+        Element description = projectElement.element(DESCRIPTION);
+
+        Settings[] projectSettings =
+        {
+            new Settings(
+            NAME,
+            name != null ? name.getTextTrim() : "",
+            "# Project Name"
+            ),
+            new Settings(
+            GROUP_ID,
+            groupId != null ? groupId.getTextTrim() : "",
+            "# Project GroupId"
+            ),
+            new Settings(
+            ARTIFACT_ID,
+            artifactId != null ? artifactId.getTextTrim() : "",
+            "# The identifier for this artifact that is unique "
+            + "within the group given by the groupID"
+            ),
+            new Settings(
+            VERSION,
+            version != null ? version.getTextTrim() : "",
+            "# The version of the artifact"
+            ),
+            new Settings(
+            DESCRIPTION,
+            description != null ? description.getTextTrim() : "",
+            "# Project description"
+            )
+        };
+
+        Arrays.asList(projectSettings)
+                .forEach(
+                        settings
+                        -> conf.iniDoc.setString(
+                                PROJECT,
+                                settings.key,
+                                settings.value,
+                                settings.comment
+                        )
+                );
+
+    }
+
+    private static void displayProjectProperties()
+    {
+        DISPLAY.level(0);
+
+        conf.iniDoc.getSection(PROJECT).forEach(prop
+                -> DISPLAY.append("project.")
+                        .append(prop.key())
+                        .append(": ")
+                        .appendln(prop.value())
+        );
+
+        DISPLAY.flush();
+    }
+
+    private static Path findConfFile(final Path srcDirPath)
+            throws FileNotFoundException
+    {
+        Path srcPath = of(srcDirPath.toString());
+
+        try
+        {
+            while (Files.notExists(srcPath.resolve(CONF_FILENAME), NOFOLLOW_LINKS))
+            {
+                if (Files.exists(srcPath.resolve("pom.xml"), NOFOLLOW_LINKS))
+                {
+                    throw new FileNotFoundException(CONF_FILENAME);
+                }
+
+                srcPath = srcPath.getParent();
+                DISPLAY.level(2).println("srcPath: " + srcPath.toString());
+            }
+        } catch (NullPointerException ex)
+        {
+            throw new FileNotFoundException(CONF_FILENAME);
+        }
+
+        Path iniPath = srcPath.resolve(CONF_FILENAME);
+        DISPLAY.level(2).println("iniPath: " + iniPath.toString());
+
+        return iniPath;
+    }
+
+    private static void processAllSubstitutions()
+    {
+        Ref<Boolean> brtn = Ref.val();
+
+        do
+        {
+            brtn.val = false;
+
+            conf.iniDoc.getSections()
+                    .forEach((String section) -> conf.iniDoc.getSection(section)
+                    .forEach((IniProperty<String> prop)
+                            -> processSubstitutionsForAProperty(prop, section, brtn)
+                    ));
+        } while (brtn.val);
+    }
+
+    private static void processCommandlineProperties(final Properties props)
+    {
+        // Process -Dkey=value properties from commandline.
+        // Add them to the "project" section.
+        if (props != null)
+        {
+            props.forEach((keyObj, valueObj) ->
+            {
+                String key = (String) keyObj;
+                String value = (String) valueObj;
+
+                conf.iniDoc.setString(PROJECT, key, value);
+            });
+        }
+    }
+
+    private static void processSubstitutionsForAProperty(
+            IniProperty<String> prop,
+            String section,
+            Ref<Boolean> brtn
+    ) throws InvalidParameterValueException
+    {
+        Ref<Boolean> rtn = Ref.val();
+
+        if (prop.value() != null)
+        {
+            DISPLAY.level(3).println(prop);
+            String value = processSubstitutions(prop.value(), null, rtn);
+
+            if (rtn.val)
+            {
+                conf.iniDoc.setString(section, prop.key(), value, prop.comment());
+                brtn.val = true;
+            }
+        }
+    }
+
+    private static Document readInPomFile(final File pomFile) throws IOException
+    {
+        try
+        {
+            return new SAXReader().read(pomFile);
+        } catch (DocumentException ex)
+        {
+            throw new IOException("\nError reading from '" + pomFile.getName() + "'", ex);
+        }
+    }
+
+    private static class Settings
+    {
+        public final String key;
+
+        public final String value;
+
+        public final String comment;
+
+        public Settings(String key, String value, String comment)
+        {
+            this.key = key;
+            this.value = value;
+            this.comment = comment;
+        }
     }
 
 }

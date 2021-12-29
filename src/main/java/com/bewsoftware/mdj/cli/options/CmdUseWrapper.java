@@ -32,14 +32,13 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.bewsoftware.fileio.BEWFiles.copyDirTree;
-import static com.bewsoftware.mdj.cli.options.util.Cli.conf;
 import static com.bewsoftware.mdj.cli.options.util.Cli.loadConf;
 import static com.bewsoftware.mdj.cli.options.util.Cli.processSubstitutions;
-import static com.bewsoftware.mdj.cli.options.util.Cli.vlevel;
+import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
 import static com.bewsoftware.mdj.cli.util.Constants.HELP_FOOTER;
 import static com.bewsoftware.mdj.cli.util.Constants.HELP_HEADER;
 import static com.bewsoftware.mdj.cli.util.Constants.SYNTAX;
-import static com.bewsoftware.mdj.cli.util.GlobalVariables.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.conf;
 import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static java.util.Optional.of;
@@ -87,17 +86,14 @@ public class CmdUseWrapper implements Option
             try
             {
                 copyDirTree(
+                        DISPLAY,
                         cmd.source() + "/" + value,
                         cmd.destination() + "/" + value, "*",
-                        vlevel, COPY_ATTRIBUTES, REPLACE_EXISTING
+                        COPY_ATTRIBUTES, REPLACE_EXISTING
                 );
             } catch (IOException ex)
             {
-                if (vlevel >= 2)
-                {
-                    DISPLAY.println(ex);
-                }
-
+                DISPLAY.level(2).println(ex);
                 rtn.val = of(-1);
             }
         }
@@ -116,11 +112,7 @@ public class CmdUseWrapper implements Option
             rtn.val = of(4);
         } catch (IOException | IniFileFormatException ex)
         {
-            if (vlevel >= 2)
-            {
-                DISPLAY.println(ex);
-            }
-
+            DISPLAY.level(2).println(ex);
             rtn.val = of(-1);
         }
     }
