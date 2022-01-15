@@ -132,8 +132,7 @@ public class MainProcessor implements Option
             for (FileData fileData : fileList)
             {
                 processFile(
-                        fileData.sourcePath,
-                        fileData.destinationPath,
+                        fileData,
                         cmd.destination(),
                         cmd.hasOption('w')
                 );
@@ -171,17 +170,7 @@ public class MainProcessor implements Option
         }
     }
 
-    /**
-     * Process a markdown text file.
-     *
-     * @param inpPath     Path of source file (.md).
-     * @param outPath     Path of destination files (.html).
-     * @param destDirPath Path of the destination directory.
-     * @param wrapper     Process wrapper files?
-     *
-     * @throws IOException If any.
-     */
-    public static void processFile(final Path inpPath, final Path outPath,
+    private static void processFile(final FileData fileData,
             final Path destDirPath, final boolean wrapper) throws IOException
     {
         StringBuilder sb = new StringBuilder();
@@ -189,7 +178,7 @@ public class MainProcessor implements Option
         String template;
         String use = "";
 
-        try (BufferedReader inReader = Files.newBufferedReader(inpPath))
+        try (BufferedReader inReader = Files.newBufferedReader(fileData.sourcePath))
         {
             String line;
 
@@ -236,8 +225,8 @@ public class MainProcessor implements Option
 
             if (!template.isBlank())
             {
-                iniDoc.setString("page", "srcFile", inpPath.toString());
-                iniDoc.setString("page", "destFile", outPath.toString());
+                iniDoc.setString("page", "srcFile", fileData.sourcePath.toString());
+                iniDoc.setString("page", "destFile", fileData.destinationPath.toString());
                 iniDoc.setString("page", "destDir", destDirPath.toString());
                 processTemplate(use, template);
             }
@@ -255,15 +244,14 @@ public class MainProcessor implements Option
 
         try (BufferedWriter outWriter
                 = Files.newBufferedWriter(
-                        outPath,
-                        CREATE,
+        fileData.destinationPath,                        CREATE,
                         TRUNCATE_EXISTING,
                         WRITE))
         {
             DISPLAY.level(3)
                     .appendln("\n--------------------------------------------")
                     .appendln("Write file:")
-                    .appendln(outPath)
+                    .appendln(fileData.destinationPath)
                     .appendln("page.html:")
                     .appendln(iniDoc.getString("page", "html",
                             "No HTML content."))
@@ -283,14 +271,6 @@ public class MainProcessor implements Option
         }
     }
 
-    /**
-     * Process a template.
-     *
-     * @param use      Alternate section label.
-     * @param template name.
-     *
-     * @throws IOException If any.
-     */
     private static void processTemplate(final String use, final String template) throws IOException
     {
         StringBuilder sbin = new StringBuilder(

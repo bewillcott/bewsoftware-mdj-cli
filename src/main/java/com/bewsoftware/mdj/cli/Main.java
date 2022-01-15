@@ -21,7 +21,6 @@ package com.bewsoftware.mdj.cli;
 
 import com.bewsoftware.mdj.cli.util.CmdLine;
 import com.bewsoftware.mdj.cli.util.MyCmdLine;
-import java.io.IOException;
 import java.util.Optional;
 
 import static com.bewsoftware.mdj.cli.options.OptionInterlink.*;
@@ -46,14 +45,11 @@ public class Main
      *
      * @return The exit code.
      *
-     * @throws IOException if any.
-     *
      * @since 1.0.4
      * @version 1.1.7
      */
-    public static int execute(String[] args) throws IOException
+    public static int execute(String[] args)
     {
-
         //
         // Process command-line
         //
@@ -83,10 +79,8 @@ public class Main
      * Executed from command-line.
      *
      * @param args the command line arguments
-     *
-     * @throws IOException if any.
      */
-    public static void main(String[] args) throws IOException
+    public static void main(String[] args)
     {
         exit(execute(args));
     }

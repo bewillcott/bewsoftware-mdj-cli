@@ -29,7 +29,7 @@ import static java.nio.file.Path.of;
 import static org.apache.commons.cli.Option.builder;
 
 /**
- * MyCmdLine class description.
+ * My implementation of the {@linkplain CmdLine} interface.
  *
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
@@ -38,6 +38,11 @@ import static org.apache.commons.cli.Option.builder;
  */
 public final class MyCmdLine implements CmdLine
 {
+    private static final int J_DOCROOTPATH = 2;
+
+    private static final int J_JARFILE = 0;
+
+    private static final int J_JARSOURCEPATH = 1;
 
     /**
      * The CommandLine instance.
@@ -120,10 +125,12 @@ public final class MyCmdLine implements CmdLine
         {
             cmdLine = parser.parse(options, args);
 
+            checkForMinimumSwitches();
+
             processOption_d();
-            processOption_j();
+            processOption_jOrW();
             processOption_i();
-            processOption_a();
+            processOption_aOrj();
             processOption_o();
             processOption_P();
             processOption_s();
@@ -131,9 +138,10 @@ public final class MyCmdLine implements CmdLine
             processOption_W();
             processOption_p();
 
-            checkForMinimumSwitches();
-
-        } catch (InvalidParameterValueException | NumberFormatException | ParseException ex)
+        } catch (InvalidParameterValueException | NumberFormatException | MissingOptionException ex)
+        {
+            exceptions.add(ex);
+        } catch (ParseException ex)
         {
             exceptions.add(ex);
         }
@@ -463,10 +471,10 @@ public final class MyCmdLine implements CmdLine
         }
     }
 
-    private void processOption_a()
+    private void processOption_aOrj()
     {
         jarFile = hasOption('a') ? new File(cmdLine.getOptionValue('a').replace('\\', '/'))
-                : hasOption('j') ? new File(cmdLine.getOptionValues('j')[0].replace('\\', '/')) : null;
+                : hasOption('j') ? new File(cmdLine.getOptionValues('j')[J_JARFILE].replace('\\', '/')) : null;
     }
 
     private void processOption_d()
@@ -481,16 +489,16 @@ public final class MyCmdLine implements CmdLine
         inputFile = hasOption('i') ? new File(cmdLine.getOptionValue('i').replace('\\', '/')) : null;
     }
 
-    private void processOption_j()
+    private void processOption_jOrW()
     {
         docRootPath = hasOption('j')
-                ? of(cmdLine.getOptionValues('j')[2].replace('\\', '/')).normalize().toAbsolutePath()
+                ? of(cmdLine.getOptionValues('j')[J_DOCROOTPATH].replace('\\', '/')).normalize().toAbsolutePath()
                 : hasOption('W')
                 ? of(cmdLine.getOptionValue('W', "").replace('\\', '/')).normalize().toAbsolutePath()
                 : null;
 
         jarSourcePath = hasOption('j')
-                ? of(cmdLine.getOptionValues('j')[1].replace('\\', '/')).normalize().toAbsolutePath() : null;
+                ? of(cmdLine.getOptionValues('j')[J_JARSOURCEPATH].replace('\\', '/')).normalize().toAbsolutePath() : null;
     }
 
     private void processOption_o()

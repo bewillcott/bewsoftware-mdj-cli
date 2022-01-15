@@ -144,6 +144,7 @@ public class MCHttpServer extends HTTPServer
             resp.send(200, String.format("Server time: %tF %<tT", now));
             return 0;
         });
+
         if (cmd.hasOption('m'))
         {
             addContextForContainingJar(context, host, server1, "/manual");
@@ -151,6 +152,7 @@ public class MCHttpServer extends HTTPServer
         {
             context = addContextForExternalDirOrJar(context, cmd, host);
         }
+
         return context;
     }
 
@@ -184,12 +186,13 @@ public class MCHttpServer extends HTTPServer
         {
             String contextString = (String) contextObj;
             ctRtn.val = contextString;
+
             try
             {
                 processContextForExternalDirOrJar((String) textObj, host, contextString);
             } catch (IOException | MissingArgumentException | URISyntaxException ex)
             {
-                exRtn.val = new Exception(ex);
+                exRtn.val = ex;
             }
         });
 

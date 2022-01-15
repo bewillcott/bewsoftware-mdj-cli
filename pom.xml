@@ -157,6 +157,7 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>2.11.0</version>
+                <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>com.bewsoftware</groupId>
@@ -410,6 +411,11 @@
                                 <goals>
                                     <goal>mdj</goal>
                                 </goals>
+                                <configuration>
+                                    <source>${docs.source}</source>
+                                    <destination>${docs.target}</destination>
+                                    <verbosity/>
+                                </configuration>
                             </execution>
                             <execution>
                                 <id>MDj-Package(HTML)</id>

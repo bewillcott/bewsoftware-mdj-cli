@@ -40,6 +40,10 @@ public class Constants
      */
     public static final String CONF_FILENAME = "mdj-cli.ini";
 
+    public static final String PROGRAM = "program";
+
+    public static final String PROJECT = "project";
+
     public static final String COPYRIGHT
             = " This is the MDj Command-line Interface program (aka: mdj-cli).\n"
             + "\n"

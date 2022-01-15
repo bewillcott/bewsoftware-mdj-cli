@@ -20,13 +20,11 @@
 
 package com.bewsoftware.mdj.cli.options;
 
-import com.bewsoftware.fileio.ini.IniFileFormatException;
 import com.bewsoftware.mdj.cli.util.CmdLine;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Optional;
 
-import static com.bewsoftware.mdj.cli.options.util.Cli.loadConf;
 import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
 import static com.bewsoftware.mdj.cli.util.Constants.HELP_FOOTER;
 import static com.bewsoftware.mdj.cli.util.Constants.HELP_HEADER;
@@ -85,8 +83,6 @@ public class CmdCreateJar implements Option
             {
                 try
                 {
-                    loadConfigFileData(cmd);
-
                     rtn = of(createJarFile(
                             cmd.jarFile(),
                             cmd.jarSourcePath()
@@ -100,17 +96,5 @@ public class CmdCreateJar implements Option
         }
 
         return rtn;
-    }
-
-    private void loadConfigFileData(CmdLine cmd)
-    {
-        // Load configuration file data
-        try
-        {
-            loadConf(cmd.docRootPath());
-        } catch (IOException | IniFileFormatException ex)
-        {
-            DISPLAY.level(2).println(ex);
-        }
     }
 }

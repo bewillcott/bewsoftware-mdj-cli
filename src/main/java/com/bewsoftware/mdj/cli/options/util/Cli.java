@@ -23,6 +23,7 @@ import com.bewsoftware.common.InvalidParameterValueException;
 import com.bewsoftware.fileio.ini.IniDocument;
 import com.bewsoftware.fileio.ini.IniFile;
 import com.bewsoftware.fileio.ini.IniFileFormatException;
+import com.bewsoftware.mdj.cli.util.Constants;
 import com.bewsoftware.mdj.core.TextEditor;
 import com.bewsoftware.property.IniProperty;
 import com.bewsoftware.utils.struct.Ref;
@@ -39,9 +40,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import static com.bewsoftware.mdj.cli.util.Constants.CONF_FILENAME;
-import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
-import static com.bewsoftware.mdj.cli.util.Constants.POM;
+import static com.bewsoftware.mdj.cli.util.Constants.*;
 import static com.bewsoftware.mdj.cli.util.GlobalVariables.conf;
 import static com.bewsoftware.mdj.cli.util.Keys.*;
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
@@ -56,10 +55,6 @@ import static java.nio.file.Path.of;
  */
 public class Cli
 {
-    private static final String PROGRAM = "Program";
-
-    private static final String PROJECT = "Project";
-
     private static final Pattern SUBSTITUTION_PATTERN
             = Pattern.compile("(?<!\\\\)(?:\\$\\{(?<group>\\w+)[.](?<key>\\w+)\\})");
 
@@ -86,15 +81,13 @@ public class Cli
             final String use
     )
     {
-        return conf.iniDoc.getString(
-                section,
-                key,
-                conf.iniDoc.getString(use, key, "")
-        );
+        String rtn = conf.iniDoc.getString(section, key, null);
+        return rtn != null ? rtn : conf.iniDoc.getString(use, key, "");
     }
 
     /**
-     * Load the configuration file: {@link #CONF_FILENAME}
+     * Load the configuration file:
+     * {@link Constants#CONF_FILENAME CONF_FILENAME}
      *
      * @param srcDirPath Initial directory to look for the file.
      *
@@ -368,16 +361,14 @@ public class Cli
     {
         // Process -Dkey=value properties from commandline.
         // Add them to the "project" section.
-        if (props != null)
+        props.forEach((keyObj, valueObj) ->
         {
-            props.forEach((keyObj, valueObj) ->
-            {
-                String key = (String) keyObj;
-                String value = (String) valueObj;
+            String key = (String) keyObj;
+            String value = (String) valueObj;
 
-                conf.iniDoc.setString(PROJECT, key, value);
-            });
-        }
+            conf.iniDoc.setString(PROJECT, key, value);
+        });
+
     }
 
     private static void processSubstitutionsForAProperty(

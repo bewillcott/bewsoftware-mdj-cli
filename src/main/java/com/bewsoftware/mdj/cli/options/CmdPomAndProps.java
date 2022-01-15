@@ -54,12 +54,7 @@ public class CmdPomAndProps implements Option
         //
         if (cmd.hasOption('P'))
         {
-            Properties props = null;
-
-            if (cmd.hasOption('D'))
-            {
-                props = cmd.getOptionProperties('D');
-            }
+            Properties props = cmd.getOptionProperties('D');
 
             try
             {

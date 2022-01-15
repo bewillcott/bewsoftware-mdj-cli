@@ -66,7 +66,7 @@ public interface CmdLine
     public List<Exception> exceptions();
 
     /**
-     * Retrieve the map of values associated to the option.
+     * Retrieve the map of values associated with the option.
      *
      * @param opt name of the option.
      *
@@ -77,7 +77,7 @@ public interface CmdLine
     public Properties getOptionProperties(char opt);
 
     /**
-     * Retrieve the map of values associated to the option.
+     * Retrieve the map of values associated with the option.
      *
      * @param opt name of the option.
      *

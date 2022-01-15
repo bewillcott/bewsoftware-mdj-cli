@@ -29,6 +29,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import static com.bewsoftware.mdj.cli.util.Constants.DEFAULT_INPUT_FILE_EXTENSION;
 import static com.bewsoftware.mdj.cli.util.Constants.DEFAULT_OUTPUT_FILE_EXTENSION;
+import static java.nio.file.Files.exists;
 import static java.nio.file.Path.of;
 
 /**
@@ -59,9 +60,9 @@ public class CmdInputFile implements Option
         //
         // if '-i' switch active, check and set others as necessary.
         //
-        if (cmd.hasOption('i'))
+        if (cmd.hasOption('i') && !processInputFileOption(cmd))
         {
-            processInputFileOption(cmd);
+            rtn = Optional.of(-1);
         }
 
         return rtn;
@@ -95,22 +96,31 @@ public class CmdInputFile implements Option
         return fileName;
     }
 
-    private void processInputFileOption(CmdLine cmd)
+    private boolean processInputFileOption(CmdLine cmd)
     {
-        String fileName = cmd.inputFile().getName();
-        String baseName = FilenameUtils.getBaseName(fileName);
-        Ref<Boolean> fileExtensionChanged = Ref.val(Boolean.FALSE);
+        boolean rtn = false;
 
-        fileName = processFileExtension(fileName, fileExtensionChanged);
-
-        String parent = cmd.inputFile().getParent();
-
-        if (parent != null || fileExtensionChanged.val)
+        if (exists(cmd.inputFile().toPath()))
         {
-            cmd.inputFile(new File(fileName));
+            String fileName = cmd.inputFile().getName();
+            String baseName = FilenameUtils.getBaseName(fileName);
+            Ref<Boolean> fileExtensionChanged = Ref.val(false);
+
+            fileName = processFileExtension(fileName, fileExtensionChanged);
+
+            String parent = cmd.inputFile().getParent();
+
+            if (parent != null || fileExtensionChanged.val)
+            {
+                cmd.inputFile(new File(fileName));
+            }
+
+            processRelatedOptions(cmd, parent, baseName);
+
+            rtn = true;
         }
 
-        processRelatedOptions(cmd, parent, baseName);
+        return rtn;
     }
 
     private void processRelatedOptions(CmdLine cmd, String parent, String baseName)

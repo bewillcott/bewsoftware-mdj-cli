@@ -166,7 +166,7 @@ public class Jar
         SortedSet<Path> fileSet = getFileList(jarSourcePath, "*", true);
         Manifest manifest = getManifest(POM, conf);
 
-        Jar.createJAR(
+        createJAR(
                 jarFile,
                 new ArrayList<>(jarFileSet),
                 jarDirPath,
