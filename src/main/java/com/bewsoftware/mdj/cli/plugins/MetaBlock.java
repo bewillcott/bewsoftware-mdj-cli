@@ -23,6 +23,8 @@ package com.bewsoftware.mdj.cli.plugins;
 import java.util.regex.Matcher;
 
 import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.Constants.PAGE;
+import static com.bewsoftware.mdj.cli.util.Constants.TEXT;
 import static com.bewsoftware.mdj.cli.util.GlobalVariables.conf;
 import static java.util.regex.Pattern.DOTALL;
 import static java.util.regex.Pattern.MULTILINE;
@@ -46,10 +48,10 @@ public class MetaBlock implements Plugin
     @Override
     public void execute()
     {
-        String text = conf.iniDoc.getString("page", "text", "");
+        String text = conf.iniDoc.getString(PAGE, TEXT, "");
         Matcher m = compile("\\A(?:@@@\\n(?<metablock>.*?)\\n@@@\\n)(?<body>.*)\\z", DOTALL)
                 .matcher(text);
-        conf.iniDoc.removeSection("page");
+        conf.iniDoc.removeSection(PAGE);
 
         if (m.find())
         {
@@ -75,13 +77,13 @@ public class MetaBlock implements Plugin
                         .append("key = ").appendln(key)
                         .append("value = ").println(value);
 
-                conf.iniDoc.setString("page", key, value);
+                conf.iniDoc.setString(PAGE, key, value);
             }
 
             DISPLAY.level(3)
                     .println("============================================\n");
         }
 
-        conf.iniDoc.setString("page", "text", text);
+        conf.iniDoc.setString(PAGE, TEXT, text);
     }
 }

@@ -40,10 +40,6 @@ public class Constants
      */
     public static final String CONF_FILENAME = "mdj-cli.ini";
 
-    public static final String PROGRAM = "program";
-
-    public static final String PROJECT = "project";
-
     public static final String COPYRIGHT
             = " This is the MDj Command-line Interface program (aka: mdj-cli).\n"
             + "\n"
@@ -72,10 +68,18 @@ public class Constants
 
     public static final String HELP_HEADER;
 
+    public static final String PAGE = "page";
+
+    public static final String TEXT = "text";
+
     /**
      * The single instance of the {@link MCPOMProperties} class.
      */
     public static final MCPOMProperties POM = INSTANCE;
+
+    public static final String PROGRAM = "program";
+
+    public static final String PROJECT = "project";
 
     public static final String SYNTAX = "java -jar /path/to/mdj-cli-<version>.jar [OPTION]...\n\noptions:";
 

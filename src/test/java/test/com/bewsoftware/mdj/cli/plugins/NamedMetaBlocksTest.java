@@ -1,5 +1,5 @@
 /*
- *  File Name:    MetaBlockTest.java
+ *  File Name:    NamedMetaBlocksTest.java
  *  Project Name: bewsoftware-mdj-cli
  *
  *  Copyright (c) 2022 Bradley Willcott
@@ -21,13 +21,9 @@
 package test.com.bewsoftware.mdj.cli.plugins;
 
 import com.bewsoftware.fileio.ini.IniFile;
-import com.bewsoftware.mdj.cli.plugins.MetaBlock;
-import com.bewsoftware.property.IniProperty;
+import com.bewsoftware.mdj.cli.plugins.NamedMetaBlocks;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,10 +44,10 @@ import static test.com.bewsoftware.mdj.cli.TestConstants.TEST_RESOURCES_RESULTS;
  *
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  */
-public class MetaBlockTest
+public class NamedMetaBlocksTest
 {
 
-    public MetaBlockTest()
+    public NamedMetaBlocksTest()
     {
     }
 
@@ -60,7 +56,7 @@ public class MetaBlockTest
         return Stream.of(
                 Arguments.of(
                         TEST_RESOURCES + "index.md",
-                        TEST_RESOURCES_RESULTS + "MetaBlockResults.prop",
+                        TEST_RESOURCES_RESULTS + "NamedMetaBlocksResults.html",
                         true
                 ));
     }
@@ -78,7 +74,7 @@ public class MetaBlockTest
     }
 
     /**
-     * Test of execute method, of class MetaBlock.
+     * Test of execute method, of class NamedMetaBlocks.
      *
      * @param sourceFile
      * @param propertiesFile
@@ -97,7 +93,7 @@ public class MetaBlockTest
         System.out.println("[MetaBlockTest.testExecute()]");
         loadTestString(sourceFile);
 
-        MetaBlock instance = new MetaBlock();
+        NamedMetaBlocks instance = new NamedMetaBlocks();
         instance.execute();
 
         assertEquals(
@@ -111,36 +107,12 @@ public class MetaBlockTest
     {
         boolean rtn = false;
 
-        Properties props = new Properties();
-        props.load(Files.newBufferedReader(of(filename)));
-        List<IniProperty<String>> pageProps = conf.iniDoc.getSection(PAGE);
+        String expResult = Files.readString(of(filename));
+        String actualResult = conf.iniDoc.getString(PAGE, "navbar", "");
 
-        if (pageProps.size() >= props.size())
+        if (expResult.equals(actualResult))
         {
             rtn = true;
-
-            for (Entry<Object, Object> entry : props.entrySet())
-            {
-                String key = (String) entry.getKey();
-                String expValue = (String) entry.getValue();
-
-                String actualValue = conf.iniDoc.getString(PAGE, key, "DEFAULT VALUE");
-
-                if (!expValue.equals(actualValue))
-                {
-                    String error = "Result: key{" + key + "}:actualValue{" + actualValue
-                            + "} does not equal expValue{" + expValue + "}";
-                    conf.iniDoc.setStringG(ERROR, error);
-                    rtn = false;
-
-                    break;
-                }
-            }
-        } else
-        {
-            String error = "pageProps.size(){" + pageProps.size()
-                    + "} does not equal props.size(){" + props.size() + "}";
-            conf.iniDoc.setStringG(ERROR, error);
         }
 
         return rtn;

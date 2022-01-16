@@ -1,8 +1,8 @@
 /*
- *  File Name:    PluginInterlink.java
+ *  File Name:    TestConstants.java
  *  Project Name: bewsoftware-mdj-cli
  *
- *  Copyright (c) 2021 Bradley Willcott
+ *  Copyright (c) 2022 Bradley Willcott
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,39 +18,25 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.bewsoftware.mdj.cli.plugins;
+package test.com.bewsoftware.mdj.cli;
 
 /**
- * Provide simple connectivity between calling method and required plugin.
- * <p>
- * This is to provide some an intermediate layer of separation.
+ * TestConstants class description.
  *
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
- * @since 1.1.7
- * @version 1.1.7
+ * @since 1.0
+ * @version 1.0
  */
-public class PluginInterlink
+public class TestConstants
 {
-    private static final PluginController PLUGIN_CONTROLLER = new PluginController();
+    public static final String ERROR = "error";
 
-    private PluginInterlink()
+    public static final String TEST_RESOURCES = "src/test/resources/";
+
+    public static final String TEST_RESOURCES_RESULTS = "src/test/resources/results/";
+
+    private TestConstants()
     {
     }
-
-    public static void processMetaBlock()
-    {
-        PLUGIN_CONTROLLER.runPlugin("MetaBlock");
-    }
-
-    public static void processNamedMetaBlocks()
-    {
-        PLUGIN_CONTROLLER.runPlugin("NamedMetaBlocks");
-    }
-
-    public static void processStylesheets()
-    {
-        PLUGIN_CONTROLLER.runPlugin("Stylesheets");
-    }
-
 }

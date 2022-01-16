@@ -25,6 +25,8 @@ import com.bewsoftware.mdj.core.TextEditor;
 import java.util.regex.Pattern;
 
 import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.Constants.PAGE;
+import static com.bewsoftware.mdj.cli.util.Constants.TEXT;
 import static com.bewsoftware.mdj.cli.util.GlobalVariables.conf;
 import static java.util.regex.Pattern.DOTALL;
 import static java.util.regex.Pattern.compile;
@@ -88,11 +90,12 @@ public class NamedMetaBlocks implements Plugin
     public void execute()
     {
         TextEditor text = new TextEditor(
-                conf.iniDoc.getString("page", "text", "")
+                conf.iniDoc.getString(PAGE, TEXT, "")
         );
         Pattern p = compile(
                 "(?<=\\n)(?:@@@\\[(?<type>[@#])(?<name>\\w+)\\]\\n(?<metablock>.*?)\\n@@@\\n)",
-                DOTALL);
+                DOTALL
+        );
 
         text.replaceAll(p, m ->
         {
@@ -119,11 +122,11 @@ public class NamedMetaBlocks implements Plugin
                     .appendln(html)
                     .println("============================================\n");
 
-            conf.iniDoc.setString("page", name, html);
+            conf.iniDoc.setString(PAGE, name, html);
             return "";
         });
 
         text.replaceAll("\\\\@@@", "@@@");
-        conf.iniDoc.setString("page", "text", text.toString());
+        conf.iniDoc.setString(PAGE, TEXT, text.toString());
     }
 }

@@ -38,6 +38,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import static java.nio.file.Path.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static test.com.bewsoftware.mdj.cli.TestConstants.TEST_RESOURCES;
+import static test.com.bewsoftware.mdj.cli.TestConstants.TEST_RESOURCES_RESULTS;
 
 /**
  * SingletonTest class description.
@@ -49,10 +51,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class SingletonTest
 {
-
-    private static final String TEST_RESOURCES = "src/test/resources/";
-
-    private static final String TEST_RESOURCES_RESULTS = "src/test/resources/results/";
 
     public SingletonTest()
     {
@@ -69,49 +67,18 @@ public class SingletonTest
                         }, 0,
                         TEST_RESOURCES + "singleton.html",
                         TEST_RESOURCES_RESULTS + "singleton.html"
-                //                ),
-                //                Arguments.of(
-                //                        new String[]
-                //                        {
-                //                            "-s", "src/docs/manual"
-                //                        }, 0
-                //                ),
-                //                Arguments.of(
-                //                        new String[]
-                //                        {
-                //                            "-s", "src/docs/manual",
-                //                            "-d", "target/docs/manual",
-                //                            "-w", "-r",
-                //                            "-P", "pom.xml"
-                //                        }, 0
-                )
-        );
+                ));
     }
 
     @BeforeEach
     public void setUp()
     {
-        File file = new File(TEST_RESOURCES + "singleton.html");
-        FileUtils.deleteQuietly(file);
+        FileUtils.deleteQuietly(new File(TEST_RESOURCES + "singleton.html"));
     }
 
     @AfterEach
     public void tearDown() throws IOException
     {
-//        Files.find(of("src/docs/manual"), 1,
-//                (Path path, BasicFileAttributes a) ->
-//        {
-//            return FilenameUtils.getExtension(path.toString())
-//                    .compareToIgnoreCase(DEFAULT_OUTPUT_FILE_EXTENSION.substring(1))
-//                    == 0;
-//        }
-//        ).forEach(
-//                (Path path) ->
-//        {
-//            System.out.println("> " + path);
-//            FileUtils.deleteQuietly(path.toFile());
-//        }
-//        );
     }
 
     /**
@@ -136,7 +103,9 @@ public class SingletonTest
         System.out.println("[SingletonTest.testExecute()]");
         CmdLine cmd = new MyCmdLine(args);
         System.out.println("cmd:\n" + cmd);
+
         int result = Main.execute(args);
+
         System.out.println("result: " + result);
         assertEquals(expResult, result);
 
