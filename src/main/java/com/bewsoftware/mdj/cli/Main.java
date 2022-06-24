@@ -32,7 +32,7 @@ import static java.lang.System.exit;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 0.1
- * @version 1.1.7
+ * @version 1.1.8
  */
 public class Main
 {

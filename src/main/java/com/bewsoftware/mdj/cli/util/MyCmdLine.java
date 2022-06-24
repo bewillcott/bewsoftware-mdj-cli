@@ -505,7 +505,7 @@ public final class MyCmdLine implements CmdLine
     private void processOption_o()
     {
         outputFile = hasOption('o') ? new File(cmdLine.getOptionValue('o').replace('\\', '/')) : null;
-        DISPLAY.level(1).appendln(outputFile);
+        DISPLAY.level(1).appendln(outputFile).flush();
     }
 
     private void processOption_p()

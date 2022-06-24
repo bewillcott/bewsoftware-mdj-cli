@@ -53,7 +53,7 @@ import static java.util.regex.Pattern.compile;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.1.7
- * @version 1.1.7
+ * @version 1.1.8
  */
 public class MainProcessor implements Option
 {
