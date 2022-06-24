@@ -36,6 +36,9 @@ import static java.lang.System.exit;
  */
 public class Main
 {
+    private Main()
+    {
+    }
 
     /**
      * Called from either {@link #main(java.lang.String[]) main()} or another
@@ -84,9 +87,4 @@ public class Main
     {
         exit(execute(args));
     }
-
-    private Main()
-    {
-    }
-
 }

@@ -231,17 +231,4 @@ public class Find
             addInPathToOutList(outPath, inPath, outList);
         }
     }
-
-    public static class FileData
-    {
-        public Path destinationPath;
-
-        public Path sourcePath;
-
-        public FileData(Path sourcePath, Path destinationPath)
-        {
-            this.sourcePath = sourcePath;
-            this.destinationPath = destinationPath;
-        }
-    }
 }

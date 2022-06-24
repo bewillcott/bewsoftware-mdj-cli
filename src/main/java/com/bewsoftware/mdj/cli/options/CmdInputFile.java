@@ -47,13 +47,13 @@ public class CmdInputFile implements Option
         // NoOp
     }
 
-    private static boolean fileNameEndsWithDot(String fileName)
+    private static boolean fileNameEndsWithDot(final String fileName)
     {
         return fileName.charAt(fileName.length() - 1) == '.';
     }
 
     @Override
-    public Optional<Integer> execute(CmdLine cmd)
+    public Optional<Integer> execute(final CmdLine cmd)
     {
         Optional<Integer> rtn = Optional.empty();
 
@@ -68,15 +68,16 @@ public class CmdInputFile implements Option
         return rtn;
     }
 
-    private String appendExtensionToDottedFilename(String fileName, String extn)
+    private String appendExtensionToDottedFilename(final String fileName,final String extn)
     {
         return fileName.charAt(fileName.length() - 2) + extn;
     }
 
-    private String processFileExtension(String fileName, Ref<Boolean> fileExtensionChanged)
+    private String processFileExtension(final String fileName, final Ref<Boolean> fileExtensionChanged)
             throws IllegalArgumentException
     {
         String extn = FilenameUtils.getExtension(fileName);
+        String fName = fileName;
 
         if (extn.isEmpty())
         {
@@ -84,16 +85,16 @@ public class CmdInputFile implements Option
 
             if (fileNameEndsWithDot(fileName))
             {
-                fileName = appendExtensionToDottedFilename(fileName, extn);
+                fName = appendExtensionToDottedFilename(fileName, extn);
             } else
             {
-                fileName += extn;
+                fName += extn;
             }
 
             fileExtensionChanged.val = true;
         }
 
-        return fileName;
+        return fName;
     }
 
     private boolean processInputFileOption(CmdLine cmd)

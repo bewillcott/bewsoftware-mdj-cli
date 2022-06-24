@@ -23,7 +23,7 @@ package com.bewsoftware.mdj.cli.options;
 import com.bewsoftware.fileio.ini.IniDocument;
 import com.bewsoftware.mdj.cli.plugins.PluginInterlink;
 import com.bewsoftware.mdj.cli.util.CmdLine;
-import com.bewsoftware.mdj.cli.util.Find.FileData;
+import com.bewsoftware.mdj.cli.util.FileData;
 import com.bewsoftware.mdj.core.MarkdownProcessor;
 import com.bewsoftware.mdj.core.TextEditor;
 import com.bewsoftware.utils.struct.Ref;
@@ -62,24 +62,6 @@ public class MainProcessor implements Option
         // NoOp
     }
 
-    @Override
-    public Optional<Integer> execute(CmdLine cmd)
-    {
-        Optional<Integer> rtn = Optional.empty();
-
-        try
-        {
-            conf.iniDoc.setString("system", "date", new Date().toString());
-            processFiles(cmd);
-        } catch (IOException ex)
-        {
-            DISPLAY.level(2).println(ex);
-            rtn = of(-1);
-        }
-
-        return rtn;
-    }
-
     private static void loadOutputDirs(List<FileData> fileList, Set<Path> outputDirs)
     {
         DISPLAY.level(1).appendln("loadOutputDirs:");
@@ -105,41 +87,6 @@ public class MainProcessor implements Option
         DISPLAY.flush();
     }
 
-    private static void processFiles(CmdLine cmd) throws IOException
-    {
-        //
-        // Get files to process
-        //
-        List<FileData> fileList = getUpdateList(
-                cmd.source(),
-                cmd.destination(),
-                cmd.inputFile(),
-                null,
-                cmd.hasOption('r'));
-
-        // Process files
-        if (!fileList.isEmpty())
-        {
-            if (singleFileWithOutputFile(cmd, fileList))
-            {
-                updateFileList(cmd, fileList);
-            }
-
-            Set<Path> outputDirs = new TreeSet<>();
-            loadOutputDirs(fileList, outputDirs);
-            processDirectories(outputDirs);
-
-            for (FileData fileData : fileList)
-            {
-                processFile(
-                        fileData,
-                        cmd.destination(),
-                        cmd.hasOption('w')
-                );
-            }
-        }
-    }
-
     private static void processDirectories(Set<Path> outputDirs) throws IOException
     {
         DISPLAY.level(2);
@@ -151,25 +98,6 @@ public class MainProcessor implements Option
         }
     }
 
-    private static boolean singleFileWithOutputFile(CmdLine cmd, List<FileData> fileList)
-    {
-        return cmd.outputFile() != null && fileList.size() == 1;
-    }
-
-    private static void updateFileList(CmdLine cmd, List<FileData> fileList)
-    {
-        Path outPath = cmd.outputFile().toPath();
-
-        if (outPath.isAbsolute())
-        {
-            fileList.get(0).destinationPath = outPath;
-        } else
-        {
-            Path target = fileList.get(0).destinationPath.getParent();
-            fileList.get(0).destinationPath = target.resolve(outPath);
-        }
-    }
-
     private static void processFile(final FileData fileData,
             final Path destDirPath, final boolean wrapper) throws IOException
     {
@@ -178,7 +106,7 @@ public class MainProcessor implements Option
         String template;
         String use = "";
 
-        try (BufferedReader inReader = Files.newBufferedReader(fileData.sourcePath))
+        try ( BufferedReader inReader = Files.newBufferedReader(fileData.sourcePath))
         {
             String line;
 
@@ -242,10 +170,9 @@ public class MainProcessor implements Option
                     ));
         }
 
-        try (BufferedWriter outWriter
+        try ( BufferedWriter outWriter
                 = Files.newBufferedWriter(
-        fileData.destinationPath,                        CREATE,
-                        TRUNCATE_EXISTING,
+                        fileData.destinationPath, CREATE, TRUNCATE_EXISTING,
                         WRITE))
         {
             DISPLAY.level(3)
@@ -268,6 +195,41 @@ public class MainProcessor implements Option
                             )
                     )
             );
+        }
+    }
+
+    private static void processFiles(CmdLine cmd) throws IOException
+    {
+        //
+        // Get files to process
+        //
+        List<FileData> fileList = getUpdateList(
+                cmd.source(),
+                cmd.destination(),
+                cmd.inputFile(),
+                null,
+                cmd.hasOption('r'));
+
+        // Process files
+        if (!fileList.isEmpty())
+        {
+            if (singleFileWithOutputFile(cmd, fileList))
+            {
+                updateFileList(cmd, fileList);
+            }
+
+            Set<Path> outputDirs = new TreeSet<>();
+            loadOutputDirs(fileList, outputDirs);
+            processDirectories(outputDirs);
+
+            for (FileData fileData : fileList)
+            {
+                processFile(
+                        fileData,
+                        cmd.destination(),
+                        cmd.hasOption('w')
+                );
+            }
         }
     }
 
@@ -324,7 +286,7 @@ public class MainProcessor implements Option
                 .appendln("template:")
                 .println(templatesPath);
 
-        try (BufferedReader inReader = Files.newBufferedReader(templatesPath))
+        try ( BufferedReader inReader = Files.newBufferedReader(templatesPath))
         {
             String line;
 
@@ -383,4 +345,49 @@ public class MainProcessor implements Option
 
         iniDoc.setString("page", "html", textEd.toString());
     }
+
+    private static boolean singleFileWithOutputFile(CmdLine cmd, List<FileData> fileList)
+    {
+        return cmd.outputFile() != null && fileList.size() == 1;
+    }
+
+    private static void updateFileList(CmdLine cmd, List<FileData> fileList)
+    {
+        Path outPath = cmd.outputFile().toPath();
+
+        if (outPath.isAbsolute())
+        {
+            fileList.get(0).destinationPath = outPath;
+        } else
+        {
+            Path target = fileList.get(0).destinationPath.getParent();
+
+            if (target != null)
+            {
+                fileList.get(0).destinationPath = target.resolve(outPath);
+            } else
+            {
+                fileList.get(0).destinationPath = outPath;
+            }
+        }
+    }
+
+    @Override
+    public Optional<Integer> execute(CmdLine cmd)
+    {
+        Optional<Integer> rtn = Optional.empty();
+
+        try
+        {
+            conf.iniDoc.setString("system", "date", new Date().toString());
+            processFiles(cmd);
+        } catch (IOException ex)
+        {
+            DISPLAY.level(2).println(ex);
+            rtn = of(-1);
+        }
+
+        return rtn;
+    }
+
 }

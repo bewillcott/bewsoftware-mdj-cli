@@ -20,6 +20,7 @@ import com.bewsoftware.common.InvalidParameterValueException;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import org.apache.commons.cli.*;
@@ -128,8 +129,8 @@ public final class MyCmdLine implements CmdLine
             checkForMinimumSwitches();
 
             processOption_d();
-            processOption_jOrW();
             processOption_i();
+            processOption_jOrW();
             processOption_aOrj();
             processOption_o();
             processOption_P();
@@ -312,7 +313,7 @@ public final class MyCmdLine implements CmdLine
     @Override
     public List<Exception> exceptions()
     {
-        return exceptions;
+        return Collections.unmodifiableList(exceptions);
     }
 
     @Override
@@ -504,6 +505,7 @@ public final class MyCmdLine implements CmdLine
     private void processOption_o()
     {
         outputFile = hasOption('o') ? new File(cmdLine.getOptionValue('o').replace('\\', '/')) : null;
+        DISPLAY.level(1).appendln(outputFile);
     }
 
     private void processOption_p()

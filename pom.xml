@@ -5,7 +5,7 @@
 
     <groupId>com.bewsoftware</groupId>
     <artifactId>bewsoftware-mdj-cli</artifactId>
-    <version>1.1.7</version>
+    <version>1.1.8-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>BEWSoftware MDj CLI</name>
@@ -15,9 +15,9 @@
         <jar.manifest.mainClass>com.bewsoftware.mdj.cli.Main</jar.manifest.mainClass>
         <docs.source>src/docs/manual</docs.source>
         <docs.target>target/docs/manual</docs.target>
-        <java.version>17</java.version>
+        <java.version>18</java.version>
         <source.encoding>UTF-8</source.encoding>
-        <bewsoftware.version>2.0.1-SNAPSHOT</bewsoftware.version>
+        <bewsoftware.version>2.0.1</bewsoftware.version>
         <javadoc.source.version>${java.version}</javadoc.source.version>
         <jdk.version>${java.version}</jdk.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -121,7 +121,7 @@
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter</artifactId>
-                <version>5.8.2</version>
+                <version>5.9.0-M1</version>
             </dependency>
             <dependency>
                 <groupId>org.dom4j</groupId>
@@ -136,7 +136,7 @@
             <dependency>
                 <groupId>com.bewsoftware</groupId>
                 <artifactId>bewsoftware-mdj-core</artifactId>
-                <version>0.6.14</version>
+                <version>0.7.1</version>
             </dependency>
             <dependency>
                 <groupId>com.bewsoftware</groupId>
@@ -162,7 +162,7 @@
             <dependency>
                 <groupId>com.bewsoftware</groupId>
                 <artifactId>bewsoftware-mdj-core</artifactId>
-                <version>0.6.14</version>
+                <version>0.7.1</version>
                 <classifier>manual</classifier>
             </dependency>
         </dependencies>
@@ -720,7 +720,7 @@
                 <plugin>
                     <groupId>com.bewsoftware.mojo</groupId>
                     <artifactId>bewsoftware-mdj-plugin</artifactId>
-                    <version>1.1.7-SNAPSHOT</version>
+                    <version>1.1.7</version>
                 </plugin>
                 <plugin>
                     <groupId>com.bewsoftware.mojo</groupId>
@@ -731,12 +731,12 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.3.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.7</version>
+                    <version>0.8.8</version>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -749,23 +749,23 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.1.0</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.1</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-dependency-plugin</artifactId>
                     <version>3.2.0</version>
                 </plugin>
                 <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.10.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>3.3.0</version>
+                </plugin>
+                <plugin>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>3.0.0-M1</version>
+                    <version>3.0.0-M2</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>3.0.0-M5</version>
+                    <version>3.0.0-M7</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-install-plugin</artifactId>
@@ -773,31 +773,31 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-invoker-plugin</artifactId>
-                    <version>3.2.2</version>
+                    <version>3.3.0</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.2.2</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.3.1</version>
+                    <version>3.4.0</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-jxr-plugin</artifactId>
-                    <version>3.1.1</version>
+                    <version>3.2.0</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-plugin-plugin</artifactId>
-                    <version>3.6.2</version>
+                    <version>3.6.4</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>3.1.2</version>
+                    <version>3.3.0</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-release-plugin</artifactId>
-                    <version>3.0.0-M4</version>
+                    <version>3.0.0-M6</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-resources-plugin</artifactId>
@@ -805,11 +805,11 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-scm-plugin</artifactId>
-                    <version>1.12.0</version>
+                    <version>2.0.0-M1</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.9.1</version>
+                    <version>4.0.0-M1</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-source-plugin</artifactId>
@@ -817,7 +817,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M5</version>
+                    <version>3.0.0-M7</version>
                 </plugin>
             </plugins>
         </pluginManagement>

@@ -70,8 +70,6 @@ public class Constants
 
     public static final String PAGE = "page";
 
-    public static final String TEXT = "text";
-
     /**
      * The single instance of the {@link MCPOMProperties} class.
      */
@@ -82,6 +80,8 @@ public class Constants
     public static final String PROJECT = "project";
 
     public static final String SYNTAX = "java -jar /path/to/mdj-cli-<version>.jar [OPTION]...\n\noptions:";
+
+    public static final String TEXT = "text";
 
     static
     {
