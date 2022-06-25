@@ -1,3 +1,3 @@
 #!/bin/sh
 d=`dirname $0`
-java -jar $d/bewsoftware-mdj-cli-1.1.7-with-deps.jar "$@"
+java -jar $d/${project.build.finalName}-with-deps.jar "$@"
