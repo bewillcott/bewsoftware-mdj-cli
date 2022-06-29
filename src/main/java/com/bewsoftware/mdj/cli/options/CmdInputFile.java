@@ -2,7 +2,7 @@
  *  File Name:    CmdInputFile.java
  *  Project Name: bewsoftware-mdj-cli
  *
- *  Copyright (c) 2021 Bradley Willcott
+ *  Copyright (c) 2021-2022 Bradley Willcott
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ import static java.nio.file.Path.of;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.1.7
- * @version 1.1.7
+ * @version 1.1.9
  */
 public class CmdInputFile implements Option
 {
@@ -47,33 +47,17 @@ public class CmdInputFile implements Option
         // NoOp
     }
 
+    private static String appendExtensionToDottedFilename(final String fileName, final String extn)
+    {
+        return fileName.charAt(fileName.length() - 2) + extn;
+    }
+
     private static boolean fileNameEndsWithDot(final String fileName)
     {
         return fileName.charAt(fileName.length() - 1) == '.';
     }
 
-    @Override
-    public Optional<Integer> execute(final CmdLine cmd)
-    {
-        Optional<Integer> rtn = Optional.empty();
-
-        //
-        // if '-i' switch active, check and set others as necessary.
-        //
-        if (cmd.hasOption('i') && !processInputFileOption(cmd))
-        {
-            rtn = Optional.of(-1);
-        }
-
-        return rtn;
-    }
-
-    private String appendExtensionToDottedFilename(final String fileName,final String extn)
-    {
-        return fileName.charAt(fileName.length() - 2) + extn;
-    }
-
-    private String processFileExtension(final String fileName, final Ref<Boolean> fileExtensionChanged)
+    private static String processFileExtension(final String fileName, final Ref<Boolean> fileExtensionChanged)
             throws IllegalArgumentException
     {
         String extn = FilenameUtils.getExtension(fileName);
@@ -97,7 +81,7 @@ public class CmdInputFile implements Option
         return fName;
     }
 
-    private boolean processInputFileOption(CmdLine cmd)
+    private static boolean processInputFileOption(CmdLine cmd)
     {
         boolean rtn = false;
 
@@ -124,7 +108,7 @@ public class CmdInputFile implements Option
         return rtn;
     }
 
-    private void processRelatedOptions(CmdLine cmd, String parent, String baseName)
+    private static void processRelatedOptions(CmdLine cmd, String parent, String baseName)
     {
         Path srcPath = of(parent != null ? parent : "");
 
@@ -142,5 +126,21 @@ public class CmdInputFile implements Option
         {
             cmd.outputFile(new File(baseName + DEFAULT_OUTPUT_FILE_EXTENSION));
         }
+    }
+
+    @Override
+    public Optional<Integer> execute(final CmdLine cmd)
+    {
+        Optional<Integer> rtn = Optional.empty();
+
+        //
+        // if '-i' switch active, check and set others as necessary.
+        //
+        if (cmd.hasOption('i') && !processInputFileOption(cmd))
+        {
+            rtn = Optional.of(-1);
+        }
+
+        return rtn;
     }
 }

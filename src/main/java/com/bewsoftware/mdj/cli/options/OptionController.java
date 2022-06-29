@@ -2,7 +2,7 @@
  *  File Name:    OptionController.java
  *  Project Name: bewsoftware-mdj-cli
  *
- *  Copyright (c) 2021 Bradley Willcott
+ *  Copyright (c) 2021-2022 Bradley Willcott
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ import java.util.logging.Logger;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.1.7
- * @version 1.1.7
+ * @version 1.1.9
  */
 public class OptionController
 {
@@ -88,7 +88,7 @@ public class OptionController
 
     public Optional<Integer> runOption(String className, CmdLine cmd)
     {
-        Optional<Integer> rtn = null;
+        Optional<Integer> rtn = Optional.empty();
         Option option = options.get(className);
 
         if (option != null)

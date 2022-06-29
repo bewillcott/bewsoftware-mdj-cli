@@ -2,7 +2,7 @@
  * This file is part of the MDj Command-line Interface program
  * (aka: mdj-cli).
  *
- * Copyright (C) 2020 Bradley Willcott
+ * Copyright (C) 2020-2022 Bradley Willcott
  *
  * mdj-cli is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,7 +51,7 @@ import static java.nio.file.Path.of;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 0.1
- * @version 1.1.7
+ * @version 1.1.9
  */
 public class Cli
 {
@@ -405,13 +405,13 @@ public class Cli
 
     private static class Settings
     {
+        public final String comment;
+
         public final String key;
 
         public final String value;
 
-        public final String comment;
-
-        public Settings(String key, String value, String comment)
+        private Settings(String key, String value, String comment)
         {
             this.key = key;
             this.value = value;

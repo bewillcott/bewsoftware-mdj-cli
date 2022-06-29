@@ -49,7 +49,8 @@ import static java.util.regex.Pattern.compile;
  * The HTML from the above code will begin with something like this:
  * {@code <div id="name">}.<br>
  * Therefore, you can set up formatting via CSS using the 'id' value:
- * "{@code #name}".
+ * "{@code #name}"
+ * .<br><br>
  * <hr>
  * <pre><code>
  *

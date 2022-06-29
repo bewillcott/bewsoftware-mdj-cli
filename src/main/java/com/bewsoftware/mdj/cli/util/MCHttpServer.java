@@ -2,7 +2,7 @@
  * This file is part of the MDj Command-line Interface program
  * (aka: mdj-cli).
  *
- * Copyright (C) 2020 Bradley Willcott
+ * Copyright (C) 2020-2022 Bradley Willcott
  *
  * mdj-cli is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ import static java.nio.file.Path.of;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.0.28
- * @version 1.1.7
+ * @version 1.1.9
  */
 public class MCHttpServer extends HTTPServer
 {
@@ -122,54 +122,25 @@ public class MCHttpServer extends HTTPServer
         }
     }
 
-    private static String setupHost(
-            MCHttpServer server1,
-            final CmdLine cmd,
-            String context
-    ) throws IOException, MissingArgumentException, URISyntaxException
+    private static void addContextForContainingJar(
+            final String context,
+            final VirtualHost host,
+            final MCHttpServer server,
+            final String directory
+    ) throws IOException, URISyntaxException
     {
-        // default host
-        VirtualHost host = server1.getVirtualHost(null);
-        // with directory index pages
-        host.setAllowGeneratedIndex(
-                cmd.hasOption('p')
-                && cmd.hasOption("allowGeneratedIndex")
+        // The containing 'jar' file.
+        URI jarURI = URI.create(
+                "jar:"
+                + server
+                        .getClass()
+                        .getProtectionDomain()
+                        .getCodeSource()
+                        .getLocation()
+                        .toURI()
         );
-        host.addContext(
-                "/time",
-                (Request req, Response resp) ->
-        {
-            long now = System.currentTimeMillis();
-            resp.getHeaders().add("Content-Type", "text/plain");
-            resp.send(200, String.format("Server time: %tF %<tT", now));
-            return 0;
-        });
 
-        if (cmd.hasOption('m'))
-        {
-            addContextForContainingJar(context, host, server1, "/manual");
-        } else if (cmd.hasOption('p'))
-        {
-            context = addContextForExternalDirOrJar(context, cmd, host);
-        }
-
-        return context;
-    }
-
-    private static void setupServer() throws IOException
-    {
-        // set up server
-        File mimeTypes = new File("/etc/mime.types");
-
-        if (mimeTypes.exists())
-        {
-            addContentTypes(new FileInputStream(mimeTypes));
-        } else
-        {
-            addContentTypes(HTTPServer.class.getResourceAsStream(
-                    "/docs/jar/etc/mime.types"
-            ));
-        }
+        host.addContext(context, new JarContextHandler(jarURI, directory));
     }
 
     private static String addContextForExternalDirOrJar(
@@ -203,16 +174,17 @@ public class MCHttpServer extends HTTPServer
 
         if (!exRtn.isEmpty())
         {
-            if (exRtn.val instanceof IOException ioe)
+            switch (exRtn.val)
             {
-                throw ioe;
-            } else if (exRtn.val instanceof MissingArgumentException mae)
-            {
-                throw mae;
-
-            } else if (exRtn.val instanceof URISyntaxException use)
-            {
-                throw use;
+                case IOException ioe ->
+                    throw ioe;
+                case MissingArgumentException mae ->
+                    throw mae;
+                case URISyntaxException use ->
+                    throw use;
+                case default ->
+                {
+                }
             }
         }
 
@@ -249,25 +221,56 @@ public class MCHttpServer extends HTTPServer
         }
     }
 
-    private static void addContextForContainingJar(
-            final String context,
-            final VirtualHost host,
-            final MCHttpServer server,
-            final String directory
-    ) throws IOException, URISyntaxException
+    private static String setupHost(
+            MCHttpServer server1,
+            final CmdLine cmd,
+            final String context
+    ) throws IOException, MissingArgumentException, URISyntaxException
     {
-        // The containing 'jar' file.
-        URI jarURI = URI.create(
-                "jar:"
-                + server
-                        .getClass()
-                        .getProtectionDomain()
-                        .getCodeSource()
-                        .getLocation()
-                        .toURI()
-        );
+        String rtn = context;
 
-        host.addContext(context, new JarContextHandler(jarURI, directory));
+        // default host
+        VirtualHost host = server1.getVirtualHost(null);
+        // with directory index pages
+        host.setAllowGeneratedIndex(
+                cmd.hasOption('p')
+                && cmd.hasOption("allowGeneratedIndex")
+        );
+        host.addContext(
+                "/time",
+                (Request req, Response resp) ->
+        {
+            long now = System.currentTimeMillis();
+            resp.getHeaders().add("Content-Type", "text/plain");
+            resp.send(200, String.format("Server time: %tF %<tT", now));
+            return 0;
+        });
+
+        if (cmd.hasOption('m'))
+        {
+            addContextForContainingJar(context, host, server1, "/manual");
+        } else if (cmd.hasOption('p'))
+        {
+            rtn = addContextForExternalDirOrJar(context, cmd, host);
+        }
+
+        return rtn;
+    }
+
+    private static void setupServer() throws IOException
+    {
+        // set up server
+        File mimeTypes = new File("/etc/mime.types");
+
+        if (mimeTypes.exists())
+        {
+            addContentTypes(new FileInputStream(mimeTypes));
+        } else
+        {
+            addContentTypes(HTTPServer.class.getResourceAsStream(
+                    "/docs/jar/etc/mime.types"
+            ));
+        }
     }
 
     /**
@@ -297,7 +300,8 @@ public class MCHttpServer extends HTTPServer
          * @throws IOException              if any.
          * @throws MissingArgumentException if any.
          */
-        public ContextToPublish(String htmlSourceString) throws IOException, MissingArgumentException
+        @SuppressWarnings("AssignmentToMethodParameter")
+        private ContextToPublish(String htmlSourceString) throws IOException, MissingArgumentException
         {
             if (htmlSourceString == null)
             {

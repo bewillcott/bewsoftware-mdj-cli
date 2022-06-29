@@ -2,7 +2,7 @@
  * This file is part of the MDj Command-line Interface program
  * (aka: mdj-cli).
  *
- * Copyright (C) 2020 Bradley Willcott
+ * Copyright (C) 2020-2022 Bradley Willcott
  *
  * mdj-cli is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,14 +19,6 @@
  */
 package com.bewsoftware.mdj.cli.util;
 
-/**
- * Create a 'jar' file.
- *
- * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
- *
- * @since 0.1
- * @version 1.0.14
- */
 import com.bewsoftware.fileio.ini.IniFile;
 import com.bewsoftware.httpserver.HTTPServer;
 import java.io.*;
@@ -54,7 +46,7 @@ import static com.bewsoftware.mdj.cli.util.GlobalVariables.conf;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 0.1
- * @version 1.1.7
+ * @version 1.1.9
  */
 public class Jar
 {
@@ -119,7 +111,7 @@ public class Jar
 
         List<IOException> exceptions = new ArrayList<>();
 
-        try (JarOutputStream jos
+        try ( JarOutputStream jos
                 = new JarOutputStream(
                         new BufferedOutputStream(
                                 new FileOutputStream(jarFile)),
@@ -232,13 +224,14 @@ public class Jar
      */
     public static Manifest getManifest(final String progname, Manifest manifest)
     {
+        Manifest rtn = manifest;
 
-        if (manifest == null)
+        if (rtn == null)
         {
-            manifest = new Manifest();
+            rtn = new Manifest();
         }
 
-        Attributes mainAttribs = manifest.getMainAttributes();
+        Attributes mainAttribs = rtn.getMainAttributes();
         mainAttribs.put(Attributes.Name.MANIFEST_VERSION, "1.0");
         mainAttribs.put(new Attributes.Name("Created-By"), progname);
         mainAttribs.put(Attributes.Name.CONTENT_TYPE, "text/html");
@@ -246,7 +239,7 @@ public class Jar
         mainAttribs.put(new Attributes.Name("HTTPServer-version"), HTTPServer.VERSION);
         mainAttribs.put(Attributes.Name.MAIN_CLASS, "com.bewsoftware.httpserver.HTTPServer");
 
-        return manifest;
+        return rtn;
     }
 
     /**
@@ -262,7 +255,7 @@ public class Jar
             final Path entryFilePath
     ) throws IOException
     {
-        try (BufferedInputStream bis = new BufferedInputStream(
+        try ( BufferedInputStream bis = new BufferedInputStream(
                 Files.newInputStream(entryFilePath)))
         {
             byte[] buffer = new byte[1024];

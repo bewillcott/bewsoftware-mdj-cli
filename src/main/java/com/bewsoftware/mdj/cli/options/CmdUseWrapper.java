@@ -2,7 +2,7 @@
  *  File Name:    CmdUseWrapper.java
  *  Project Name: bewsoftware-mdj-cli
  *
- *  Copyright (c) 2021 Bradley Willcott
+ *  Copyright (c) 2021-2022 Bradley Willcott
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ import static java.util.Optional.of;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.1.7
- * @version 1.1.7
+ * @version 1.1.9
  */
 public class CmdUseWrapper implements Option
 {
@@ -57,6 +57,83 @@ public class CmdUseWrapper implements Option
     public CmdUseWrapper()
     {
         // NoOp
+    }
+
+    private static void copyFiles(String value, CmdLine cmd, Ref<Optional<Integer>> rtn)
+    {
+        if (!value.isEmpty())
+        {
+            try
+            {
+                copyDirTree(
+                        DISPLAY,
+                        cmd.source() + "/" + value,
+                        cmd.destination() + "/" + value, "*",
+                        COPY_ATTRIBUTES, REPLACE_EXISTING
+                );
+            } catch (IOException ex)
+            {
+                DISPLAY.level(2).println(ex);
+                rtn.val = of(-1);
+            }
+        }
+    }
+
+    private static void loadConfigurationFile(Path srcDir, CmdLine cmd, Ref<Optional<Integer>> rtn)
+    {
+        try
+        {
+            loadConf(srcDir);
+        } catch (FileNotFoundException ex)
+        {
+            String msg = ex.toString()
+                    + "\nHave you initialised the wrapper functionality? '-W <Doc Root Dir>'\n";
+            cmd.printHelp(msg, SYNTAX, HELP_HEADER, HELP_FOOTER, true);
+            rtn.val = of(4);
+        } catch (IOException | IniFileFormatException ex)
+        {
+            DISPLAY.level(2).println(ex);
+            rtn.val = of(-1);
+        }
+    }
+
+    private static Path loadConfigurationFileData(CmdLine cmd)
+    {
+        Path srcDir = Path.of("");
+
+        if (cmd.source() != null)
+        {
+            srcDir = cmd.source();
+        } else if (cmd.inputFile() != null)
+        {
+            Path inpPath = Path.of(cmd.inputFile().toString()).getParent();
+
+            if (inpPath != null)
+            {
+                srcDir = inpPath;
+            }
+        }
+
+        return srcDir;
+    }
+
+    private static void processIncludeDirs(CmdLine cmd, Ref<Optional<Integer>> rtn)
+    {
+        if (rtn.val.isEmpty() && conf.iniDoc.containsSection("includeDirs"))
+        {
+            List<IniProperty<String>> props = conf.iniDoc.getSection("includeDirs");
+
+            for (IniProperty<String> prop : props)
+            {
+                String value = prop.value();
+
+                if (value != null)
+                {
+                    value = processSubstitutions(value, null, Ref.val());
+                    copyFiles(value, cmd, rtn);
+                }
+            }
+        }
     }
 
     @Override
@@ -77,82 +154,5 @@ public class CmdUseWrapper implements Option
         }
 
         return rtn.val;
-    }
-
-    private void copyFiles(String value, CmdLine cmd, Ref<Optional<Integer>> rtn)
-    {
-        if (!value.isEmpty())
-        {
-            try
-            {
-                copyDirTree(
-                        DISPLAY,
-                        cmd.source() + "/" + value,
-                        cmd.destination() + "/" + value, "*",
-                        COPY_ATTRIBUTES, REPLACE_EXISTING
-                );
-            } catch (IOException ex)
-            {
-                DISPLAY.level(2).println(ex);
-                rtn.val = of(-1);
-            }
-        }
-    }
-
-    private void loadConfigurationFile(Path srcDir, CmdLine cmd, Ref<Optional<Integer>> rtn)
-    {
-        try
-        {
-            loadConf(srcDir);
-        } catch (FileNotFoundException ex)
-        {
-            String msg = ex.toString()
-                    + "\nHave you initialised the wrapper functionality? '-W <Doc Root Dir>'\n";
-            cmd.printHelp(msg, SYNTAX, HELP_HEADER, HELP_FOOTER, true);
-            rtn.val = of(4);
-        } catch (IOException | IniFileFormatException ex)
-        {
-            DISPLAY.level(2).println(ex);
-            rtn.val = of(-1);
-        }
-    }
-
-    private Path loadConfigurationFileData(CmdLine cmd)
-    {
-        Path srcDir = Path.of("");
-
-        if (cmd.source() != null)
-        {
-            srcDir = cmd.source();
-        } else if (cmd.inputFile() != null)
-        {
-            Path inpPath = Path.of(cmd.inputFile().toString()).getParent();
-
-            if (inpPath != null)
-            {
-                srcDir = inpPath;
-            }
-        }
-
-        return srcDir;
-    }
-
-    private void processIncludeDirs(CmdLine cmd, Ref<Optional<Integer>> rtn)
-    {
-        if (rtn.val.isEmpty() && conf.iniDoc.containsSection("includeDirs"))
-        {
-            List<IniProperty<String>> props = conf.iniDoc.getSection("includeDirs");
-
-            for (IniProperty<String> prop : props)
-            {
-                String value = prop.value();
-
-                if (value != null)
-                {
-                    value = processSubstitutions(value, null, Ref.val());
-                    copyFiles(value, cmd, rtn);
-                }
-            }
-        }
     }
 }

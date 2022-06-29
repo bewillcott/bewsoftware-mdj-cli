@@ -2,7 +2,7 @@
  *  File Name:    CmdFailed.java
  *  Project Name: bewsoftware-mdj-cli
  *
- *  Copyright (c) 2021 Bradley Willcott
+ *  Copyright (c) 2021-2022 Bradley Willcott
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ import static java.util.Optional.of;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.1.7
- * @version 1.1.7
+ * @version 1.1.9
  */
 public class CmdFailed implements Option
 {
@@ -63,7 +63,9 @@ public class CmdFailed implements Option
             // help.  This is called "beating the user with a clue stick."
             cmd.exceptions().forEach(ex -> sb.append(ex).append('\n'));
 
-            cmd.printHelp(sb.toString(), SYNTAX, HELP_HEADER, HELP_FOOTER, true);
+            cmd.printHelp(sb.toString(), SYNTAX, HELP_HEADER,
+                    HELP_FOOTER, true);
+
             rtn = of(-1);
         }
 

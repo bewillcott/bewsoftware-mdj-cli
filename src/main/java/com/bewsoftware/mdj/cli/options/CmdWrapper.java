@@ -2,7 +2,7 @@
  *  File Name:    CmdWrapper.java
  *  Project Name: bewsoftware-mdj-cli
  *
- *  Copyright (c) 2021 Bradley Willcott
+ *  Copyright (c) 2021-2022 Bradley Willcott
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ import static java.util.Optional.of;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.1.7
- * @version 1.1.7
+ * @version 1.1.9
  */
 public class CmdWrapper implements Option
 {
@@ -66,9 +66,9 @@ public class CmdWrapper implements Option
      * @throws URISyntaxException     If any.
      *
      * @since 0.1
-     * @version 1.1.7
+     * @version 1.1.9
      */
-    public static int initialiseWrappers(final Path docRootPath)
+    private static int initialiseWrappers(final Path docRootPath)
             throws IOException, IniFileFormatException, URISyntaxException
     {
         DISPLAY.level(3).println("docRootPath:\n" + docRootPath);
@@ -180,5 +180,4 @@ public class CmdWrapper implements Option
 
         return rtn;
     }
-
 }
