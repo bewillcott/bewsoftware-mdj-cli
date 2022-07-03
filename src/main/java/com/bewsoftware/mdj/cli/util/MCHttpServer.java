@@ -153,7 +153,7 @@ public class MCHttpServer extends HTTPServer
         final Ref<Exception> exRtn = Ref.val();
         final Ref<String> ctRtn = Ref.val();
 
-        cmd.getOptionProperties('p').forEach((contextObj, textObj) ->
+        cmd.getOptionProperties('P').forEach((contextObj, textObj) ->
         {
             String contextString = (String) contextObj;
             ctRtn.val = contextString;
@@ -231,11 +231,13 @@ public class MCHttpServer extends HTTPServer
 
         // default host
         VirtualHost host = server1.getVirtualHost(null);
+
         // with directory index pages
         host.setAllowGeneratedIndex(
                 cmd.hasOption('p')
                 && cmd.hasOption("allowGeneratedIndex")
         );
+
         host.addContext(
                 "/time",
                 (Request req, Response resp) ->

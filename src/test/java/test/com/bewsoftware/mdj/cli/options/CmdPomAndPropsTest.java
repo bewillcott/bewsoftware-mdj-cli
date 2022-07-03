@@ -49,7 +49,7 @@ public class CmdPomAndPropsTest
                 Arguments.of(
                         new String[]
                         {
-                            "-P", "pom.xml",
+                            "-p", "pom.xml",
                             "-i", "test.md"
                         }, null
                 ),
@@ -63,7 +63,7 @@ public class CmdPomAndPropsTest
                 Arguments.of(
                         new String[]
                         {
-                            "-P", "input.md",
+                            "-p", "input.md",
                             "-i", "test.md"
                         }, -1
                 )

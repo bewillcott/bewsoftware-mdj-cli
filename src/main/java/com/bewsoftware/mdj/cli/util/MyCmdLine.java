@@ -1,5 +1,8 @@
 /*
- * Copyright (C) 2020 <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
+ *  File Name:    MyCmdLine.java
+ *  Project Name: bewsoftware-mdj-cli
+ *
+ *  Copyright (c) 2021-2022 Bradley Willcott
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +38,7 @@ import static org.apache.commons.cli.Option.builder;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.0.7
- * @version 1.0.14
+ * @version 2.0.0
  */
 public final class MyCmdLine implements CmdLine
 {
@@ -91,6 +94,11 @@ public final class MyCmdLine implements CmdLine
     private File outputFile;
 
     /**
+     * The properties for the '-P' option.
+     */
+    private Properties pProperties;
+
+    /**
      * The pom.xml file.
      */
     private File pomFile;
@@ -133,11 +141,11 @@ public final class MyCmdLine implements CmdLine
             processOption_jOrW();
             processOption_aOrj();
             processOption_o();
-            processOption_P();
+            processOption_p();
             processOption_s();
             processOption_v();
             processOption_W();
-            processOption_p();
+            processOption_P();
 
         } catch (InvalidParameterValueException | NumberFormatException | MissingOptionException ex)
         {
@@ -213,8 +221,8 @@ public final class MyCmdLine implements CmdLine
                 .argName("fileName")
                 .build());
 
-        // Add publish directory/jar file: '-p'
-        options.addOption(builder("p")
+        // Add publish directory/jar file: '-P'
+        options.addOption(builder("P")
                 .desc("Publish the HTML files from either a directory, or a 'jar' file.\n"
                         + " 'htmlSource' is either the directory to publish,\n"
                         + " or the path to the 'jar' file (including it's name and extension).\n"
@@ -226,8 +234,8 @@ public final class MyCmdLine implements CmdLine
                 .argName("context=htmlSource")
                 .build());
 
-        // Add pom.xml file: '-P'
-        options.addOption(builder("P")
+        // Add pom.xml file: '-p'
+        options.addOption(builder("p")
                 .desc("The /path/to/the/pom.xml file. (pom.xml)")
                 .hasArg()
                 .argName("filePath")
@@ -325,7 +333,14 @@ public final class MyCmdLine implements CmdLine
     @Override
     public Properties getOptionProperties(String opt)
     {
-        return cmdLine.getOptionProperties(opt);
+        Properties rtn = cmdLine.getOptionProperties(opt);
+
+        if (rtn.isEmpty() && "P".equals(opt))
+        {
+            rtn = pProperties;
+        }
+
+        return rtn;
     }
 
     @Override
@@ -448,18 +463,28 @@ public final class MyCmdLine implements CmdLine
         //                             or '-p', or '-s', or '-W', -h, or --help.
         //
         if (!(hasOption('a') || hasOption('c') || hasOption('i') || hasOption('j')
-                || hasOption('m') || hasOption('p') || hasOption('s') || hasOption('W') || hasOption('h')))
+                || hasOption('m') || hasOption('P') || hasOption('s') || hasOption('W') || hasOption('h')))
         {
             String msg = "\nYou must use at least one of the following options:"
                     //  + "\n\t'-a', '-c', -i', '-j', '-m', '-p', '-s', '-W', or '-h|--help'\n";
-                    + "\n\t'-c', -i', '-j', '-m', '-p', '-s', '-W', or '-h|--help'\n";
+                    + "\n\t'-c', -i', '-j', '-m', '-P', '-s', '-W', or '-h|--help'\n";
             throw new MissingOptionException(msg);
         }
     }
 
     private void processOption_P()
     {
-        pomFile = hasOption('P') ? new File(cmdLine.getOptionValue('P').replace('\\', '/')) : null;
+        // Handler publish option: '-P'
+        if (hasOption('P'))
+        {
+            String[] values = cmdLine.getOptionValues('P');
+
+            if (values == null)
+            {
+                pProperties = new Properties();
+                pProperties.put("/", "");
+            }
+        }
     }
 
     private void processOption_W()
@@ -510,20 +535,7 @@ public final class MyCmdLine implements CmdLine
 
     private void processOption_p()
     {
-        // Handler publish option: '-p'
-        if (hasOption('p'))
-        {
-            String[] values = cmdLine.getOptionValues('p');
-
-            if (values == null)
-            {
-                // TODO: Sort this out - assigned value never used: values
-                values = new String[]
-                {
-                    "/", ""
-                };
-            }
-        }
+        pomFile = hasOption('p') ? new File(cmdLine.getOptionValue('p').replace('\\', '/')) : null;
     }
 
     private void processOption_s()

@@ -21,14 +21,14 @@
 package com.bewsoftware.mdj.cli.util;
 
 /**
- * Keys class description.
+ * Keys interface description.
  *
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.1.7
  * @version 1.1.7
  */
-public class Keys
+public interface Keys
 {
     public static final String ARTIFACT_ID = "artifactId";
 
@@ -43,8 +43,4 @@ public class Keys
     public static final String NAME = "name";
 
     public static final String VERSION = "version";
-
-    private Keys()
-    {
-    }
 }

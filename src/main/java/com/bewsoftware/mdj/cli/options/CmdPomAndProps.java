@@ -2,7 +2,7 @@
  *  File Name:    CmdPomAndProps.java
  *  Project Name: bewsoftware-mdj-cli
  *
- *  Copyright (c) 2021 Bradley Willcott
+ *  Copyright (c) 2021-2022 Bradley Willcott
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ import static java.util.Optional.of;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.1.7
- * @version 1.1.7
+ * @version 2.0.0
  */
 public class CmdPomAndProps implements Option
 {
@@ -50,9 +50,9 @@ public class CmdPomAndProps implements Option
         Optional<Integer> rtn = Optional.empty();
 
         //
-        // if '-P' Add pom.xml file
+        // if '-p' Add pom.xml file
         //
-        if (cmd.hasOption('P'))
+        if (cmd.hasOption('p'))
         {
             Properties props = cmd.getOptionProperties('D');
 

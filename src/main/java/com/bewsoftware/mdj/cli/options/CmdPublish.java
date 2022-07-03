@@ -2,7 +2,7 @@
  *  File Name:    CmdPublish.java
  *  Project Name: bewsoftware-mdj-cli
  *
- *  Copyright (c) 2021 Bradley Willcott
+ *  Copyright (c) 2021-2022 Bradley Willcott
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ import static java.util.Optional.of;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.1.7
- * @version 1.1.7
+ * @version 2.0.0
  */
 public class CmdPublish implements Option
 {
@@ -49,11 +49,11 @@ public class CmdPublish implements Option
         Optional<Integer> rtn = Optional.empty();
 
         //
-        // if '-p' then, publish http files from either: jarFile or docRootPath.
+        // if '-P' then, publish http files from either: jarFile or docRootPath.
         //
         // returns 0.
         //
-        if (cmd.hasOption('p'))
+        if (cmd.hasOption('P'))
         {
             DISPLAY.level(0).println("Publishing files...");
             MCHttpServer.execute(cmd);
