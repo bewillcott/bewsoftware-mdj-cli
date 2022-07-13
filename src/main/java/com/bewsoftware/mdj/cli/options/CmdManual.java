@@ -2,7 +2,7 @@
  *  File Name:    CmdManual.java
  *  Project Name: bewsoftware-mdj-cli
  *
- *  Copyright (c) 2021 Bradley Willcott
+ *  Copyright (c) 2021-2022 Bradley Willcott
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.bewsoftware.mdj.cli.options;
@@ -33,7 +33,7 @@ import static java.util.Optional.of;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.1.7
- * @version 1.1.7
+ * @version 2.0.0
  */
 public class CmdManual implements Option
 {
@@ -55,8 +55,7 @@ public class CmdManual implements Option
         if (cmd.hasOption('m'))
         {
             DISPLAY.level(0).println("Displaying manual...");
-            MCHttpServer.execute(cmd);
-            rtn = of(0);
+            rtn = of(MCHttpServer.execute(cmd));
         }
 
         return rtn;

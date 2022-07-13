@@ -1,69 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions>
-        <action>
-            <actionName>run</actionName>
-            <packagings>
-                <packaging>jar</packaging>
-            </packagings>
-            <goals>
-                <goal>process-classes</goal>
-                <goal>org.codehaus.mojo:exec-maven-plugin:3.0.0:exec</goal>
-            </goals>
-            <properties>
-                <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
-                <exec.executable>java</exec.executable>
-                <exec.workingdir></exec.workingdir>
-                <exec.appArgs>-P --allowGeneratedIndex</exec.appArgs>
-                <exec.vmArgs>--enable-preview</exec.vmArgs>
-                <exec.mainClass>com.bewsoftware.mdj.cli.Main</exec.mainClass>
-            </properties>
-        </action>
-        <action>
-            <actionName>debug</actionName>
-            <packagings>
-                <packaging>jar</packaging>
-            </packagings>
-            <goals>
-                <goal>process-classes</goal>
-                <goal>org.codehaus.mojo:exec-maven-plugin:3.0.0:exec</goal>
-            </goals>
-            <properties>
-                <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
-                <exec.executable>java</exec.executable>
-                <jpda.listen>true</jpda.listen>
-                <exec.workingdir></exec.workingdir>
-                <exec.appArgs>-P --allowGeneratedIndex</exec.appArgs>
-                <exec.vmArgs>--enable-preview -agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address}</exec.vmArgs>
-                <exec.mainClass>com.bewsoftware.mdj.cli.Main</exec.mainClass>
-            </properties>
-        </action>
-        <action>
-            <actionName>profile</actionName>
-            <packagings>
-                <packaging>jar</packaging>
-            </packagings>
-            <goals>
-                <goal>process-classes</goal>
-                <goal>org.codehaus.mojo:exec-maven-plugin:3.0.0:exec</goal>
-            </goals>
-            <properties>
-                <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
-                <exec.executable>java</exec.executable>
-                <exec.workingdir></exec.workingdir>
-                <exec.appArgs>-P --allowGeneratedIndex</exec.appArgs>
-                <exec.vmArgs>--enable-preview</exec.vmArgs>
-                <exec.mainClass>com.bewsoftware.mdj.cli.Main</exec.mainClass>
-            </properties>
-        </action>
-        <action>
-            <actionName>build</actionName>
-            <packagings>
-                <packaging>*</packaging>
-            </packagings>
-            <goals>
-                <goal>install</goal>
-                
-                
-            </goals>
-        </action>
-    </actions>
+    <action>
+        <actionName>run</actionName>
+        <packagings>
+            <packaging>jar</packaging>
+        </packagings>
+        <goals>
+            <goal>process-classes</goal>
+            <goal>org.codehaus.mojo:exec-maven-plugin:3.0.0:exec</goal>
+        </goals>
+        <properties>
+            <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
+            <exec.executable>java</exec.executable>
+            <exec.workingdir></exec.workingdir>
+            <exec.appArgs>-P --allowGeneratedIndex -v3</exec.appArgs>
+            <exec.vmArgs>--enable-preview</exec.vmArgs>
+            <exec.mainClass>com.bewsoftware.mdj.cli.Main</exec.mainClass>
+        </properties>
+    </action>
+    <action>
+        <actionName>debug</actionName>
+        <packagings>
+            <packaging>jar</packaging>
+        </packagings>
+        <goals>
+            <goal>process-classes</goal>
+            <goal>org.codehaus.mojo:exec-maven-plugin:3.0.0:exec</goal>
+        </goals>
+        <properties>
+            <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
+            <exec.executable>java</exec.executable>
+            <jpda.listen>true</jpda.listen>
+            <exec.workingdir></exec.workingdir>
+            <exec.appArgs>-P --allowGeneratedIndex -v3</exec.appArgs>
+            <exec.vmArgs>--enable-preview -agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address}</exec.vmArgs>
+            <exec.mainClass>com.bewsoftware.mdj.cli.Main</exec.mainClass>
+        </properties>
+    </action>
+    <action>
+        <actionName>profile</actionName>
+        <packagings>
+            <packaging>jar</packaging>
+        </packagings>
+        <goals>
+            <goal>process-classes</goal>
+            <goal>org.codehaus.mojo:exec-maven-plugin:3.0.0:exec</goal>
+        </goals>
+        <properties>
+            <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
+            <exec.executable>java</exec.executable>
+            <exec.workingdir></exec.workingdir>
+            <exec.appArgs>-P --allowGeneratedIndex -v3</exec.appArgs>
+            <exec.vmArgs>--enable-preview</exec.vmArgs>
+            <exec.mainClass>com.bewsoftware.mdj.cli.Main</exec.mainClass>
+        </properties>
+    </action>
+    <action>
+        <actionName>build</actionName>
+        <packagings>
+            <packaging>*</packaging>
+        </packagings>
+        <goals>
+            <goal>install</goal>
+        </goals>
+    </action>
+</actions>

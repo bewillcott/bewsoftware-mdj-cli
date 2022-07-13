@@ -2,7 +2,7 @@
  *  File Name:    MainProcessor.java
  *  Project Name: bewsoftware-mdj-cli
  *
- *  Copyright (c) 2021 Bradley Willcott
+ *  Copyright (c) 2021-2022 Bradley Willcott
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.bewsoftware.mdj.cli.options;
@@ -41,6 +41,7 @@ import static com.bewsoftware.mdj.cli.options.util.Cli.processSubstitutions;
 import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
 import static com.bewsoftware.mdj.cli.util.Find.getUpdateList;
 import static com.bewsoftware.mdj.cli.util.GlobalVariables.conf;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.exception;
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.nio.file.StandardOpenOption.WRITE;
@@ -53,7 +54,7 @@ import static java.util.regex.Pattern.compile;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.1.7
- * @version 1.1.8
+ * @version 2.0.0
  */
 public class MainProcessor implements Option
 {
@@ -383,11 +384,10 @@ public class MainProcessor implements Option
             processFiles(cmd);
         } catch (IOException ex)
         {
-            DISPLAY.level(2).println(ex);
+            exception = ex;
             rtn = of(-1);
         }
 
         return rtn;
     }
-
 }

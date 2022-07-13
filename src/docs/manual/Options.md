@@ -19,16 +19,16 @@ Command Line Options
     'jar' file.<br>**Note:** Can *not* be used with any other switches, except `-v [<level>]`.|
 |`-m`|Display web based manual in system default web browser.|
 |`-o <fileName>`|The HTML output file. (`*.html`)|
-|`-p <context>=<htmlSource>`|Publish the HTML files from either a directory, \
+|`-P <context>=<htmlSource>`|Publish the HTML files from either a directory, \
     or a 'jar' file.<br> 'htmlSource' is either the directory to publish,<br> or \
     the path to the 'jar' file (including it's name and extension).<br>(defaults: \
     context: `"/"`, htmlSource: `""` - current directory)<br>Can be used multiple \
     times to publish multiple sources at once.|
 |`--allowGeneratedIndex`|Allow a directory listing to be generated, if no 'index' \
-    file found.<br>Use with option: `-p`.<br>(default: `false`)|
+    file found.<br>Use with option: `-P`.<br>(default: `false`)|
 |`--disallowBrowserFileCaching`|Disallow web browsers caching the files sent by \
-    this instance of the web server.<br>Use with option: `-p`.<br>(default: `false`)|
-|`-P <filePath>`|The /path/to/the/pom.xml file. (pom.xml)|
+    this instance of the web server.<br>Use with option: `-P`.<br>(default: `false`)|
+|`-p <filePath>`|The /path/to/the/pom.xml file. (pom.xml)|
 |`-r`|Recursively process directories.|
 |`-s <directory>`|The source directory for markdown files.<br>(default: `""` - current directory)|
 |`-v [<level>]`|Verbosity. (default: `<level>` = `0`, or `1` if set with no level [`1`-`3`])|

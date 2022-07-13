@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.bewsoftware.mdj.cli.options;
@@ -25,10 +25,10 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Optional;
 
-import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
 import static com.bewsoftware.mdj.cli.util.Constants.HELP_FOOTER;
 import static com.bewsoftware.mdj.cli.util.Constants.HELP_HEADER;
 import static com.bewsoftware.mdj.cli.util.Constants.SYNTAX;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.exception;
 import static com.bewsoftware.mdj.cli.util.Jar.createJarFile;
 import static java.util.Optional.of;
 
@@ -38,7 +38,7 @@ import static java.util.Optional.of;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.1.7
- * @version 1.1.9
+ * @version 2.0.0
  */
 public class CmdCreateJar implements Option
 {
@@ -88,7 +88,7 @@ public class CmdCreateJar implements Option
                     ));
                 } catch (IOException | URISyntaxException ex)
                 {
-                    DISPLAY.level(2).println(ex);
+                    exception = ex;
                     rtn = of(-1);
                 }
             }

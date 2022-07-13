@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.bewsoftware.mdj.cli.options;
@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.Properties;
 
 import static com.bewsoftware.mdj.cli.options.util.Cli.loadPom;
-import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.exception;
 import static java.util.Optional.of;
 
 /**
@@ -61,7 +61,7 @@ public class CmdPomAndProps implements Option
                 loadPom(cmd.pomFile(), props);
             } catch (IOException ex)
             {
-                DISPLAY.level(2).println(ex);
+                exception = ex;
                 rtn = of(-1);
             }
         }

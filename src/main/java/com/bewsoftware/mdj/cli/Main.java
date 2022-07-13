@@ -2,7 +2,7 @@
  * This file is part of the MDj Command-line Interface program
  * (aka: mdj-cli).
  *
- * Copyright (C) 2020 Bradley Willcott
+ * Copyright (C) 2020-2022 Bradley Willcott
  *
  * mdj-cli is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 package com.bewsoftware.mdj.cli;
 
@@ -25,6 +25,7 @@ import java.util.Optional;
 
 import static com.bewsoftware.mdj.cli.options.OptionInterlink.*;
 import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.exception;
 import static java.lang.System.exit;
 
 /**
@@ -32,7 +33,7 @@ import static java.lang.System.exit;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 0.1
- * @version 1.1.8
+ * @version 2.0.0
  */
 public class Main
 {
@@ -74,6 +75,11 @@ public class Main
                 .or(() -> processCmdPomAndProps(cmd))
                 .or(() -> processCmdUseWrapper(cmd))
                 .or(() -> runMainProcessor(cmd));
+
+        if (result.isPresent() && result.get() != 0 && exception != null)
+        {
+            DISPLAY.level(0).println(exception);
+        }
 
         return result.orElse(0);
     }

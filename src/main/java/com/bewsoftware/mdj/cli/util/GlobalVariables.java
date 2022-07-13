@@ -15,12 +15,13 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.bewsoftware.mdj.cli.util;
 
 import com.bewsoftware.fileio.ini.IniFile;
+
 /**
  * GlobalVariables class description.
  *
@@ -29,12 +30,18 @@ import com.bewsoftware.fileio.ini.IniFile;
  * @since 1.1.7
  * @version 1.1.7
  */
+@SuppressWarnings("PublicField")
 public class GlobalVariables
 {
     /**
      * The configuration INI file.
      */
     public static IniFile conf;
+
+    /**
+     * Holds the last exception.
+     */
+    public static Exception exception;
 
     /**
      * The verbosity level.
@@ -44,5 +51,4 @@ public class GlobalVariables
     private GlobalVariables()
     {
     }
-
 }

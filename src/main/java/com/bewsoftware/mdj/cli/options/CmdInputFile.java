@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.bewsoftware.mdj.cli.options;
@@ -23,12 +23,14 @@ package com.bewsoftware.mdj.cli.options;
 import com.bewsoftware.mdj.cli.util.CmdLine;
 import com.bewsoftware.utils.struct.Ref;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 import org.apache.commons.io.FilenameUtils;
 
 import static com.bewsoftware.mdj.cli.util.Constants.DEFAULT_INPUT_FILE_EXTENSION;
 import static com.bewsoftware.mdj.cli.util.Constants.DEFAULT_OUTPUT_FILE_EXTENSION;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.exception;
 import static java.nio.file.Files.exists;
 import static java.nio.file.Path.of;
 
@@ -38,7 +40,7 @@ import static java.nio.file.Path.of;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.1.7
- * @version 1.1.9
+ * @version 2.0.0
  */
 public class CmdInputFile implements Option
 {
@@ -103,6 +105,9 @@ public class CmdInputFile implements Option
             processRelatedOptions(cmd, parent, baseName);
 
             rtn = true;
+        } else
+        {
+            exception = new IOException(cmd.inputFile().toPath().toString());
         }
 
         return rtn;

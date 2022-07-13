@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.bewsoftware.mdj.cli.options;
@@ -56,8 +56,7 @@ public class CmdPublish implements Option
         if (cmd.hasOption('P'))
         {
             DISPLAY.level(0).println("Publishing files...");
-            MCHttpServer.execute(cmd);
-            rtn = of(0);
+            rtn = of(MCHttpServer.execute(cmd));
         }
 
         return rtn;

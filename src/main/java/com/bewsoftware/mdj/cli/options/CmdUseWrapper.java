@@ -15,7 +15,7 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.bewsoftware.mdj.cli.options;
@@ -39,6 +39,7 @@ import static com.bewsoftware.mdj.cli.util.Constants.HELP_FOOTER;
 import static com.bewsoftware.mdj.cli.util.Constants.HELP_HEADER;
 import static com.bewsoftware.mdj.cli.util.Constants.SYNTAX;
 import static com.bewsoftware.mdj.cli.util.GlobalVariables.conf;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.exception;
 import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static java.util.Optional.of;
@@ -49,7 +50,7 @@ import static java.util.Optional.of;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.1.7
- * @version 1.1.9
+ * @version 2.0.0
  */
 public class CmdUseWrapper implements Option
 {
@@ -73,7 +74,7 @@ public class CmdUseWrapper implements Option
                 );
             } catch (IOException ex)
             {
-                DISPLAY.level(2).println(ex);
+                exception = ex;
                 rtn.val = of(-1);
             }
         }
@@ -89,10 +90,11 @@ public class CmdUseWrapper implements Option
             String msg = ex.toString()
                     + "\nHave you initialised the wrapper functionality? '-W <Doc Root Dir>'\n";
             cmd.printHelp(msg, SYNTAX, HELP_HEADER, HELP_FOOTER, true);
+            exception = ex;
             rtn.val = of(4);
         } catch (IOException | IniFileFormatException ex)
         {
-            DISPLAY.level(2).println(ex);
+            exception = ex;
             rtn.val = of(-1);
         }
     }
@@ -147,7 +149,11 @@ public class CmdUseWrapper implements Option
         {
             Path srcDir = loadConfigurationFileData(cmd);
             loadConfigurationFile(srcDir, cmd, rtn);
-            processIncludeDirs(cmd, rtn);
+
+            if (rtn.val.isEmpty())
+            {
+                processIncludeDirs(cmd, rtn);
+            }
         } else
         {
             conf = new IniFile();

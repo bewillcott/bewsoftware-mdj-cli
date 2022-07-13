@@ -15,7 +15,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 package com.bewsoftware.mdj.cli.util;
 
@@ -38,7 +38,7 @@ import static com.bewsoftware.httpserver.HTTPServer.VERSION;
 import static com.bewsoftware.httpserver.HTTPServer.addContentTypes;
 import static com.bewsoftware.httpserver.Utils.openURL;
 import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
-import static java.lang.System.exit;
+import static com.bewsoftware.mdj.cli.util.GlobalVariables.exception;
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 import static java.nio.file.Path.of;
 
@@ -48,7 +48,7 @@ import static java.nio.file.Path.of;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.0.28
- * @version 1.1.9
+ * @version 2.0.0
  */
 public class MCHttpServer extends HTTPServer
 {
@@ -80,9 +80,12 @@ public class MCHttpServer extends HTTPServer
      * Starts a stand-alone HTTP server, serving files from disk.
      *
      * @param cmd The command line options, if any.
+     *
+     * @return exit code
      */
-    public static void execute(final CmdLine cmd)
+    public static int execute(final CmdLine cmd)
     {
+        int rtn = 0;
         MCHttpServer server;
         String context = "/";
 
@@ -107,6 +110,7 @@ public class MCHttpServer extends HTTPServer
             {
                 "Stop Server"
             };
+
             JOptionPane.showOptionDialog(null, msg, TITLE + " (" + VERSION + ")",
                     JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE,
                     null, options, null);
@@ -114,12 +118,13 @@ public class MCHttpServer extends HTTPServer
             server.stop();
             msg = TITLE + " (" + VERSION + ") on port " + server.port + " has terminated.";
             DISPLAY.level(0).println(msg);
-            exit(0);
         } catch (HeadlessException | IOException | InterruptedException | URISyntaxException | MissingArgumentException ex)
         {
-            DISPLAY.level(0).println(ex);
-            exit(-1);
+            exception = ex;
+            rtn = -1;
         }
+
+        return rtn;
     }
 
     private static void addContextForContainingJar(
@@ -147,7 +152,7 @@ public class MCHttpServer extends HTTPServer
             final String context,
             final CmdLine cmd,
             final VirtualHost host
-    ) throws IOException, MissingArgumentException, URISyntaxException
+    )
     {
         // An External directory or 'jar' file.
         final Ref<Exception> exRtn = Ref.val();
@@ -169,23 +174,18 @@ public class MCHttpServer extends HTTPServer
 
         if (ctRtn.isEmpty())
         {
-            processContextForExternalDirOrJar("", host, context);
+            try
+            {
+                processContextForExternalDirOrJar("", host, context);
+            } catch (IOException | MissingArgumentException | URISyntaxException ex)
+            {
+                exRtn.val = ex;
+            }
         }
 
-        if (!exRtn.isEmpty())
+        if (exRtn.isPresent())
         {
-            switch (exRtn.val)
-            {
-                case IOException ioe ->
-                    throw ioe;
-                case MissingArgumentException mae ->
-                    throw mae;
-                case URISyntaxException use ->
-                    throw use;
-                case default ->
-                {
-                }
-            }
+            exception = exRtn.val;
         }
 
         return ctRtn.val;
@@ -234,7 +234,7 @@ public class MCHttpServer extends HTTPServer
 
         // with directory index pages
         host.setAllowGeneratedIndex(
-                cmd.hasOption('p')
+                cmd.hasOption('P')
                 && cmd.hasOption("allowGeneratedIndex")
         );
 
@@ -251,7 +251,7 @@ public class MCHttpServer extends HTTPServer
         if (cmd.hasOption('m'))
         {
             addContextForContainingJar(context, host, server1, "/manual");
-        } else if (cmd.hasOption('p'))
+        } else if (cmd.hasOption('P'))
         {
             rtn = addContextForExternalDirOrJar(context, cmd, host);
         }
@@ -276,7 +276,7 @@ public class MCHttpServer extends HTTPServer
     }
 
     /**
-     * Used to decode the property value for the '-p' option.
+     * Used to decode the property value for the '-P' option.
      *
      * @since 1.0.30
      * @version 1.1.7
