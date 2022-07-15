@@ -49,7 +49,7 @@ why you would need that I have no idea.  Since this is a proper
 compliant web server, it can take multiple client connections on
 the one port.
 
-To start everything, you need at least Java SE 12, or later installed
+To start everything, you need at least Java SE 18, or later installed
 on your system.  Then on a command line (terminal/cmd) type:
 
   java -jar <jarfilename>.jar
@@ -57,7 +57,7 @@ on your system.  Then on a command line (terminal/cmd) type:
 Do this in the same directory you stored the 'jar' file.  You should
 see something like this:
 
-HTTP Server (v2.5.2) is listening on port 9000
+HTTP Server (v2.7.0) is listening on port 9000
 Browser: http://localhost:9000/
 
 and a dialog box will also pop up, along with your browser.
