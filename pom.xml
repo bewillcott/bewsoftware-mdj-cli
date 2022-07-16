@@ -12,6 +12,8 @@
     <description>Command-line program that uses the MDj Core library to process markdown text files into static html files.</description>
 
     <properties>
+        <bewsoftware.libs>2.0.2</bewsoftware.libs>
+        <mdj.core>0.7.2</mdj.core>
         <jar.manifest.mainClass>com.bewsoftware.mdj.cli.Main</jar.manifest.mainClass>
         <docs.source>src/docs/manual</docs.source>
         <docs.target>target/docs/manual</docs.target>
@@ -25,6 +27,7 @@
         <project.reporting.outputEncoding>${source.encoding}</project.reporting.outputEncoding>
         <javadoc.reporting.outputDirectory>${project.reporting.outputDirectory}/apidocs</javadoc.reporting.outputDirectory>
         <javadoc.link.url.jdk>https://docs.oracle.com/en/java/javase/${java.version}/docs/api/</javadoc.link.url.jdk>
+        <keep.version.number></keep.version.number>
         <skip.unit.tests>true</skip.unit.tests>
         <skip.version.build>false</skip.version.build>
     </properties>
@@ -87,13 +90,6 @@
             <groupId>com.bewsoftware</groupId>
             <artifactId>bewsoftware-mdj-core</artifactId>
         </dependency>
-        <!-- TESTING DEPENDENCIES -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-            <optional>true</optional>
-        </dependency>
         <dependency>
             <groupId>org.dom4j</groupId>
             <artifactId>dom4j</artifactId>
@@ -111,11 +107,16 @@
             <artifactId>bewsoftware-mdj-core</artifactId>
             <classifier>manual</classifier>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
         <dependencies>
-            <!-- TESTING DEPENDENCIES -->
             <dependency>
                 <groupId>com.bewsoftware</groupId>
                 <artifactId>bewsoftware-jlhttp</artifactId>
@@ -124,32 +125,27 @@
             <dependency>
                 <groupId>com.bewsoftware</groupId>
                 <artifactId>bewsoftware-files</artifactId>
-                <version>2.0.1</version>
+                <version>${bewsoftware.libs}</version>
             </dependency>
             <dependency>
                 <groupId>com.bewsoftware</groupId>
                 <artifactId>bewsoftware-utils</artifactId>
-                <version>2.0.1</version>
+                <version>${bewsoftware.libs}</version>
             </dependency>
             <dependency>
                 <groupId>com.bewsoftware</groupId>
                 <artifactId>bewsoftware-common</artifactId>
-                <version>2.0.1</version>
+                <version>${bewsoftware.libs}</version>
             </dependency>
             <dependency>
                 <groupId>com.bewsoftware</groupId>
                 <artifactId>bewsoftware-property</artifactId>
-                <version>2.0.1</version>
+                <version>${bewsoftware.libs}</version>
             </dependency>
             <dependency>
                 <groupId>com.bewsoftware</groupId>
                 <artifactId>bewsoftware-mdj-core</artifactId>
-                <version>0.7.2</version>
-            </dependency>
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter</artifactId>
-                <version>5.9.0-M1</version>
+                <version>${mdj.core}</version>
             </dependency>
             <dependency>
                 <groupId>org.dom4j</groupId>
@@ -170,8 +166,13 @@
             <dependency>
                 <groupId>com.bewsoftware</groupId>
                 <artifactId>bewsoftware-mdj-core</artifactId>
-                <version>0.7.2</version>
+                <version>${mdj.core}</version>
                 <classifier>manual</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>5.9.0-M1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -472,6 +473,7 @@
                                     <goal>release</goal>
                                 </goals>
                                 <configuration>
+                                    <keep>${keep.version.number}</keep>
                                     <finalBaseNamePropertyName>finalBaseName</finalBaseNamePropertyName>
                                 </configuration>
                             </execution>
@@ -732,7 +734,7 @@
                 <plugin>
                     <groupId>com.bewsoftware.mojo</groupId>
                     <artifactId>bewsoftware-version-plugin</artifactId>
-                    <version>1.1.0</version>
+                    <version>1.2.0</version>
                 </plugin>
 
                 <plugin>
@@ -840,6 +842,7 @@
                             <goal>build</goal>
                         </goals>
                         <configuration>
+                            <keep>${keep.version.number}</keep>
                             <skip>${skip.version.build}</skip>
                         </configuration>
                     </execution>
