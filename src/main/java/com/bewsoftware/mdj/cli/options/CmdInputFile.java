@@ -28,8 +28,8 @@ import java.nio.file.Path;
 import java.util.Optional;
 import org.apache.commons.io.FilenameUtils;
 
-import static com.bewsoftware.mdj.cli.util.Constants.DEFAULT_INPUT_FILE_EXTENSION;
-import static com.bewsoftware.mdj.cli.util.Constants.DEFAULT_OUTPUT_FILE_EXTENSION;
+import static com.bewsoftware.mdj.cli.util.Constants.DEFAULT_INPUT_FILE_EXTN;
+import static com.bewsoftware.mdj.cli.util.Constants.DEFAULT_OUTPUT_FILE_EXTN;
 import static com.bewsoftware.mdj.cli.util.GlobalVariables.exception;
 import static java.nio.file.Files.exists;
 import static java.nio.file.Path.of;
@@ -40,7 +40,7 @@ import static java.nio.file.Path.of;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.1.7
- * @version 2.0.0
+ * @version 2.0.2
  */
 public class CmdInputFile implements Option
 {
@@ -67,7 +67,7 @@ public class CmdInputFile implements Option
 
         if (extn.isEmpty())
         {
-            extn = DEFAULT_INPUT_FILE_EXTENSION;
+            extn = DEFAULT_INPUT_FILE_EXTN;
 
             if (fileNameEndsWithDot(fileName))
             {
@@ -129,7 +129,7 @@ public class CmdInputFile implements Option
 
         if (!cmd.hasOption('o'))
         {
-            cmd.outputFile(new File(baseName + DEFAULT_OUTPUT_FILE_EXTENSION));
+            cmd.outputFile(new File(baseName + DEFAULT_OUTPUT_FILE_EXTN));
         }
     }
 

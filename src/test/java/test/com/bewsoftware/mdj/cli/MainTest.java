@@ -37,7 +37,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import static com.bewsoftware.mdj.cli.util.Constants.DEFAULT_OUTPUT_FILE_EXTENSION;
+import static com.bewsoftware.mdj.cli.util.Constants.DEFAULT_OUTPUT_FILE_EXTN;
 import static java.nio.file.Path.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -93,7 +93,7 @@ public class MainTest
                 (Path path, BasicFileAttributes a) ->
         {
             return FilenameUtils.getExtension(path.toString())
-                    .compareToIgnoreCase(DEFAULT_OUTPUT_FILE_EXTENSION.substring(1))
+                    .compareToIgnoreCase(DEFAULT_OUTPUT_FILE_EXTN.substring(1))
                     == 0;
         }
         ).forEach(

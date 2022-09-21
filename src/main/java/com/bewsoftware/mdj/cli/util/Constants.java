@@ -2,7 +2,7 @@
  *  File Name:    Constants.java
  *  Project Name: bewsoftware-mdj-cli
  *
- *  Copyright (c) 2021 Bradley Willcott
+ *  Copyright (c) 2021-2022 Bradley Willcott
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ import static com.bewsoftware.mdj.cli.util.MCPOMProperties.INSTANCE;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 1.1.7
- * @version 1.1.7
+ * @version 2.0.2
  */
 public class Constants
 {
@@ -43,7 +43,7 @@ public class Constants
     public static final String COPYRIGHT
             = " This is the MDj Command-line Interface program (aka: mdj-cli).\n"
             + "\n"
-            + " Copyright (C) 2020 Bradley Willcott\n"
+            + " Copyright (C) 2020-2022 Bradley Willcott\n"
             + "\n"
             + " mdj-cli is free software: you can redistribute it and/or modify\n"
             + " it under the terms of the GNU General Public License as published by\n"
@@ -58,9 +58,9 @@ public class Constants
             + " You should have received a copy of the GNU General Public License\n"
             + " along with this program.  If not, see <https://www.gnu.org/licenses/>.\n";
 
-    public static final String DEFAULT_INPUT_FILE_EXTENSION = ".md";
+    public static final String DEFAULT_INPUT_FILE_EXTN = ".md";
 
-    public static final String DEFAULT_OUTPUT_FILE_EXTENSION = ".html";
+    public static final String DEFAULT_OUTPUT_FILE_EXTN = ".html";
 
     public static final Display DISPLAY = ConsoleIO.consoleDisplay("");
 
@@ -99,5 +99,4 @@ public class Constants
     private Constants()
     {
     }
-
 }

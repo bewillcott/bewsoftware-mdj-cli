@@ -51,7 +51,7 @@ import static java.nio.file.Path.of;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 0.1
- * @version 1.1.9
+ * @version 2.1.0
  */
 public class Cli
 {
@@ -254,6 +254,11 @@ public class Cli
         Element version = projectElement.element(VERSION);
         Element name = projectElement.element(NAME);
         Element description = projectElement.element(DESCRIPTION);
+
+        if (version == null)
+        {
+            version = projectElement.element(PARENT).element(VERSION);
+        }
 
         Settings[] projectSettings =
         {

@@ -2,7 +2,7 @@
  * This file is part of the MDj Command-line Interface program
  * (aka: mdj-cli).
  *
- * Copyright (C) 2020 Bradley Willcott
+ * Copyright (C) 2020-2022 Bradley Willcott
  *
  * mdj-cli is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ import java.util.SortedSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.bewsoftware.mdj.cli.util.Constants.DEFAULT_INPUT_FILE_EXTENSION;
-import static com.bewsoftware.mdj.cli.util.Constants.DEFAULT_OUTPUT_FILE_EXTENSION;
+import static com.bewsoftware.mdj.cli.util.Constants.DEFAULT_INPUT_FILE_EXTN;
+import static com.bewsoftware.mdj.cli.util.Constants.DEFAULT_OUTPUT_FILE_EXTN;
 import static com.bewsoftware.mdj.cli.util.Constants.DISPLAY;
 import static java.lang.Character.MAX_VALUE;
 import static java.nio.file.Files.getLastModifiedTime;
@@ -57,7 +57,7 @@ import static java.nio.file.Path.of;
  * @author <a href="mailto:bw.opensource@yahoo.com">Bradley Willcott</a>
  *
  * @since 0.1
- * @version 1.1.7
+ * @version 2.0.2
  */
 public class Find
 {
@@ -95,7 +95,7 @@ public class Find
 
         Finder finder = new Finder(
                 DISPLAY,
-                pattern != null ? pattern : "*" + DEFAULT_INPUT_FILE_EXTENSION
+                pattern != null ? pattern : "*" + DEFAULT_INPUT_FILE_EXTN
         );
 
         Files.walkFileTree(
@@ -138,7 +138,7 @@ public class Find
 
         Finder finder = new Finder(
                 DISPLAY,
-                pattern != null ? pattern.toString() : "*" + DEFAULT_INPUT_FILE_EXTENSION
+                pattern != null ? pattern.toString() : "*" + DEFAULT_INPUT_FILE_EXTN
         );
 
         Files.walkFileTree(
@@ -225,7 +225,7 @@ public class Find
             String basename = m.group("basename");
             Path outPath = of(
                     destPath != null ? destPath.toString() : "",
-                    basename + (outExtn != null ? outExtn : DEFAULT_OUTPUT_FILE_EXTENSION)
+                    basename + (outExtn != null ? outExtn : DEFAULT_OUTPUT_FILE_EXTN)
             );
 
             addInPathToOutList(outPath, inPath, outList);

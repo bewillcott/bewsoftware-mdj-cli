@@ -42,5 +42,7 @@ public interface Keys
 
     public static final String NAME = "name";
 
+    public static final String PARENT = "parent";
+
     public static final String VERSION = "version";
 }
