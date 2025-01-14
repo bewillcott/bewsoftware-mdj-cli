@@ -1,3 +1,3 @@
 #!/bin/sh
 d=`dirname $0`
-java -jar $d/${project.build.finalName}-with-deps.jar "$@"
+java -Xss2M -jar $d/${project.build.finalName}-with-deps.jar "$@"

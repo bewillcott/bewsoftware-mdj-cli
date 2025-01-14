@@ -73,7 +73,7 @@ public class MainTest
                             "-s", "src/docs/manual",
                             "-d", "target/docs/manual",
                             "-w", "-r",
-                            "-P", "pom.xml"
+                            "-p", "pom.xml"
                         }, 0
                 )
         );
@@ -87,6 +87,7 @@ public class MainTest
     }
 
     @AfterEach
+    @SuppressWarnings("UseOfSystemOutOrSystemErr")
     public void tearDown() throws IOException
     {
         Files.find(of("src/docs/manual"), 1,
@@ -113,6 +114,7 @@ public class MainTest
      */
     @ParameterizedTest
     @MethodSource("provideArgsForTestExecute")
+    @SuppressWarnings("UseOfSystemOutOrSystemErr")
     public void testExecute(String[] args, int expResult)
     {
         System.out.println("[MainTest.testExecute()]");

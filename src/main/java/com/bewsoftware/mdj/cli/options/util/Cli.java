@@ -244,6 +244,15 @@ public class Cli
                 );
     }
 
+    /**
+     * Add the {@code <project>} properties from the {@code pom.xml} file.
+     *
+     * @param document XML document to process
+     *
+     * @todo
+     * Add facility to handle an externally supplied list of elements
+     * to find and include, instead of this limited list.
+     */
     private static void addProjectSettings(Document document)
     {
         // root is 'project'.

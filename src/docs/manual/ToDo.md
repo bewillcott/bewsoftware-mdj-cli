@@ -38,13 +38,19 @@ title: ${document.name} | ToDo List
     - [x]! (04/12/2020) Auto-generate MANIFEST.mf file.
         - [X]! (09/12/2020) include meta data from [MANIFEST.mf] section in `mdj-cli.ini`.
     - [x]! Add options related to _jar_ file creation: `-j`
-- [x]! Add new [switches][opt]:
+- [ ]! Add new [switches][opt]:
     - [x]! (26/02/2020)`-W` : Create new directories (css, templates) in current directory.  
             Add default versions of: `style.css` and `default.html`.
     - [x]! (26/02/2020)`-w` : Include/use the contents of these directories as needed.
+    - [ ]! `-e` : `pom.xml` element to include in available list of substitution variables.  
+           E.g.: `-e properties\javadoc.title` will become: `${project\properties\javadoc.title}`  
+           for `<properties><javadoc.title>My Title</javadoc.title></properties>`  
+           All elements are children of `<project>`.
+    - [ ]! `-E` : Add a new element to the substitution variables.  
+           E.g.: `-E mydata\id=12345` will become: `${project\mydata\id}`
 - [x]! -!(24/02/2020) Added JSAP functionality. Configure the [options][opt]![1]
 - [X]! +!(04/12/2020) Replaced JSAP with Apache Commons CLI. Configure the [options][opt]!
-
+- [ ]! Add new ordered list for type: `a)`, `b)`, `c)`, etc.
 
 
 [mb]:Meta Blocks.html

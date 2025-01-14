@@ -27,7 +27,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import javax.swing.JOptionPane;
@@ -100,7 +99,8 @@ public class MCHttpServer extends HTTPServer
             server.start();
             String msg = TITLE + " (" + VERSION + ") is listening on port " + server.port;
             DISPLAY.level(0).println(msg);
-            openURL(new URL("http", "localhost", server.port, context));
+
+            openURL(new URI("http", "", "localhost", server.port, context, "", "").toURL());
 
             // GUI dialog to show server running, with button to
             // shutdown server.

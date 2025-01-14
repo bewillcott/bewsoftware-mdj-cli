@@ -1,4 +1,4 @@
 @echo off
 cls
 
-java -jar ${project.build.finalName}-with-deps.jar
+java -Xss2M -jar ${project.build.finalName}-with-deps.jar
